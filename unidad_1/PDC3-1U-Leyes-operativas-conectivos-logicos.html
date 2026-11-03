@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pizarra Digital - Conectivos Lógicos y Tablas de Verdad</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'montano-blue': '#1269A8',
+                        'montano-yellow': '#F7D615',
+                        'montano-green': '#54887D',
+                        'montano-lightblue': '#88B5C7',
+                        'montano-olive': '#A6B046',
+                        'montano-bg': '#F2F5E9'
+                    },
+                    fontFamily: {
+                        sans: ['Segoe UI', 'Tahoma', 'Verdana', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Verdana, sans-serif; }
+        .tab-content { display: none; animation: fadeIn 0.5s ease-in-out; }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        /* Custom scrollbar for better presentation */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #F2F5E9; }
+        ::-webkit-scrollbar-thumb { background: #88B5C7; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #1269A8; }
+        
+        .interactive-btn:active { transform: scale(0.98); }
+    </style>
+</head>
+<body class="bg-montano-bg text-gray-800 min-h-screen flex flex-col">
+
+    <!-- Encabezado y Barra de Herramientas -->
+    <header class="bg-white shadow-md border-b-4 border-montano-blue p-4 flex justify-between items-center sticky top-0 z-50">
+        <div class="flex items-center gap-4">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyEop0yf6lZ7Jk9MILZxF1rBj4Oqs5esyhIQ&s" alt="Logo Colegio Montano" class="h-12 w-auto rounded">
+            <div>
+                <h1 class="text-2xl font-bold text-montano-blue">Matemática - 3ro Básico</h1>
+                <p class="text-sm font-bold text-montano-blue">Docente: PEM Bairon Duarte </p>
+                <h2 class="text-sm font-semibold text-montano-green">Tema: Leyes operativas de los conectivos lógicos: introducción</h2>
+            </div>
+        </div>
+
+        <!-- Identificador PDC -->
+        <div class="bg-montano-bg border-l-4 border-montano-yellow px-8 py-2 rounded-lg shadow-sm hidden md:block">
+            <span class="text-2xl font-extrabold text-montano-blue tracking-widest">PDC3</span>
+        </div>
+
+        <button onclick="toggleFullScreen()" class="bg-montano-yellow text-montano-blue font-bold py-2 px-4 rounded-lg shadow hover:bg-yellow-400 transition-colors flex items-center gap-2 interactive-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+            </svg>
+            Pantalla Completa
+        </button>
+    </header>
+
+    <!-- Barra de Contexto Pedagógico -->
+    <div class="bg-montano-blue text-white px-6 py-2 flex flex-wrap justify-between text-sm shadow-inner">
+        <div><span class="font-bold text-montano-yellow">Hábito 1:</span> Ser proactivo (Propone una estrategia, revisa y corrige autónomamente)</div>
+        <div><span class="font-bold text-montano-yellow">Competencia:</span> Resolución lógica de situaciones formales.</div>
+    </div>
+
+    <!-- Navegación por Pestañas -->
+    <nav class="flex justify-center bg-white shadow-sm overflow-x-auto">
+        <button onclick="openTab('tab1')" id="btn-tab1" class="tab-btn px-6 py-4 font-bold text-montano-blue border-b-4 border-montano-blue bg-blue-50 transition-all">I. Introducción (10')</button>
+        <button onclick="openTab('tab2')" id="btn-tab2" class="tab-btn px-6 py-4 font-bold text-gray-500 border-b-4 border-transparent hover:text-montano-blue hover:bg-blue-50 transition-all">II. Trabajo Individual (20')</button>
+        <button onclick="openTab('tab3')" id="btn-tab3" class="tab-btn px-6 py-4 font-bold text-gray-500 border-b-4 border-transparent hover:text-montano-blue hover:bg-blue-50 transition-all">III. Trabajo Cooperativo (25')</button>
+        <button onclick="openTab('tab4')" id="btn-tab4" class="tab-btn px-6 py-4 font-bold text-gray-500 border-b-4 border-transparent hover:text-montano-blue hover:bg-blue-50 transition-all">IV. Plenaria y Cierre (15')</button>
+    </nav>
+
+    <!-- Contenido Principal -->
+    <main class="flex-grow p-6 sm:p-10 max-w-7xl mx-auto w-full">
+
+        <!-- Pestaña I: Introducción Motivante -->
+        <section id="tab1" class="tab-content active">
+            <div class="bg-white rounded-2xl shadow-lg border border-gray-200 p-8">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="bg-montano-yellow p-3 rounded-full shadow">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-montano-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16l2.879-2.879m0 0a3 3 0 104.243-4.242 3 3 0 00-4.243 4.242zM21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    </div>
+                    <h2 class="text-3xl font-bold text-montano-blue">¿Dos expresiones diferentes pueden significar lo mismo?</h2>
+                </div>
+                
+                <p class="text-lg text-gray-700 mb-6">Analicemos las siguientes parejas de expresiones:</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div class="bg-montano-bg p-5 rounded-xl border-t-4 border-montano-lightblue shadow-sm text-center">
+                        <p class="text-lg font-medium text-gray-800 mb-2">«No es cierto que no está lloviendo»</p>
+                        <hr class="border-gray-300 my-2">
+                        <p class="text-lg font-medium text-gray-800">«Está lloviendo»</p>
+                    </div>
+                    <div class="bg-montano-bg p-5 rounded-xl border-t-4 border-montano-lightblue shadow-sm text-center">
+                        <p class="text-lg font-medium text-gray-800 mb-2 font-mono">p y p</p>
+                        <hr class="border-gray-300 my-2">
+                        <p class="text-lg font-medium text-gray-800 font-mono">p</p>
+                    </div>
+                    <div class="bg-montano-bg p-5 rounded-xl border-t-4 border-montano-lightblue shadow-sm text-center">
+                        <p class="text-lg font-medium text-gray-800 mb-2 font-mono">p o p</p>
+                        <hr class="border-gray-300 my-2">
+                        <p class="text-lg font-medium text-gray-800 font-mono">p</p>
+                    </div>
+                </div>
+
+                <div class="bg-montano-blue text-white p-6 rounded-xl shadow-md">
+                    <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-montano-yellow" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        Preguntas Exploratorias:
+                    </h3>
+                    <ul class="list-disc list-inside space-y-2 text-lg ml-4">
+                        <li>¿Las expresiones de cada pareja comunican la misma condición?</li>
+                        <li>¿Cómo podríamos demostrarlo sin depender solamente de nuestra intuición?</li>
+                        <li>¿Qué herramienta de la clase anterior permite comprobar todos los casos posibles?</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pestaña II: Trabajo Individual -->
+        <section id="tab2" class="tab-content">
+            <div class="bg-white rounded-2xl shadow-lg border border-gray-200 p-8">
+                <h2 class="text-3xl font-bold text-montano-blue mb-6 border-b-2 border-montano-lightblue pb-2">Equivalencia Lógica y Primeras Leyes</h2>
+                
+                <!-- Conceptos -->
+                <div class="grid grid-cols-1 gap-6 mb-8">
+                    <div class="bg-blue-50 p-5 rounded-xl border border-blue-200">
+                        <h3 class="text-xl font-bold text-montano-blue mb-2">1. Equivalencia lógica ( ≡ )</h3>
+                        <p class="text-gray-700">Dos proposiciones compuestas son lógicamente equivalentes cuando tienen el <strong>mismo valor de verdad</strong> para <strong>todas</strong> las combinaciones posibles de sus proposiciones simples.</p>
+                        <p class="text-sm mt-2 text-gray-500">Ejemplo: <strong>¬(¬p) ≡ p</strong>. La doble negación recupera el valor de verdad original de p.</p>
+                    </div>
+                    
+                    <!-- Tabla de conectivos -->
+                    <div class="bg-montano-bg p-5 rounded-xl border border-gray-300 overflow-x-auto">
+                        <h3 class="text-xl font-bold text-montano-blue mb-3">2. Leyes operativas iniciales</h3>
+                        <p class="text-sm text-gray-600 mb-3"><em>Nota: <strong>V</strong> representa una proposición siempre verdadera y <strong>F</strong> una proposición siempre falsa.</em></p>
+                        <table class="w-full text-left bg-white border-collapse rounded shadow-sm">
+                            <thead>
+                                <tr class="bg-montano-lightblue text-white">
+                                    <th class="p-2 border">Ley</th>
+                                    <th class="p-2 border">Expresión</th>
+                                    <th class="p-2 border">Interpretación</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-sm">
+                                <tr><td class="p-2 border font-bold">Identidad</td><td class="p-2 border font-mono font-bold text-center">p ∧ V ≡ p</td><td class="p-2 border">Conjuntar p con algo verdadero no cambia p.</td></tr>
+                                <tr class="bg-gray-50"><td class="p-2 border font-bold">Identidad</td><td class="p-2 border font-mono font-bold text-center">p ∨ F ≡ p</td><td class="p-2 border">Disyuntar p con algo falso no cambia p.</td></tr>
+                                <tr><td class="p-2 border font-bold">Dominación</td><td class="p-2 border font-mono font-bold text-center">p ∨ V ≡ V</td><td class="p-2 border">La disyunción con V siempre es verdadera.</td></tr>
+                                <tr class="bg-gray-50"><td class="p-2 border font-bold">Dominación</td><td class="p-2 border font-mono font-bold text-center">p ∧ F ≡ F</td><td class="p-2 border">La conjunción con F siempre es falsa.</td></tr>
+                                <tr><td class="p-2 border font-bold">Idempotencia</td><td class="p-2 border font-mono font-bold text-center">p ∧ p ≡ p</td><td class="p-2 border">Repetir p en una conjunción no cambia su valor.</td></tr>
+                                <tr class="bg-gray-50"><td class="p-2 border font-bold">Idempotencia</td><td class="p-2 border font-mono font-bold text-center">p ∨ p ≡ p</td><td class="p-2 border">Repetir p en una disyunción no cambia su valor.</td></tr>
+                                <tr><td class="p-2 border font-bold">Doble negación</td><td class="p-2 border font-mono font-bold text-center">¬(¬p) ≡ p</td><td class="p-2 border">Negar dos veces devuelve el valor original.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Práctica -->
+                <h3 class="text-2xl font-bold text-montano-olive mb-4">Práctica Guiada: Identifica la Ley</h3>
+                <p class="mb-4 text-gray-700">Completa las equivalencias e indica el nombre de la ley utilizada. <em>(Haz clic en "Ver Solución" para autoevaluarte)</em>.</p>
+                
+                <div class="space-y-4">
+                    <!-- Item A -->
+                    <div class="border rounded-lg p-4 bg-gray-50 flex flex-col sm:flex-row justify-between sm:items-center">
+                        <span class="text-lg font-mono font-medium mb-2 sm:mb-0">a) p ∨ F ≡ ______</span>
+                        <button onclick="toggleAnswer('ans-a')" class="bg-montano-lightblue text-white px-3 py-1 rounded hover:bg-montano-blue transition self-start sm:self-auto">Ver Solución</button>
+                        <div id="ans-a" class="hidden mt-3 sm:mt-0 sm:ml-4 p-3 bg-white border border-green-300 rounded text-montano-green font-semibold flex-1">
+                            ≡ p (Ley de Identidad)
+                        </div>
+                    </div>
+                    <!-- Item B -->
+                    <div class="border rounded-lg p-4 bg-gray-50 flex flex-col sm:flex-row justify-between sm:items-center">
+                        <span class="text-lg font-mono font-medium mb-2 sm:mb-0">b) p ∧ F ≡ ______</span>
+                        <button onclick="toggleAnswer('ans-b')" class="bg-montano-lightblue text-white px-3 py-1 rounded hover:bg-montano-blue transition self-start sm:self-auto">Ver Solución</button>
+                        <div id="ans-b" class="hidden mt-3 sm:mt-0 sm:ml-4 p-3 bg-white border border-green-300 rounded text-montano-green font-semibold flex-1">
+                            ≡ F (Ley de Dominación)
+                        </div>
+                    </div>
+                    <!-- Item C -->
+                    <div class="border rounded-lg p-4 bg-gray-50 flex flex-col sm:flex-row justify-between sm:items-center">
+                        <span class="text-lg font-mono font-medium mb-2 sm:mb-0">c) p ∨ p ≡ ______</span>
+                        <button onclick="toggleAnswer('ans-c')" class="bg-montano-lightblue text-white px-3 py-1 rounded hover:bg-montano-blue transition self-start sm:self-auto">Ver Solución</button>
+                        <div id="ans-c" class="hidden mt-3 sm:mt-0 sm:ml-4 p-3 bg-white border border-green-300 rounded text-montano-green font-semibold flex-1">
+                            ≡ p (Ley de Idempotencia)
+                        </div>
+                    </div>
+                    <!-- Item D -->
+                    <div class="border rounded-lg p-4 bg-gray-50 flex flex-col sm:flex-row justify-between sm:items-center">
+                        <span class="text-lg font-mono font-medium mb-2 sm:mb-0">d) ¬(¬p) ≡ ______</span>
+                        <button onclick="toggleAnswer('ans-d')" class="bg-montano-lightblue text-white px-3 py-1 rounded hover:bg-montano-blue transition self-start sm:self-auto">Ver Solución</button>
+                        <div id="ans-d" class="hidden mt-3 sm:mt-0 sm:ml-4 p-3 bg-white border border-green-300 rounded text-montano-green font-semibold flex-1">
+                            ≡ p (Ley de Doble Negación)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pestaña III: Trabajo Cooperativo -->
+        <section id="tab3" class="tab-content">
+            <div class="bg-white rounded-2xl shadow-lg border border-gray-200 p-8">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
+                    <h2 class="text-3xl font-bold text-montano-blue">Laboratorio de equivalencias lógicas</h2>
+                    <div class="bg-montano-yellow text-montano-blue font-bold px-4 py-2 rounded-lg mt-4 md:mt-0 shadow">Equipos de 4 integrantes</div>
+                </div>
+
+                <div class="bg-montano-bg p-5 rounded-xl border-l-4 border-montano-olive mb-6">
+                    <h3 class="font-bold text-lg mb-2">Instrucciones y Roles (¡Hábito 1: Ser proactivo!)</h3>
+                    <ul class="list-disc ml-6 text-gray-700 space-y-1 mb-4">
+                        <li>Construyan la tabla de verdad de cada expresión.</li>
+                        <li>Comparen las columnas finales para decidir si son equivalentes (≡).</li>
+                        <li>Identifiquen la ley que justifica la equivalencia y preparen su conclusión.</li>
+                    </ul>
+                    <div class="flex flex-wrap gap-3">
+                        <span class="bg-white px-3 py-1 rounded-full text-sm shadow-sm border font-semibold">👑 Coordinador</span>
+                        <span class="bg-white px-3 py-1 rounded-full text-sm shadow-sm border font-semibold">🛠️ Constructor (Tablas)</span>
+                        <span class="bg-white px-3 py-1 rounded-full text-sm shadow-sm border font-semibold">✅ Verificador</span>
+                        <span class="bg-white px-3 py-1 rounded-full text-sm shadow-sm border font-semibold">🗣️ Portavoz</span>
+                    </div>
+                </div>
+
+                <!-- Tabla de Casos -->
+                <div class="overflow-x-auto bg-white rounded-lg border border-gray-300 shadow-sm">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-montano-blue text-white">
+                                <th class="p-3 border">Caso</th>
+                                <th class="p-3 border">Expresión 1</th>
+                                <th class="p-3 border">Expresión 2</th>
+                                <th class="p-3 border">¿Equivalentes?</th>
+                                <th class="p-3 border">Ley aplicable</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-gray-700 font-medium">
+                            <tr><td class="p-3 border text-center">1</td><td class="p-3 border font-mono">p ∧ V</td><td class="p-3 border font-mono">p</td><td class="p-3 border">________</td><td class="p-3 border">________</td></tr>
+                            <tr class="bg-gray-50"><td class="p-3 border text-center">2</td><td class="p-3 border font-mono">p ∨ F</td><td class="p-3 border font-mono">p</td><td class="p-3 border">________</td><td class="p-3 border">________</td></tr>
+                            <tr><td class="p-3 border text-center">3</td><td class="p-3 border font-mono">p ∨ V</td><td class="p-3 border font-mono">V</td><td class="p-3 border">________</td><td class="p-3 border">________</td></tr>
+                            <tr class="bg-gray-50"><td class="p-3 border text-center">4</td><td class="p-3 border font-mono">p ∧ F</td><td class="p-3 border font-mono">F</td><td class="p-3 border">________</td><td class="p-3 border">________</td></tr>
+                            <tr><td class="p-3 border text-center">5</td><td class="p-3 border font-mono">p ∧ p</td><td class="p-3 border font-mono">p</td><td class="p-3 border">________</td><td class="p-3 border">________</td></tr>
+                            <tr class="bg-gray-50"><td class="p-3 border text-center">6</td><td class="p-3 border font-mono">¬(¬p)</td><td class="p-3 border font-mono">p</td><td class="p-3 border">________</td><td class="p-3 border">________</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <details class="group bg-gray-200 rounded-lg p-4 mt-6 cursor-pointer shadow-inner">
+                    <summary class="font-bold text-montano-blue outline-none flex justify-between items-center">
+                        Mostrar Respuestas de Evaluación Docente
+                        <span class="transition group-open:rotate-180">
+                            <svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24"><path d="M6 9l6 6 6-6"></path></svg>
+                        </span>
+                    </summary>
+                    <div class="mt-4 text-sm text-gray-800 space-y-3 bg-white p-4 rounded border border-gray-300">
+                        <p><strong>Nota:</strong> Todos los casos son SÍ equivalentes. La equivalencia se demuestra construyendo la tabla de verdad y verificando que la columna de Expresión 1 es idéntica a Expresión 2.</p>
+                        <p><strong>Leyes aplicables:</strong> Caso 1: Identidad. Caso 2: Identidad. Caso 3: Dominación. Caso 4: Dominación. Caso 5: Idempotencia. Caso 6: Doble negación.</p>
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <!-- Pestaña IV: Plenaria y Cierre -->
+        <section id="tab4" class="tab-content">
+            <div class="bg-white rounded-2xl shadow-lg border border-gray-200 p-8 grid grid-cols-1 lg:grid-cols-2 gap-8">
+                
+                <!-- Ticket de Salida y Síntesis -->
+                <div>
+                    <h2 class="text-3xl font-bold text-montano-blue mb-4">Ticket de Salida</h2>
+                    <div class="bg-montano-bg p-5 rounded-xl border-t-4 border-montano-yellow shadow mb-6">
+                        <h4 class="font-bold text-lg mb-3">Resuelve individualmente:</h4>
+                        <ol class="list-decimal ml-5 space-y-3 text-gray-700">
+                            <li>Completa: <strong>p ∧ V ≡ ______</strong>.</li>
+                            <li>Indica qué ley se aplica en: <strong>p ∨ p ≡ p</strong>.</li>
+                            <li>Si <strong>p = F</strong>, determina <strong>¬(¬p)</strong>.</li>
+                        </ol>
+                    </div>
+
+                    <div class="bg-green-50 p-5 rounded-xl shadow-sm border border-green-200">
+                        <h4 class="font-bold text-montano-green text-lg mb-2">Metacognición</h4>
+                        <p class="italic text-gray-700">¿Cómo te ayuda una tabla de verdad a comprobar que una transformación lógica es válida?</p>
+                    </div>
+                </div>
+
+                <!-- Instrumento de Evaluación: Lista de Cotejo -->
+                <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-md">
+                    <h3 class="text-xl font-bold text-montano-blue mb-4 flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-montano-olive" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" /></svg>
+                        Lista de Cotejo Grupal (Plenaria)
+                    </h3>
+                    <p class="text-sm text-gray-500 mb-4">Docente: Marca las casillas para evaluar la participación de los equipos en la plenaria.</p>
+                    
+                    <div class="space-y-3">
+                        <label class="flex items-start gap-3 cursor-pointer p-2 hover:bg-gray-50 rounded">
+                            <input type="checkbox" class="w-5 h-5 mt-0.5 rounded text-montano-blue focus:ring-montano-blue">
+                            <span class="text-gray-700"><strong>Identificación:</strong> Reconoce las leyes de identidad y dominación.</span>
+                        </label>
+                        <label class="flex items-start gap-3 cursor-pointer p-2 hover:bg-gray-50 rounded">
+                            <input type="checkbox" class="w-5 h-5 mt-0.5 rounded text-montano-blue focus:ring-montano-blue">
+                            <span class="text-gray-700"><strong>Aplicación:</strong> Aplica las leyes de idempotencia y doble negación.</span>
+                        </label>
+                        <label class="flex items-start gap-3 cursor-pointer p-2 hover:bg-gray-50 rounded">
+                            <input type="checkbox" class="w-5 h-5 mt-0.5 rounded text-montano-blue focus:ring-montano-blue">
+                            <span class="text-gray-700"><strong>Comprobación:</strong> Construye tablas de verdad y compara columnas finales.</span>
+                        </label>
+                        <label class="flex items-start gap-3 cursor-pointer p-2 hover:bg-gray-50 rounded">
+                            <input type="checkbox" class="w-5 h-5 mt-0.5 rounded text-montano-blue focus:ring-montano-blue">
+                            <span class="text-gray-700"><strong>Argumentación:</strong> Justifica sus conclusiones y revisa el trabajo del equipo.</span>
+                        </label>
+                    </div>
+
+                    <!-- Mini Trivia Interactiva Rapida -->
+                    <div class="mt-6 border-t pt-4">
+                        <h4 class="font-bold text-montano-olive mb-2 text-center">Trivia Rápida de Cierre</h4>
+                        <div class="bg-montano-blue text-white p-4 rounded-lg text-center shadow-inner">
+                            <p id="trivia-q" class="mb-3 text-lg font-medium">La ley de Identidad afirma que p ∨ V ≡ p</p>
+                            <div class="flex justify-center gap-4">
+                                <button onclick="checkTrivia(true)" class="bg-green-500 hover:bg-green-600 px-4 py-2 rounded font-bold transition">Verdadero</button>
+                                <button onclick="checkTrivia(false)" class="bg-red-500 hover:bg-red-600 px-4 py-2 rounded font-bold transition">Falso</button>
+                            </div>
+                            <p id="trivia-feedback" class="mt-3 font-bold h-6"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Pie de página -->
+    <footer class="bg-gray-800 text-gray-400 text-center py-4 text-sm mt-auto">
+        &copy; 2026 Colegio Montano - Modelo Educativo Interactivo. Próxima clase: Leyes operativas de los conectivos lógicos: aplicación y comprobación.
+    </footer>
+
+    <!-- Scripts de interactividad -->
+    <script>
+        // Función para cambiar de pestañas
+        function openTab(tabId) {
+            // Ocultar todos los contenidos
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+
+            // Resetear estilos de los botones
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('text-montano-blue', 'border-montano-blue', 'bg-blue-50');
+                btn.classList.add('text-gray-500', 'border-transparent');
+            });
+
+            // Mostrar el contenido seleccionado
+            document.getElementById(tabId).classList.add('active');
+
+            // Resaltar el botón seleccionado
+            const activeBtn = document.getElementById('btn-' + tabId);
+            activeBtn.classList.remove('text-gray-500', 'border-transparent');
+            activeBtn.classList.add('text-montano-blue', 'border-montano-blue', 'bg-blue-50');
+        }
+
+        // Función para ocultar/mostrar respuestas
+        function toggleAnswer(id) {
+            const el = document.getElementById(id);
+            if (el.classList.contains('hidden')) {
+                el.classList.remove('hidden');
+            } else {
+                el.classList.add('hidden');
+            }
+        }
+
+        // Función de Pantalla Completa
+        function toggleFullScreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch((err) => {
+                    console.log(`Error al intentar iniciar el modo pantalla completa: ${err.message}`);
+                });
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
+        }
+
+        // Trivia Script
+        const triviaQuestions = [
+            { q: 'La expresión p ∨ V ≡ p es falsa, la correcta es p ∨ V ≡ V (Ley de Dominación).', ans: true, desc: "¡Correcto! Disyuntar con V siempre resulta en V." },
+            { q: 'Según la ley de Idempotencia, p ∧ p ≡ p.', ans: true, desc: "¡Correcto! Repetir una proposición no cambia su valor." },
+            { q: 'La ley de doble negación ¬(¬p) ≡ F', ans: false, desc: "Falso. La doble negación recupera el valor original ≡ p." }
+        ];
+        let currentQ = 0;
+
+        function checkTrivia(userAns) {
+            const feedback = document.getElementById('trivia-feedback');
+            const qData = triviaQuestions[currentQ];
+            
+            if (userAns === qData.ans) {
+                feedback.innerHTML = `<span class="text-green-300">¡Correcto! ${qData.desc}</span>`;
+            } else {
+                feedback.innerHTML = `<span class="text-montano-yellow">Revisa: ${qData.desc}</span>`;
+            }
+
+            // Pasar a la siguiente pregunta después de 2.5 seg
+            setTimeout(() => {
+                currentQ = (currentQ + 1) % triviaQuestions.length;
+                document.getElementById('trivia-q').innerText = triviaQuestions[currentQ].q;
+                feedback.innerHTML = '';
+            }, 2500);
+        }
+    </script>
+</body>
+</html>
