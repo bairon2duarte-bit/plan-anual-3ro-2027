@@ -40,26 +40,55 @@
         ::-webkit-scrollbar-thumb:hover { background: #1269A8; }
         
         .interactive-btn:active { transform: scale(0.98); }
+
     </style>
 </head>
 <body class="bg-montano-bg text-gray-800 min-h-screen flex flex-col">
 
     <!-- Encabezado y Barra de Herramientas -->
-    <header class="bg-white shadow-md border-b-4 border-montano-blue p-4 flex justify-between items-center sticky top-0 z-50">
-        <div class="flex items-center gap-4">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyEop0yf6lZ7Jk9MILZxF1rBj4Oqs5esyhIQ&s" alt="Logo Colegio Montano" class="h-12 w-auto rounded">
-            <div>
-                <h1 class="text-2xl font-bold text-montano-blue">Matemática - 3ro Básico</h1>
-                <h2 class="text-sm font-semibold text-montano-green">Tema: Lógica proposicional y razonamiento</h2>
-            </div>
+   <header class="bg-white shadow-md border-b-4 border-montano-blue p-4 flex justify-between items-center sticky top-0 z-50">
+
+    <!-- Logo y datos del curso -->
+    <div class="flex items-center gap-4">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyEop0yf6lZ7Jk9MILZxF1rBj4Oqs5esyhIQ&s"
+             alt="Logo Colegio Montano"
+             class="h-12 w-auto rounded">
+
+        <div>
+            <h1 class="text-2xl font-bold text-montano-blue">
+                Matemática - 3ro Básico
+            </h1>
+
+            <p class="text-sm font-bold text-montano-blue">Docente: PEM Bairon Duarte </p>
+            
+            <h2 class="text-sm font-semibold text-montano-green">
+                Tema: Lógica proposicional y razonamiento
+            </h2>
         </div>
-        <button onclick="toggleFullScreen()" class="bg-montano-yellow text-montano-blue font-bold py-2 px-4 rounded-lg shadow hover:bg-yellow-400 transition-colors flex items-center gap-2 interactive-btn">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
-            </svg>
-            Pantalla Completa
-        </button>
-    </header>
+    </div>
+
+    <!-- Identificador PDC -->
+    <div class="bg-montano-bg border-l-4 border-montano-yellow px-8 py-2 rounded-lg shadow-sm">
+        <span class="text-2xl font-extrabold text-montano-blue tracking-widest">
+            PDC1
+        </span>
+    </div>
+
+    <!-- Botón Pantalla Completa -->
+    <button onclick="toggleFullScreen()"
+        class="bg-montano-yellow text-montano-blue font-bold py-2 px-4 rounded-lg shadow hover:bg-yellow-400 transition-colors flex items-center gap-2 interactive-btn">
+
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5"
+             fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+        </svg>
+
+        Pantalla Completa
+    </button>
+
+</header>
 
     <!-- Barra de Contexto Pedagógico -->
     <div class="bg-montano-blue text-white px-6 py-2 flex flex-wrap justify-between text-sm shadow-inner">
