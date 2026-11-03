@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pizarra Digital - Conectivos Lógicos y Tablas de Verdad</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'montano-blue': '#1269A8',
+                        'montano-yellow': '#F7D615',
+                        'montano-green': '#54887D',
+                        'montano-lightblue': '#88B5C7',
+                        'montano-olive': '#A6B046',
+                        'montano-bg': '#F2F5E9'
+                    },
+                    fontFamily: {
+                        sans: ['Segoe UI', 'Tahoma', 'Verdana', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Verdana, sans-serif; }
+        .tab-content { display: none; animation: fadeIn 0.5s ease-in-out; }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        /* Custom scrollbar for better presentation */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #F2F5E9; }
+        ::-webkit-scrollbar-thumb { background: #88B5C7; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #1269A8; }
+        
+        .interactive-btn:active { transform: scale(0.98); }
+    </style>
+</head>
+<body class="bg-montano-bg text-gray-800 min-h-screen flex flex-col">
+
+    <!-- Encabezado y Barra de Herramientas -->
+    <header class="bg-white shadow-md border-b-4 border-montano-blue p-4 flex justify-between items-center sticky top-0 z-50">
+        <div class="flex items-center gap-4">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyEop0yf6lZ7Jk9MILZxF1rBj4Oqs5esyhIQ&s" alt="Logo Colegio Montano" class="h-12 w-auto rounded">
+            <div>
+                <h1 class="text-2xl font-bold text-montano-blue">Matemática - 3ro Básico</h1>
+                <h2 class="text-sm font-semibold text-montano-green">Tema: Conectivos lógicos y tablas de verdad</h2>
+            </div>
+        </div>
+        <button onclick="toggleFullScreen()" class="bg-montano-yellow text-montano-blue font-bold py-2 px-4 rounded-lg shadow hover:bg-yellow-400 transition-colors flex items-center gap-2 interactive-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+            </svg>
+            Pantalla Completa
+        </button>
+    </header>
+
+    <!-- Barra de Contexto Pedagógico -->
+    <div class="bg-montano-blue text-white px-6 py-2 flex flex-wrap justify-between text-sm shadow-inner">
+        <div><span class="font-bold text-montano-yellow">Hábito 2:</span> Comenzar con un fin en mente (Identifica proposiciones y el resultado esperado)</div>
+        <div><span class="font-bold text-montano-yellow">Competencia:</span> Resolución lógica de situaciones formales.</div>
+    </div>
+
+    <!-- Navegación por Pestañas -->
+    <nav class="flex justify-center bg-white shadow-sm overflow-x-auto">
+        <button onclick="openTab('tab1')" id="btn-tab1" class="tab-btn px-6 py-4 font-bold text-montano-blue border-b-4 border-montano-blue bg-blue-50 transition-all">I. Introducción (10')</button>
+        <button onclick="openTab('tab2')" id="btn-tab2" class="tab-btn px-6 py-4 font-bold text-gray-500 border-b-4 border-transparent hover:text-montano-blue hover:bg-blue-50 transition-all">II. Trabajo Individual (20')</button>
+        <button onclick="openTab('tab3')" id="btn-tab3" class="tab-btn px-6 py-4 font-bold text-gray-500 border-b-4 border-transparent hover:text-montano-blue hover:bg-blue-50 transition-all">III. Trabajo Cooperativo (25')</button>
+        <button onclick="openTab('tab4')" id="btn-tab4" class="tab-btn px-6 py-4 font-bold text-gray-500 border-b-4 border-transparent hover:text-montano-blue hover:bg-blue-50 transition-all">IV. Plenaria y Cierre (15')</button>
+    </nav>
+
+    <!-- Contenido Principal -->
+    <main class="flex-grow p-6 sm:p-10 max-w-7xl mx-auto w-full">
+
+        <!-- Pestaña I: Introducción Motivante -->
+        <section id="tab1" class="tab-content active">
+            <div class="bg-white rounded-2xl shadow-lg border border-gray-200 p-8">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="bg-montano-yellow p-3 rounded-full shadow">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-montano-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                    </div>
+                    <h2 class="text-3xl font-bold text-montano-blue">¿Cómo cambia el significado al unir dos afirmaciones?</h2>
+                </div>
+                
+                <p class="text-lg text-gray-700 mb-6">Considera las siguientes proposiciones: <br><strong>p:</strong> «8 es un número par» &nbsp;|&nbsp; <strong>q:</strong> «8 es mayor que 5».</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                    <div class="bg-montano-bg p-4 rounded-xl border-l-4 border-montano-lightblue text-lg font-medium text-center">1. 8 es un número par <strong>y</strong> es mayor que 5.</div>
+                    <div class="bg-montano-bg p-4 rounded-xl border-l-4 border-montano-lightblue text-lg font-medium text-center">2. 8 es un número par <strong>o</strong> es mayor que 5.</div>
+                    <div class="bg-montano-bg p-4 rounded-xl border-l-4 border-montano-lightblue text-lg font-medium text-center">3. <strong>Si</strong> 8 es un número par, <strong>entonces</strong> es mayor que 5.</div>
+                    <div class="bg-montano-bg p-4 rounded-xl border-l-4 border-montano-lightblue text-lg font-medium text-center">4. 8 es un número par <strong>si y solo si</strong> es mayor que 5.</div>
+                </div>
+
+                <div class="bg-montano-blue text-white p-6 rounded-xl shadow-md">
+                    <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-montano-yellow" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        Preguntas para reflexionar (Lluvia de ideas):
+                    </h3>
+                    <ul class="list-disc list-inside space-y-2 text-lg ml-4">
+                        <li>¿Qué palabra conecta las dos afirmaciones en cada caso?</li>
+                        <li>¿Todas las expresiones significan lo mismo?</li>
+                        <li>¿Cómo podemos decidir si una expresión compuesta es verdadera o falsa?</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pestaña II: Trabajo Individual -->
+        <section id="tab2" class="tab-content">
+            <div class="bg-white rounded-2xl shadow-lg border border-gray-200 p-8">
+                <h2 class="text-3xl font-bold text-montano-blue mb-6 border-b-2 border-montano-lightblue pb-2">Conceptos Clave y Práctica Individual</h2>
+                
+                <!-- Conceptos -->
+                <div class="grid grid-cols-1 gap-6 mb-8">
+                    <div class="flex flex-col md:flex-row gap-6">
+                        <div class="bg-blue-50 p-5 rounded-xl border border-blue-200 flex-1">
+                            <h3 class="text-xl font-bold text-montano-blue mb-2">1. Proposiciones simples y compuestas</h3>
+                            <p class="text-gray-700">Una <strong>proposición simple</strong> expresa una sola afirmación. Una <strong>proposición compuesta</strong> se forma al unir o modificar proposiciones mediante conectivos lógicos (p, q).</p>
+                        </div>
+                        <div class="bg-green-50 p-5 rounded-xl border border-green-200 flex-1">
+                            <h3 class="text-xl font-bold text-montano-green mb-2">2. Tablas de verdad</h3>
+                            <p class="text-gray-700">Organizan las combinaciones posibles de valores de verdad. Para dos proposiciones p y q, existen 4 combinaciones: VV, VF, FV, FF.</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Tabla de conectivos -->
+                    <div class="bg-montano-bg p-5 rounded-xl border border-gray-300 overflow-x-auto">
+                        <h3 class="text-xl font-bold text-montano-blue mb-3">3. Conectivos lógicos</h3>
+                        <table class="w-full text-left bg-white border-collapse rounded shadow-sm">
+                            <thead>
+                                <tr class="bg-montano-lightblue text-white">
+                                    <th class="p-2 border">Conectivo</th>
+                                    <th class="p-2 border">Símbolo</th>
+                                    <th class="p-2 border">Lectura</th>
+                                    <th class="p-2 border">Significado / Regla</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-sm">
+                                <tr><td class="p-2 border font-bold">Negación</td><td class="p-2 border text-center font-mono">¬p</td><td class="p-2 border">No p</td><td class="p-2 border">Invierte el valor de verdad de p.</td></tr>
+                                <tr class="bg-gray-50"><td class="p-2 border font-bold">Conjunción</td><td class="p-2 border text-center font-mono">p ∧ q</td><td class="p-2 border">p y q</td><td class="p-2 border">Es verdadera <strong>únicamente</strong> si ambas son verdaderas.</td></tr>
+                                <tr><td class="p-2 border font-bold">Disyunción (inclusiva)</td><td class="p-2 border text-center font-mono">p ∨ q</td><td class="p-2 border">p o q</td><td class="p-2 border">Es falsa <strong>únicamente</strong> si ambas son falsas.</td></tr>
+                                <tr class="bg-gray-50"><td class="p-2 border font-bold">Condicional</td><td class="p-2 border text-center font-mono">p → q</td><td class="p-2 border">Si p, entonces q</td><td class="p-2 border">Es falsa <strong>únicamente</strong> cuando p es verdadera y q falsa.</td></tr>
+                                <tr><td class="p-2 border font-bold">Bicondicional</td><td class="p-2 border text-center font-mono">p ↔ q</td><td class="p-2 border">p si y solo si q</td><td class="p-2 border">Es verdadera cuando p y q tienen el <strong>mismo</strong> valor.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Práctica -->
+                <h3 class="text-2xl font-bold text-montano-olive mb-4">¡Ponte a prueba! (Tu turno)</h3>
+                <p class="mb-4 text-gray-700">Sean <strong>p: «9 es impar»</strong> (V) y <strong>q: «9 es múltiplo de 3»</strong> (V). Determina el valor de verdad. <em>(Haz clic en "Ver Solución" para autoevaluarte)</em>.</p>
+                
+                <div class="space-y-4">
+                    <!-- Item A -->
+                    <div class="border rounded-lg p-4 bg-gray-50">
+                        <div class="flex justify-between items-center">
+                            <span class="text-lg font-medium">a) ¬p</span>
+                            <button onclick="toggleAnswer('ans-a')" class="bg-montano-lightblue text-white px-3 py-1 rounded hover:bg-montano-blue transition">Ver Solución</button>
+                        </div>
+                        <div id="ans-a" class="hidden mt-3 p-3 bg-white border border-gray-300 rounded text-gray-700 font-semibold">
+                            Falso (F). (Invierte el valor de p, que es V).
+                        </div>
+                    </div>
+                    <!-- Item B -->
+                    <div class="border rounded-lg p-4 bg-gray-50">
+                        <div class="flex justify-between items-center">
+                            <span class="text-lg font-medium">b) p ∧ q</span>
+                            <button onclick="toggleAnswer('ans-b')" class="bg-montano-lightblue text-white px-3 py-1 rounded hover:bg-montano-blue transition">Ver Solución</button>
+                        </div>
+                        <div id="ans-b" class="hidden mt-3 p-3 bg-white border border-green-300 rounded text-montano-green font-semibold">
+                            Verdadero (V). Ambas proposiciones son verdaderas.
+                        </div>
+                    </div>
+                    <!-- Item C -->
+                    <div class="border rounded-lg p-4 bg-gray-50">
+                        <div class="flex justify-between items-center">
+                            <span class="text-lg font-medium">c) p ∨ q</span>
+                            <button onclick="toggleAnswer('ans-c')" class="bg-montano-lightblue text-white px-3 py-1 rounded hover:bg-montano-blue transition">Ver Solución</button>
+                        </div>
+                        <div id="ans-c" class="hidden mt-3 p-3 bg-white border border-green-300 rounded text-montano-green font-semibold">
+                            Verdadero (V). (Solo es falsa si ambas fueran falsas).
+                        </div>
+                    </div>
+                    <!-- Item D -->
+                    <div class="border rounded-lg p-4 bg-gray-50">
+                        <div class="flex justify-between items-center">
+                            <span class="text-lg font-medium">d) p → q</span>
+                            <button onclick="toggleAnswer('ans-d')" class="bg-montano-lightblue text-white px-3 py-1 rounded hover:bg-montano-blue transition">Ver Solución</button>
+                        </div>
+                        <div id="ans-d" class="hidden mt-3 p-3 bg-white border border-green-300 rounded text-montano-green font-semibold">
+                            Verdadero (V). El antecedente es V y el consecuente V.
+                        </div>
+                    </div>
+                    <!-- Item E -->
+                    <div class="border rounded-lg p-4 bg-gray-50">
+                        <div class="flex justify-between items-center">
+                            <span class="text-lg font-medium">e) p ↔ q</span>
+                            <button onclick="toggleAnswer('ans-e')" class="bg-montano-lightblue text-white px-3 py-1 rounded hover:bg-montano-blue transition">Ver Solución</button>
+                        </div>
+                        <div id="ans-e" class="hidden mt-3 p-3 bg-white border border-green-300 rounded text-montano-green font-semibold">
+                            Verdadero (V). Ambas tienen el mismo valor.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pestaña III: Trabajo Cooperativo -->
+        <section id="tab3" class="tab-content">
+            <div class="bg-white rounded-2xl shadow-lg border border-gray-200 p-8">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
+        <!-- Pestaña III: Trabajo Cooperativo -->
+        <section id="tab3" class="tab-content">
+            <div class="bg-white rounded-2xl shadow-lg border border-gray-200 p-8">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
+                    <h2 class="text-3xl font-bold text-montano-blue">Construimos y verificamos tablas de verdad</h2>
+                    <div class="bg-montano-yellow text-montano-blue font-bold px-4 py-2 rounded-lg mt-4 md:mt-0 shadow">Equipos de 4 integrantes</div>
+                </div>
+
+                <div class="bg-montano-bg p-5 rounded-xl border-l-4 border-montano-olive mb-6">
+                    <h3 class="font-bold text-lg mb-2">Instrucciones y Roles (¡Hábito 2: Comenzar con un fin en mente!)</h3>
+                    <ul class="list-disc ml-6 text-gray-700 space-y-1 mb-4">
+                        <li>Definan las proposiciones simples y completen las cuatro combinaciones en su hoja.</li>
+                        <li>Calculen el resultado usando las reglas de cada conectivo y justifiquen.</li>
+                    </ul>
+                    <div class="flex flex-wrap gap-3">
+                        <span class="bg-white px-3 py-1 rounded-full text-sm shadow-sm border font-semibold">👑 Coordinador</span>
+                        <span class="bg-white px-3 py-1 rounded-full text-sm shadow-sm border font-semibold">📊 Encargado de tabla</span>
+                        <span class="bg-white px-3 py-1 rounded-full text-sm shadow-sm border font-semibold">✅ Verificador</span>
+                        <span class="bg-white px-3 py-1 rounded-full text-sm shadow-sm border font-semibold">🗣️ Portavoz</span>
+                    </div>
+                </div>
+
+                <!-- Situaciones -->
+                <div class="space-y-6">
+                    <div class="border p-5 rounded-lg border-gray-300 shadow-sm bg-gray-50">
+                        <h4 class="font-bold text-xl text-montano-blue mb-2">Situación 1</h4>
+                        <p class="text-gray-700 mb-2">Sean <strong>p: «15 es múltiplo de 3»</strong> y <strong>q: «15 es un número par»</strong>. <br>Completen la tabla con las 4 combinaciones (VV, VF, FV, FF) en su hoja. Luego, evalúen los conectivos (∧, ∨, →, ↔) con los valores reales de p y q.</p>
+                        <p class="italic text-sm text-gray-500 mt-2">Pista: primero identifiquen el valor real de p y q para saber qué fila de la tabla aplicará a su conclusión.</p>
+                    </div>
+                    
+                    <div class="border p-5 rounded-lg border-gray-300 shadow-sm bg-gray-50">
+                        <h4 class="font-bold text-xl text-montano-blue mb-2">Situación 2</h4>
+                        <p class="text-gray-700">Si <strong>r</strong> es una proposición falsa, determina el valor de verdad de <strong>¬r</strong>. Explica detalladamente tu respuesta.</p>
+                    </div>
+
+                    <div class="border p-5 rounded-lg border-gray-300 shadow-sm bg-gray-50">
+                        <h4 class="font-bold text-xl text-montano-blue mb-2">Situación 3</h4>
+                        <p class="text-gray-700">Escriban un ejemplo cotidiano que represente una <strong>conjunción (y)</strong> y otro que represente una <strong>disyunción inclusiva (o)</strong>. Identifiquen las proposiciones simples de cada caso.</p>
+                    </div>
+                </div>
+
+                <details class="group bg-gray-200 rounded-lg p-4 mt-6 cursor-pointer shadow-inner">
+                    <summary class="font-bold text-montano-blue outline-none flex justify-between items-center">
+                        Mostrar Respuestas de Evaluación Docente
+                        <span class="transition group-open:rotate-180">
+                            <svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24"><path d="M6 9l6 6 6-6"></path></svg>
+                        </span>
+                    </summary>
+                    <div class="mt-4 text-sm text-gray-800 space-y-3 bg-white p-4 rounded border border-gray-300">
+                        <p><strong>Sit 1:</strong> p=V, q=F (Fila 2 de la tabla). Por tanto: p∧q = F; p∨q = V; p→q = F; p↔q = F.</p>
+                        <p><strong>Sit 2:</strong> ¬r = V. (Al negar una proposición falsa, se invierte y se obtiene una verdadera).</p>
+                        <p><strong>Sit 3:</strong> Ej. Conjunción: "Hice la tarea y limpié mi cuarto" (Ambas deben cumplirse para ser V). Disyunción: "Iremos al cine o comeremos pizza" (Basta con que una se cumpla para ser V).</p>
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <!-- Pestaña IV: Plenaria y Cierre -->
+        <section id="tab4" class="tab-content">
+            <div class="bg-white rounded-2xl shadow-lg border border-gray-200 p-8 grid grid-cols-1 lg:grid-cols-2 gap-8">
+                
+                <!-- Ticket de Salida y Síntesis -->
+                <div>
+                    <h2 class="text-3xl font-bold text-montano-blue mb-4">Ticket de Salida</h2>
+                    <div class="bg-montano-bg p-5 rounded-xl border-t-4 border-montano-yellow shadow mb-6">
+                        <h4 class="font-bold text-lg mb-3">Resuelve individualmente:</h4>
+                        <ol class="list-decimal ml-5 space-y-3 text-gray-700">
+                            <li>Si <strong>p = V</strong> y <strong>q = F</strong>, determina <strong>p ∧ q</strong> y <strong>p ∨ q</strong>.</li>
+                            <li>Si <strong>p = V</strong> y <strong>q = F</strong>, determina <strong>p → q</strong>.</li>
+                            <li>Explica con tus palabras qué información presenta una tabla de verdad.</li>
+                        </ol>
+                    </div>
+
+                    <div class="bg-green-50 p-5 rounded-xl shadow-sm border border-green-200">
+                        <h4 class="font-bold text-montano-green text-lg mb-2">Metacognición</h4>
+                        <p class="italic text-gray-700">¿Qué paso te ayudó más a evitar errores al determinar el valor de verdad de una proposición compuesta?</p>
+                    </div>
+                </div>
+
+                <!-- Instrumento de Evaluación: Lista de Cotejo -->
+                <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-md">
+                    <h3 class="text-xl font-bold text-montano-blue mb-4 flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-montano-olive" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" /></svg>
+                        Lista de Cotejo Grupal (Plenaria)
+                    </h3>
+                    <p class="text-sm text-gray-500 mb-4">Docente: Marca las casillas para evaluar la participación de los equipos en la plenaria.</p>
+                    
+                    <div class="space-y-3">
+                        <label class="flex items-start gap-3 cursor-pointer p-2 hover:bg-gray-50 rounded">
+                            <input type="checkbox" class="w-5 h-5 mt-0.5 rounded text-montano-blue focus:ring-montano-blue">
+                            <span class="text-gray-700"><strong>Identificación:</strong> Identifica correctamente las proposiciones simples p y q.</span>
+                        </label>
+                        <label class="flex items-start gap-3 cursor-pointer p-2 hover:bg-gray-50 rounded">
+                            <input type="checkbox" class="w-5 h-5 mt-0.5 rounded text-montano-blue focus:ring-montano-blue">
+                            <span class="text-gray-700"><strong>Representación:</strong> Reconoce los símbolos de los conectivos.</span>
+                        </label>
+                        <label class="flex items-start gap-3 cursor-pointer p-2 hover:bg-gray-50 rounded">
+                            <input type="checkbox" class="w-5 h-5 mt-0.5 rounded text-montano-blue focus:ring-montano-blue">
+                            <span class="text-gray-700"><strong>Construcción:</strong> Completa correctamente las cuatro combinaciones de la tabla.</span>
+                        </label>
+                        <label class="flex items-start gap-3 cursor-pointer p-2 hover:bg-gray-50 rounded">
+                            <input type="checkbox" class="w-5 h-5 mt-0.5 rounded text-montano-blue focus:ring-montano-blue">
+                            <span class="text-gray-700"><strong>Aplicación y Justificación:</strong> Aplica reglas de conectivos y justifica sus resultados.</span>
+                        </label>
+                    </div>
+
+                    <!-- Mini Trivia Interactiva Rapida -->
+                    <div class="mt-6 border-t pt-4">
+                        <h4 class="font-bold text-montano-olive mb-2 text-center">Trivia Rápida de Cierre</h4>
+                        <div class="bg-montano-blue text-white p-4 rounded-lg text-center shadow-inner">
+                            <p id="trivia-q" class="mb-3 text-lg font-medium">Si p=V y q=V, entonces "p ∧ q" es Verdadero.</p>
+                            <div class="flex justify-center gap-4">
+                                <button onclick="checkTrivia(true)" class="bg-green-500 hover:bg-green-600 px-4 py-2 rounded font-bold transition">Verdadero</button>
+                                <button onclick="checkTrivia(false)" class="bg-red-500 hover:bg-red-600 px-4 py-2 rounded font-bold transition">Falso</button>
+                            </div>
+                            <p id="trivia-feedback" class="mt-3 font-bold h-6"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Pie de página -->
+    <footer class="bg-gray-800 text-gray-400 text-center py-4 text-sm mt-auto">
+        &copy; 2026 Colegio Montano - Modelo Educativo Interactivo. Próxima clase: Leyes operativas de los conectivos lógicos.
+    </footer>
+
+    <!-- Scripts de interactividad -->
+    <script>
+        // Función para cambiar de pestañas
+        function openTab(tabId) {
+            // Ocultar todos los contenidos
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+
+            // Resetear estilos de los botones
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('text-montano-blue', 'border-montano-blue', 'bg-blue-50');
+                btn.classList.add('text-gray-500', 'border-transparent');
+            });
+
+            // Mostrar el contenido seleccionado
+            document.getElementById(tabId).classList.add('active');
+
+            // Resaltar el botón seleccionado
+            const activeBtn = document.getElementById('btn-' + tabId);
+            activeBtn.classList.remove('text-gray-500', 'border-transparent');
+            activeBtn.classList.add('text-montano-blue', 'border-montano-blue', 'bg-blue-50');
+        }
+
+        // Función para ocultar/mostrar respuestas
+        function toggleAnswer(id) {
+            const el = document.getElementById(id);
+            if (el.classList.contains('hidden')) {
+                el.classList.remove('hidden');
+            } else {
+                el.classList.add('hidden');
+            }
+        }
+
+        // Función de Pantalla Completa
+        function toggleFullScreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch((err) => {
+                    console.log(`Error al intentar iniciar el modo pantalla completa: ${err.message}`);
+                });
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
+        }
+
+        // Trivia Script
+        const triviaQuestions = [
+            { q: 'Si p=V y q=V, entonces "p ∧ q" es Verdadero.', ans: true, desc: "¡Correcto! La conjunción exige que ambas sean verdaderas." },
+            { q: 'Si p=V y q=F, entonces "p → q" es Verdadero.', ans: false, desc: "Falso. El condicional es el único caso donde V → F resulta Falso." },
+            { q: 'La disyunción inclusiva (o) solo es falsa cuando ambas son falsas.', ans: true, desc: "¡Exacto! Basta con que una sea Verdadera para que toda sea Verdadera." }
+        ];
+        let currentQ = 0;
+
+        function checkTrivia(userAns) {
+            const feedback = document.getElementById('trivia-feedback');
+            const qData = triviaQuestions[currentQ];
+            
+            if (userAns === qData.ans) {
+                feedback.innerHTML = `<span class="text-green-300">¡Correcto! ${qData.desc}</span>`;
+            } else {
+                feedback.innerHTML = `<span class="text-montano-yellow">Revisa: ${qData.desc}</span>`;
+            }
+
+            // Pasar a la siguiente pregunta después de 2.5 seg
+            setTimeout(() => {
+                currentQ = (currentQ + 1) % triviaQuestions.length;
+                document.getElementById('trivia-q').innerText = triviaQuestions[currentQ].q;
+                feedback.innerHTML = '';
+            }, 2500);
+        }
+    </script>
+</body>
+</html>
