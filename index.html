@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plan Anual Institucional - Colegio Montano</title>
+    <style>
+        :root {
+            --cm-blue-main: #1F3C88;
+            --cm-blue-sec: #3F72AF;
+            --cm-white: #FFFFFF;
+            --cm-yellow: #F2C94C;
+            --cm-gray-light: #F4F7F6;
+            --cm-text-dark: #333333;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--cm-gray-light);
+            color: var(--cm-text-dark);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Encabezado */
+        header {
+            background-color: var(--cm-blue-main);
+            color: var(--cm-white);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            z-index: 10;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .header-logo {
+            max-height: 50px;
+        }
+
+        .header-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header-info h1 {
+            margin: 0;
+            font-size: 1.5rem;
+            font-style: italic;
+            color: var(--cm-white);
+        }
+
+        .header-info span {
+            font-size: 0.9rem;
+            color: var(--cm-yellow);
+            font-style: italic;
+        }
+
+        /* Boton Pantalla Completa */
+        .btn-fullscreen {
+            background-color: var(--cm-yellow);
+            color: var(--cm-blue-main);
+            border: none;
+            padding: 10px 20px;
+            font-size: 1rem;
+            font-style: italic;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-fullscreen:hover {
+            transform: scale(1.05);
+            box-shadow: 0 2px 8px rgba(242, 201, 76, 0.5);
+        }
+
+        /* Navegacion por pestañas */
+        nav {
+            background-color: var(--cm-blue-sec);
+            display: flex;
+            overflow-x: auto;
+            scrollbar-width: thin;
+        }
+
+        nav::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        nav::-webkit-scrollbar-thumb {
+            background: var(--cm-blue-main);
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            color: var(--cm-white);
+            padding: 15px 25px;
+            font-size: 1rem;
+            font-style: italic;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: background 0.3s, color 0.3s;
+            border-bottom: 4px solid transparent;
+        }
+
+        .tab-btn:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+
+        .tab-btn.active {
+            color: var(--cm-yellow);
+            border-bottom: 4px solid var(--cm-yellow);
+            background-color: rgba(31, 60, 136, 0.4);
+        }
+
+        /* Contenido Principal */
+        main {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .tab-content {
+            display: none;
+            background-color: var(--cm-white);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Estilos de contenido y cursivas obligatorias */
+        .tab-content h2 {
+            color: var(--cm-blue-main);
+            font-style: italic;
+            border-bottom: 2px solid var(--cm-blue-sec);
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+
+        .tab-content h3 {
+            color: var(--cm-blue-sec);
+            font-style: italic;
+            margin-top: 20px;
+        }
+
+        .tab-content p, .tab-content ul, .tab-content ol {
+            line-height: 1.6;
+            font-size: 1.1rem;
+        }
+
+        .tab-content ul li {
+            margin-bottom: 8px;
+        }
+
+        .highlight-box {
+            background-color: rgba(242, 201, 76, 0.15);
+            border-left: 5px solid var(--cm-yellow);
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .card {
+            border: 1px solid rgba(63, 114, 175, 0.3);
+            border-radius: 8px;
+            padding: 20px;
+            background-color: var(--cm-gray-light);
+            transition: transform 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(31, 60, 136, 0.1);
+        }
+
+        .card h4 {
+            color: var(--cm-blue-main);
+            font-style: italic;
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body id="dashboard">
+
+    <header>
+        <div class="header-left">
+            <img src="https://admisiones.colegiomontano.edu.gt/assets/img/logo-cm-blanco.webp" alt="Logo Colegio Montano" class="header-logo">
+            <div class="header-info">
+                <h1><i>Plan Anual Matemáticas - Tercero Básico</i></h1>
+                <span><i>Prof. Bairon Duarte | Ciclo Escolar 2027</i></span>
+            </div>
+        </div>
+        <button class="btn-fullscreen" onclick="toggleFullScreen()">
+            🖥️ <i>Pantalla Completa</i>
+        </button>
+    </header>
+
+    <nav>
+        <button class="tab-btn active" onclick="openTab(event, 'tab-1')"><i>I) Descriptor</i></button>
+        <button class="tab-btn" onclick="openTab(event, 'tab-2')"><i>II) Objetivos</i></button>
+        <button class="tab-btn" onclick="openTab(event, 'tab-3')"><i>III) Competencias</i></button>
+        <button class="tab-btn" onclick="openTab(event, 'tab-4')"><i>IV) Indicadores</i></button>
+        <button class="tab-btn" onclick="openTab(event, 'tab-5')"><i>V) Métodos</i></button>
+        <button class="tab-btn" onclick="openTab(event, 'tab-6')"><i>VI) Bibliografía</i></button>
+        <button class="tab-btn" onclick="openTab(event, 'tab-7')"><i>VII) Contenidos</i></button>
+    </nav>
+
+    <main>
+        <!-- I) DESCRIPTOR DEL CURSO -->
+        <div id="tab-1" class="tab-content active">
+            <h2><i>I) Descriptor del Curso</i></h2>
+            <p>El área de matemática tiene la finalidad de afianzar y ampliar las competencias relacionadas con el análisis, razonamiento y comunicación eficaz de sus ideas cuando los y las estudiantes se plantean, formulan, resuelven e interpretan problemas matemáticos en una variedad de contextos.</p>
+            <p>El área tiene como propósito, adicionalmente a la formación de las aptitudes analíticas relacionadas al pensamiento creativo, la toma de decisiones, la solución a problemas, el procesamiento y la organización de elementos visuales y otro tipo de información, que el estudiante pueda desarrollar otras cualidades personales relativas a la responsabilidad, a una alta autoestima, a la sociabilidad, gestión personal, integridad y honestidad.</p>
+            <div class="highlight-box">
+                <p><i>El objetivo principal, es que el estudiante adquiera una habilidad tangible para resolver problemas, por medio de un método sistemático, mejor que la simple memorización, ya que, al comprender sólidamente los temas, el estudiante podrá formarse un concepto y un vocabulario de matemática con el fin de que adquiera seguridad en su propia capacidad.</i></p>
+            </div>
+            <h3><i>Aspectos fundamentales de la actividad matemática:</i></h3>
+            <ul>
+                <li><i>Planteamiento y resolución de problemas.</i></li>
+                <li><i>Razonamiento matemático.</i></li>
+                <li><i>Comunicación matemática.</i></li>
+            </ul>
+        </div>
+
+        <!-- II) OBJETIVOS GENERALES -->
+        <div id="tab-2" class="tab-content">
+            <h2><i>II) Objetivos Generales</i></h2>
+            <div class="highlight-box">
+                <p><i>Enriquecer la comprensión de la realidad, facilitar la selección de estrategias para resolver problemas y contribuir al desarrollo del pensamiento crítico y autónomo en todos los estudiantes.</i></p>
+            </div>
+        </div>
+
+        <!-- III) COMPETENCIAS -->
+        <div id="tab-3" class="tab-content">
+            <h2><i>III) Competencias</i></h2>
+            
+            <h3><i>Competencias Académicas (Área de Matemática):</i></h3>
+            <ul>
+                <li>Produce patrones aritméticos, algebraicos aplicando propiedades, relaciones, símbolos y señales de fenómenos naturales, sociales y culturales.</li>
+                <li>Utiliza técnicas de sucesiones y series para interpretar hechos sociales, económicos y geográficos.</li>
+                <li>Resuelve situaciones problema de carácter formal que demandan el dominio del pensamiento lógico matemático y las operaciones matemáticas de aritmética y álgebra en los conjuntos numéricos reales y complejos.</li>
+                <li>Aplica conocimientos sobre ecuaciones, desigualdades, sistemas de ecuaciones simultáneas, en situaciones que promueven el mejoramiento y transformación del medio natural, social y cultural de su contexto.</li>
+                <li>Emplea las teorías de geometría y trigonometría para interpretar diferente información y elaborar informes sobre situaciones reales.</li>
+            </ul>
+
+            <div class="highlight-box">
+                <h3><i>Competencias CM (Institucionales - Integración Fija):</i></h3>
+                <ul>
+                    <li><i>Pensamiento crítico y resolución de problemas.</i></li>
+                    <li><i>Colaboración y trabajo en equipo.</i></li>
+                    <li><i>Competencias digitales.</i></li>
+                    <li><i>Comunicación efectiva.</i></li>
+                    <li><i>Creatividad e innovación.</i></li>
+                    <li><i>Aprendizaje autónomo y adaptabilidad.</i></li>
+                    <li><i>Conciencia global y cultural.</i></li>
+                    <li><i>Ética y ciudadanía digital.</i></li>
+                    <li><i>Gestión emocional y resiliencia.</i></li>
+                    <li><i>Conciencia ecológica y sostenibilidad.</i></li>
+                    <li><i>Desempeño de roles de liderazgo.</i></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- IV) INDICADORES DE LOGRO -->
+        <div id="tab-4" class="tab-content">
+            <h2><i>IV) Indicadores de Logro</i></h2>
+            <ul>
+                <li>Emite juicios argumentando procedimientos y resultados.</li>
+                <li>Aplica conceptos de pensamiento lógico y aritmética para el planteamiento y resolución de problemas de contexto.</li>
+                <li>Aplica la factorización de polinomios al simplificar fracciones y expresiones algebraicas.</li>
+                <li>Utiliza diferentes métodos en la resolución de ecuaciones lineales, cuadráticas, con valor absoluto, inecuaciones y/o desigualdades lineales y métodos de resolución de sistemas de ecuaciones.</li>
+                <li>Resuelve problemas que involucran el cálculo de medidas, dimensionales, ángulos, conversiones y la aplicación de teoremas y propiedades de figuras planas y cuerpos sólidos.</li>
+            </ul>
+        </div>
+
+        <!-- V) MÉTODOS DIDÁCTICOS -->
+        <div id="tab-5" class="tab-content">
+            <h2><i>V) Métodos Didácticos (Modelo CM)</i></h2>
+            <p>Se aplica de forma estricta el <i>Modelo Activo-Colaborativo</i> institucional y el método del <i>Período Doble (70 minutos)</i>, distribuido de la siguiente manera:</p>
+            
+            <div class="grid-container">
+                <div class="card">
+                    <h4><i>1. Introducción Motivante</i></h4>
+                    <p>Activación de presaberes mediante el uso de juegos, dinamización y lluvia de ideas para captar la atención del alumno.</p>
+                </div>
+                <div class="card">
+                    <h4><i>2. Trabajo Individual</i></h4>
+                    <p>Desarrollo de las potencialidades, habilidades y destrezas individuales, permitiendo al estudiante procesar el conocimiento.</p>
+                </div>
+                <div class="card">
+                    <h4><i>3. Trabajo en Equipo</i></h4>
+                    <p>Interacción activa con roles claramente definidos bajo la consigna institucional: <i>"Todos para uno y uno para todos"</i>.</p>
+                </div>
+                <div class="card">
+                    <h4><i>4. Plenaria</i></h4>
+                    <p>Exposición pública del trabajo, fomentando el diálogo socrático apoyado siempre por la <i>lectura previa en casa</i>.</p>
+                </div>
+            </div>
+
+            <div class="highlight-box">
+                <h3><i>Metodologías Clave Transversales:</i></h3>
+                <ul>
+                    <li><i>Aprendizaje Basado en Proyectos (ABP)</i></li>
+                    <li><i>Constructivismo</i></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- VI) BIBLIOGRAFÍA -->
+        <div id="tab-6" class="tab-content">
+            <h2><i>VI) Bibliografía y Referencias</i></h2>
+            <ul>
+                <li>Programa El líder en mí.</li>
+                <li>Matemáticas 9, Los caminos del saber, Santillana, 2013</li>
+                <li>Currículo Nacional Base. Mineduc. Guatemala</li>
+                <li>Baldor, Aurelio (1972). Álgebra elemental. Cultural Centroamericana, Guatemala.</li>
+                <li>Baldor, Aurelio (1974). Aritmética Teórico práctica. Cultural Centroamericana, Guatemala.</li>
+                <li>Baldor, Aurelio (2004). Geometría plana y del espacio con una introducción a la trigonometría. Publicaciones Cultural, México.</li>
+                <li>Hipertexto 3 Básico, Editorial Santillana, Bogotá, Colombia 2010</li>
+                <li>Los caminos del Saber 9 Editorial Santillana, Bogotá, Colombia 2014</li>
+                <li>Álgebra y trigonometría Séptima Edición, Pearson Prentice Hall, México 2006</li>
+                <li>Álgebra intermedia, un enfoque del mundo Real, Tercera Edición, McGraw Hill, México 2009</li>
+            </ul>
+        </div>
+
+        <!-- VII) CONTENIDOS -->
+        <div id="tab-7" class="tab-content">
+            <h2><i>VII) Contenidos (Desglose por Unidades)</i></h2>
+            
+            <div class="grid-container">
+                <div class="card">
+                    <h4><i>Unidad I: Lógica y Aritmética</i></h4>
+                    <ol>
+                        <li>Lógica proposicional y razonamiento</li>
+                        <li>Conectivos lógicos y tablas de verdad</li>
+                        <li>Leyes operativas de los conectivos lógicos</li>
+                        <li>Teoría de Conjuntos fundamentos</li>
+                        <li>Operaciones con conjuntos y su representación</li>
+                        <li>Conjuntos numéricos</li>
+                        <li>Aritméticas leyes y propiedades</li>
+                        <li>Potenciación y radicación de enteros y racionales</li>
+                        <li>Leyes de los exponentes y de las raíces</li>
+                        <li>Jerarquía de las operaciones incluyendo signos de agrupación</li>
+                    </ol>
+                </div>
+
+                <div class="card">
+                    <h4><i>Unidad II: Álgebra y Ecuaciones</i></h4>
+                    <ol>
+                        <li>Sucesiones, series y aplicaciones</li>
+                        <li>Sucesiones aritméticas y geométricas</li>
+                        <li>Álgebra fundamentos y aplicaciones</li>
+                        <li>Término y expresión algebraica</li>
+                        <li>Operaciones aritméticas aplicadas a polinomios</li>
+                        <li>Productos notables</li>
+                        <li>Factorización</li>
+                        <li>Despejes</li>
+                        <li>Ecuaciones, desigualdades e inecuaciones</li>
+                        <li>Ecuaciones cuadráticas y métodos de resolución</li>
+                        <li>Números complejos</li>
+                    </ol>
+                </div>
+
+                <div class="card">
+                    <h4><i>Unidad III: Sistemas Lineales</i></h4>
+                    <ol>
+                        <li>Sistemas de ecuaciones lineales</li>
+                        <li>Ecuaciones simultáneas con dos y tres variables</li>
+                        <li>Métodos de resolución, Soluciones y tipos</li>
+                        <li>Método gráfico para dos variables (Una solución, Infinitas soluciones, Sin solución)</li>
+                        <li>Método de igualación</li>
+                        <li>Método por sustitución</li>
+                        <li>Método de Eliminación, suma o reducción</li>
+                        <li>Problemas con modelado de sistemas de ecuaciones</li>
+                    </ol>
+                </div>
+
+                <div class="card">
+                    <h4><i>Unidad IV: Geometría y Trigonometría</i></h4>
+                    <ol>
+                        <li>Geometría, conceptos básicos, ángulos</li>
+                        <li>Rectas paralelas y perpendiculares</li>
+                        <li>Triángulos y ángulos</li>
+                        <li>Teoremas fundamentales (Pitágoras, Thales y Euclides)</li>
+                        <li>Cuadriláteros y polígonos</li>
+                        <li>Circunferencia, puntos, rectas y ángulos</li>
+                        <li>Perímetro y superficie</li>
+                        <li>Cuerpos geométricos Áreas y volúmenes</li>
+                        <li>Trigonometría del triángulo rectángulo y triangulo oblicuángulo</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Logica para navegacion por pestañas
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            
+            // Ocultar todos los contenidos de las pestañas
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].classList.remove("active");
+            }
+            
+            // Remover la clase active de todos los botones
+            tablinks = document.getElementsByClassName("tab-btn");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].classList.remove("active");
+            }
+            
+            // Mostrar la pestaña actual y añadir la clase active al boton que abrio la pestaña
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+
+        // Logica para Pantalla Completa
+        function toggleFullScreen() {
+            var doc = window.document;
+            var docEl = doc.documentElement;
+
+            var requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
+            var cancelFullScreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
+
+            try {
+                if(!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
+                    if(requestFullScreen) {
+                        var promise = requestFullScreen.call(docEl);
+                        // Manejar el rechazo de la promesa (común en navegadores modernos)
+                        if (promise && promise.catch) {
+                            promise.catch(function(error) {
+                                showErrorMessage("<i>La pantalla completa no está permitida en esta vista previa.</i>");
+                            });
+                        }
+                    }
+                } else {
+                    if(cancelFullScreen) {
+                        var cancelPromise = cancelFullScreen.call(doc);
+                        if (cancelPromise && cancelPromise.catch) {
+                            cancelPromise.catch(function(error) {
+                                showErrorMessage("<i>Error al salir de pantalla completa.</i>");
+                            });
+                        }
+                    }
+                }
+            } catch (err) {
+                // Capturar el error en caso de que el navegador no use promesas para esta API
+                showErrorMessage("<i>La pantalla completa no está permitida en esta vista previa.</i>");
+            }
+        }
+
+        // Función para mostrar mensajes de error de forma estética (sin usar alert)
+        function showErrorMessage(message) {
+            var existingToast = document.getElementById("cm-toast");
+            if (existingToast) {
+                existingToast.remove();
+            }
+
+            var toast = document.createElement("div");
+            toast.id = "cm-toast";
+            toast.innerHTML = message;
+            toast.style.position = "fixed";
+            toast.style.bottom = "20px";
+            toast.style.left = "50%";
+            toast.style.transform = "translateX(-50%)";
+            toast.style.backgroundColor = "var(--cm-blue-main)";
+            toast.style.color = "var(--cm-white)";
+            toast.style.padding = "12px 24px";
+            toast.style.borderRadius = "8px";
+            toast.style.boxShadow = "0 4px 12px rgba(0,0,0,0.3)";
+            toast.style.zIndex = "9999";
+            toast.style.transition = "opacity 0.3s ease-in-out";
+            
+            document.body.appendChild(toast);
+
+            // Desaparecer después de 3 segundos
+            setTimeout(function() {
+                toast.style.opacity = "0";
+                setTimeout(function() {
+                    if (toast.parentNode) {
+                        toast.parentNode.removeChild(toast);
+                    }
+                }, 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
