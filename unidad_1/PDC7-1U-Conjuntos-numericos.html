@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pizarra Digital - PDC 7: Conjuntos Numéricos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- MathJax 3 para renderizado de expresiones LaTeX -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)']],
+                displayMath: [['\\[', '\\]']]
+            },
+            startup: {
+                pageReady: () => {
+                    return MathJax.startup.defaultPageReady().then(() => {
+                        console.log('MathJax initial mockup ready.');
+                    });
+                }
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        montano: {
+                            blue: '#1269A8',
+                            yellow: '#F7D615',
+                            green: '#54887D',
+                            lightblue: '#88B5C7',
+                            olive: '#A6B046',
+                            bg: '#F2F5E9'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Segoe UI', 'Tahoma', 'Verdana', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Verdana, sans-serif; }
+        .fade-in { animation: fadeIn 0.4s ease-in-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .custom-scrollbar::-webkit-scrollbar { width: 8px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #F2F5E9; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #88B5C7; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #1269A8; }
+    </style>
+</head>
+<body class="bg-montano-bg text-gray-800 h-screen flex flex-col overflow-hidden custom-scrollbar">
+
+    <!-- Encabezado unificado estilo visual Montano -->
+    
+<header class="bg-montano-blue shadow-md relative z-10 flex-shrink-0">
+    <!-- <div class="container mx-auto px-4 py-3 flex justify-between items-center gap-4"> -->
+    <div class="container mx-auto px-4 py-3 flex justify-start items-center gap-12">    
+
+        <!-- 1. Izquierda: Escudo independiente -->
+        <div class="flex-shrink-0 flex items-center justify-center">
+            <img src="../img/escudo_montano_transparente.png"
+                 alt="Escudo Colegio Montano"
+                 class="h-24 md:h-28 w-auto object-contain">
+        </div>
+
+        <!-- 2. Información académica -->
+        <div class="flex flex-col text-white justify-center flex-shrink-0">
+            <span class="text-xl md:text-2xl font-extrabold text-montano-yellow tracking-wider drop-shadow-sm whitespace-nowrap mb-0.5">
+                COLEGIO MONTANO
+            </span>
+            <h1 class="text-base md:text-lg font-bold leading-tight text-gray-100">
+                Matemática - 3ro Básico
+            </h1>
+            <h2 class="text-xs md:text-sm font-medium mt-0.5 text-gray-200">
+                Docente: PEM Bairon Duarte
+            </h2>
+            <h3 class="text-xs md:text-sm text-gray-200">
+                Tema: Conjuntos numéricos
+            </h3>
+        </div>
+
+        <!-- 3. Centro: Identificación del plan -->
+        <div class="flex flex-col items-center justify-center bg-white border-l-4 border-montano-yellow px-4 md:px-6 py-1.5 rounded-r-md shadow-sm text-center flex-shrink-0">
+            <span class="text-base md:text-lg font-extrabold text-montano-blue tracking-wide">
+                PDC7
+            </span>
+            <span class="text-[11px] md:text-xs font-bold text-gray-700">
+                Semana 4
+            </span>
+            <span class="text-[10px] md:text-[11px] text-gray-500">
+                1 al 5 de feb 2027
+            </span>
+        </div>
+
+        <!-- 4. Derecha: Pantalla completa -->
+        <button onclick="toggleFullscreen()"
+                class="bg-montano-yellow text-montano-blue font-bold px-3 py-1.5 md:px-4 md:py-2 text-xs md:text-sm rounded shadow hover:bg-yellow-400 transition-colors flex items-center gap-2 flex-shrink-0">
+            <i class="fas fa-expand"></i>
+            <span>Pantalla Completa</span>
+        </button>
+
+    </div>
+</header>
+
+
+    <!-- Navegación de Pestañas -->
+    <nav class="container mx-auto px-4 mt-4 flex-shrink-0">
+        <ul class="flex flex-wrap gap-2 justify-center md:justify-start" id="tabs-nav">
+            <li>
+                <button onclick="switchTab('tab-info')" id="btn-tab-info" class="tab-btn active px-4 py-2 rounded-t-lg font-bold bg-montano-blue text-white transition-colors border-b-0">
+                    <i class="fas fa-info-circle mr-1"></i> Foco Pedagógico
+                </button>
+            </li>
+            <li>
+                <button onclick="switchTab('tab-1')" id="btn-tab-1" class="tab-btn px-4 py-2 rounded-t-lg font-bold bg-gray-200 text-gray-700 hover:bg-montano-lightblue hover:text-white transition-colors">
+                    <i class="fas fa-rocket mr-1"></i> I. Motivación
+                </button>
+            </li>
+            <li>
+                <button onclick="switchTab('tab-2')" id="btn-tab-2" class="tab-btn px-4 py-2 rounded-t-lg font-bold bg-gray-200 text-gray-700 hover:bg-montano-lightblue hover:text-white transition-colors">
+                    <i class="fas fa-user-edit mr-1"></i> II. Individual
+                </button>
+            </li>
+            <li>
+                <button onclick="switchTab('tab-3')" id="btn-tab-3" class="tab-btn px-4 py-2 rounded-t-lg font-bold bg-gray-200 text-gray-700 hover:bg-montano-lightblue hover:text-white transition-colors">
+                    <i class="fas fa-users mr-1"></i> III. Cooperativo
+                </button>
+            </li>
+            <li>
+                <button onclick="switchTab('tab-4')" id="btn-tab-4" class="tab-btn px-4 py-2 rounded-t-lg font-bold bg-gray-200 text-gray-700 hover:bg-montano-lightblue hover:text-white transition-colors">
+                    <i class="fas fa-chalkboard-teacher mr-1"></i> IV. Plenaria
+                </button>
+            </li>
+            <li>
+                <button onclick="switchTab('tab-eval')" id="btn-tab-eval" class="tab-btn px-4 py-2 rounded-t-lg font-bold bg-gray-200 text-gray-700 hover:bg-montano-olive hover:text-white transition-colors">
+                    <i class="fas fa-clipboard-check mr-1"></i> Evaluación
+                </button>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Contenedor Principal (Área de Pizarra) -->
+    <main class="container mx-auto px-4 pb-6 flex-grow overflow-auto custom-scrollbar">
+        <div class="bg-white shadow-lg rounded-b-lg rounded-tr-lg p-6 min-h-full border-t-4 border-montano-blue">
+            
+            <!-- PESTAÑA: Foco Pedagógico -->
+            <div id="tab-info" class="tab-content fade-in">
+                <h2 class="text-2xl font-bold text-montano-blue border-b-2 border-montano-yellow pb-2 mb-4">Competencias y Logros</h2>
+                
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-blue-50 p-4 rounded-xl border border-blue-100 shadow-sm">
+                        <h3 class="font-bold text-lg text-montano-blue mb-2"><i class="fas fa-bullseye"></i> Competencia Referencia (CNB 2.2)</h3>
+                        <p class="mb-3">Resuelve problemas aplicando la teoría de conjuntos.</p>
+                        <h3 class="font-bold text-lg text-montano-blue mb-2"><i class="fas fa-chart-line"></i> Logro de Aprendizaje</h3>
+                        <p>Clasificar números en los conjuntos naturales, enteros, racionales, irracionales y reales; representar sus relaciones de inclusión mediante un diagrama general; y justificar a qué conjunto o conjuntos pertenece un número dado.</p>
+                    </div>
+
+                    <div class="bg-green-50 p-4 rounded-xl border border-green-100 shadow-sm">
+                        <h3 class="font-bold text-lg text-montano-green mb-2"><i class="fas fa-seedling"></i> Modelo Formativo Montano</h3>
+                        <div class="flex items-center gap-3 mb-2">
+                            <span class="bg-montano-olive text-white px-3 py-1 rounded-full font-bold text-sm">Hábito 1</span>
+                            <span class="font-bold text-gray-700">Ser proactivo.</span>
+                        </div>
+                        <p class="text-sm text-gray-600 italic">Conducta: Propone ejemplos, pregunta cuando identifica una duda y verifica por iniciativa propia la clasificación de los números.</p>
+                        
+                        <h3 class="font-bold text-lg text-montano-green mt-4 mb-2"><i class="fas fa-tools"></i> Recursos</h3>
+                        <ul class="list-disc list-inside text-sm text-gray-700">
+                            <li>Pizarra y marcadores.</li>
+                            <li>Cuaderno, lápiz y borrador.</li>
+                            <li>Hoja de trabajo con lista de números.</li>
+                            <li>Regla y lápices de colores.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PESTAÑA I: Motivación -->
+            <div id="tab-1" class="tab-content fade-in hidden">
+                <div class="flex justify-between items-center mb-4 border-b-2 border-montano-yellow pb-2">
+                    <h2 class="text-2xl font-bold text-montano-blue">I. Introducción Motivante</h2>
+                    <span class="bg-montano-lightblue text-white px-3 py-1 rounded-full text-sm font-bold"><i class="far fa-clock"></i> 10 min</span>
+                </div>
+
+                <div class="bg-yellow-50 p-5 rounded-xl border-l-4 border-montano-yellow mb-6 shadow-sm">
+                    <h3 class="text-xl font-bold text-gray-800 mb-3"><i class="fas fa-question-circle text-montano-yellow"></i> Situación Detonante</h3>
+                    <p class="text-lg mb-4">El docente escribe en la pizarra los números: \(-4, 0, 5, \frac{1}{2}, \sqrt{2}, \pi\)</p>
+                    <div class="grid md:grid-cols-2 gap-4 text-center mt-4">
+                        <div class="bg-white p-3 rounded-lg shadow-sm border">¿Todos son números? ¿Pertenecen al mismo conjunto?</div>
+                        <div class="bg-white p-3 rounded-lg shadow-sm border">¿Cómo clasificaríamos \(\sqrt{2}\) o \(\frac{1}{2}\)?</div>
+                    </div>
+                </div>
+
+                <div class="text-center bg-gray-50 p-4 rounded-lg border border-gray-200">
+                    <p class="font-bold text-montano-blue"><i class="fas fa-lightbulb text-montano-yellow"></i> Hábito 1 en acción:</p>
+                    <p class="text-sm">Cada estudiante se compromete a proponer ejemplos y justificar su clasificación de manera proactiva.</p>
+                </div>
+            </div>
+
+            <!-- PESTAÑA II: Individual -->
+            <div id="tab-2" class="tab-content fade-in hidden">
+                <div class="flex justify-between items-center mb-4 border-b-2 border-montano-yellow pb-2">
+                    <h2 class="text-2xl font-bold text-montano-blue">II. Trabajo Individual Guiado</h2>
+                    <span class="bg-montano-lightblue text-white px-3 py-1 rounded-full text-sm font-bold"><i class="far fa-clock"></i> 20 min</span>
+                </div>
+
+                <!-- Exposición Magistral -->
+                <div class="mb-6">
+                    <h3 class="font-bold text-lg mb-2 text-gray-800">Conceptos Clave y Relación de Inclusión</h3>
+                    <div class="grid md:grid-cols-2 gap-4 mb-4">
+                        <div class="bg-gray-50 p-4 rounded-lg border">
+                            <ul class="space-y-2 text-sm">
+                                <li><strong class="text-montano-blue">Naturales (\(\mathbb{N}\)):</strong> Usados para contar: \(\{1, 2, 3, \dots\}\).</li>
+                                <li><strong class="text-montano-blue">Enteros (\(\mathbb{Z}\)):</strong> Naturales, opuestos negativos y cero: \(\{\dots, -2, -1, 0, 1, 2, \dots\}\).</li>
+                                <li><strong class="text-montano-blue">Racionales (\(\mathbb{Q}\)):</strong> Expresables como \(\frac{a}{b}\) (\(b \neq 0\)). Fracciones y decimales periódicos/finitos.</li>
+                            </ul>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg border">
+                            <ul class="space-y-2 text-sm">
+                                <li><strong class="text-montano-blue">Irracionales (\(\mathbb{R} \setminus \mathbb{Q}\)):</strong> Decimales infinitos no periódicos: \(\sqrt{2}, \pi, e\).</li>
+                                <li><strong class="text-montano-blue">Reales (\(\mathbb{R}\)):</strong> Reúnen racionales e irracionales.</li>
+                                <li><strong class="text-montano-blue">Inclusión:</strong> \(\mathbb{N} \subset \mathbb{Z} \subset \mathbb{Q} \subset \mathbb{R}\).</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Diagrama de Inclusión General (SVG) -->
+                    <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm text-center mb-6">
+                        <h4 class="font-bold text-montano-blue mb-3"><i class="fas fa-sitemap"></i> Diagrama General de los Conjuntos Numéricos</h4>
+                        <svg viewBox="0 0 500 260" class="w-full max-w-[480px] mx-auto">
+                            <!-- ℝ Reales -->
+                            <rect x="10" y="10" width="480" height="240" rx="20" fill="#f8fafc" stroke="#1269A8" stroke-width="3"/>
+                            <text x="30" y="35" font-weight="bold" fill="#1269A8" font-size="14">\(\mathbb{R}\) (NÚMEROS REALES)</text>
+                            
+                            <!-- ℚ Racionales (incluye enteros y naturales) -->
+                            <rect x="30" y="50" width="300" height="185" rx="15" fill="#eff6ff" stroke="#3b82f6" stroke-width="2"/>
+                            <text x="45" y="72" font-weight="bold" fill="#2563eb" font-size="12">\(\mathbb{Q}\) RACIONALES</text>
+                            <text x="50" y="215" font-size="11" fill="#475569">Ej: \(\frac{1}{2}, -\frac{3}{4}, 0.25\)</text>
+
+                            <!-- ℤ Enteros -->
+                            <rect x="50" y="85" width="260" height="115" rx="12" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+                            <text x="65" y="105" font-weight="bold" fill="#1d4ed8" font-size="12">\(\mathbb{Z}\) ENTEROS</text>
+
+                            <!-- ℕ Naturales -->
+                            <ellipse cx="145" cy="155" rx="75" ry="32" fill="#bfdbfe" stroke="#1d4ed8" stroke-width="2"/>
+                            <text x="105" y="150" font-weight="bold" fill="#1e40af" font-size="12">\(\mathbb{N}\)</text>
+                            <text x="105" y="168" font-size="11" fill="#1e40af">\(1, 2, 3, \dots\)</text>
+
+                            <!-- ℝ \ ℚ Irracionales -->
+                            <rect x="350" y="50" width="120" height="185" rx="15" fill="#fef3c7" stroke="#d97706" stroke-width="2"/>
+                            <text x="365" y="72" font-weight="bold" fill="#b45309" font-size="12">\(\mathbb{R} \setminus \mathbb{Q}\)</text>
+                            <text x="375" y="90" font-size="11" fill="#b45309">IRRACIONALES</text>
+                            <text x="370" y="140" font-size="12" fill="#78350f">\(\sqrt{2}, \sqrt{3}, \pi, e\)</text>
+                        </svg>
+                    </div>
+
+                    <!-- Práctica guiada con soluciones ocultas -->
+                    <div class="bg-gray-50 p-4 rounded-lg border">
+                        <h4 class="font-bold text-montano-blue mb-2">Verificación Individual Guiada</h4>
+                        <p class="text-sm mb-3">Clasifica los siguientes números indicando el conjunto más pequeño al que pertenecen: \(-3, 8, 0, \frac{2}{7}, 0.4, 0.333\ldots, \sqrt{5}, \pi\).</p>
+                        <button onclick="toggleSolution('sol-indiv')" class="bg-montano-blue text-white text-xs px-3 py-1.5 rounded font-bold hover:bg-blue-700 transition">
+                            <i class="fas fa-eye mr-1"></i> Ver Solución / Orientación
+                        </button>
+                        <div id="sol-indiv" class="hidden mt-3 p-3 bg-white rounded border border-blue-200 text-sm space-y-1">
+                            <p>• \(-3 \in \mathbb{Z}\) (Entero)</p>
+                            <p>• \(8 \in \mathbb{N}\) (Natural)</p>
+                            <p>• \(0 \in \mathbb{Z}\) (Entero, con la convención adoptada)</p>
+                            <p>• \(\frac{2}{7} \in \mathbb{Q}\) (Racional)</p>
+                            <p>• \(0.4 \in \mathbb{Q}\) (Racional finito)</p>
+                            <p>• \(0.333\ldots \in \mathbb{Q}\) (Racional periódico)</p>
+                            <p>• \(\sqrt{5} \in \mathbb{R} \setminus \mathbb{Q}\) (Irracional)</p>
+                            <p>• \(\pi \in \mathbb{R} \setminus \mathbb{Q}\) (Irracional)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PESTAÑA III: Cooperativo -->
+            <div id="tab-3" class="tab-content fade-in hidden">
+                <div class="flex justify-between items-center mb-4 border-b-2 border-montano-yellow pb-2">
+                    <h2 class="text-2xl font-bold text-montano-blue">III. Trabajo Cooperativo / en Equipo</h2>
+                    <span class="bg-montano-lightblue text-white px-3 py-1 rounded-full text-sm font-bold"><i class="far fa-clock"></i> 25 min</span>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="md:col-span-2 bg-yellow-50 p-5 rounded-xl border border-montano-yellow shadow-sm">
+                        <h3 class="text-lg font-bold text-gray-800 mb-2"><i class="fas fa-users text-montano-yellow"></i> Actividad: «Detectives de los números»</h3>
+                        <p class="text-sm mb-3">En equipos de 3 o 4 integrantes, analicen la lista: \(-12, 0, 6, \frac{3}{4}, -\frac{2}{5}, 1.25, 0.777\ldots, \sqrt{16}, \sqrt{7}, \pi, 2\).</p>
+                        <ul class="list-disc list-inside text-sm space-y-2 text-gray-700">
+                            <li>Clasifiquen cada número en el conjunto más pequeño (\(\mathbb{N}, \mathbb{Z}, \mathbb{Q}, \mathbb{R} \setminus \mathbb{Q}\)).</li>
+                            <li>Anoten una justificación para cada caso (ej. \(\sqrt{16} = 4\), por tanto es natural).</li>
+                            <li>Construyan un diagrama de conjuntos numéricos y ubiquen cada número.</li>
+                            <li>Escriban dos relaciones de inclusión y preparen una explicación de los casos confusos.</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-montano-blue text-white p-5 rounded-xl shadow-md flex flex-col justify-between">
+                        <div>
+                            <h4 class="font-bold text-montano-yellow mb-3 border-b border-white/20 pb-2"><i class="fas fa-tasks"></i> Producto Verificable</h4>
+                            <p class="text-sm mb-2">Hoja de trabajo con la clasificación, diagrama rotulado y justificaciones escritas.</p>
+                        </div>
+                        <div class="bg-white/10 p-3 rounded-lg text-xs mt-4">
+                            <strong>Hábito 1:</strong> Responsabilidad personal y verificación proactiva en equipo.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PESTAÑA IV: Plenaria -->
+            <div id="tab-4" class="tab-content fade-in hidden">
+                <div class="flex justify-between items-center mb-4 border-b-2 border-montano-yellow pb-2">
+                    <h2 class="text-2xl font-bold text-montano-blue">IV. Plenaria y Cierre</h2>
+                    <span class="bg-montano-lightblue text-white px-3 py-1 rounded-full text-sm font-bold"><i class="far fa-clock"></i> 15 min</span>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6 mb-6">
+                    <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
+                        <h3 class="text-lg font-bold text-montano-blue mb-3"><i class="fas fa-microphone-alt"></i> Exposición Plenaria</h3>
+                        <p class="text-sm text-gray-700 mb-4">Equipos presentan sus diagramas justificando casos como \(\sqrt{16}\), \(\sqrt{7}\) y \(0.777\ldots\).</p>
+                        <div class="bg-blue-50 p-3 rounded-lg text-sm border-l-4 border-montano-blue">
+                            <strong class="block mb-1">Síntesis Colectiva:</strong>
+                            <p class="text-xs text-gray-700">Todo natural es entero, todo entero es racional y todo racional es real. Los irracionales son reales no racionales.</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-gradient-to-br from-montano-blue to-montano-lightblue text-white p-5 rounded-xl shadow-sm flex flex-col justify-center items-center text-center">
+                        <i class="fas fa-gamepad text-4xl text-montano-yellow mb-3"></i>
+                        <h3 class="text-lg font-bold mb-2">Trivia Interactiva de Clasificación</h3>
+                        <p class="text-sm mb-4">Dinámica rápida de preguntas sobre pertenencia a conjuntos numéricos.</p>
+                        <button class="bg-montano-yellow text-montano-blue px-4 py-2 rounded-lg font-bold shadow hover:bg-yellow-400 transition" onclick="alert('Se abre la trivia interactiva de números reales.')">
+                            Iniciar Trivia Rápida
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Ticket de Salida -->
+                <div class="bg-yellow-50 p-5 rounded-xl border border-montano-yellow shadow-sm">
+                    <h3 class="font-bold text-lg text-gray-800 mb-3"><i class="fas fa-ticket-alt text-montano-yellow"></i> Ticket de Salida Individual</h3>
+                    <ul class="list-disc list-inside text-sm space-y-2 text-gray-700 mb-3">
+                        <li>Indica el conjunto más pequeño al que pertenece \(-9\).</li>
+                        <li>¿\(0.25\) es racional o irracional? Justifica.</li>
+                        <li>Explica por qué \(\sqrt{3}\) es real, pero no racional.</li>
+                        <li>Completa: \(\mathbb{N} \subset \underline{\quad} \subset \underline{\quad} \subset \mathbb{R}\).</li>
+                    </ul>
+                    <p class="text-xs text-gray-600 italic border-t border-yellow-200 pt-2"><strong>Metacognición:</strong> ¿Qué característica utilicé para clasificar los números?</p>
+                </div>
+            </div>
+
+            <!-- PESTAÑA EVALUACIÓN -->
+            <div id="tab-eval" class="tab-content fade-in hidden">
+                <div class="flex justify-between items-center mb-4 border-b-2 border-montano-yellow pb-2">
+                    <h2 class="text-2xl font-bold text-montano-blue">Instrumentos de Evaluación</h2>
+                </div>
+
+                <p class="mb-4 text-sm text-gray-700"><strong>Criterio de evaluación:</strong> Clasifica correctamente números naturales, enteros, racionales e irracionales; reconoce su inclusión en los reales; representa la relación en un diagrama y justifica sus decisiones.</p>
+
+                <div class="overflow-x-auto mb-6">
+                    <table class="w-full text-left border-collapse bg-white shadow-sm rounded-lg overflow-hidden">
+                        <thead class="bg-montano-green text-white">
+                            <tr>
+                                <th class="p-3">Evidencia Observable</th>
+                                <th class="p-3">Instrumento</th>
+                                <th class="p-3">Aspectos por Verificar</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-sm">
+                            <tr class="border-b">
+                                <td class="p-3">Clasificación individual de números.</td>
+                                <td class="p-3 font-bold text-montano-blue">Revisión de ejercicios</td>
+                                <td class="p-3">Identifica conjunto más pequeño y reconoce pertenencias por inclusión.</td>
+                            </tr>
+                            <tr class="border-b bg-gray-50">
+                                <td class="p-3">Diagrama y justificaciones del equipo.</td>
+                                <td class="p-3 font-bold text-montano-blue">Lista de cotejo</td>
+                                <td class="p-3">Ubica \(\mathbb{N}\) en \(\mathbb{Z}\), \(\mathbb{Z}\) en \(\mathbb{Q}\), \(\mathbb{Q}\) en \(\mathbb{R}\) y separa irracionales.</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3">Respuestas del ticket de salida.</td>
+                                <td class="p-3 font-bold text-montano-blue">Ticket individual</td>
+                                <td class="p-3">Explica racionalidad/irracionalidad y completa relaciones de inclusión.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Lista de Cotejo Interactiva -->
+                <h3 class="font-bold text-lg text-montano-blue mb-3">Lista de Cotejo para Plenaria (Trabajo en Equipo)</h3>
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+                    <table class="w-full text-left border-collapse">
+                        <thead class="bg-gray-100">
+                            <tr>
+                                <th class="p-3 border-b text-sm">Criterio a Evaluar</th>
+                                <th class="p-3 border-b text-sm text-center w-24">Sí Cumple</th>
+                                <th class="p-3 border-b text-sm text-center w-24">No Cumple</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-sm">
+                            <tr class="border-b hover:bg-gray-50">
+                                <td class="p-3">1. Explican con claridad la clasificación y el tipo de número.</td>
+                                <td class="p-3 text-center"><input type="radio" name="crit1" class="w-4 h-4 text-montano-blue"></td>
+                                <td class="p-3 text-center"><input type="radio" name="crit1" class="w-4 h-4"></td>
+                            </tr>
+                            <tr class="border-b hover:bg-gray-50">
+                                <td class="p-3">2. Ubican correctamente los números en el diagrama de inclusión.</td>
+                                <td class="p-3 text-center"><input type="radio" name="crit2" class="w-4 h-4 text-montano-blue"></td>
+                                <td class="p-3 text-center"><input type="radio" name="crit2" class="w-4 h-4"></td>
+                            </tr>
+                            <tr class="border-b hover:bg-gray-50">
+                                <td class="p-3">3. Demuestran trabajo colaborativo y participación equitativa.</td>
+                                <td class="p-3 text-center"><input type="radio" name="crit3" class="w-4 h-4 text-montano-blue"></td>
+                                <td class="p-3 text-center"><input type="radio" name="crit3" class="w-4 h-4"></td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-3">4. Responden adecuadamente a preguntas sobre simplificación de raíces.</td>
+                                <td class="p-3 text-center"><input type="radio" name="crit4" class="w-4 h-4 text-montano-blue"></td>
+                                <td class="p-3 text-center"><input type="radio" name="crit4" class="w-4 h-4"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        // Lógica de Pestañas
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(el => {
+                el.classList.remove('bg-montano-blue', 'text-white', 'active');
+                el.classList.add('bg-gray-200', 'text-gray-700');
+            });
+            
+            document.getElementById(tabId).classList.remove('hidden');
+            
+            const btn = document.getElementById('btn-' + tabId);
+            btn.classList.remove('bg-gray-200', 'text-gray-700');
+            btn.classList.add('bg-montano-blue', 'text-white', 'active');
+
+            // Renderizar LaTeX al cambiar de pestaña
+            if (window.MathJax) {
+                MathJax.typesetPromise();
+            }
+        }
+
+        // Lógica para solución oculta
+        function toggleSolution(solId) {
+            const el = document.getElementById(solId);
+            if (el.classList.contains('hidden')) {
+                el.classList.remove('hidden');
+                if (window.MathJax) {
+                    MathJax.typesetPromise([el]);
+                }
+            } else {
+                el.classList.add('hidden');
+            }
+        }
+
+        // Pantalla Completa
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    console.log(`Error al intentar pantalla completa: ${err.message}`);
+                });
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
+        }
+    </script>
+</body>
+</html>
