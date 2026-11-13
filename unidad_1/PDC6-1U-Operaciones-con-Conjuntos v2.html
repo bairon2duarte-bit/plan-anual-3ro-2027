@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pizarra Digital - PDC 6: Conjuntos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        montano: {
+                            blue: '#1269A8',
+                            yellow: '#F7D615',
+                            green: '#54887D',
+                            lightblue: '#88B5C7',
+                            olive: '#A6B046',
+                            bg: '#F2F5E9'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Segoe UI', 'Tahoma', 'Verdana', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Verdana, sans-serif; }
+        .fade-in { animation: fadeIn 0.4s ease-in-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .custom-scrollbar::-webkit-scrollbar { width: 8px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #F2F5E9; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #88B5C7; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #1269A8; }
+    </style>
+</head>
+<body class="bg-montano-bg text-gray-800 h-screen flex flex-col overflow-hidden custom-scrollbar">
+
+    <!-- Encabezado unificado estilo visual Montano -->
+    <header class="bg-montano-blue shadow-md relative z-10 flex-shrink-0">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            
+            <!-- Izquierda: Logo y Textos -->
+            <div class="flex items-center gap-4">
+                <!-- Se usa una URL pública ya que los archivos locales no se renderizan en la vista previa -->
+                <div class="bg-white/10 p-1.5 rounded-2xl backdrop-blur-sm shadow-inner">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyEop0yf6lZ7Jk9MILZxF1rBj4Oqs5esyhIQ&s" alt="Logo Colegio Montano" class="h-14 mix-blend-screen opacity-90 hover:opacity-100 transition-opacity rounded-xl" style="filter: brightness(1.1) contrast(1.2);">
+                </div>
+                <div class="flex flex-col text-white justify-center">
+                    <span class="text-2xl md:text-3xl font-extrabold text-montano-yellow uppercase tracking-wider drop-shadow-sm">Colegio Montano</span>
+                    <h1 class="text-lg md:text-xl font-bold leading-tight text-gray-100">Matemática - 3ro Básico</h1>
+                    <h2 class="text-sm font-medium mt-1">Docente: PEM Bairon Duarte</h2>
+                    <h3 class="text-sm text-gray-200">Tema: Operaciones con conjuntos y su representación</h3>
+                </div>
+            </div>
+
+            <!-- Centro: Etiqueta de Plan (PDC6) -->
+            <div class="hidden md:flex bg-white border-l-4 border-montano-yellow px-6 py-2 rounded-r-md shadow-sm">
+                <span class="text-xl font-extrabold text-montano-blue tracking-wide">PDC6</span>
+            </div>
+
+            <!-- Derecha: Botón Pantalla Completa -->
+            <button onclick="toggleFullscreen()" class="bg-montano-yellow text-montano-blue font-bold px-5 py-2.5 rounded shadow hover:bg-yellow-400 transition-colors flex items-center gap-2">
+                <i class="fas fa-expand"></i> <span class="hidden sm:inline">Pantalla Completa</span>
+            </button>
+
+        </div>
+    </header>
+
+    <!-- Navegación de Pestañas -->
+    <nav class="container mx-auto px-4 mt-4 flex-shrink-0">
+        <ul class="flex flex-wrap gap-2 justify-center md:justify-start" id="tabs-nav">
+            <li>
+                <button onclick="switchTab('tab-info')" id="btn-tab-info" class="tab-btn active px-4 py-2 rounded-t-lg font-bold bg-montano-blue text-white transition-colors border-b-0">
+                    <i class="fas fa-info-circle mr-1"></i> Foco Pedagógico
+                </button>
+            </li>
+            <li>
+                <button onclick="switchTab('tab-1')" id="btn-tab-1" class="tab-btn px-4 py-2 rounded-t-lg font-bold bg-gray-200 text-gray-700 hover:bg-montano-lightblue hover:text-white transition-colors">
+                    <i class="fas fa-rocket mr-1"></i> I. Motivación
+                </button>
+            </li>
+            <li>
+                <button onclick="switchTab('tab-2')" id="btn-tab-2" class="tab-btn px-4 py-2 rounded-t-lg font-bold bg-gray-200 text-gray-700 hover:bg-montano-lightblue hover:text-white transition-colors">
+                    <i class="fas fa-user-edit mr-1"></i> II. Individual
+                </button>
+            </li>
+            <li>
+                <button onclick="switchTab('tab-3')" id="btn-tab-3" class="tab-btn px-4 py-2 rounded-t-lg font-bold bg-gray-200 text-gray-700 hover:bg-montano-lightblue hover:text-white transition-colors">
+                    <i class="fas fa-users mr-1"></i> III. Cooperativo
+                </button>
+            </li>
+            <li>
+                <button onclick="switchTab('tab-4')" id="btn-tab-4" class="tab-btn px-4 py-2 rounded-t-lg font-bold bg-gray-200 text-gray-700 hover:bg-montano-lightblue hover:text-white transition-colors">
+                    <i class="fas fa-chalkboard-teacher mr-1"></i> IV. Plenaria
+                </button>
+            </li>
+            <li>
+                <button onclick="switchTab('tab-eval')" id="btn-tab-eval" class="tab-btn px-4 py-2 rounded-t-lg font-bold bg-gray-200 text-gray-700 hover:bg-montano-olive hover:text-white transition-colors">
+                    <i class="fas fa-clipboard-check mr-1"></i> Evaluación
+                </button>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Contenedor Principal (Área de Pizarra) -->
+    <main class="container mx-auto px-4 pb-6 flex-grow overflow-auto custom-scrollbar">
+        <div class="bg-white shadow-lg rounded-b-lg rounded-tr-lg p-6 min-h-full border-t-4 border-montano-blue">
+            
+            <!-- PESTAÑA: Foco Pedagógico -->
+            <div id="tab-info" class="tab-content fade-in">
+                <h2 class="text-2xl font-bold text-montano-blue border-b-2 border-montano-yellow pb-2 mb-4">Competencias y Logros</h2>
+                
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-blue-50 p-4 rounded-xl border border-blue-100 shadow-sm">
+                        <h3 class="font-bold text-lg text-montano-blue mb-2"><i class="fas fa-bullseye"></i> Competencia (CNB 2.2)</h3>
+                        <p class="mb-3">Resuelve problemas aplicando la teoría de conjuntos.</p>
+                        <h3 class="font-bold text-lg text-montano-blue mb-2"><i class="fas fa-chart-line"></i> Logro de Aprendizaje</h3>
+                        <p>Al finalizar la sesión, el estudiante determinará la unión, la intersección y la diferencia de dos conjuntos, expresará cada operación mediante notación simbólica y la representará en diagramas de Venn, justificando qué elementos se incluyen o se excluyen.</p>
+                    </div>
+
+                    <div class="bg-green-50 p-4 rounded-xl border border-green-100 shadow-sm">
+                        <h3 class="font-bold text-lg text-montano-green mb-2"><i class="fas fa-seedling"></i> Modelo Formativo Montano</h3>
+                        <div class="flex items-center gap-3 mb-2">
+                            <span class="bg-montano-olive text-white px-3 py-1 rounded-full font-bold text-sm">Hábito 2</span>
+                            <span class="font-bold text-gray-700">Comenzar con un fin en mente.</span>
+                        </div>
+                        <p class="text-sm text-gray-600 italic">Conducta: Antes de resolver, el estudiante identifica qué operación necesita realizar y establece qué elementos espera encontrar en el resultado.</p>
+                        
+                        <h3 class="font-bold text-lg text-montano-green mt-4 mb-2"><i class="fas fa-tools"></i> Recursos</h3>
+                        <ul class="list-disc list-inside text-sm text-gray-700">
+                            <li>Pizarra y marcadores.</li>
+                            <li>Cuaderno y lápiz.</li>
+                            <li>Hojas de trabajo o tarjetas de elementos.</li>
+                            <li>Regla y lápices de colores.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PESTAÑA I: Motivación -->
+            <div id="tab-1" class="tab-content fade-in hidden">
+                <div class="flex justify-between items-center mb-4 border-b-2 border-montano-yellow pb-2">
+                    <h2 class="text-2xl font-bold text-montano-blue">I. Introducción Motivante</h2>
+                    <span class="bg-montano-lightblue text-white px-3 py-1 rounded-full text-sm font-bold"><i class="far fa-clock"></i> 10 min</span>
+                </div>
+
+                <div class="bg-yellow-50 p-5 rounded-xl border-l-4 border-montano-yellow mb-6 shadow-sm">
+                    <h3 class="text-xl font-bold text-gray-800 mb-3"><i class="fas fa-question-circle text-montano-yellow"></i> Situación Detonante</h3>
+                    <p class="text-lg mb-4">En el aula se encuesta a un grupo de estudiantes sobre dos actividades:</p>
+                    <ul class="list-none flex gap-6 mb-4">
+                        <li class="bg-white px-4 py-2 rounded-lg shadow-sm border border-gray-200">⚽ Quienes practican <strong>fútbol</strong> (Conjunto F)</li>
+                        <li class="bg-white px-4 py-2 rounded-lg shadow-sm border border-gray-200">🏀 Quienes practican <strong>baloncesto</strong> (Conjunto B)</li>
+                    </ul>
+                    <p class="italic text-gray-600">Algunos estudiantes practican ambas actividades y otros solamente una.</p>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-4 text-center">
+                    <div class="p-4 bg-montano-blue text-white rounded-xl shadow-md">
+                        <h4 class="font-bold mb-2">Pregunta 1</h4>
+                        <p class="text-sm">¿Cómo identificaríamos a quienes practican <strong>al menos uno</strong> de los deportes?</p>
+                    </div>
+                    <div class="p-4 bg-montano-green text-white rounded-xl shadow-md">
+                        <h4 class="font-bold mb-2">Pregunta 2</h4>
+                        <p class="text-sm">¿Cómo encontraríamos a quienes practican <strong>los dos</strong>?</p>
+                    </div>
+                    <div class="p-4 bg-montano-olive text-white rounded-xl shadow-md">
+                        <h4 class="font-bold mb-2">Pregunta 3</h4>
+                        <p class="text-sm">¿Cómo identificaríamos a quienes practican fútbol, <strong>pero no</strong> baloncesto?</p>
+                    </div>
+                </div>
+
+                <div class="mt-8 text-center bg-gray-50 p-4 rounded-lg border border-gray-200">
+                    <p class="font-bold text-montano-blue"><i class="fas fa-lightbulb text-montano-yellow"></i> Hábito 2 en acción:</p>
+                    <p class="text-sm">Define mentalmente el resultado que buscas <strong>antes</strong> de escoger la operación matemática.</p>
+                </div>
+            </div>
+
+            <!-- PESTAÑA II: Individual -->
+            <div id="tab-2" class="tab-content fade-in hidden">
+                <div class="flex justify-between items-center mb-4 border-b-2 border-montano-yellow pb-2">
+                    <h2 class="text-2xl font-bold text-montano-blue">II. Trabajo Individual Guiado</h2>
+                    <span class="bg-montano-lightblue text-white px-3 py-1 rounded-full text-sm font-bold"><i class="far fa-clock"></i> 20 min</span>
+                </div>
+
+                <!-- Exposición Magistral Resumida -->
+                <div class="mb-6">
+                    <h3 class="font-bold text-lg mb-2 text-gray-800">Conceptos Clave (Ejemplo: Universo U = {1, 2, 3, 4, 5, 6, 7}, A = {1, 2, 3, 4}, B = {3, 4, 5, 6})</h3>
+                    
+                    <div class="bg-gray-100 p-4 rounded-lg mb-4 text-sm border-l-4 border-gray-500 shadow-sm">
+                        <strong class="text-gray-800 text-base"><i class="far fa-square text-gray-600 mr-1"></i> Conjunto Universo (U):</strong> 
+                        Representa el total de elementos del tema de estudio. En el diagrama de Venn, <strong>siempre se dibuja como un rectángulo</strong> que encierra a los demás conjuntos (círculos). Los elementos que no pertenecen a A ni a B (en este ejemplo, el "7") se escriben dentro del rectángulo, pero fuera de los círculos.
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse bg-white shadow-sm rounded-lg overflow-hidden">
+                            <thead class="bg-montano-blue text-white">
+                                <tr>
+                                    <th class="p-3">Operación</th>
+                                    <th class="p-3">Significado</th>
+                                    <th class="p-3">Resultado</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-sm">
+                                <tr class="border-b">
+                                    <td class="p-3 font-bold">Unión: A &cup; B</td>
+                                    <td class="p-3">Elementos que pertenecen a A, a B o a ambos. No se repiten.</td>
+                                    <td class="p-3 bg-blue-50 font-mono">A &cup; B = {1, 2, 3, 4, 5, 6}</td>
+                                </tr>
+                                <tr class="border-b">
+                                    <td class="p-3 font-bold">Intersección: A &cap; B</td>
+                                    <td class="p-3">Elementos que pertenecen simultáneamente a A y a B.</td>
+                                    <td class="p-3 bg-green-50 font-mono">A &cap; B = {3, 4}</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-bold">Diferencia: A &minus; B</td>
+                                    <td class="p-3">Elementos que pertenecen a A, pero no pertenecen a B.</td>
+                                    <td class="p-3 bg-yellow-50 font-mono">A &minus; B = {1, 2}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p class="text-xs text-red-600 mt-2 italic">* Aclaración: La diferencia depende del orden. B &minus; A = {5, 6}. Por tanto, A &minus; B &ne; B &minus; A.</p>
+                    
+                    <!-- NUEVO: Ejemplos visuales de Diagramas de Venn -->
+                    <div class="mt-6 bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
+                        <h3 class="font-bold text-lg mb-4 text-montano-blue"><i class="fas fa-shapes"></i> Representación Gráfica (Diagramas de Venn)</h3>
+                        <div class="grid md:grid-cols-3 gap-6 text-center">
+                            
+                            <!-- Unión -->
+                            <div>
+                                <h4 class="font-bold text-blue-700 mb-2">Unión (A &cup; B)</h4>
+                                <svg viewBox="0 0 200 150" class="w-full max-w-[220px] mx-auto drop-shadow-sm">
+                                    <rect x="5" y="5" width="190" height="140" fill="#f9fafb" stroke="#9ca3af" stroke-width="2" rx="4"/>
+                                    <text x="12" y="22" font-family="sans-serif" font-size="12" font-weight="bold" fill="#4b5563">U</text>
+                                    <!-- Sombreado Unión -->
+                                    <circle cx="80" cy="75" r="45" fill="#bfdbfe" />
+                                    <circle cx="120" cy="75" r="45" fill="#bfdbfe" />
+                                    <!-- Bordes -->
+                                    <circle cx="80" cy="75" r="45" fill="none" stroke="#1d4ed8" stroke-width="2" />
+                                    <circle cx="120" cy="75" r="45" fill="none" stroke="#1d4ed8" stroke-width="2" />
+                                    <text x="50" y="79" font-family="sans-serif" font-size="14" font-weight="bold" fill="#1d4ed8">A</text>
+                                    <text x="140" y="79" font-family="sans-serif" font-size="14" font-weight="bold" fill="#1d4ed8">B</text>
+                                </svg>
+                                <p class="text-xs text-gray-600 mt-2">Todo A y todo B pintados.</p>
+                            </div>
+
+                            <!-- Intersección -->
+                            <div>
+                                <h4 class="font-bold text-green-700 mb-2">Intersección (A &cap; B)</h4>
+                                <svg viewBox="0 0 200 150" class="w-full max-w-[220px] mx-auto drop-shadow-sm">
+                                    <defs>
+                                        <clipPath id="clipIntersection">
+                                            <circle cx="120" cy="75" r="45" />
+                                        </clipPath>
+                                    </defs>
+                                    <rect x="5" y="5" width="190" height="140" fill="#f9fafb" stroke="#9ca3af" stroke-width="2" rx="4"/>
+                                    <text x="12" y="22" font-family="sans-serif" font-size="12" font-weight="bold" fill="#4b5563">U</text>
+                                    <!-- Sombreado Intersección -->
+                                    <circle cx="80" cy="75" r="45" fill="#bbf7d0" clip-path="url(#clipIntersection)" />
+                                    <!-- Bordes -->
+                                    <circle cx="80" cy="75" r="45" fill="none" stroke="#15803d" stroke-width="2" />
+                                    <circle cx="120" cy="75" r="45" fill="none" stroke="#15803d" stroke-width="2" />
+                                    <text x="50" y="79" font-family="sans-serif" font-size="14" font-weight="bold" fill="#15803d">A</text>
+                                    <text x="140" y="79" font-family="sans-serif" font-size="14" font-weight="bold" fill="#15803d">B</text>
+                                </svg>
+                                <p class="text-xs text-gray-600 mt-2">Solo la zona compartida.</p>
+                            </div>
+
+                            <!-- Diferencia -->
+                            <div>
+                                <h4 class="font-bold text-yellow-600 mb-2">Diferencia (A &minus; B)</h4>
+                                <svg viewBox="0 0 200 150" class="w-full max-w-[220px] mx-auto drop-shadow-sm">
+                                    <defs>
+                                        <mask id="maskDifference">
+                                            <rect x="0" y="0" width="200" height="150" fill="white" />
+                                            <circle cx="120" cy="75" r="45" fill="black" />
+                                        </mask>
+                                    </defs>
+                                    <rect x="5" y="5" width="190" height="140" fill="#f9fafb" stroke="#9ca3af" stroke-width="2" rx="4"/>
+                                    <text x="12" y="22" font-family="sans-serif" font-size="12" font-weight="bold" fill="#4b5563">U</text>
+                                    <!-- Sombreado Diferencia -->
+                                    <circle cx="80" cy="75" r="45" fill="#fef08a" mask="url(#maskDifference)" />
+                                    <!-- Bordes -->
+                                    <circle cx="80" cy="75" r="45" fill="none" stroke="#a16207" stroke-width="2" />
+                                    <circle cx="120" cy="75" r="45" fill="none" stroke="#a16207" stroke-width="2" />
+                                    <text x="50" y="79" font-family="sans-serif" font-size="14" font-weight="bold" fill="#a16207">A</text>
+                                    <text x="140" y="79" font-family="sans-serif" font-size="14" font-weight="bold" fill="#a16207">B</text>
+                                </svg>
+                                <p class="text-xs text-gray-600 mt-2">Solo los de A excluyendo a B.</p>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Verificación Individual -->
+                <div class="bg-gray-50 p-5 rounded-xl border border-gray-200 mt-6">
+                                <li>Calculen <strong class="font-mono text-montano-blue">A &cup; B</strong> e indiquen cuántos prefieren al menos una actividad.</li>
+                                <li>Calculen <strong class="font-mono text-montano-blue">A &cap; B</strong> e indiquen quiénes prefieren ambas actividades.</li>
+                                <li>Calculen <strong class="font-mono text-montano-blue">A &minus; B</strong> e indiquen quiénes prefieren lectura, pero no experimentos.</li>
+                                <li>Calculen <strong class="font-mono text-montano-blue">B &minus; A</strong> e indiquen quiénes prefieren experimentos, pero no lectura.</li>
+                                <li>Representen los dos conjuntos en un <strong>diagrama de Venn</strong> (¡No olviden dibujar el <strong>rectángulo</strong> para el Universo $U$!) y ubiquen cada elemento.</li>
+                                <li>Identifiquen a los estudiantes que quedan fuera de los círculos (dentro del rectángulo). ¿Qué significa esto en el contexto de la encuesta?</li>
+                                <li>Escriban una <strong>conclusión</strong>: ¿Por qué la unión no debe repetir los elementos comunes?</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <!-- Roles -->
+                        <div class="bg-montano-blue text-white p-4 rounded-xl shadow-md mb-4">
+                            <h4 class="font-bold text-montano-yellow mb-3 border-b border-white/20 pb-2"><i class="fas fa-users-cog"></i> Roles del Equipo</h4>
+                            <ul class="text-sm space-y-2">
+                                <li><i class="fas fa-star text-montano-yellow mr-2"></i><strong>Coordinador:</strong> Organiza el trabajo.</li>
+                                <li><i class="fas fa-calculator text-montano-yellow mr-2"></i><strong>Calculista:</strong> Realiza operaciones.</li>
+                                <li><i class="fas fa-check-double text-montano-yellow mr-2"></i><strong>Verificador:</strong> Comprueba elementos.</li>
+                                <li><i class="fas fa-bullhorn text-montano-yellow mr-2"></i><strong>Portavoz:</strong> Presenta conclusión.</li>
+                            </ul>
+                        </div>
+
+                        <!-- Hábito 2 -->
+                        <div class="bg-montano-olive text-white p-4 rounded-xl shadow-md">
+                            <h4 class="font-bold mb-2"><i class="fas fa-compass"></i> Producto y Hábito 2</h4>
+                            <p class="text-sm mb-2"><strong>Entregable:</strong> Hoja de trabajo con operaciones, diagrama de Venn rotulado y conclusión.</p>
+                            <p class="text-sm italic border-t border-white/30 pt-2">Antes de efectuar cada operación, acuerden qué región del diagrama deben obtener. Al finalizar, comparen.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PESTAÑA IV: Plenaria -->
+            <div id="tab-4" class="tab-content fade-in hidden">
+                <div class="flex justify-between items-center mb-4 border-b-2 border-montano-yellow pb-2">
+                    <h2 class="text-2xl font-bold text-montano-blue">IV. Plenaria y Cierre</h2>
+                    <span class="bg-montano-lightblue text-white px-3 py-1 rounded-full text-sm font-bold"><i class="far fa-clock"></i> 15 min</span>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6 mb-6">
+                    <!-- Plenaria -->
+                    <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
+                        <h3 class="text-lg font-bold text-montano-blue mb-3"><i class="fas fa-microphone-alt"></i> Exposición Plenaria</h3>
+                        <p class="text-sm text-gray-700 mb-4">Dos equipos presentan sus diagramas y explican una operación. El grupo comprueba resultados y corrige errores frecuentes (repetir elementos, orden, etc.).</p>
+                        <div class="bg-blue-50 p-3 rounded-lg text-sm border-l-4 border-montano-blue">
+                            <strong class="block mb-1">Síntesis Colectiva:</strong>
+                            <ul class="list-disc list-inside space-y-1">
+                                <li><span class="font-mono">A &cup; B</span> reúne todos, sin repetir.</li>
+                                <li><span class="font-mono">A &cap; B</span> contiene únicamente los comunes.</li>
+                                <li><span class="font-mono">A &minus; B</span> exclusivos de A (¡el orden importa!).</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Juego Interactivo Sugerido -->
+                    <div class="bg-gradient-to-br from-montano-blue to-montano-lightblue text-white p-5 rounded-xl shadow-sm flex flex-col justify-center items-center text-center">
+                        <i class="fas fa-gamepad text-4xl text-montano-yellow mb-3"></i>
+                        <h3 class="text-lg font-bold mb-2">Simulador / Trivia Interactiva</h3>
+                        <p class="text-sm mb-4">Para dinamizar el cierre, proyecta una trivia rápida de "Falso/Verdadero" sobre propiedades de los conjuntos.</p>
+                        <button class="bg-montano-yellow text-montano-blue px-4 py-2 rounded-lg font-bold shadow hover:bg-yellow-400 transition" onclick="alert('En un entorno real, este botón abriría un Kahoot, Quizziz o un Simulador de Diagramas de Venn PhET.')">
+                            Abrir Trivia Rápida
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Ticket de Salida -->
+                <div class="bg-yellow-50 p-5 rounded-xl border border-montano-yellow shadow-sm">
+                    <h3 class="font-bold text-lg text-gray-800 mb-3"><i class="fas fa-ticket-alt text-montano-yellow"></i> Ticket de Salida Individual</h3>
+                    <p class="mb-3 text-sm">Sean <strong class="font-mono">U = {2, 4, 6, 8, 10, 12}</strong>, <strong class="font-mono">P = {2, 4, 6, 8}</strong> y <strong class="font-mono">Q = {6, 8, 10}</strong>. Calcula:</p>
+                    <div class="flex flex-wrap gap-4 font-mono text-sm mb-4">
+                        <div class="bg-white px-3 py-2 rounded shadow-sm">1. P &cup; Q</div>
+                        <div class="bg-white px-3 py-2 rounded shadow-sm">2. P &cap; Q</div>
+                        <div class="bg-white px-3 py-2 rounded shadow-sm">3. P &minus; Q</div>
+                        <div class="bg-white px-3 py-2 rounded shadow-sm">4. Elementos en U fuera de P y Q</div>
+                    </div>
+                    <p class="text-sm text-gray-700 italic border-t border-yellow-200 pt-3"><strong>Metacognición:</strong> ¿Qué resultado buscabas antes de operar? ¿Cómo comprobaste tu diagrama?</p>
+                </div>
+            </div>
+
+            <!-- PESTAÑA EVALUACIÓN -->
+            <div id="tab-eval" class="tab-content fade-in hidden">
+                <div class="flex justify-between items-center mb-4 border-b-2 border-montano-yellow pb-2">
+                    <h2 class="text-2xl font-bold text-montano-blue">Instrumentos de Evaluación</h2>
+                </div>
+
+                <p class="mb-4 text-sm text-gray-700"><strong>Criterio de evaluación:</strong> Realiza correctamente la unión, intersección y diferencia de dos conjuntos; representa las operaciones en diagrama de Venn y justifica la selección.</p>
+
+                <div class="overflow-x-auto mb-6">
+                    <table class="w-full text-left border-collapse bg-white shadow-sm rounded-lg overflow-hidden">
+                        <thead class="bg-montano-green text-white">
+                            <tr>
+                                <th class="p-3">Evidencia Observable</th>
+                                <th class="p-3">Instrumento</th>
+                                <th class="p-3">Aspectos por Verificar</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-sm">
+                            <tr class="border-b">
+                                <td class="p-3">Operaciones resueltas durante práctica individual.</td>
+                                <td class="p-3 font-bold text-montano-blue">Revisión de ejercicios</td>
+                                <td class="p-3">No repite elementos; identifica comunes; respeta el orden en la diferencia.</td>
+                            </tr>
+                            <tr class="border-b bg-gray-50">
+                                <td class="p-3">Hoja grupal y diagrama de Venn.</td>
+                                <td class="p-3 font-bold text-montano-blue">Lista de cotejo</td>
+                                <td class="p-3">Ubica cada elemento en la región correcta y rotula A y B.</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3">Ticket de salida y explicación oral (Plenaria).</td>
+                                <td class="p-3 font-bold text-montano-blue">Preguntas breves</td>
+                                <td class="p-3">Explica con claridad el significado de &cup;, &cap; y &minus;.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Lista de Cotejo Interactiva -->
+                <h3 class="font-bold text-lg text-montano-blue mb-3">Lista de Cotejo para Plenaria (Trabajo en Equipo)</h3>
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+                    <table class="w-full text-left border-collapse">
+                        <thead class="bg-gray-100">
+                            <tr>
+                                <th class="p-3 border-b text-sm">Criterio a Evaluar</th>
+                                <th class="p-3 border-b text-sm text-center w-24">Sí Cumple</th>
+                                <th class="p-3 border-b text-sm text-center w-24">No Cumple</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-sm">
+                            <tr class="border-b hover:bg-gray-50">
+                                <td class="p-3">1. Demuestran dominio del tema y claridad en la explicación.</td>
+                                <td class="p-3 text-center"><input type="radio" name="crit1" class="w-4 h-4 text-montano-blue"></td>
+                                <td class="p-3 text-center"><input type="radio" name="crit1" class="w-4 h-4"></td>
+                            </tr>
+                            <tr class="border-b hover:bg-gray-50">
+                                <td class="p-3">2. Siguen una lógica procedimental correcta en sus cálculos.</td>
+                                <td class="p-3 text-center"><input type="radio" name="crit2" class="w-4 h-4 text-montano-blue"></td>
+                                <td class="p-3 text-center"><input type="radio" name="crit2" class="w-4 h-4"></td>
+                            </tr>
+                            <tr class="border-b hover:bg-gray-50">
+                                <td class="p-3">3. Evidencian trabajo colaborativo y equidad en la participación.</td>
+                                <td class="p-3 text-center"><input type="radio" name="crit3" class="w-4 h-4 text-montano-blue"></td>
+                                <td class="p-3 text-center"><input type="radio" name="crit3" class="w-4 h-4"></td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-3">4. Tienen capacidad de respuesta ante preguntas durante la plenaria.</td>
+                                <td class="p-3 text-center"><input type="radio" name="crit4" class="w-4 h-4 text-montano-blue"></td>
+                                <td class="p-3 text-center"><input type="radio" name="crit4" class="w-4 h-4"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        // Lógica de Pestañas
+        function switchTab(tabId) {
+            // Ocultar todos los contenidos
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            
+            // Reiniciar estilos de botones
+            document.querySelectorAll('.tab-btn').forEach(el => {
+                el.classList.remove('bg-montano-blue', 'text-white', 'active');
+                el.classList.add('bg-gray-200', 'text-gray-700');
+            });
+            
+            // Mostrar contenido seleccionado
+            document.getElementById(tabId).classList.remove('hidden');
+            
+            // Resaltar botón activo
+            const btn = document.getElementById('btn-' + tabId);
+            btn.classList.remove('bg-gray-200', 'text-gray-700');
+            btn.classList.add('bg-montano-blue', 'text-white', 'active');
+        }
+
+        // Lógica para botones de mostrar/ocultar solución
+        function toggleSolution(solId) {
+            const el = document.getElementById(solId);
+            if (el.classList.contains('hidden')) {
+                el.classList.remove('hidden');
+                el.classList.add('fade-in');
+            } else {
+                el.classList.add('hidden');
+                el.classList.remove('fade-in');
+            }
+        }
+
+        // Función nativa para Pantalla Completa
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    console.log(`Error al intentar modo pantalla completa: ${err.message}`);
+                });
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
+        }
+    </script>
+</body>
+</html>
