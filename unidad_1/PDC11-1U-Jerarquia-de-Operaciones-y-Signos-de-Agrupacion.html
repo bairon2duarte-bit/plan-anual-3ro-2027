@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pizarra Digital - PDC 11: Jerarquía de las Operaciones y Signos de Agrupación</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- MathJax 3 para renderizado de expresiones LaTeX -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)']],
+                displayMath: [['\\[', '\\]']]
+            },
+            startup: {
+                pageReady: () => {
+                    return MathJax.startup.defaultPageReady().then(() => {
+                        console.log('MathJax initial mockup ready.');
+                    });
+                }
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        montano: {
+                            blue: '#1269A8',
+                            yellow: '#F7D615',
+                            green: '#54887D',
+                            lightblue: '#88B5C7',
+                            olive: '#A6B046',
+                            bg: '#F2F5E9'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Segoe UI', 'Tahoma', 'Verdana', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Verdana, sans-serif; }
+        .fade-in { animation: fadeIn 0.4s ease-in-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .custom-scrollbar::-webkit-scrollbar { width: 8px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #F2F5E9; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #88B5C7; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #1269A8; }
+    </style>
+</head>
+<body class="bg-montano-bg text-gray-800 h-screen flex flex-col overflow-hidden custom-scrollbar">
+
+    <!-- Encabezado unificado estilo visual Montano (4 columnas exactas) -->
+    <header class="bg-montano-blue shadow-md relative z-10 flex-shrink-0">
+        <div class="container mx-auto px-4 py-3 flex justify-start items-center gap-12">    
+
+            <!-- 1. Izquierda: Escudo independiente -->
+            <div class="flex-shrink-0 flex items-center justify-center">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyEop0yf6lZ7Jk9MILZxF1rBj4Oqs5esyhIQ&s"
+                     alt="Escudo Colegio Montano"
+                     class="h-24 md:h-28 w-auto object-contain">
+            </div>
+
+            <!-- 2. Información académica -->
+            <div class="flex flex-col text-white justify-center flex-shrink-0">
+                <span class="text-xl md:text-2xl font-extrabold text-montano-yellow tracking-wider drop-shadow-sm whitespace-nowrap mb-0.5">
+                    COLEGIO MONTANO
+                </span>
+                <h1 class="text-base md:text-lg font-bold leading-tight text-gray-100">
+                    Matemática - 3ro Básico
+                </h1>
+                <h2 class="text-xs md:text-sm font-medium mt-0.5 text-gray-200">
+                    Docente: PEM Bairon Duarte
+                </h2>
+                <h3 class="text-xs md:text-sm text-gray-200">
+                    Tema: Jerarquía de operaciones y signos de agrupación
+                </h3>
+            </div>
+
+            <!-- 3. Centro: Identificación del plan -->
+            <div class="flex flex-col items-center justify-center bg-white border-l-4 border-montano-yellow px-4 md:px-6 py-1.5 rounded-r-md shadow-sm text-center flex-shrink-0">
+                <span class="text-base md:text-lg font-extrabold text-montano-blue tracking-wide">
+                    PDC11
+                </span>
+                <span class="text-[11px] md:text-xs font-bold text-gray-700">
+                    Semana 6
+                </span>
+                <span class="text-[10px] md:text-[11px] text-gray-500">
+                    15 al 19 feb 2027
+                </span>
+            </div>
+
+            <!-- 4. Derecha: Pantalla completa -->
+            <button onclick="toggleFullscreen()"
+                    class="bg-montano-yellow text-montano-blue font-bold px-3 py-1.5 md:px-4 md:py-2 text-xs md:text-sm rounded shadow hover:bg-yellow-400 transition-colors flex items-center gap-2 flex-shrink-0">
+                <i class="fas fa-expand"></i>
+                <span>Pantalla Completa</span>
+            </button>
+
+        </div>
+    </header>
+
+    <!-- Navegación de Pestañas -->
+    <nav class="container mx-auto px-4 mt-4 flex-shrink-0">
+        <ul class="flex flex-wrap gap-2 justify-center md:justify-start" id="tabs-nav">
+            <li>
+                <button onclick="switchTab('tab-info')" id="btn-tab-info" class="tab-btn active px-4 py-2 rounded-t-lg font-bold bg-montano-blue text-white transition-colors border-b-0">
+                    <i class="fas fa-info-circle mr-1"></i> Foco Pedagógico
+                </button>
+            </li>
+            <li>
+                <button onclick="switchTab('tab-1')" id="btn-tab-1" class="tab-btn px-4 py-2 rounded-t-lg font-bold bg-gray-200 text-gray-700 hover:bg-montano-lightblue hover:text-white transition-colors">
+                    <i class="fas fa-rocket mr-1"></i> I. Motivación
+                </button>
+            </li>
+            <li>
+                <button onclick="switchTab('tab-2')" id="btn-tab-2" class="tab-btn px-4 py-2 rounded-t-lg font-bold bg-gray-200 text-gray-700 hover:bg-montano-lightblue hover:text-white transition-colors">
+                    <i class="fas fa-user-edit mr-1"></i> II. Individual
+                </button>
+            </li>
+            <li>
+                <button onclick="switchTab('tab-3')" id="btn-tab-3" class="tab-btn px-4 py-2 rounded-t-lg font-bold bg-gray-200 text-gray-700 hover:bg-montano-lightblue hover:text-white transition-colors">
+                    <i class="fas fa-users mr-1"></i> III. Cooperativo
+                </button>
+            </li>
+            <li>
+                <button onclick="switchTab('tab-4')" id="btn-tab-4" class="tab-btn px-4 py-2 rounded-t-lg font-bold bg-gray-200 text-gray-700 hover:bg-montano-lightblue hover:text-white transition-colors">
+                    <i class="fas fa-chalkboard-teacher mr-1"></i> IV. Plenaria
+                </button>
+            </li>
+            <li>
+                <button onclick="switchTab('tab-eval')" id="btn-tab-eval" class="tab-btn px-4 py-2 rounded-t-lg font-bold bg-gray-200 text-gray-700 hover:bg-montano-olive hover:text-white transition-colors">
+                    <i class="fas fa-clipboard-check mr-1"></i> Evaluación
+                </button>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Contenedor Principal (Área de Pizarra) -->
+    <main class="container mx-auto px-4 pb-6 flex-grow overflow-auto custom-scrollbar">
+        <div class="bg-white shadow-lg rounded-b-lg rounded-tr-lg p-6 min-h-full border-t-4 border-montano-blue">
+            
+            <!-- PESTAÑA: Foco Pedagógico -->
+            <div id="tab-info" class="tab-content fade-in">
+                <h2 class="text-2xl font-bold text-montano-blue border-b-2 border-montano-yellow pb-2 mb-4">Competencia y Logro de Aprendizaje (Plan 11)</h2>
+                
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-blue-50 p-4 rounded-xl border border-blue-100 shadow-sm">
+                        <h3 class="font-bold text-lg text-montano-blue mb-2"><i class="fas fa-bullseye"></i> Competencia Institucional de Referencia</h3>
+                        <p class="mb-3 text-sm text-gray-700">«Resuelve situaciones problema de carácter formal que demandan el dominio del pensamiento lógico matemático y las operaciones matemáticas de aritmética y álgebra en los conjuntos numéricos reales y complejos».</p>
+                        
+                        <h3 class="font-bold text-lg text-montano-blue mb-2"><i class="fas fa-chart-line"></i> Objetivo de Aprendizaje</h3>
+                        <p class="text-sm text-gray-700">Al finalizar la sesión, el estudiante resolverá expresiones numéricas que involucren operaciones combinadas, potencias, raíces y signos de agrupación; aplicará correctamente la jerarquía de las operaciones; y justificará cada paso, respetando el orden de resolución de izquierda a derecha cuando las operaciones tengan la misma prioridad.</p>
+                    </div>
+
+                    <div class="bg-green-50 p-4 rounded-xl border border-green-100 shadow-sm">
+                        <h3 class="font-bold text-lg text-montano-green mb-2"><i class="fas fa-seedling"></i> Modelo Formativo Montano</h3>
+                        <div class="flex items-center gap-3 mb-2">
+                            <span class="bg-montano-olive text-white px-3 py-1 rounded-full font-bold text-sm">Hábito 2</span>
+                            <span class="font-bold text-gray-700">Comenzar con un fin en mente.</span>
+                        </div>
+                        <p class="text-sm text-gray-600 italic mb-4">Conducta observable: antes de calcular, identifica las operaciones presentes, planifica el orden de resolución y comprueba que cada paso respete la jerarquía.</p>
+                        
+                        <h3 class="font-bold text-lg text-montano-green mb-2"><i class="fas fa-tools"></i> Recursos y Materiales</h3>
+                        <ul class="list-disc list-inside text-sm text-gray-700 space-y-1">
+                            <li>Pizarra y marcadores.</li>
+                            <li>Cuaderno, lápiz y borrador.</li>
+                            <li>Hoja de trabajo con expresiones combinadas.</li>
+                            <li>Tarjetas con expresiones para ordenar operaciones.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PESTAÑA I: Motivación -->
+            <div id="tab-1" class="tab-content fade-in hidden">
+                <div class="flex justify-between items-center mb-4 border-b-2 border-montano-yellow pb-2">
+                    <h2 class="text-2xl font-bold text-montano-blue">I. Introducción Motivante (~10 min)</h2>
+                    <span class="bg-montano-lightblue text-white px-3 py-1 rounded-full text-sm font-bold"><i class="far fa-clock"></i> 10 min</span>
+                </div>
+
+                <div class="bg-yellow-50 p-5 rounded-xl border-l-4 border-montano-yellow mb-6 shadow-sm">
+                    <h3 class="text-xl font-bold text-gray-800 mb-3"><i class="fas fa-question-circle text-montano-yellow"></i> Situación Detonante</h3>
+                    <p class="text-base mb-3">El docente escribe en la pizarra:</p>
+                    <div class="bg-white p-4 rounded-lg shadow-sm border text-center mb-4">
+                        <span class="text-xl font-bold text-montano-blue">\(18 - 6 \div 3 \times 2\)</span>
+                    </div>
+                    <p class="text-sm text-gray-700 mb-2"><strong>Preguntas orientadoras:</strong> ¿El resultado es 8, 14 o 16? ¿Qué operación debe realizarse primero? ¿Cambiaría el resultado si resolvemos de izquierda a derecha sin considerar la prioridad?</p>
+                    <p class="text-sm text-gray-700 mt-2">Luego se presenta \(20 - [3 \times (2 + 4)]\) y se pregunta qué parte debe resolverse primero.</p>
+                </div>
+
+                <div class="text-center bg-gray-50 p-4 rounded-lg border border-gray-200">
+                    <p class="font-bold text-montano-blue"><i class="fas fa-lightbulb text-montano-yellow"></i> Hábito 2 en acción:</p>
+                    <p class="text-sm text-gray-700">Cada estudiante traza un plan antes de calcular y anticipa qué signo de agrupación debe atender primero.</p>
+                </div>
+            </div>
+
+            <!-- PESTAÑA II: Individual -->
+            <div id="tab-2" class="tab-content fade-in hidden">
+                <div class="flex justify-between items-center mb-4 border-b-2 border-montano-yellow pb-2">
+                    <h2 class="text-2xl font-bold text-montano-blue">II. Exposición Magistral y Trabajo Individual Guiado (~20 min)</h2>
+                    <span class="bg-montano-lightblue text-white px-3 py-1 rounded-full text-sm font-bold"><i class="far fa-clock"></i> 20 min</span>
+                </div>
+
+                <!-- Exposición Magistral -->
+                <div class="mb-6 space-y-4">
+                    <h3 class="font-bold text-lg text-gray-800">Regla General de Jerarquía de Operaciones</h3>
+                    
+                    <div class="bg-gray-50 p-4 rounded-lg border text-sm space-y-2">
+                        <ol class="list-decimal list-inside space-y-1.5 text-gray-700">
+                            <li><strong>Signos de agrupación:</strong> Resolver primero el contenido del agrupador más interno \(( ), [ ], \{ \}\) y continuar hacia afuera.</li>
+                            <li><strong>Potencias y raíces:</strong> Calcular las potencias y raíces que aparezcan en la expresión.</li>
+                            <li><strong>Multiplicaciones y divisiones:</strong> Resolver en el orden en que aparecen, de <strong>izquierda a derecha</strong> (tienen igual prioridad).</li>
+                            <li><strong>Adiciones y sustracciones:</strong> Resolver en el orden en que aparecen, de <strong>izquierda a derecha</strong> (tienen igual prioridad).</li>
+                        </ol>
+                        <p class="text-xs text-amber-800 bg-amber-50 p-2 rounded mt-2">⚠️ <strong>Aclaración fundamental:</strong> Multiplicación y división tienen la misma prioridad; no se hace siempre primero la multiplicación. Lo mismo aplica para suma y resta.</p>
+                    </div>
+
+                    <!-- Ejemplos Resueltos -->
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="bg-white p-4 rounded-lg border shadow-sm text-sm">
+                            <h4 class="font-bold text-montano-blue mb-1">Ejemplo 1: \(18 - 6 \div 3 \times 2\)</h4>
+                            <p class="text-gray-600 text-xs">División primero (\(6 \div 3 = 2\)): \(18 - 2 \times 2\).<br>Multiplicación (\(2 \times 2 = 4\)): \(18 - 4\).<br>Resta final: <strong>14</strong>.</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg border shadow-sm text-sm">
+                            <h4 class="font-bold text-montano-blue mb-1">Ejemplo 2: \(5 + 2^3 \times \sqrt{49} - 18 \div 3\)</h4>
+                            <p class="text-gray-600 text-xs">Potencia y raíz (\(2^3=8\), \(\sqrt{49}=7\)): \(5 + 8 \times 7 - 18 \div 3\).<br>Multiplicación y división (\(56\) y \(6\)): \(5 + 56 - 6\).<br>Suma/Resta izq. a der.: <strong>55</strong>.</p>
+                        </div>
+                    </div>
+
+                    <!-- Práctica guiada con soluciones ocultas -->
+                    <div class="bg-gray-50 p-4 rounded-lg border">
+                        <h4 class="font-bold text-montano-blue mb-2">Práctica Individual Guiada</h4>
+                        <p class="text-sm mb-3">1) Resuelve \(16 + 24 \div 6 \times 2\).<br>2) Resuelve \(40 - [5 \times (3 + 1)]\).<br>3) Resuelve \(3^2 + 4 \times \sqrt{25} - 12 \div 3\).</p>
+                        <button onclick="toggleSolution('sol-indiv-p11')" class="bg-montano-blue text-white text-xs px-3 py-1.5 rounded font-bold hover:bg-blue-700 transition">
+                            <i class="fas fa-eye mr-1"></i> Ver Solución / Orientación
+                        </button>
+                        <div id="sol-indiv-p11" class="hidden mt-3 p-3 bg-white rounded border border-blue-200 text-sm space-y-1">
+                            <p>• \(16 + 24 \div 6 \times 2 = 16 + 4 \times 2 = 16 + 8 = 24\).</p>
+                            <p>• \(40 - [5 \times (3 + 1)] = 40 - [5 \times 4] = 40 - 20 = 20\).</p>
+                            <p>• \(3^2 + 4 \times \sqrt{25} - 12 \div 3 = 9 + 4 \times 5 - 4 = 9 + 20 - 4 = 25\).</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PESTAÑA III: Cooperativo -->
+            <div id="tab-3" class="tab-content fade-in hidden">
+                <div class="flex justify-between items-center mb-4 border-b-2 border-montano-yellow pb-2">
+                    <h2 class="text-2xl font-bold text-montano-blue">III. Trabajo Cooperativo en Equipo (~25 min)</h2>
+                    <span class="bg-montano-lightblue text-white px-3 py-1 rounded-full text-sm font-bold"><i class="far fa-clock"></i> 25 min</span>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="md:col-span-2 bg-yellow-50 p-5 rounded-xl border border-montano-yellow shadow-sm">
+                        <h3 class="text-lg font-bold text-gray-800 mb-2"><i class="fas fa-users text-montano-yellow"></i> Actividad: «Rastreadores del orden de operaciones»</h3>
+                        <p class="text-sm mb-3">En equipos de 3 o 4 integrantes, resuelvan los siguientes desafíos indicando cada paso:</p>
+                        <ul class="list-disc list-inside text-sm space-y-2 text-gray-700">
+                            <li><strong>Reto 1 (Combinadas):</strong> \(A = 36 \div 3 \times 2 + 5^2 - 7\), \(B = 48 - 6 \times (5 + 3) \div 4\), \(C = 7 + 3^2 \times 2 - \sqrt{81}\).</li>
+                            <li><strong>Reto 2 (Agrupadores anidados):</strong> \(D = \{40 - [3 \times (4 + 2)]\} \div 2\), \(E = 60 \div \{2 \times [3 + (7 - 5)]\} + 4\).</li>
+                            <li><strong>Reto 3 (Errores):</strong> Analicen por qué \(24 \div 6 \times 2 \neq 24 \div 12\) y por qué \(5 + 2 \times 3 \neq 21\).</li>
+                            <li><strong>Reto 4 (Construcción):</strong> Diseñen una expresión con paréntesis, corchetes, potencia, raíz y suma/resta que dé exactamente 20.</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-montano-blue text-white p-5 rounded-xl shadow-md flex flex-col justify-between">
+                        <div>
+                            <h4 class="font-bold text-montano-yellow mb-3 border-b border-white/20 pb-2"><i class="fas fa-tasks"></i> Producto Verificable</h4>
+                            <p class="text-sm mb-2">Hoja de trabajo con ejercicios resueltos paso a paso, corrección de errores y expresión original creada.</p>
+                        </div>
+                        <div class="bg-white/10 p-3 rounded-lg text-xs mt-4">
+                            <strong>Hábito 2:</strong> Acuerdo previo del orden de resolución, distribución de roles y validación rigurosa.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PESTAÑA IV: Plenaria -->
+            <div id="tab-4" class="tab-content fade-in hidden">
+                <div class="flex justify-between items-center mb-4 border-b-2 border-montano-yellow pb-2">
+                    <h2 class="text-2xl font-bold text-montano-blue">IV. Plenaria y Cierre (~15 min)</h2>
+                    <span class="bg-montano-lightblue text-white px-3 py-1 rounded-full text-sm font-bold"><i class="far fa-clock"></i> 15 min</span>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6 mb-6">
+                    <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
+                        <h3 class="text-lg font-bold text-montano-blue mb-3"><i class="fas fa-microphone-alt"></i> Exposición Plenaria</h3>
+                        <p class="text-sm text-gray-700 mb-4">Equipos presentan agrupadores anidados y análisis de errores cometidos al omitir la regla de izquierda a derecha.</p>
+                        <div class="bg-blue-50 p-3 rounded-lg text-sm border-l-4 border-montano-blue">
+                            <strong class="block mb-1">Síntesis Colectiva:</strong>
+                            <p class="text-xs text-gray-700">Primero agrupador más interno, luego potencias/raíces, seguidas de multiplicación y división (izq. a der.), y finalmente adición y sustracción (izq. a der.).</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-gradient-to-br from-montano-blue to-montano-lightblue text-white p-5 rounded-xl shadow-sm flex flex-col justify-center items-center text-center">
+                        <i class="fas fa-gamepad text-4xl text-montano-yellow mb-3"></i>
+                        <h3 class="text-lg font-bold mb-2">Trivia Interactiva de Jerarquía</h3>
+                        <p class="text-sm mb-4">Dinámica rápida para evaluar la velocidad y precisión en el orden de operaciones.</p>
+                        <button class="bg-montano-yellow text-montano-blue px-4 py-2 rounded-lg font-bold shadow hover:bg-yellow-400 transition" onclick="alert('Se abre la trivia interactiva de jerarquía de operaciones.')">
+                            Iniciar Trivia Rápida
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Ticket de Salida -->
+                <div class="bg-yellow-50 p-5 rounded-xl border border-montano-yellow shadow-sm">
+                    <h3 class="font-bold text-lg text-gray-800 mb-3"><i class="fas fa-ticket-alt text-montano-yellow"></i> Ticket de Salida Individual</h3>
+                    <ul class="list-disc list-inside text-sm space-y-2 text-gray-700 mb-3">
+                        <li>Resuelve \(32 - 12 \div 3 \times 2\).</li>
+                        <li>Resuelve \([18 + (4^2 - 7)] \div 3\).</li>
+                        <li>Explica con un ejemplo por qué multiplicación y división se resuelven de izquierda a derecha.</li>
+                    </ul>
+                    <p class="text-xs text-gray-600 italic border-t border-yellow-200 pt-2"><strong>Metacognición:</strong> ¿Qué paso debo identificar antes de comenzar? ¿Cuándo utilizo la regla de izquierda a derecha?</p>
+                </div>
+            </div>
+
+            <!-- PESTAÑA EVALUACIÓN -->
+            <div id="tab-eval" class="tab-content fade-in hidden">
+                <div class="flex justify-between items-center mb-4 border-b-2 border-montano-yellow pb-2">
+                    <h2 class="text-2xl font-bold text-montano-blue">Instrumentos de Evaluación</h2>
+                </div>
+
+                <p class="mb-4 text-sm text-gray-700"><strong>Criterio de evaluación:</strong> Resuelve expresiones numéricas combinadas aplicando correctamente la jerarquía de las operaciones y los signos de agrupación; desarrolla los procedimientos en orden, respeta la prioridad de cada operación y justifica las decisiones tomadas.</p>
+
+                <div class="overflow-x-auto mb-6">
+                    <table class="w-full text-left border-collapse bg-white shadow-sm rounded-lg overflow-hidden">
+                        <thead class="bg-montano-green text-white">
+                            <tr>
+                                <th class="p-3">Evidencia Observable</th>
+                                <th class="p-3">Instrumento</th>
+                                <th class="p-3">Aspectos por Verificar</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-sm">
+                            <tr class="border-b">
+                                <td class="p-3">Práctica individual guiada.</td>
+                                <td class="p-3 font-bold text-montano-blue">Revisión de procedimientos</td>
+                                <td class="p-3">Identifica prioridades y registra transformaciones sin saltar pasos.</td>
+                            </tr>
+                            <tr class="border-b bg-gray-50">
+                                <td class="p-3">Hoja grupal de retos y análisis de errores.</td>
+                                <td class="p-3 font-bold text-montano-blue">Lista de cotejo</td>
+                                <td class="p-3">Resuelve agrupadores anidados, aplica izquierda a derecha y argumenta correcciones.</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3">Ticket de salida individual.</td>
+                                <td class="p-3 font-bold text-montano-blue">Ejercicio breve</td>
+                                <td class="p-3">Resuelve expresión combinada y explica el orden aplicado.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Lista de Cotejo Interactiva -->
+                <h3 class="font-bold text-lg text-montano-blue mb-3">Lista de Cotejo para Plenaria (Trabajo en Equipo)</h3>
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+                    <table class="w-full text-left border-collapse">
+                        <thead class="bg-gray-100">
+                            <tr>
+                                <th class="p-3 border-b text-sm">Criterio a Evaluar en Plenaria</th>
+                                <th class="p-3 border-b text-sm text-center w-24">Sí Cumple</th>
+                                <th class="p-3 border-b text-sm text-center w-24">No Cumple</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-sm">
+                            <tr class="border-b hover:bg-gray-50">
+                                <td class="p-3">1. Dominio del tema y claridad en la explicación del orden de operaciones.</td>
+                                <td class="p-3 text-center"><input type="radio" name="crit1" class="w-4 h-4 text-montano-blue"></td>
+                                <td class="p-3 text-center"><input type="radio" name="crit1" class="w-4 h-4"></td>
+                            </tr>
+                            <tr class="border-b hover:bg-gray-50">
+                                <td class="p-3">2. Lógica o procedimiento seguido al resolver agrupadores anidados de adentro hacia afuera.</td>
+                                <td class="p-3 text-center"><input type="radio" name="crit2" class="w-4 h-4 text-montano-blue"></td>
+                                <td class="p-3 text-center"><input type="radio" name="crit2" class="w-4 h-4"></td>
+                            </tr>
+                            <tr class="border-b hover:bg-gray-50">
+                                <td class="p-3">3. Trabajo colaborativo y equidad en la participación del equipo.</td>
+                                <td class="p-3 text-center"><input type="radio" name="crit3" class="w-4 h-4 text-montano-blue"></td>
+                                <td class="p-3 text-center"><input type="radio" name="crit3" class="w-4 h-4"></td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-3">4. Capacidad de respuesta y argumentación ante preguntas de la plenaria.</td>
+                                <td class="p-3 text-center"><input type="radio" name="crit4" class="w-4 h-4 text-montano-blue"></td>
+                                <td class="p-3 text-center"><input type="radio" name="crit4" class="w-4 h-4"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        // Lógica de Pestañas
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(el => {
+                el.classList.remove('bg-montano-blue', 'text-white', 'active');
+                el.classList.add('bg-gray-200', 'text-gray-700');
+            });
+            
+            document.getElementById(tabId).classList.remove('hidden');
+            
+            const btn = document.getElementById('btn-' + tabId);
+            btn.classList.remove('bg-gray-200', 'text-gray-700');
+            btn.classList.add('bg-montano-blue', 'text-white', 'active');
+
+            // Renderizar LaTeX al cambiar de pestaña
+            if (window.MathJax) {
+                MathJax.typesetPromise();
+            }
+        }
+
+        // Lógica para solución oculta
+        function toggleSolution(solId) {
+            const el = document.getElementById(solId);
+            if (el.classList.contains('hidden')) {
+                el.classList.remove('hidden');
+                if (window.MathJax) {
+                    MathJax.typesetPromise([el]);
+                }
+            } else {
+                el.classList.add('hidden');
+            }
+        }
+
+        // Pantalla Completa
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    console.log(`Error al intentar pantalla completa: ${err.message}`);
+                });
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
+        }
+    </script>
+</body>
+</html>
