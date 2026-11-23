@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sílabo interactivo | Colegio Montano</title>
+<style>
+:root{--blue:#123b62;--blue2:#1d5b89;--yellow:#f2c230;--bg:#f4f7fa;--ink:#243342;--muted:#617386;--line:#dce5ed}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Arial,Helvetica,sans-serif}
+header{background:white;border-bottom:5px solid var(--yellow);padding:14px clamp(15px,4vw,45px);display:flex;gap:14px;align-items:center}
+.logo {
+    width: 70px;
+    height: 70px;
+    object-fit: contain;
+}
+h1{font-size:clamp(18px,2.5vw,25px);color:var(--blue);margin:0}header p{margin:2px 0;color:var(--muted);font-size:13px}
+main{max-width:1050px;margin:auto;padding:28px 17px 45px}.hero{background:linear-gradient(120deg,var(--blue),var(--blue2));color:white;padding:30px;border-radius:18px;margin-bottom:22px}
+.hero small{color:#f8dc7b;font-weight:bold;letter-spacing:1.4px}.hero h2{font-size:clamp(25px,4vw,36px);line-height:1.15;margin:8px 0}.hero p{max-width:700px;color:#e4edf5}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}.card{background:white;border:1px solid var(--line);border-radius:17px;padding:21px;text-align:left;cursor:pointer;min-height:165px;box-shadow:0 7px 22px #183b5812;transition:.18s}
+.card:hover,.card:focus{transform:translateY(-3px);outline:3px solid #d8eaf8}.card b{font-size:12px;letter-spacing:1px;color:var(--accent)}.ico{font-size:24px;margin:10px 0}.card h3{color:var(--blue);margin:0 0 5px;font-size:20px}.card p{margin:0;color:var(--muted);font-size:14px}
+.c1{--accent:#1e6595}.c2{--accent:#317347}.c3{--accent:#946514}.c4{--accent:#704b91}
+#detail{display:none}.top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+button.back{background:white;border:1px solid var(--line);border-radius:9px;padding:10px 14px;color:var(--blue);font-weight:bold;cursor:pointer}
+.head{background:white;border-left:6px solid var(--accent);padding:20px;border-radius:14px;margin-bottom:14px}.head small{color:var(--accent);font-weight:bold}.head h2{margin:4px 0;color:var(--blue)}.head p{margin:0;color:var(--muted)}
+details{background:white;border:1px solid var(--line);border-radius:12px;margin:10px 0;overflow:hidden}summary{cursor:pointer;padding:15px 17px;color:var(--blue);font-weight:bold;list-style:none;display:flex;justify-content:space-between}summary::-webkit-details-marker{display:none}summary:after{content:"＋";font-size:19px}details[open] summary:after{content:"−"}.content{padding:0 18px 17px}.content li{margin:5px 0}
+.note{background:#fff8e5;border:1px solid #f1dfaa;border-radius:9px;padding:12px;color:#654f20;font-size:13px;margin:10px 0}
+.times{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.time{background:#f2f6f9;padding:12px;border-radius:9px}.time strong{display:block;color:var(--blue)}
+a{color:#145d91}footer{text-align:center;color:var(--muted);font-size:12px;padding:20px}
+@media(max-width:620px){.grid,.times{grid-template-columns:1fr}.card{min-height:130px;padding:17px}.hero{padding:22px}main{padding:20px 13px 35px}}
+</style></head>
+<body>
+<header><img src="escudo-montano.png" class="logo" alt="Escudo Colegio Montano"><div><h1>Matemática · Quinto Bachillerato </h1><p>Colegio Montano | INFORMACION PARA PADRES Y REPRESENTANTES</p></div></header>
+<main>
+<section id="home">
+<div class="hero"><small>BIENVENIDOS AL CURSO</small><h2>Aprendamos Matemática con propósito</h2><p>Conoce el curso, nuestra metodología, los criterios de evaluación y los recursos de apoyo.</p><strong>Docente: PEM Bairon Duarte</strong></div>
+<div class="grid">
+<button class="card c1" onclick="show(1)"><b>01 · PRESENTACIÓN</b><div class="ico">👨‍🏫</div><h3>Conozcamos el curso</h3><p>Presentación del docente, perfil profesional y filosofía de liderazgo.</p></button>
+<button class="card c2" onclick="show(2)"><b>02 · APRENDIZAJE</b><div class="ico">📘</div><h3>Cómo aprenderemos</h3><p>Competencias, materiales, actividades y metodología de clase.</p></button>
+<button class="card c3" onclick="show(3)"><b>03 · EVALUACIÓN</b><div class="ico">🎯</div><h3>Evaluación y compromisos</h3><p>Formas de evaluación, entrega de tareas y ausencias.</p></button>
+<button class="card c4" onclick="show(4)"><b>04 · APOYO</b><div class="ico">💻</div><h3>Recursos y apoyo</h3><p>PIME-Canvas, aplicación móvil, notificaciones y soporte.</p></button>
+</div></section>
+<section id="detail"><div class="top"><button class="back" onclick="home()">← Volver al inicio</button><span>MATEMÁTICA · QUINTO BACHILLERATO</span></div><div class="head" id="heading"></div><div id="sections"></div></section>
+</main><footer>© Colegio Montano · Matemática ·  Quinto Bachillerato </footer>
+<script>
+const data={
+1:{t:"Conozcamos el curso",n:"01 · PRESENTACIÓN",c:"#1e6595",d:"Quién acompaña el proceso de aprendizaje y qué principios orientan el curso.",s:[
+
+["Presentación del docente",`
+<div class="presentacion-docente">
+    <div class="datos-docente">
+        <p><b>Nombre:</b> Bairon Efraín Duarte González</p>
+        <p><b>Profesión:</b> PC; Licenciatura en la Enseñanza de la Física y Matemática, EFPEM-USAC.</p>
+        <p><b>Título:</b> PEM, Profesor de Enseñanza Media de Física y Matemática, EFPEM-USAC.</p>
+        <p><b>Diversificado:</b> Bachiller en Computación.</p>
+        <p><b>Correo:</b> <a href="mailto:bduarte@colegiomontano.edu.gt">bduarte@colegiomontano.edu.gt</a></p>
+    </div>
+    <img src="foto3.png" alt="Fotografía del docente" class="foto-docente">
+</div>
+`],
+
+["Perfil profesional",`<p>Docente con más de 20 años de experiencia en educación secundaria. Comprometido con el pensamiento crítico, el interés por las matemáticas, la formación integral y el aprendizaje significativo.                                     Siempre busco la formación integral de mis estudiantes, manteniendo una constante capacitación para innovar en metodologías educativas y promover el aprendizaje significativo.  Mi misión es servir, la cual se fundamenta en el liderazgo colaborativo y el trabajo en equipo, tratando de esta manera de contribuir a la construcción de comunidades educativas dinámicas y exitosas.</p>`],
+["Un poco de mí",`<p>Como profesor, siempre me preocupo por prepararme y capacitarme constantemente para ofrecer lo mejor a mis alumnos. Tuve la oportunidad de impartir cursos libres de física y matemáticas en la Universidad de San Carlos de Guatemala.
+
+Como estudiante, enfrenté decisiones que cambiaron el rumbo de mi vida:
+
+Inicié mis estudios en la Universidad Rafael Landívar, donde cursé un año de la carrera de Licenciatura en Informática. Posteriormente, en la Universidad de San Carlos de Guatemala, estudié durante cuatro años la carrera de Ingeniería en Sistemas. Sin embargo, al casarme y tener a mi primer hijo, mis prioridades cambiaron.
+
+Más adelante, retomé mis estudios en la USAC, específicamente en la Escuela de Formación de Profesores de Enseñanza Media (EFPEM), donde obtuve el título de Profesor de Enseñanza Media (PEM). Además, finalicé la Licenciatura en la Enseñanza de la Matemática y la Física.
+
+Actualmente, estoy trabajando en mi tesis de licenciatura y también cursando el Profesorado en Enseñanza de la Informática y Computación.</p>`],
+["Hábitos efectivos y liderazgo",`<p>Siempre disfruto aprender algo nuevo y dedicar tiempo de calidad a mi familia y amigos. Valoro la escucha activa y me esfuerzo por expresar gratitud en mis interacciones diarias. También procuro crear un ambiente de trabajo agradable, donde la colaboración y el respeto sean fundamentales.
+
+En mi tiempo libre, disfruto de un buen café mientras realizo trabajos de carpintería o veo series de televisión, actividades que utilizo como una forma de relajación y equilibrio, sin caer en excesos.”</blockquote>`]]},
+2:{t:"Cómo aprenderemos",n:"02 · APRENDIZAJE",c:"#317347",d:"La forma de trabajar, los recursos y las experiencias que apoyarán el aprendizaje.",s:[
+["Competencias del curso",`<div class="note"><b>Pendiente de validación curricular:</b> el documento fuente incluye competencias de funciones, trigonometría, cálculo integral y álgebra matricial. Deben revisarse y sustituirse por las competencias correspondientes a Quinto Bachillerato 2027, verificadas con el CNB y la planificación anual.</div>`],
+["Materiales",`<ul><li>Cuaderno, lápices, borrador y sacapuntas.</li><li>Calculadora científica, cuando la actividad lo permita.</li><li>Juego de geometría y papel milimetrado, según el tema.</li><li>Textos de referencia y GeoGebra cuando sean pertinentes.</li><li>Dispositivos digitales y acceso a internet, opcionalmente.</li></ul>`],
+["Actividades de aprendizaje",`<ul><li>Cálculo mental.</li><li>Lectura previa de documentos en Canvas.</li><li>Registro de definiciones y ejemplos en el cuaderno.</li><li>Tareas en casa y resolución de ejercicios.</li><li>Evaluaciones mediante logros programados.</li></ul>`],
+["Metodología",`<p>Método de los cuatro momentos activo-colaborativo, aprendizaje basado en proyectos y constructivismo. Se promueve la lectura previa en casa y la participación en el diálogo socrático.</p>`],
+["Así se desarrolla una clase",`<div class="times"><div class="time"><strong>Introducción motivante · 10 min</strong>Activar presaberes con preguntas, retos, juegos o lluvia de ideas.</div><div class="time"><strong>Trabajo individual · 20 min</strong>Desarrollar habilidades y resolver de manera personal.</div><div class="time"><strong>Trabajo en equipo · 25 min</strong>Colaborar, asumir roles y alcanzar una meta común.</div><div class="time"><strong>Plenaria · 15 min</strong>Explicar procedimientos, compartir conclusiones y reflexionar.</div></div><p><b>Duración total: 70 minutos.</b></p>`]]},
+3:{t:"Evaluación y compromisos",n:"03 · EVALUACIÓN",c:"#946514",d:"Qué evidencias se tomarán en cuenta y cuáles son las normas de cumplimiento.",s:[
+["ACTIVIDADES DE EVALUACION",`<ul><li>Logros.</li><li>Hojas de trabajo individuales y en equipo.</li><li>Portafolios.</li><li>Proyectos.</li><li>Presentaciones.</li></ul>`],
+["Entrega de tareas",
+       `<li><b>Durante cada unidad habran 4 actividades de evaluacion:</b> "Cada actividad de evaluacion tendra su plan de mejora" 
+
+    <li><b>Sanciones a tareas:</b>
+    <ol><li><b>Enfermedad o fuerza mayor:</b> entrega al día siguiente sin sanción, presentando la excusa correspondiente ante la encargada de nivel.</li><li><b>Un día tarde sin justificación:</b> reducción del 20%.</li><li><b>Dos días tarde sin justificación:</b> reducción del 50%.</li><li><b>Más de dos días:</b> se recibe únicamente para revisión, sin valor acumulativo.</li></ol>`],
+["Cuando el estudiante está ausente",`<p>Si la ausencia se debe a enfermedad o fuerza mayor, presenta la excusa ante la encargada de nivel. En PIME-Canvas encontrarás tareas y hojas de trabajo para ponerte al día y presentarlas el día que te incorpores. Si son logros, se asignará una nueva fecha.</p>`],
+["Responsabilidad académica",`<p>Consulta las publicaciones de Canvas, prepara las lecturas previas, participa en las actividades y entrega los trabajos en las fechas establecidas.</p>`]]},
+4:{t:"Recursos y apoyo",n:"04 · APOYO",c:"#704b91",d:"Herramientas digitales y canales para consultar materiales o solicitar asistencia.",s:[
+["PIME-Canvas",`<p>Consulta en PIME-Canvas las tareas, hojas de trabajo, lecturas y avisos del curso.</p><div class="note">Agregar el enlace directo al curso cuando se disponga de él.</div>`],
+["Canvas Student: Android e iOS",`<p>Instala la aplicación Canvas Student para consultar el curso desde tu dispositivo móvil.</p><div class="note">Aquí se pueden incorporar los videos tutoriales originales para Android e iOS.</div>`],
+["Notificaciones",`<p>Activa las notificaciones de PIME-Canvas para recibir avisos en el correo y en tus dispositivos y dar seguimiento a tu avance.</p>`],
+["Bibliografía",`<ul>
+    <li>1. Zill, D. G., y Dewar, J. M. (2012). Álgebra, trigonometría y geometría analítica (3.ª ed.). McGraw-Hill.</li>
+    <li>2. Stewart, J., Redlin, L., y Watson, S. (2007). Precálculo: Matemáticas para el cálculo (5.ª ed.). Cengage Learning.</li>
+    <li>3. Swokowski, E. W., y Cole, J. A. (2009). Álgebra y trigonometría con geometría analítica. Cengage Learning.</li>
+    <li>4. Barnett, R. A., Ziegler, M. R., y Byleen, K. E. Precálculo: Funciones y gráficas (4.ª ed.). McGraw-Hill.</li>
+    </ul>`],
+["Departamento Técnico (Soporte IT)",`<p>Escribe a <a href="mailto:pime@colegiomontano.edu.gt">pime@colegiomontano.edu.gt</a> o utiliza el formulario institucional de soporte IT.</p><div class="note">Agregar el enlace oficial del formulario cuando esté disponible.</div>`]]}
+};
+function show(id){let g=data[id];document.getElementById("home").style.display="none";document.getElementById("detail").style.display="block";let h=document.getElementById("heading");h.style.setProperty("--accent",g.c);h.innerHTML=`<small style="color:${g.c};font-weight:bold">${g.n}</small><h2>${g.t}</h2><p>${g.d}</p>`;document.getElementById("sections").innerHTML=g.s.map((x,i)=>`<details ${i===0?"open":""}><summary>${x[0]}</summary><div class="content">${x[1]}</div></details>`).join("");window.scrollTo({top:0,behavior:"smooth"})}
+function home(){document.getElementById("detail").style.display="none";document.getElementById("home").style.display="block";window.scrollTo({top:0,behavior:"smooth"})}
+</script></body></html>
