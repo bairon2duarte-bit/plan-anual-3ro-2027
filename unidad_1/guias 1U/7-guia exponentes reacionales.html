@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía Interactiva: Radicales y Exponentes Racionales - Colegio Montano</title>
+    <!-- Tailwind CSS para diseño moderno y responsivo -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- MathJax para renderizado impecable de expresiones matemáticas -->
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #F2F5E9;
+        }
+        /* Marco de pizarra digital con identidad Colegio Montano */
+        .whiteboard-container {
+            background-color: #ffffff;
+            border: 5px solid #F7D615;
+            border-radius: 12px;
+            box-shadow: 0 12px 30px rgba(18, 105, 168, 0.18);
+        }
+        .header-bg {
+            background: linear-gradient(135deg, #1269A8 0%, #0e5285 100%);
+        }
+        .tab-active {
+            background-color: #1269A8;
+            color: #ffffff;
+            border-bottom: 4px solid #F7D615;
+        }
+        .tab-inactive {
+            background-color: #88B5C7;
+            color: #0d4b7a;
+        }
+        .tab-inactive:hover {
+            background-color: #54887D;
+            color: #ffffff;
+        }
+        .card-theory {
+            background-color: #F2F5E9;
+            border-left: 5px solid #54887D;
+            border-radius: 8px;
+        }
+        .card-exercise {
+            background-color: rgba(136, 181, 199, 0.16);
+            border: 1px solid #54887D;
+            border-left: 5px solid #1269A8;
+            border-radius: 8px;
+        }
+        .solution-box {
+            background-color: rgba(136, 181, 199, 0.30);
+            border-left: 4px solid #54887D;
+            border-radius: 6px;
+        }
+        .badge-level {
+            background-color: #A6B046;
+            color: #ffffff;
+        }
+        .btn-action {
+            background-color: #1269A8;
+            color: #ffffff;
+            transition: all 0.2s ease;
+        }
+        .btn-action:hover {
+            background-color: #54887D;
+        }
+    </style>
+</head>
+<body class="p-3 md:p-6 min-h-screen flex flex-col items-center">
+
+    <!-- Contenedor Principal de la Pizarra Digital -->
+    <div id="whiteboard" class="whiteboard-container w-full max-w-6xl flex flex-col overflow-hidden">
+        
+        <!-- Barra Superior / Encabezado Institucional -->
+        <header class="header-bg p-4 flex flex-col sm:flex-row justify-between items-center text-white gap-4">
+            <div class="flex items-center space-x-4">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyEop0yf6lZ7Jk9MILZxF1rBj4Oqs5esyhIQ&s" alt="Logo Colegio Montano" class="h-14 w-14 object-contain bg-white rounded-full p-1 shadow-md">
+                <div>
+                    <h1 class="text-xl md:text-2xl font-bold tracking-wide">Colegio Montano</h1>
+                    <p class="text-xs md:text-sm text-[#F7D615] font-bold">Pizarra Digital Interactiva — Radicales y Exponentes Racionales (Secciones 2.4 y 2.5)</p>
+                </div>
+            </div>
+            <div>
+                <button id="fullscreen-btn" onclick="toggleFullScreen()" class="bg-[#F7D615] text-[#1269A8] font-bold px-4 py-2 rounded-lg shadow hover:bg-yellow-300 transition flex items-center gap-2 text-sm cursor-pointer">
+                    <span>[ ⛶ Pantalla completa ]</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Menú de Pestañas Horizontales Interactivas -->
+        <nav class="flex flex-wrap bg-[#88B5C7] border-b-2 border-[#54887D]">
+            <button onclick="switchTab('teoria')" id="btn-teoria" class="flex-1 py-3 px-3 text-center font-bold text-xs md:text-sm tab-active transition cursor-pointer">Teoría</button>
+            <button onclick="switchTab('ejemplos')" id="btn-ejemplos" class="flex-1 py-3 px-3 text-center font-bold text-xs md:text-sm tab-inactive transition cursor-pointer">Ejemplos</button>
+            <button onclick="switchTab('ejercicios')" id="btn-ejercicios" class="flex-1 py-3 px-3 text-center font-bold text-xs md:text-sm tab-inactive transition cursor-pointer">Ejercicios</button>
+            <button onclick="switchTab('reflexion')" id="btn-reflexion" class="flex-1 py-3 px-3 text-center font-bold text-xs md:text-sm tab-inactive transition cursor-pointer">Reflexión</button>
+            <button onclick="switchTab('evaluacion')" id="btn-evaluacion" class="flex-1 py-3 px-3 text-center font-bold text-xs md:text-sm tab-inactive transition cursor-pointer">Evaluación</button>
+        </nav>
+
+        <!-- Lienzo de Contenido Principal -->
+        <main class="p-5 md:p-8 flex-1 overflow-y-auto max-h-[78vh] bg-[#F2F5E9]/40">
+
+            <!-- ========================================== -->
+            <!-- PESTAÑA 1: EXPLICACIÓN TEÓRICA             -->
+            <!-- ========================================== -->
+            <section id="tab-teoria" class="space-y-6">
+                <div class="border-b-2 border-[#1269A8] pb-2">
+                    <h2 class="text-2xl font-bold text-[#1269A8]">1. Explicación Teórica: Radicales y Exponentes Racionales</h2>
+                    <p class="text-sm text-[#54887D] font-semibold">Basado estrictamente en las Secciones 2.4 y 2.5 del material de estudio.</p>
+                </div>
+
+                <!-- Bloque 2.4.1 Definición y Terminología -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="card-theory p-5 shadow-sm space-y-3">
+                        <h3 class="font-bold text-lg text-[#1269A8]">Definición 2.4.1: Raíz \(n\)-ésima Principal</h3>
+                        <p class="text-sm text-gray-800 leading-relaxed">
+                            Supóngase que \(x\) es un número real y \(n \ge 2\) es un entero positivo:
+                        </p>
+                        <ul class="text-sm text-gray-800 list-disc pl-5 space-y-1">
+                            <li><strong>i)</strong> Si \(x > 0\), entonces \(\sqrt[n]{x}\) es el número \(r\) positivo tal que \(x = r^n\).</li>
+                            <li><strong>ii)</strong> Si \(x < 0\) y \(n\) es un entero positivo <strong>impar</strong>, entonces \(\sqrt[n]{x}\) es un número \(r\) negativo tal que \(x = r^n\).</li>
+                            <li><strong>iii)</strong> Si \(x < 0\) y \(n\) es un entero positivo <strong>par</strong>, entonces \(\sqrt[n]{x}\) <strong>no es un número real</strong> (es un número complejo).</li>
+                            <li><strong>iv)</strong> Si \(x = 0\), entonces \(\sqrt[n]{x} = 0\).</li>
+                        </ul>
+                        <div class="bg-white p-3 rounded border border-[#54887D] text-center font-bold text-[#1269A8]">
+                            \(\sqrt[n]{x} = r \iff x = r^n\)
+                        </div>
+                    </div>
+
+                    <div class="card-theory p-5 shadow-sm space-y-3">
+                        <h3 class="font-bold text-lg text-[#1269A8]">Terminología y Convenciones</h3>
+                        <ul class="text-sm text-gray-800 space-y-2 leading-relaxed">
+                            <li>• La expresión \(\sqrt[n]{x}\) se llama <strong>radical</strong>, el entero \(n\) es el <strong>índice del radical</strong> y el número real \(x\) es el <strong>radicando</strong>.</li>
+                            <li>• Si el índice es \(n = 2\), normalmente se omite (\(\sqrt[2]{25} = \sqrt{25}\)) y se lee <em>raíz cuadrada</em>. Si \(n = 3\), se lee <em>raíz cúbica</em>.</li>
+                            <li>• Si \(n\) es par y \(x > 0\), existen dos raíces reales, pero el símbolo \(\sqrt[n]{x}\) se reserva exclusivamente para la <strong>raíz principal (positiva)</strong>; la negativa se denota \(-\sqrt[n]{x}\).</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Teorema 2.4.1 Leyes de los Radicales y Racionalización -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="card-theory p-5 shadow-sm space-y-3">
+                        <h3 class="font-bold text-lg text-[#1269A8]">Teorema 2.4.1: Leyes de los Radicales</h3>
+                        <p class="text-xs text-gray-600">Sean \(m\) y \(n\) enteros positivos, y \(x, y\) números reales (siempre que representen números reales):</p>
+                        <div class="bg-white p-4 rounded border border-[#54887D] text-sm text-gray-800 space-y-2">
+                            <p><strong>i)</strong> \((\sqrt[n]{x})^n = x\)</p>
+                            <p><strong>ii)</strong> \(\sqrt[n]{x^n} = \begin{cases} x, & \text{si } n \text{ es impar} \\ |x|, & \text{si } n \text{ es par} \end{cases}\)</p>
+                            <p><strong>iii)</strong> \(\sqrt[n]{xy} = \sqrt[n]{x}\sqrt[n]{y}\)</p>
+                            <p><strong>iv)</strong> \(\sqrt[n]{\dfrac{x}{y}} = \dfrac{\sqrt[n]{x}}{\sqrt[n]{y}}\)</p>
+                            <p><strong>v)</strong> \(\sqrt[m]{\sqrt[n]{x}} = \sqrt[mn]{x}\)</p>
+                        </div>
+                    </div>
+
+                    <div class="card-theory p-5 shadow-sm space-y-3">
+                        <h3 class="font-bold text-lg text-[#1269A8]">Racionalización y Factor Conjugado</h3>
+                        <p class="text-sm text-gray-800 leading-relaxed">
+                            <strong>Racionalizar</strong> consiste en eliminar radicales del denominador (habitual en álgebra) o del numerador (frecuente en cálculo) multiplicando la fracción por una forma especial de \(1\).
+                        </p>
+                        <div class="bg-white p-3 rounded border border-[#54887D] text-sm text-gray-800 space-y-2">
+                            <p><strong>Radical simple:</strong> \(\dfrac{1}{\sqrt{5}} \cdot \dfrac{\sqrt{5}}{\sqrt{5}} = \dfrac{\sqrt{5}}{5}\)</p>
+                            <p><strong>Factor conjugado:</strong> Para expresiones binómicas como \(\sqrt{x} + \sqrt{y}\), su conjugado es \(\sqrt{x} - \sqrt{y}\):</p>
+                            <p class="text-center font-semibold text-[#1269A8]">\((\sqrt{x}+\sqrt{y})(\sqrt{x}-\sqrt{y}) = x - y\)</p>
+                        </div>
+                        <p class="text-xs text-red-700 font-semibold">
+                            Nota del aula: \(\sqrt{x^2} = |x|\), no \(x\) si \(x < 0\). Tampoco \(\sqrt{a+b} = \sqrt{a} + \sqrt{b}\).
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Definición 2.5.1 y Teorema 2.5.1 Exponentes Racionales -->
+                <div class="card-theory p-6 shadow-sm space-y-4">
+                    <h3 class="font-bold text-lg text-[#1269A8]">Definición 2.5.1 y Teorema 2.5.1: Exponentes Racionales</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-800">
+                        <div class="bg-white p-4 rounded border border-[#54887D] space-y-2">
+                            <p class="font-bold text-[#54887D]">Definición de Potencia Racional</p>
+                            <p>Supóngase \(x \in \mathbb{R}\) y \(n \ge 2\) entero positivo:</p>
+                            <p><strong>i)</strong> Si \(\sqrt[n]{x}\) existe, entonces \(x^{1/n} = \sqrt[n]{x}\).</p>
+                            <p><strong>ii)</strong> Si \(\sqrt[n]{x}\) existe y \(m\) es cualquier entero tal que \(m/n\) está en sus <strong>términos mínimos</strong>:</p>
+                            <p class="text-center font-bold text-[#1269A8] py-1">\(x^{m/n} = \sqrt[n]{x^m} = (\sqrt[n]{x})^m\)</p>
+                            <p class="text-xs text-gray-600">Nota práctica: Suele ser más sencillo calcular primero la raíz \((\sqrt[n]{x})^m\).</p>
+                        </div>
+                        <div class="bg-white p-4 rounded border border-[#54887D] space-y-2">
+                            <p class="font-bold text-[#54887D]">Teorema 2.5.1: Leyes de Exponentes Racionales</p>
+                            <p>Para \(x, y \in \mathbb{R}\) y \(r, s \in \mathbb{Q}\) (cuando representen números reales):</p>
+                            <ul class="space-y-1">
+                                <li><strong>i)</strong> \(x^r x^s = x^{r+s}\)</li>
+                                <li><strong>ii)</strong> \((x^r)^s = x^{rs} = (x^s)^r\)</li>
+                                <li><strong>iii)</strong> \((xy)^r = x^r y^r\)</li>
+                                <li><strong>iv)</strong> \(\left(\dfrac{x}{y}\right)^r = \dfrac{x^r}{y^r}\)</li>
+                                <li><strong>v)</strong> \(\dfrac{x^r}{x^s} = x^{r-s}\)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- PESTAÑA 2: EJEMPLOS RESUELTOS (5 POR NIVEL)-->
+            <!-- ========================================== -->
+            <section id="tab-ejemplos" class="hidden space-y-8">
+                <div class="border-b-2 border-[#1269A8] pb-2">
+                    <h2 class="text-2xl font-bold text-[#1269A8]">2. Ejemplos Resueltos Paso a Paso</h2>
+                    <p class="text-sm text-[#54887D] font-semibold">15 ejemplos extraídos y adaptados del texto (5 Básico, 5 Intermedio, 5 Avanzado).</p>
+                </div>
+
+                <!-- NIVEL BÁSICO -->
+                <div class="space-y-4">
+                    <h3 class="text-xl font-bold text-[#54887D] flex items-center gap-2">
+                        <span class="badge-level text-xs px-3 py-1 rounded-full">NIVEL BÁSICO</span> Evaluación de Raíces Principales y Potencias Fraccionarias
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="card-theory p-4 shadow-sm">
+                            <p class="font-bold text-[#1269A8]">Ejemplo Básico 1 (Ejemplo 1a, p. 72)</p>
+                            <p class="text-sm font-semibold mt-1">Halle la raíz cuadrada principal \(\sqrt{100}\).</p>
+                            <div class="mt-2 bg-white p-3 rounded border text-sm text-gray-800">
+                                <strong>Resolución:</strong> Por el inciso i) de la Definición 2.4.1, buscamos el número positivo \(r\) tal que \(r^2 = 100\). Como \(10^2 = 100\), entonces \(\sqrt{100} = \mathbf{10}\).
+                            </div>
+                        </div>
+
+                        <div class="card-theory p-4 shadow-sm">
+                            <p class="font-bold text-[#1269A8]">Ejemplo Básico 2 (Ejemplo 1b, p. 72)</p>
+                            <p class="text-sm font-semibold mt-1">Halle la raíz cúbica principal \(\sqrt[3]{-64}\).</p>
+                            <div class="mt-2 bg-white p-3 rounded border text-sm text-gray-800">
+                                <strong>Resolución:</strong> Dado que el radicando \(-64 < 0\) y el índice \(n = 3\) es impar (inciso ii, Def. 2.4.1), buscamos \(r < 0\) tal que \(r^3 = -64\). Como \((-4)^3 = -64\), resulta \(\sqrt[3]{-64} = \mathbf{-4}\).
+                            </div>
+                        </div>
+
+                        <div class="card-theory p-4 shadow-sm">
+                            <p class="font-bold text-[#1269A8]">Ejemplo Básico 3 (Ejemplo 1c, p. 72)</p>
+                            <p class="text-sm font-semibold mt-1">Halle la raíz cuarta principal \(\sqrt[4]{\dfrac{16}{81}}\).</p>
+                            <div class="mt-2 bg-white p-3 rounded border text-sm text-gray-800">
+                                <strong>Resolución:</strong> Por el inciso i) de la Definición 2.4.1, buscamos \(r > 0\) tal que \(r^4 = \frac{16}{81}\). Como \(\left(\frac{2}{3}\right)^4 = \frac{16}{81}\), obtenemos \(\sqrt[4]{\frac{16}{81}} = \mathbf{\dfrac{2}{3}}\).
+                            </div>
+                        </div>
+
+                        <div class="card-theory p-4 shadow-sm">
+                            <p class="font-bold text-[#1269A8]">Ejemplo Básico 4 (Ejemplo 1, p. 78)</p>
+                            <p class="text-sm font-semibold mt-1">Evalúe \((25)^{1/2}\) y \((64)^{1/3}\).</p>
+                            <div class="mt-2 bg-white p-3 rounded border text-sm text-gray-800">
+                                <strong>Resolución:</strong> Usando la Definición 2.5.1 i):<br>
+                                • \((25)^{1/2} = \sqrt{25} = \mathbf{5}\) (raíz cuadrada principal).<br>
+                                • \((64)^{1/3} = \sqrt[3]{64} = \mathbf{4}\) (raíz cúbica principal).
+                            </div>
+                        </div>
+
+                        <div class="card-theory p-4 shadow-sm md:col-span-2">
+                            <p class="font-bold text-[#1269A8]">Ejemplo Básico 5 (Ejemplo 2a y 2b, p. 79)</p>
+                            <p class="text-sm font-semibold mt-1">Evalúe: a) \((0.09)^{5/2}\) &nbsp;&nbsp; b) \((-27)^{-4/3}\).</p>
+                            <div class="mt-2 bg-white p-3 rounded border text-sm text-gray-800">
+                                <strong>Resolución:</strong> Aplicando \(x^{m/n} = (\sqrt[n]{x})^m\):<br>
+                                • <strong>a)</strong> \((0.09)^{5/2} = (\sqrt{0.09})^5 = (0.3)^5 = \mathbf{0.00243}\).<br>
+                                • <strong>b)</strong> \((-27)^{-4/3} = (\sqrt[3]{-27})^{-4} = (-3)^{-4} = \dfrac{1}{(-3)^4} = \mathbf{\dfrac{1}{81}}\).
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- NIVEL INTERMEDIO -->
+                <div class="space-y-4">
+                    <h3 class="text-xl font-bold text-[#54887D] flex items-center gap-2">
+                        <span class="badge-level text-xs px-3 py-1 rounded-full">NIVEL INTERMEDIO</span> Simplificación con Leyes de Radicales y Exponentes Racionales
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="card-theory p-4 shadow-sm">
+                            <p class="font-bold text-[#1269A8]">Ejemplo Intermedio 1 (Ejemplo 2a y 2b, p. 73)</p>
+                            <p class="text-sm font-semibold mt-1">Simplifique: a) \(\sqrt[3]{\sqrt[7]{x^{21}}}\) &nbsp;&nbsp; b) \(\sqrt{\dfrac{x^2}{25}}\).</p>
+                            <div class="mt-2 bg-white p-3 rounded border text-sm text-gray-800">
+                                <strong>Resolución:</strong><br>
+                                • <strong>a)</strong> Por v) del Teorema 2.4.1: \(\sqrt[3 \cdot 7]{x^{21}} = \sqrt[21]{x^{21}} = \mathbf{x}\) (índice impar).<br>
+                                • <strong>b)</strong> Por iv) y ii) del Teorema 2.4.1: \(\dfrac{\sqrt{x^2}}{\sqrt{25}} = \mathbf{\dfrac{|x|}{5}}\) (índice par).
+                            </div>
+                        </div>
+
+                        <div class="card-theory p-4 shadow-sm">
+                            <p class="font-bold text-[#1269A8]">Ejemplo Intermedio 2 (Ejemplo 2d, p. 73)</p>
+                            <p class="text-sm font-semibold mt-1">Simplifique \(\sqrt[3]{81a^3b^5c^6}\).</p>
+                            <div class="mt-2 bg-white p-3 rounded border text-sm text-gray-800">
+                                <strong>Resolución:</strong> Factorizamos los cubos perfectos en el radicando:<br>
+                                \(\sqrt[3]{(27a^3b^3c^6)(3b^2)} = \sqrt[3]{(3abc^2)^3 \cdot 3b^2} = \sqrt[3]{(3abc^2)^3}\sqrt[3]{3b^2} = \mathbf{3abc^2\sqrt[3]{3b^2}}\).
+                            </div>
+                        </div>
+
+                        <div class="card-theory p-4 shadow-sm">
+                            <p class="font-bold text-[#1269A8]">Ejemplo Intermedio 3 (Ejemplo 3, p. 73)</p>
+                            <p class="text-sm font-semibold mt-1">Simplifique: a) \(\sqrt[3]{2x^2y^3}\sqrt[3]{4xz^3}\) &nbsp;&nbsp; b) \(\dfrac{\sqrt[4]{32a^{10}b^{16}}}{\sqrt[4]{2a^2}}\).</p>
+                            <div class="mt-2 bg-white p-3 rounded border text-sm text-gray-800">
+                                <strong>Resolución:</strong><br>
+                                • <strong>a)</strong> Por iii) del Teo. 2.4.1: \(\sqrt[3]{8x^3y^3z^3} = \sqrt[3]{(2xyz)^3} = \mathbf{2xyz}\).<br>
+                                • <strong>b)</strong> Por iv) del Teo. 2.4.1: \(\sqrt[4]{\frac{32a^{10}b^{16}}{2a^2}} = \sqrt[4]{16a^8b^{16}} = \sqrt[4]{(2a^2b^4)^4} = \mathbf{2a^2b^4}\).
+                            </div>
+                        </div>
+
+                        <div class="card-theory p-4 shadow-sm">
+                            <p class="font-bold text-[#1269A8]">Ejemplo Intermedio 4 (Ejemplo 4, p. 74)</p>
+                            <p class="text-sm font-semibold mt-1">Simplifique \(\sqrt{10} - \sqrt{40x^4} + \sqrt{90x^4y^8}\).</p>
+                            <div class="mt-2 bg-white p-3 rounded border text-sm text-gray-800">
+                                <strong>Resolución:</strong> Extraemos factores cuadrados de cada término:<br>
+                                \(\sqrt{10} - \sqrt{4x^4 \cdot 10} + \sqrt{9x^4y^8 \cdot 10} = \sqrt{10} - 2x^2\sqrt{10} + 3x^2y^4\sqrt{10}\)<br>
+                                Factorizando \(\sqrt{10}\): \(\mathbf{\sqrt{10}(1 - 2x^2 + 3x^2y^4)}\).
+                            </div>
+                        </div>
+
+                        <div class="card-theory p-4 shadow-sm md:col-span-2">
+                            <p class="font-bold text-[#1269A8]">Ejemplo Intermedio 5 (Ejemplo 5, p. 74 y Ejemplo 5, p. 80)</p>
+                            <p class="text-sm font-semibold mt-1">Racionalice \(\dfrac{1}{\sqrt[3]{2}}\) y simplifique \(\dfrac{x^{2/3}y^{1/2}}{x^{1/4}y^{3/2}}\).</p>
+                            <div class="mt-2 bg-white p-3 rounded border text-sm text-gray-800">
+                                <strong>Resolución:</strong><br>
+                                • \(\dfrac{1}{\sqrt[3]{2}} \cdot \dfrac{(\sqrt[3]{2})^2}{(\sqrt[3]{2})^2} = \dfrac{\sqrt[3]{4}}{\sqrt[3]{2^3}} = \mathbf{\dfrac{\sqrt[3]{4}}{2}}\).<br>
+                                • \(\dfrac{x^{2/3}y^{1/2}}{x^{1/4}y^{3/2}} = x^{2/3 - 1/4} y^{1/2 - 3/2} = x^{(8-3)/12} y^{-1} = \mathbf{\dfrac{x^{5/12}}{y}}\).
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- NIVEL AVANZADO -->
+                <div class="space-y-4">
+                    <h3 class="text-xl font-bold text-[#54887D] flex items-center gap-2">
+                        <span class="badge-level text-xs px-3 py-1 rounded-full">NIVEL AVANZADO</span> Conjugados, Radicales Anidados y Aplicaciones Científicas
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="card-theory p-4 shadow-sm">
+                            <p class="font-bold text-[#1269A8]">Ejemplo Avanzado 1 (Ejemplo 6, p. 75)</p>
+                            <p class="text-sm font-semibold mt-1">Racionalice el denominador de \(\dfrac{1}{\sqrt{x} + 3}\).</p>
+                            <div class="mt-2 bg-white p-3 rounded border text-sm text-gray-800">
+                                <strong>Resolución:</strong> Multiplicamos por el conjugado \(\frac{\sqrt{x}-3}{\sqrt{x}-3}\):<br>
+                                \(\dfrac{1}{\sqrt{x}+3} \cdot \dfrac{\sqrt{x}-3}{\sqrt{x}-3} = \dfrac{\sqrt{x}-3}{(\sqrt{x})^2 - 3^2} = \mathbf{\dfrac{\sqrt{x}-3}{x-9}}\).
+                            </div>
+                        </div>
+
+                        <div class="card-theory p-4 shadow-sm">
+                            <p class="font-bold text-[#1269A8]">Ejemplo Avanzado 2 (Ejemplo 7, p. 75)</p>
+                            <p class="text-sm font-semibold mt-1">Racionalice el numerador de \(\dfrac{\sqrt{x+h} - \sqrt{x}}{h}\).</p>
+                            <div class="mt-2 bg-white p-3 rounded border text-sm text-gray-800">
+                                <strong>Resolución:</strong> Multiplicamos por el conjugado del numerador \(\frac{\sqrt{x+h}+\sqrt{x}}{\sqrt{x+h}+\sqrt{x}}\):<br>
+                                \(\dfrac{(x+h) - x}{h(\sqrt{x+h}+\sqrt{x})} = \dfrac{h}{h(\sqrt{x+h}+\sqrt{x})} = \mathbf{\dfrac{1}{\sqrt{x+h}+\sqrt{x}}}\).
+                            </div>
+                        </div>
+
+                        <div class="card-theory p-4 shadow-sm">
+                            <p class="font-bold text-[#1269A8]">Ejemplo Avanzado 3 (Ejemplos 7 y 8, p. 80)</p>
+                            <p class="text-sm font-semibold mt-1">Escriba como un solo radical: a) \(\sqrt{x\sqrt[4]{x}}\) &nbsp;&nbsp; b) \(\dfrac{\sqrt[3]{16}}{\sqrt{2}}\).</p>
+                            <div class="mt-2 bg-white p-3 rounded border text-sm text-gray-800">
+                                <strong>Resolución:</strong><br>
+                                • <strong>a)</strong> \((x \cdot x^{1/4})^{1/2} = (x^{5/4})^{1/2} = x^{5/8} = \mathbf{\sqrt[8]{x^5}}\).<br>
+                                • <strong>b)</strong> \(\dfrac{16^{1/3}}{2^{1/2}} = \dfrac{(2^4)^{1/3}}{2^{1/2}} = 2^{4/3 - 1/2} = 2^{5/6} = \sqrt[6]{2^5} = \mathbf{\sqrt[6]{32}}\).
+                            </div>
+                        </div>
+
+                        <div class="card-theory p-4 shadow-sm">
+                            <p class="font-bold text-[#1269A8]">Ejemplo Avanzado 4 (Ejemplo 9, p. 81)</p>
+                            <p class="text-sm font-semibold mt-1">Simplifique \((8\,000\,000)^{2/3}\sqrt[4]{0.0001r^8t^{12}}\).</p>
+                            <div class="mt-2 bg-white p-3 rounded border text-sm text-gray-800">
+                                <strong>Resolución:</strong> Expresando en notación científica:<br>
+                                \((8 \times 10^6)^{2/3}(1 \times 10^{-4} r^8 t^{12})^{1/4} = 8^{2/3}(10^6)^{2/3}(10^{-4})^{1/4}(r^8)^{1/4}(t^{12})^{1/4}\)<br>
+                                \(= (\sqrt[3]{8})^2 (10^4)(10^{-1}) r^2 t^3 = 4 \times 10^3 r^2 t^3 = \mathbf{4\,000r^2t^3}\).
+                            </div>
+                        </div>
+
+                        <div class="card-theory p-4 shadow-sm md:col-span-2">
+                            <p class="font-bold text-[#1269A8]">Ejemplo Avanzado 5 (Ejemplo 8, p. 75 - Gravedad Artificial)</p>
+                            <p class="text-sm font-semibold mt-1">La tasa de rotación \(N\) (rotaciones/s) para simular gravedad \(a\) en una estación espacial de radio \(r\) es \(N = \dfrac{1}{2\pi}\sqrt{\dfrac{a}{r}}\). Si \(r = 150\text{ m}\) y \(a = 9.8\text{ m/s}^2\), halle \(N\).</p>
+                            <div class="mt-2 bg-white p-3 rounded border text-sm text-gray-800">
+                                <strong>Resolución:</strong> Sustituyendo \(a = 9.8\) y \(r = 150\):<br>
+                                \(N = \dfrac{1}{2\pi}\sqrt{\dfrac{9.8}{150}} \approx \mathbf{0.04\text{ rotaciones por segundo}}\) (equivalente a \(2.4\text{ rotaciones por minuto}\)).
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- PESTAÑA 3: EJERCICIOS PRÁCTICOS (5 X NIVEL)-->
+            <!-- ========================================== -->
+            <section id="tab-ejercicios" class="hidden space-y-8">
+                <div class="border-b-2 border-[#1269A8] pb-2">
+                    <h2 class="text-2xl font-bold text-[#1269A8]">3. Ejercicios Prácticos</h2>
+                    <p class="text-sm text-[#54887D] font-semibold">Resuelve cada problema seleccionado de las secciones 2.4 y 2.5 y verifica tu procedimiento.</p>
+                </div>
+
+                <!-- 5 EJERCICIOS BÁSICOS -->
+                <div class="space-y-3">
+                    <h3 class="text-lg font-bold text-[#54887D]">Nivel Básico (Evaluación Directa y Notación)</h3>
+                    
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Básico 1 (Ej. 1 y 7, Sec. 2.4)</span>
+                        <p class="font-semibold text-gray-800 mt-1">Evalúe los siguientes radicales: a) \(\sqrt[3]{-125}\) &nbsp;&nbsp; b) \(\sqrt[3]{-\dfrac{64}{27}}\).</p>
+                        <button onclick="toggleSol('sol-b1', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-b1" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong><br>
+                            a) Como \((-5)^3 = -125\), \(\sqrt[3]{-125} = \mathbf{-5}\).<br>
+                            b) Como \(\left(-\frac{4}{3}\right)^3 = -\frac{64}{27}\), \(\sqrt[3]{-\frac{64}{27}} = \mathbf{-\dfrac{4}{3}}\).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Básico 2 (Ej. 5 y 6, Sec. 2.4)</span>
+                        <p class="font-semibold text-gray-800 mt-1">Evalúe: a) \(\sqrt[4]{0.0001}\) &nbsp;&nbsp; b) \(\sqrt[5]{32}\).</p>
+                        <button onclick="toggleSol('sol-b2', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-b2" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong><br>
+                            a) \((0.1)^4 = 0.0001 \implies \sqrt[4]{0.0001} = \mathbf{0.1}\).<br>
+                            b) \(2^5 = 32 \implies \sqrt[5]{32} = \mathbf{2}\).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Básico 3 (Ej. 3 y 6, Sec. 2.5)</span>
+                        <p class="font-semibold text-gray-800 mt-1">Escriba usando exponentes racionales: a) \(\dfrac{1}{(\sqrt[3]{x})^4}\) &nbsp;&nbsp; b) \(\sqrt[3]{a^2 + b^2}\).</p>
+                        <button onclick="toggleSol('sol-b3', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-b3" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong><br>
+                            a) \(\dfrac{1}{x^{4/3}} = \mathbf{x^{-4/3}}\).<br>
+                            b) \(\mathbf{(a^2 + b^2)^{1/3}}\).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Básico 4 (Ej. 11 y 16, Sec. 2.5)</span>
+                        <p class="font-semibold text-gray-800 mt-1">Escriba usando notación radical: a) \((3a)^{2/3}\) &nbsp;&nbsp; b) \((3a)^{-3/2}\).</p>
+                        <button onclick="toggleSol('sol-b4', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-b4" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong><br>
+                            a) \(\mathbf{\sqrt[3]{(3a)^2}}\) o \(\mathbf{\sqrt[3]{9a^2}}\).<br>
+                            b) \(\dfrac{1}{(3a)^{3/2}} = \mathbf{\dfrac{1}{\sqrt{(3a)^3}}}\).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Básico 5 (Ej. 20 y 22, Sec. 2.5)</span>
+                        <p class="font-semibold text-gray-800 mt-1">Encuentre el valor numérico de: a) \(\left(\dfrac{1}{64}\right)^{-2/3}\) &nbsp;&nbsp; b) \(\left(\dfrac{81}{16}\right)^{3/4}\).</p>
+                        <button onclick="toggleSol('sol-b5', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-b5" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong><br>
+                            a) \(\left(\sqrt[3]{\frac{1}{64}}\right)^{-2} = \left(\frac{1}{4}\right)^{-2} = 4^2 = \mathbf{16}\).<br>
+                            b) \(\left(\sqrt[4]{\frac{81}{16}}\right)^3 = \left(\frac{3}{2}\right)^3 = \mathbf{\dfrac{27}{8}}\).
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5 EJERCICIOS INTERMEDIOS -->
+                <div class="space-y-3">
+                    <h3 class="text-lg font-bold text-[#54887D]">Nivel Intermedio (Simplificación Algebraica y Suma de Radicales)</h3>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Intermedio 1 (Ej. 15 y 16, Sec. 2.4)</span>
+                        <p class="font-semibold text-gray-800 mt-1">Simplifique: a) \(\sqrt[3]{4ab^3}\sqrt[3]{16a^2}\) &nbsp;&nbsp; b) \(\sqrt[4]{16x^5}\sqrt[4]{2x^3y^4}\).</p>
+                        <button onclick="toggleSol('sol-i1', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-i1" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong><br>
+                            a) \(\sqrt[3]{64a^3b^3} = \sqrt[3]{(4ab)^3} = \mathbf{4ab}\).<br>
+                            b) \(\sqrt[4]{32x^8y^4} = \sqrt[4]{16x^8y^4 \cdot 2} = \mathbf{2x^2y\sqrt[4]{2}}\).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Intermedio 2 (Ej. 23 y 31, Sec. 2.4)</span>
+                        <p class="font-semibold text-gray-800 mt-1">Simplifique (suponiendo variables positivas): a) \(\sqrt[3]{\sqrt{a^6b^{12}}}\) &nbsp;&nbsp; b) \(\sqrt{\dfrac{-16x^2}{-8x^{-2}}}\).</p>
+                        <button onclick="toggleSol('sol-i2', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-i2" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong><br>
+                            a) \(\sqrt[6]{a^6b^{12}} = \mathbf{ab^2}\).<br>
+                            b) \(\sqrt{2x^{2 - (-2)}} = \sqrt{2x^4} = \mathbf{x^2\sqrt{2}}\).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Intermedio 3 (Ej. 51 y 53, Sec. 2.4)</span>
+                        <p class="font-semibold text-gray-800 mt-1">Combine los radicales y simplifique: a) \(4\sqrt[3]{2} - \sqrt[3]{16}\) &nbsp;&nbsp; b) \(3\sqrt{8x^3} - \sqrt{18xy^2} + \sqrt{32x^5}\).</p>
+                        <button onclick="toggleSol('sol-i3', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-i3" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong><br>
+                            a) \(4\sqrt[3]{2} - \sqrt[3]{8 \cdot 2} = 4\sqrt[3]{2} - 2\sqrt[3]{2} = \mathbf{2\sqrt[3]{2}}\).<br>
+                            b) \(3(2x\sqrt{2x}) - 3y\sqrt{2x} + 4x^2\sqrt{2x} = \mathbf{(6x - 3y + 4x^2)\sqrt{2x}}\).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Intermedio 4 (Ej. 32 y 34, Sec. 2.5)</span>
+                        <p class="font-semibold text-gray-800 mt-1">Simplifique y elimine exponentes negativos: a) \((4x^4y^{-6})^{1/2}\) &nbsp;&nbsp; b) \(\dfrac{4x^{1/2}}{(8x)^{1/3}}\).</p>
+                        <button onclick="toggleSol('sol-i4', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-i4" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong><br>
+                            a) \(4^{1/2}(x^4)^{1/2}(y^{-6})^{1/2} = 2x^2y^{-3} = \mathbf{\dfrac{2x^2}{y^3}}\).<br>
+                            b) \(\dfrac{4x^{1/2}}{2x^{1/3}} = 2x^{1/2 - 1/3} = \mathbf{2x^{1/6}}\).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Intermedio 5 (Ej. 41 y 42, Sec. 2.4)</span>
+                        <p class="font-semibold text-gray-800 mt-1">Racionalice el denominador de: a) \(\dfrac{2}{\sqrt[3]{4}}\) &nbsp;&nbsp; b) \(\dfrac{1}{\sqrt[3]{xy}}\).</p>
+                        <button onclick="toggleSol('sol-i5', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-i5" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong><br>
+                            a) \(\dfrac{2}{\sqrt[3]{4}} \cdot \dfrac{\sqrt[3]{2}}{\sqrt[3]{2}} = \dfrac{2\sqrt[3]{2}}{\sqrt[3]{8}} = \dfrac{2\sqrt[3]{2}}{2} = \mathbf{\sqrt[3]{2}}\).<br>
+                            b) \(\dfrac{1}{\sqrt[3]{xy}} \cdot \dfrac{\sqrt[3]{x^2y^2}}{\sqrt[3]{x^2y^2}} = \mathbf{\dfrac{\sqrt[3]{x^2y^2}}{xy}}\).
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5 EJERCICIOS AVANZADOS -->
+                <div class="space-y-3">
+                    <h3 class="text-lg font-bold text-[#54887D]">Nivel Avanzado (Conjugados, Radicales Combinados y Modelado)</h3>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Avanzado 1 (Ej. 37 y 39, Sec. 2.4)</span>
+                        <p class="font-semibold text-gray-800 mt-1">Racionalice el denominador: a) \(\dfrac{\sqrt{2} - \sqrt{5}}{\sqrt{2} + \sqrt{5}}\) &nbsp;&nbsp; b) \(\dfrac{\sqrt{x} + \sqrt{y}}{\sqrt{x} - \sqrt{y}}\).</p>
+                        <button onclick="toggleSol('sol-a1', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-a1" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong><br>
+                            a) Multiplicando por \(\frac{\sqrt{2}-\sqrt{5}}{\sqrt{2}-\sqrt{5}}\): \(\dfrac{2 - 2\sqrt{10} + 5}{2 - 5} = \dfrac{7 - 2\sqrt{10}}{-3} = \mathbf{\dfrac{2\sqrt{10} - 7}{3}}\).<br>
+                            b) Multiplicando por \(\frac{\sqrt{x}+\sqrt{y}}{\sqrt{x}+\sqrt{y}}\): \(\mathbf{\dfrac{x + 2\sqrt{xy} + y}{x - y}}\).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Avanzado 2 (Ej. 48, Sec. 2.4)</span>
+                        <p class="font-semibold text-gray-800 mt-1">Racionalice el numerador de \(\dfrac{\dfrac{1}{\sqrt{x+h}} - \dfrac{1}{\sqrt{x}}}{h}\).</p>
+                        <button onclick="toggleSol('sol-a2', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-a2" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong><br>
+                            1. Combinamos las fracciones del numerador: \(\dfrac{\sqrt{x} - \sqrt{x+h}}{h\sqrt{x}\sqrt{x+h}}\).<br>
+                            2. Multiplicamos por el conjugado \(\frac{\sqrt{x}+\sqrt{x+h}}{\sqrt{x}+\sqrt{x+h}}\):<br>
+                            \(\dfrac{x - (x+h)}{h\sqrt{x}\sqrt{x+h}(\sqrt{x}+\sqrt{x+h})} = \dfrac{-h}{h\sqrt{x}\sqrt{x+h}(\sqrt{x}+\sqrt{x+h})} = \mathbf{\dfrac{-1}{\sqrt{x}\sqrt{x+h}(\sqrt{x}+\sqrt{x+h})}}\).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Avanzado 3 (Ej. 43 y 44, Sec. 2.5)</span>
+                        <p class="font-semibold text-gray-800 mt-1">Simplifique y elimine exponentes negativos: a) \(\dfrac{(a^{-1/3}b^{2/9}c^{1/6})^9}{(a^{1/6}b^{-2/3})^6}\) &nbsp;&nbsp; b) \(\left(\dfrac{x^{1/5}y^{3/10}}{x^{-2/5}y^{1/2}}\right)^{-10}\).</p>
+                        <button onclick="toggleSol('sol-a3', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-a3" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong><br>
+                            a) \(\dfrac{a^{-3}b^2c^{3/2}}{ab^{-4}} = a^{-3-1}b^{2-(-4)}c^{3/2} = a^{-4}b^6c^{3/2} = \mathbf{\dfrac{b^6c^{3/2}}{a^4}}\).<br>
+                            b) \(\left(x^{1/5 - (-2/5)}y^{3/10 - 5/10}\right)^{-10} = (x^{3/5}y^{-2/10})^{-10} = x^{-6}y^2 = \mathbf{\dfrac{y^2}{x^6}}\).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Avanzado 4 (Ej. 50 y 56, Sec. 2.5)</span>
+                        <p class="font-semibold text-gray-800 mt-1">Escriba como un solo radical: a) \(\sqrt[3]{4}\sqrt{2}\) &nbsp;&nbsp; b) \(\dfrac{\sqrt[3]{y^2\sqrt{y}}}{\sqrt[4]{y}}\).</p>
+                        <button onclick="toggleSol('sol-a4', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-a4" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong><br>
+                            a) \((2^2)^{1/3} \cdot 2^{1/2} = 2^{2/3 + 1/2} = 2^{7/6} = \sqrt[6]{2^7} = \mathbf{\sqrt[6]{128}}\).<br>
+                            b) \(\dfrac{(y^2 \cdot y^{1/2})^{1/3}}{y^{1/4}} = \dfrac{(y^{5/2})^{1/3}}{y^{1/4}} = \dfrac{y^{5/6}}{y^{1/4}} = y^{5/6 - 1/4} = y^{7/12} = \mathbf{\sqrt[12]{y^7}}\).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Avanzado 5 (Ej. 57 y 58, Sec. 2.5)</span>
+                        <p class="font-semibold text-gray-800 mt-1">Use notación científica para simplificar: \(\sqrt{0.000004}(8\,000)^{2/3}(100\,000)^{4/5}\).</p>
+                        <button onclick="toggleSol('sol-a5', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-a5" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong><br>
+                            1. Convertimos a notación científica: \((4 \times 10^{-6})^{1/2} (8 \times 10^3)^{2/3} (10^5)^{4/5}\).<br>
+                            2. Aplicamos leyes de exponentes: \((2 \times 10^{-3}) \cdot (4 \times 10^2) \cdot (10^4) = 8 \times 10^{-3+2+4} = 8 \times 10^3 = \mathbf{8\,000}\).
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- PESTAÑA 4: REFLEXIÓN CRÍTICA               -->
+            <!-- ========================================== -->
+            <section id="tab-reflexion" class="hidden space-y-6">
+                <div class="border-b-2 border-[#1269A8] pb-2">
+                    <h2 class="text-2xl font-bold text-[#1269A8]">4. Preguntas de Reflexión Crítica (Para el Análisis y la Discusión)</h2>
+                    <p class="text-sm text-[#54887D] font-semibold">Cuestionamientos conceptuales extraídos de las secciones "Notas del aula", "Para el análisis" y "Para la discusión".</p>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="card-theory p-5 shadow-sm">
+                        <h3 class="font-bold text-lg text-[#1269A8] mb-2">1. El rol del Valor Absoluto en \(\sqrt[n]{x^n}\) (Nota del aula, p. 76 y Ej. 65)</h3>
+                        <p class="text-sm text-gray-800 leading-relaxed">
+                            ¿Por qué es un error algebraico afirmar que \(\sqrt{a^2} = a\) para cualquier número real \(a\)? Evalúa el caso \(x = -3\) y explica por qué el Teorema 2.4.1 ii) exige escribir \(\sqrt[n]{x^n} = |x|\) cuando el índice \(n\) es par, pero permite escribir \(\sqrt[n]{x^n} = x\) cuando \(n\) es impar.
+                        </p>
+                    </div>
+
+                    <div class="card-theory p-5 shadow-sm">
+                        <h3 class="font-bold text-lg text-[#1269A8] mb-2">2. Importancia de reducir \(m/n\) a sus términos mínimos (Ejemplo 4, p. 79)</h3>
+                        <p class="text-sm text-gray-800 leading-relaxed">
+                            En la Definición 2.5.1 ii), se exige que el exponente racional \(m/n\) esté reducido a sus términos mínimos. Analiza qué ocurre cuando \(x = -9\), \(m = 2\) y \(n = 2\) al comparar las tres expresiones: a) \((-9)^{2/2}\), b) \([(-9)^2]^{1/2}\) y c) \([(-9)^{1/2}]^2\). ¿Por qué no producen el mismo resultado en los números reales?
+                        </p>
+                    </div>
+
+                    <div class="card-theory p-5 shadow-sm">
+                        <h3 class="font-bold text-lg text-[#1269A8] mb-2">3. Falacia de la distributividad del radical sobre la suma (Ej. 63, Sec. 2.4 y Ej. 65, Sec. 2.5)</h3>
+                        <p class="text-sm text-gray-800 leading-relaxed">
+                            Muchos estudiantes escriben erróneamente que \(\sqrt{a + b} = \sqrt{a} + \sqrt{b}\) o que \((z^2 + 25)^{1/2} = z + 5\). Construye un contraejemplo numérico sencillo (por ejemplo, \(a = 9, b = 16\)) para refutar esta igualdad y justifica por qué la propiedad \(\sqrt[n]{xy} = \sqrt[n]{x}\sqrt[n]{y}\) aplica al producto pero nunca a la adición.
+                        </p>
+                    </div>
+
+                    <div class="card-theory p-5 shadow-sm">
+                        <h3 class="font-bold text-lg text-[#1269A8] mb-2">4. Racionalización de índices superiores a 2 (Nota del aula ii, p. 76)</h3>
+                        <p class="text-sm text-gray-800 leading-relaxed">
+                            Si deseas racionalizar el denominador de \(\dfrac{1}{\sqrt[3]{2}}\), ¿por qué multiplicar el numerador y el denominador por \(\sqrt[3]{2}\) no elimina el radical del denominador, y qué factor exacto se requiere para lograrlo?
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- PESTAÑA 5: EVALUACIÓN FORMATIVA            -->
+            <!-- ========================================== -->
+            <section id="tab-evaluacion" class="hidden space-y-6">
+                <div class="border-b-2 border-[#1269A8] pb-2">
+                    <h2 class="text-2xl font-bold text-[#1269A8]">5. Evaluación Formativa y Aplicaciones Diversas</h2>
+                    <p class="text-sm text-[#54887D] font-semibold">Comprobación de conceptos (Verdadero/Falso) y problemas de aplicación científica del documento.</p>
+                </div>
+
+                <div class="space-y-4">
+                    <!-- Pregunta 1: Verdadero/Falso Sec 2.4 -->
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Ítem 1 — Análisis Conceptual (Ej. 67-70, Sec. 2.4)</span>
+                        <p class="font-semibold text-gray-800 mt-1">Determine si cada proposición es Verdadera o Falsa y justifique brevemente:</p>
+                        <ul class="text-sm text-gray-800 list-disc pl-5 mt-1 space-y-1">
+                            <li><strong>a)</strong> Si \(n\) es impar, \(\sqrt[n]{x}\) está definido para cualquier número real \(x\).</li>
+                            <li><strong>b)</strong> Si \(n\) es par, \(\sqrt[n]{x}\) está definido para cualquier número real \(x\).</li>
+                            <li><strong>c)</strong> \(\sqrt[4]{x^2} = \sqrt{x}\), para cualquier número real \(x\).</li>
+                            <li><strong>d)</strong> \(\sqrt{a^2/b^2} = |a/b|\), para cualesquiera números reales \(a\) y \(b \neq 0\).</li>
+                        </ul>
+                        <button onclick="toggleSol('sol-ev1', this)" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-ev1" class="hidden solution-box mt-3 p-3 text-sm text-gray-800 space-y-1">
+                            <p>• <strong>a) Verdadero:</strong> Todo número real (positivo, negativo o cero) tiene exactamente una raíz \(n\)-ésima real cuando \(n\) es impar.</p>
+                            <p>• <strong>b) Falso:</strong> Si \(n\) es par y \(x < 0\), \(\sqrt[n]{x}\) no es un número real (Def. 2.4.1 iii).</p>
+                            <p>• <strong>c) Falso:</strong> Si \(x < 0\), \(\sqrt[4]{x^2} = \sqrt{|x|}\) existe en \(\mathbb{R}\), pero \(\sqrt{x}\) no es real.</p>
+                            <p>• <strong>d) Verdadero:</strong> Por las leyes iv) y ii) del Teorema 2.4.1, \(\frac{\sqrt{a^2}}{\sqrt{b^2}} = \frac{|a|}{|b|} = \left|\frac{a}{b}\right|\).</p>
+                        </div>
+                    </div>
+
+                    <!-- Pregunta 2: Verdadero/Falso Sec 2.5 -->
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Ítem 2 — Exponentes Racionales (Ej. 67-74, Sec. 2.5)</span>
+                        <p class="font-semibold text-gray-800 mt-1">Determine si cada igualdad es Verdadera o Falsa:</p>
+                        <ul class="text-sm text-gray-800 list-disc pl-5 mt-1 space-y-1">
+                            <li><strong>a)</strong> \([(-4)^2]^{1/2} = 4\)</li>
+                            <li><strong>b)</strong> \([(-4)^{1/2}]^2 = -4\)</li>
+                            <li><strong>c)</strong> \(x^{-3/2} = \dfrac{1}{x^{2/3}}\)</li>
+                            <li><strong>d)</strong> \(\dfrac{a^{3/2}}{a^{-3/2}} = a^2\)</li>
+                        </ul>
+                        <button onclick="toggleSol('sol-ev2', this)" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-ev2" class="hidden solution-box mt-3 p-3 text-sm text-gray-800 space-y-1">
+                            <p>• <strong>a) Verdadero:</strong> \([16]^{1/2} = \sqrt{16} = 4\).</p>
+                            <p>• <strong>b) Falso:</strong> \((-4)^{1/2} = \sqrt{-4}\) no está definido en los números reales.</p>
+                            <p>• <strong>c) Falso:</strong> El exponente negativo invierte la base, no la fracción del exponente: \(x^{-3/2} = \frac{1}{x^{3/2}}\).</p>
+                            <p>• <strong>d) Falso:</strong> Al restar exponentes: \(a^{3/2 - (-3/2)} = a^{6/2} = a^3 \neq a^2\).</p>
+                        </div>
+                    </div>
+
+                    <!-- Pregunta 3: Aplicación Satélite Terrestre (Ej. 61, Sec. 2.4) -->
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Ítem 3 — Aplicación: Satélite Terrestre (Ej. 61, p. 77)</span>
+                        <p class="font-semibold text-gray-800 mt-1">
+                            Si un satélite da vueltas alrededor de la Tierra en una órbita circular de radio \(r = 6.70 \times 10^6\text{ m}\), halle su velocidad \(v\) si \(v = R\sqrt{g/r}\), donde \(R = 6.40 \times 10^6\text{ m}\) es el radio de la Tierra y \(g = 9.8\text{ m/s}^2\).
+                        </p>
+                        <button onclick="toggleSol('sol-ev3', this)" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-ev3" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución paso a paso:</strong><br>
+                            1. Sustituimos los valores en la fórmula: \(v = (6.40 \times 10^6)\sqrt{\dfrac{9.8}{6.70 \times 10^6}}\).<br>
+                            2. Calculamos el cociente bajo el radical: \(\dfrac{9.8}{6.70 \times 10^6} \approx 1.4627 \times 10^{-6}\).<br>
+                            3. Extraemos la raíz cuadrada: \(\sqrt{1.4627 \times 10^{-6}} \approx 1.2094 \times 10^{-3}\).<br>
+                            4. Multiplicamos por \(R\): \(v \approx (6.40 \times 10^6)(1.2094 \times 10^{-3}) \approx \mathbf{7\,740\text{ m/s}}\) (\(7.74 \times 10^3\text{ m/s}\)).
+                        </div>
+                    </div>
+
+                    <!-- Pregunta 4: Aplicación Relatividad (Ej. 62, Sec. 2.4) -->
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Ítem 4 — Aplicación: Relatividad de Einstein (Ej. 62, p. 78)</span>
+                        <p class="font-semibold text-gray-800 mt-1">
+                            La masa relativista \(m\) de un objeto a velocidad \(v\) es \(m = \dfrac{m_0}{\sqrt{1 - v^2/c^2}}\). Halle la masa de un electrón que viaja a \(v = 0.6c\) si su masa en reposo es \(m_0 = 9.1 \times 10^{-31}\text{ kg}\).
+                        </p>
+                        <button onclick="toggleSol('sol-ev4', this)" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-ev4" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución paso a paso:</strong><br>
+                            1. Sustituimos \(v = 0.6c\): \(\dfrac{v^2}{c^2} = \dfrac{(0.6c)^2}{c^2} = 0.36\).<br>
+                            2. Evaluamos el denominador: \(\sqrt{1 - 0.36} = \sqrt{0.64} = 0.8\).<br>
+                            3. Calculamos \(m\): \(m = \dfrac{9.1 \times 10^{-31}}{0.8} = \mathbf{1.1375 \times 10^{-30}\text{ kg}}\).
+                        </div>
+                    </div>
+
+                    <!-- Pregunta 5: Aplicación Tasa de Inflación (Ejemplo 10, Sec. 2.5) -->
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Ítem 5 — Aplicación: Tasa de Inflación Anual (Ejemplo 10, p. 81)</span>
+                        <p class="font-semibold text-gray-800 mt-1">
+                            El promedio de la tasa de inflación anual \(r\) de un inmueble que costaba \(p\) dólares hace \(n\) años y hoy vale \(q\) dólares está dado por \(r = \left(\dfrac{q}{p}\right)^{1/n} - 1\). Verifique el cálculo para \(p = \$80\,000\), \(q = \$500\,000\) y \(n = 12\text{ años}\).
+                        </p>
+                        <button onclick="toggleSol('sol-ev5', this)" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-ev5" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución paso a paso:</strong><br>
+                            1. Sustituimos los datos: \(r = \left(\dfrac{500\,000}{80\,000}\right)^{1/12} - 1 = (6.25)^{1/12} - 1\).<br>
+                            2. Evaluamos la raíz doceava: \((6.25)^{1/12} \approx 1.1650\).<br>
+                            3. Restamos \(1\): \(r \approx 1.1650 - 1 = 0.165\), es decir, una tasa de inflación anual promedio del \(\mathbf{16.5\%}\).
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Pie de Página Institucional -->
+        <footer class="bg-[#F2F5E9] border-t-2 border-[#54887D] p-3 text-center text-xs text-[#1269A8] font-semibold">
+            Colegio Montano — Departamento de Matemática • Pizarra Digital Interactiva (Canvas Education)
+        </footer>
+    </div>
+
+    <!-- Lógica de Interactividad -->
+    <script>
+        // Cambio dinámico entre las pestañas de la pizarra
+        function switchTab(tabName) {
+            const tabs = ['teoria', 'ejemplos', 'ejercicios', 'reflexion', 'evaluacion'];
+            tabs.forEach(t => {
+                const section = document.getElementById('tab-' + t);
+                const btn = document.getElementById('btn-' + t);
+                if (t === tabName) {
+                    section.classList.remove('hidden');
+                    btn.className = "flex-1 py-3 px-3 text-center font-bold text-xs md:text-sm tab-active transition cursor-pointer";
+                } else {
+                    section.classList.add('hidden');
+                    btn.className = "flex-1 py-3 px-3 text-center font-bold text-xs md:text-sm tab-inactive transition cursor-pointer";
+                }
+            });
+        }
+
+        // Alternar visibilidad de las soluciones ocultas
+        function toggleSol(solId, btnElement) {
+            const solDiv = document.getElementById(solId);
+            if (solDiv.classList.contains('hidden')) {
+                solDiv.classList.remove('hidden');
+                btnElement.textContent = "Ocultar solución";
+            } else {
+                solDiv.classList.add('hidden');
+                btnElement.textContent = "Mostrar solución";
+            }
+        }
+
+        // Control de Pantalla Completa mediante Fullscreen API
+        function toggleFullScreen() {
+            const elem = document.documentElement;
+            const btn = document.getElementById('fullscreen-btn');
+            if (!document.fullscreenElement) {
+                if (elem.requestFullscreen) {
+                    elem.requestFullscreen().catch(() => {});
+                } else if (elem.webkitRequestFullscreen) {
+                    elem.webkitRequestFullscreen();
+                } else if (elem.msRequestFullscreen) {
+                    elem.msRequestFullscreen();
+                }
+                btn.innerHTML = "<span>[ ✕ Salir pantalla completa ]</span>";
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen().catch(() => {});
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                }
+                btn.innerHTML = "<span>[ ⛶ Pantalla completa ]</span>";
+            }
+        }
+
+        document.addEventListener('fullscreenchange', () => {
+            const btn = document.getElementById('fullscreen-btn');
+            if (!document.fullscreenElement) {
+                btn.innerHTML = "<span>[ ⛶ Pantalla completa ]</span>";
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía Interactiva: Lógica Proposicional y Sinónimos - Colegio Montano</title>
+    <!-- Tailwind CSS para diseño moderno y responsivo -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #F2F5E9;
+        }
+        /* Estilo personalizado de pizarra digital con identidad Colegio Montano */
+        .whiteboard-container {
+            background-color: #ffffff;
+            border: 4px solid #F7D615;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(18, 105, 168, 0.15);
+        }
+        .header-bg {
+            background-color: #1269A8;
+        }
+        .tab-active {
+            background-color: #1269A8;
+            color: #ffffff;
+            border-bottom: 4px solid #F7D615;
+        }
+        .tab-inactive {
+            background-color: #88B5C7;
+            color: #1269A8;
+        }
+        .tab-inactive:hover {
+            background-color: #54887D;
+            color: #ffffff;
+        }
+        .card-custom {
+            background-color: #F2F5E9;
+            border-left: 5px solid #54887D;
+            border-radius: 8px;
+        }
+        .badge-level {
+            background-color: #A6B046;
+            color: #ffffff;
+        }
+        .btn-action {
+            background-color: #1269A8;
+            color: #ffffff;
+            transition: all 0.2s ease;
+        }
+        .btn-action:hover {
+            background-color: #54887D;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8 min-h-screen flex flex-col items-center">
+
+    <!-- Contenedor Principal de la Pizarra Digital -->
+    <div id="whiteboard" class="whiteboard-container w-full max-w-6xl flex flex-col overflow-hidden">
+        
+        <!-- Barra Superior / Encabezado con Logo y Botón Fullscreen -->
+        <header class="header-bg p-4 flex flex-col sm:flex-row justify-between items-center text-white gap-4">
+            <div class="flex items-center space-x-4">
+                <!-- Logo Oficial del Colegio Montano -->
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyEop0yf6lZ7Jk9MILZxF1rBj4Oqs5esyhIQ&s" alt="Logo Colegio Montano" class="h-12 w-12 object-contain bg-white rounded-full p-1 shadow">
+                <div>
+                    <h1 class="text-xl md:text-2xl font-bold tracking-wide">Colegio Montano</h1>
+                    <p class="text-xs md:text-sm text-[#F7D615] font-semibold">Pizarra Digital Interactiva — Lógica Proposicional y Conectivos</p>
+                </div>
+            </div>
+            <div>
+                <!-- Botón de Pantalla Completa -->
+                <button onclick="toggleFullScreen()" class="bg-[#F7D615] text-[#1269A8] font-bold px-4 py-2 rounded-lg shadow hover:bg-yellow-400 transition flex items-center gap-2 text-sm">
+                    <span>[ ⛶ Pantalla Completa ]</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Navegación por Pestañas Horizontales -->
+        <nav class="flex flex-wrap bg-[#88B5C7] border-b-2 border-[#54887D]">
+            <button onclick="switchTab('teoria')" id="btn-teoria" class="flex-1 py-3 px-4 text-center font-bold text-sm md:text-base tab-active transition">1. Teoría y Sinónimos</button>
+            <button onclick="switchTab('ejemplos')" id="btn-ejemplos" class="flex-1 py-3 px-4 text-center font-bold text-sm md:text-base tab-inactive transition">2. Ejemplos Resueltos</button>
+            <button onclick="switchTab('ejercicios')" id="btn-ejercicios" class="flex-1 py-3 px-4 text-center font-bold text-sm md:text-base tab-inactive transition">3. Ejercicios Prácticos</button>
+            <button onclick="switchTab('reflexion')" id="btn-reflexion" class="flex-1 py-3 px-4 text-center font-bold text-sm md:text-base tab-inactive transition">4. Reflexión Crítica</button>
+            <button onclick="switchTab('evaluacion')" id="btn-evaluacion" class="flex-1 py-3 px-4 text-center font-bold text-sm md:text-base tab-inactive transition">5. Evaluación Formativa</button>
+        </nav>
+
+        <!-- Contenido Dinámico de las Pestañas -->
+        <main class="p-6 md:p-8 flex-1 overflow-y-auto max-h-[75vh]">
+
+            <!-- SECCIÓN 1: TEORÍA Y SINÓNIMOS LÓGICOS -->
+            <section id="tab-teoria" class="space-y-6">
+                <div class="border-b-2 border-[#1269A8] pb-2">
+                    <h2 class="text-2xl font-bold text-[#1269A8]">Fundamentos y Sinónimos de los Conectivos Lógicos</h2>
+                    <p class="text-gray-600 text-sm">Traducción formal del lenguaje natural al lenguaje proposicional mediante equivalencias léxicas.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Tarjeta 1: Proposición -->
+                    <div class="card-custom p-5 shadow-sm">
+                        <h3 class="font-bold text-lg text-[#1269A8] mb-2">Proposición y Valor de Verdad</h3>
+                        <p class="text-gray-700 text-sm leading-relaxed">
+                            Una proposición es un enunciado u oración declarativa de la cual se puede afirmar si es <strong>falsa (F)</strong> o <strong>verdadera (V)</strong>, pero no ambas a la vez. Su veracidad o falsedad constituye su valor de verdad.
+                        </p>
+                    </div>
+
+                    <!-- Tarjeta 2: Clasificación -->
+                    <div class="card-custom p-5 shadow-sm">
+                        <h3 class="font-bold text-lg text-[#1269A8] mb-2">Tautología, Contradicción y Contingencia</h3>
+                        <p class="text-gray-700 text-sm leading-relaxed text-sm">
+                            - <strong>Tautología:</strong> Siempre Verdadero (V).<br>
+                            - <strong>Contradicción:</strong> Siempre Falso (F).<br>
+                            - <strong>Contingencia:</strong> Valores mixtos (V y F).
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Tarjeta Amplia: Diccionario de Sinónimos de Conectivos Lógicos -->
+                <div class="card-custom p-6 shadow-sm space-y-4">
+                    <h3 class="font-bold text-xl text-[#1269A8] border-b pb-2">Diccionario de Sinónimos de los Conectivos Lógicos</h3>
+                    <p class="text-xs text-gray-600">En la lectura formal de textos matemáticos y problemas de razonamiento, los conectivos se expresan mediante múltiples giros lingüísticos:</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-700">
+                        <div class="bg-white p-4 rounded border border-[#54887D]">
+                            <strong class="text-[#1269A8] block mb-1">1. Negación (~p):</strong>
+                            <p class="text-xs">"no", "no es cierto que", "no es el caso que", "no ocurre que", "nunca", "es erróneo", "es falso", "es inadmisible", "es objetable", "no sucede que".</p>
+                        </div>
+
+                        <div class="bg-white p-4 rounded border border-[#54887D]">
+                            <strong class="text-[#1269A8] block mb-1">2. Conjunción (p ∧ q):</strong>
+                            <p class="text-xs">"y", "pero", "sin embargo", "además", "aunque", "de la misma manera", "también", "del mismo modo", "incluso", "así como", "tal como", "no obstante", "a pesar de", "más aun", "a la vez", "aún".</p>
+                        </div>
+
+                        <div class="bg-white p-4 rounded border border-[#54887D]">
+                            <strong class="text-[#1269A8] block mb-1">3. Disyunción Inclusiva (p ∨ q):</strong>
+                            <p class="text-xs">"o", "excepto que", "salvo que", "solo que", "a menos que", "o también...".</p>
+                        </div>
+
+                        <div class="bg-white p-4 rounded border border-[#54887D]">
+                            <strong class="text-[#1269A8] block mb-1">4. Disyunción Exclusiva (p <u>v</u> q):</strong>
+                            <p class="text-xs">"o...", "o... o...", "bien... o bien", "o solamente...".</p>
+                        </div>
+
+                        <div class="bg-white p-4 rounded border border-[#54887D]">
+                            <strong class="text-[#1269A8] block mb-1">5. Condicional (p → q):</strong>
+                            <p class="text-xs">"si... entonces...", "si... dado que...", "... siempre que...", "cuando... así pues...", "ya que... bien se ve que...", "implica", "por tanto", "por ende", "es condición suficiente para", "porque", "p sólo si q", "q si p", "en caso de que p entonces q".</p>
+                        </div>
+
+                        <div class="bg-white p-4 rounded border border-[#54887D]">
+                            <strong class="text-[#1269A8] block mb-1">6. Bicondicional (p ↔ q):</strong>
+                            <p class="text-xs">"si y sólo si", "es equivalente", "siempre que y sólo cuando", "es idéntico", "es condición necesaria y suficiente", "es lo mismo que", "equivale a", "en el caso, y sólo en el caso, de que".</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECCIÓN 2: EJEMPLOS RESUELTOS -->
+            <section id="tab-ejemplos" class="hidden space-y-6">
+                <div class="border-b-2 border-[#1269A8] pb-2">
+                    <h2 class="text-2xl font-bold text-[#1269A8]">Ejemplos Resueltos Paso a Paso</h2>
+                    <p class="text-gray-600 text-sm">Traducción de lenguaje natural complejo usando sinónimos y análisis de niveles.</p>
+                </div>
+
+                <!-- Bloque Básico -->
+                <div class="space-y-4">
+                    <h3 class="text-lg font-bold text-[#54887D] bg-[#88B5C7] bg-opacity-30 p-2 rounded">Nivel Básico (Ejemplos 1 al 5)</h3>
+                    
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejemplo 1 - Básico</span>
+                        <p class="font-semibold text-gray-800 mt-2">Simbolice la proposición: "Es falso que el examen fue fácil".</p>
+                        <div class="mt-2 text-sm text-gray-700 bg-white p-3 rounded border">
+                            <strong>Solución:</strong> Si p: "El examen fue fácil", la expresión utiliza el sinónimo de negación "Es falso que", por lo que se simboliza como <strong>~p</strong>.
+                        </div>
+                    </div>
+
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejemplo 2 - Básico</span>
+                        <p class="font-semibold text-gray-800 mt-2">Simbolice: "Estudio matemáticas, sin embargo apruebo el curso".</p>
+                        <div class="mt-2 text-sm text-gray-700 bg-white p-3 rounded border">
+                            <strong>Solución:</strong> Sea p: "Estudio matemáticas" y q: "Apruebo el curso". El término "sin embargo" actúa como sinónimo del conector de conjunción (∧). Se simboliza como <strong>p ∧ q</strong>.
+                        </div>
+                    </div>
+
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejemplo 3 - Básico</span>
+                        <p class="font-semibold text-gray-800 mt-2">Dada p: V y q: F, determine el valor de verdad de p ∧ q.</p>
+                        <div class="mt-2 text-sm text-gray-700 bg-white p-3 rounded border">
+                            <strong>Solución:</strong> Como la conjunción exige que ambas sean verdaderas y q es F, el resultado es <strong>Falso (F)</strong>.
+                        </div>
+                    </div>
+
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejemplo 4 - Básico</span>
+                        <p class="font-semibold text-gray-800 mt-2">Simbolice: "Iré al cine a menos que tenga tarea".</p>
+                        <div class="mt-2 text-sm text-gray-700 bg-white p-3 rounded border">
+                            <strong>Solución:</strong> "A menos que" es un sinónimo clásico de la disyunción inclusiva (∨). Si p: Iré al cine, q: Tengo tarea, se representa como <strong>p ∨ q</strong>.
+                        </div>
+                    </div>
+
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejemplo 5 - Básico</span>
+                        <p class="font-semibold text-gray-800 mt-2">Halle el valor de la condicional si antecedente es V y consecuente es F.</p>
+                        <div class="mt-2 text-sm text-gray-700 bg-white p-3 rounded border">
+                            <strong>Solución:</strong> Por definición fundamental de la condicional, V → F es <strong>Falso (F)</strong>.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bloque Intermedio -->
+                <div class="space-y-4 pt-4">
+                    <h3 class="text-lg font-bold text-[#54887D] bg-[#88B5C7] bg-opacity-30 p-2 rounded">Nivel Intermedio (Ejemplos 6 al 10)</h3>
+                    
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejemplo 6 - Intermedio</span>
+                        <p class="font-semibold text-gray-800 mt-2">Simbolice: "El número es par siempre que sea divisible por 2". Identifique antecedente y consecuente.</p>
+                        <div class="mt-2 text-sm text-gray-700 bg-white p-3 rounded border">
+                            <strong>Solución:</strong> 
+                            1. Identificamos el sinónimo "siempre que", que indica una condicional donde q precede a p o viceversa ("q siempre que p" o "p, q siempre que...").<br>
+                            2. Si p: El número es par, q: Es divisible por 2. La frase significa "Si es divisible por 2, entonces es par", simbolizado como <strong>q → p</strong>.
+                        </div>
+                    </div>
+
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejemplo 7 - Intermedio</span>
+                        <p class="font-semibold text-gray-800 mt-2">Si p es F y q es V, determine el valor de verdad de (p ∨ q) ∧ ~p.</p>
+                        <div class="mt-2 text-sm text-gray-700 bg-white p-3 rounded border">
+                            <strong>Solución:</strong> 
+                            1. (p ∨ q): F ∨ V da V.<br>
+                            2. ~p: ~F da V.<br>
+                            3. V ∧ V da resultado <strong>Verdadero (V)</strong>.
+                        </div>
+                    </div>
+
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejemplo 8 - Intermedio</span>
+                        <p class="font-semibold text-gray-800 mt-2">Calcule el número de filas para una tabla de verdad con 3 variables (p, q, r).</p>
+                        <div class="mt-2 text-sm text-gray-700 bg-white p-3 rounded border">
+                            <strong>Solución:</strong> Aplicando \(2^n\) con \(n = 3\), obtenemos \(2^3 = 8\) filas.
+                        </div>
+                    </div>
+
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejemplo 9 - Intermedio</span>
+                        <p class="font-semibold text-gray-800 mt-2">Simbolice: "El triángulo es equilátero si y sólo si es equiángulo".</p>
+                        <div class="mt-2 text-sm text-gray-700 bg-white p-3 rounded border">
+                            <strong>Solución:</strong> El conector bicondicional se expresa con "si y sólo si". Si p: Es equilátero, q: Es equiángulo, se simboliza como <strong>p ↔ q</strong>.
+                        </div>
+                    </div>
+
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejemplo 10 - Intermedio</span>
+                        <p class="font-semibold text-gray-800 mt-2">Determine el valor de verdad de ~p → q sabiendo que p es V y q es F.</p>
+                        <div class="mt-2 text-sm text-gray-700 bg-white p-3 rounded border">
+                            <strong>Solución:</strong> ~p es F, q es F. Una condicional con antecedente F y consecuente F es <strong>Verdadero (V)</strong>.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bloque Avanzado -->
+                <div class="space-y-4 pt-4">
+                    <h3 class="text-lg font-bold text-[#54887D] bg-[#88B5C7] bg-opacity-30 p-2 rounded">Nivel Avanzado (Ejemplos 11 al 15)</h3>
+                    
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejemplo 11 - Avanzado</span>
+                        <p class="font-semibold text-gray-800 mt-2">Simbolice y analice: "Que llueva es condición necesaria para que crezcan las plantas".</p>
+                        <div class="mt-2 text-sm text-gray-700 bg-white p-3 rounded border">
+                            <strong>Solución:</strong> 
+                            1. Usando el diccionario de sinónimos, la frase "q es condición necesaria para p" se formaliza como <strong>p → q</strong> (si llueve, entonces crecen las plantas).<br>
+                            2. Si p: crezcan las plantas, q: llueva. Se simboliza <strong>p → q</strong>.
+                        </div>
+                    </div>
+
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejemplo 12 - Avanzado</span>
+                        <p class="font-semibold text-gray-800 mt-2">Demuestre si (p ∧ q) ↔ (q ∧ p) es una tautología.</p>
+                        <div class="mt-2 text-sm text-gray-700 bg-white p-3 rounded border">
+                            <strong>Solución:</strong> Al comparar las tablas de verdad, ambas columnas son idénticas en todas las filas. La bicondicional resulta en V en todos los casos, confirmando que <strong>es una tautología</strong> (ley conmutativa).
+                        </div>
+                    </div>
+
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejemplo 13 - Avanzado</span>
+                        <p class="font-semibold text-gray-800 mt-2">Analice el valor de verdad de [p ∧ (q ∨ r)] con p: V, q: F, r: V.</p>
+                        <div class="mt-2 text-sm text-gray-700 bg-white p-3 rounded border">
+                            <strong>Solución:</strong> (q ∨ r) = V. Luego p ∧ V = V ∧ V = <strong>Verdadero (V)</strong>.
+                        </div>
+                    </div>
+
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejemplo 14 - Avanzado</span>
+                        <p class="font-semibold text-gray-800 mt-2">Verifique si la proposición (p ∧ q) ∧ (~p ∧ ~q) es una contradicción.</p>
+                        <div class="mt-2 text-sm text-gray-700 bg-white p-3 rounded border">
+                            <strong>Solución:</strong> Es imposible que una conjunción y su negación completa sean simultáneamente verdaderas. Todos los resultados son F, por lo que <strong>es una contradicción</strong>.
+                        </div>
+                    </div>
+
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejemplo 15 - Avanzado</span>
+                        <p class="font-semibold text-gray-800 mt-2">Si la condicional p → q es Falsa, determine inequívocamente los valores de p y q.</p>
+                        <div class="mt-2 text-sm text-gray-700 bg-white p-3 rounded border">
+                            <strong>Solución:</strong> La única combinación que hace falsa una condicional es que el antecedente sea Verdadero y el consecuente sea Falso. Por tanto, <strong>p es V</strong> y <strong>q es F</strong>.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECCIÓN 3: EJERCICIOS PRÁCTICOS CON SOLUCIONES OCULTAS -->
+            <section id="tab-ejercicios" class="hidden space-y-6">
+                <div class="border-b-2 border-[#1269A8] pb-2">
+                    <h2 class="text-2xl font-bold text-[#1269A8]">Ejercicios Prácticos</h2>
+                    <p class="text-gray-600 text-sm">Traducción de sinónimos y evaluación de valores de verdad con soluciones paso a paso.</p>
+                </div>
+
+                <!-- Ejercicios Básicos (1-5) -->
+                <div class="space-y-4">
+                    <h3 class="text-lg font-bold text-[#54887D] bg-[#88B5C7] bg-opacity-30 p-2 rounded">Ejercicios Nivel Básico</h3>
+                    
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejercicio 1</span>
+                        <p class="font-semibold text-gray-800 mt-2">Traduzca usando la simbología lógica: "Nunca ocurre que el cielo esté despejado".</p>
+                        <button onclick="toggleSol('sol-e1')" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow">Mostrar solución</button>
+                        <div id="sol-e1" class="hidden mt-3 p-3 bg-white rounded border text-sm text-gray-700">
+                            <strong>Solución paso a paso:</strong> "Nunca ocurre que" es un sinónimo directo de la negación. Si p: "El cielo está despejado", la representación formal es <strong>~p</strong>.
+                        </div>
+                    </div>
+
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejercicio 2</span>
+                        <p class="font-semibold text-gray-800 mt-2">Si p: V y q: F, determine el valor de p ∧ q.</p>
+                        <button onclick="toggleSol('sol-e2')" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow">Mostrar solución</button>
+                        <div id="sol-e2" class="hidden mt-3 p-3 bg-white rounded border text-sm text-gray-700">
+                            <strong>Solución paso a paso:</strong> Como q es Falsa, la conjunción (y) resulta en <strong>Falso (F)</strong>.
+                        </div>
+                    </div>
+
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejercicio 3</span>
+                        <p class="font-semibold text-gray-800 mt-2">Simbolice: "El auto es rojo, además es rápido".</p>
+                        <button onclick="toggleSol('sol-e3')" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow">Mostrar solución</button>
+                        <div id="sol-e3" class="hidden mt-3 p-3 bg-white rounded border text-sm text-gray-700">
+                            <strong>Solución paso a paso:</strong> "Además" es un sinónimo de la conjunción (∧). Si p: El auto es rojo, q: Es rápido, se simboliza <strong>p ∧ q</strong>.
+                        </div>
+                    </div>
+
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejercicio 4</span>
+                        <p class="font-semibold text-gray-800 mt-2">Si p es F y q es F, determine la disyunción inclusiva p ∨ q.</p>
+                        <button onclick="toggleSol('sol-e4')" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow">Mostrar solución</button>
+                        <div id="sol-e4" class="hidden mt-3 p-3 bg-white rounded border text-sm text-gray-700">
+                            <strong>Solución paso a paso:</strong> La disyunción inclusiva es falsa solo si ambas son falsas. Resultado: <strong>Falso (F)</strong>.
+                        </div>
+                    </div>
+
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejercicio 5</span>
+                        <p class="font-semibold text-gray-800 mt-2">Dada p: V y q: V, determine el valor de la condicional p → q.</p>
+                        <button onclick="toggleSol('sol-e5')" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow">Mostrar solución</button>
+                        <div id="sol-e5" class="hidden mt-3 p-3 bg-white rounded border text-sm text-gray-700">
+                            <strong>Solución paso a paso:</strong> Antecedente V y consecuente V da <strong>Verdadero (V)</strong>.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ejercicios Intermedios (6-10) -->
+                <div class="space-y-4 pt-4">
+                    <h3 class="text-lg font-bold text-[#54887D] bg-[#88B5C7] bg-opacity-30 p-2 rounded">Ejercicios Nivel Intermedio</h3>
+                    
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejercicio 6</span>
+                        <p class="font-semibold text-gray-800 mt-2">Simbolice usando el diccionario de conectivos: "Aprobarás el examen puesto que estudiaste mucho".</p>
+                        <button onclick="toggleSol('sol-e6')" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow">Mostrar solución</button>
+                        <div id="sol-e6" class="hidden mt-3 p-3 bg-white rounded border text-sm text-gray-700">
+                            <strong>Solución paso a paso:</strong> 
+                            1. El término "puesto que" es un sinónimo de la condicional que actúa como indicador de causa/efecto ("q, puesto que p" equivale a p → q).<br>
+                            2. Si p: Estudiaste mucho, q: Aprobarás el examen. Se formaliza como <strong>p → q</strong>.
+                        </div>
+                    </div>
+
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejercicio 7</span>
+                        <p class="font-semibold text-gray-800 mt-2">Calcule el número de filas de una tabla de verdad con 4 variables (p, q, r, s).</p>
+                        <button onclick="toggleSol('sol-e7')" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow">Mostrar solución</button>
+                        <div id="sol-e7" class="hidden mt-3 p-3 bg-white rounded border text-sm text-gray-700">
+                            <strong>Solución paso a paso:</strong> Aplicamos \(2^4 = 16\) filas.
+                        </div>
+                    </div>
+
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejercicio 8</span>
+                        <p class="font-semibold text-gray-800 mt-2">Si p es F, q es V y r es V, determine ~p ∧ (q ∨ ~r).</p>
+                        <button onclick="toggleSol('sol-e8')" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow">Mostrar solución</button>
+                        <div id="sol-e8" class="hidden mt-3 p-3 bg-white rounded border text-sm text-gray-700">
+                            <strong>Solución paso a paso:</strong> ~p es V, ~r es F. Paréntesis (V ∨ F) = V. Conjunción final V ∧ V = <strong>Verdadero (V)</strong>.
+                        </div>
+                    </div>
+
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejercicio 9</span>
+                        <p class="font-semibold text-gray-800 mt-2">Simbolice: "El polígono es regular es condición necesaria y suficiente para que sea equiángulo".</p>
+                        <button onclick="toggleSol('sol-e9')" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow">Mostrar solución</button>
+                        <div id="sol-e9" class="hidden mt-3 p-3 bg-white rounded border text-sm text-gray-700">
+                            <strong>Solución paso a paso:</strong> "Condición necesaria y suficiente" es el sinónimo formal de la bicondicional (↔). Si p y q son las proposiciones, se simboliza <strong>p ↔ q</strong>.
+                        </div>
+                    </div>
+
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejercicio 10</span>
+                        <p class="font-semibold text-gray-800 mt-2">Si p es V, q es F, determine el valor de p <u>v</u> (q ∨ p).</p>
+                        <button onclick="toggleSol('sol-e10')" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow">Mostrar solución</button>
+                        <div id="sol-e10" class="hidden mt-3 p-3 bg-white rounded border text-sm text-gray-700">
+                            <strong>Solución paso a paso:</strong> Paréntesis (F ∨ V) = V. Operación V <u>v</u> V = <strong>Falso (F)</strong>.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ejercicios Avanzados (11-15) -->
+                <div class="space-y-4 pt-4">
+                    <h3 class="text-lg font-bold text-[#54887D] bg-[#88B5C7] bg-opacity-30 p-2 rounded">Ejercicios Nivel Avanzado</h3>
+                    
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejercicio 11</span>
+                        <p class="font-semibold text-gray-800 mt-2">Simbolice formalmente: "Llueve a cántaros, no obstante las calles están secas".</p>
+                        <button onclick="toggleSol('sol-e11')" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow">Mostrar solución</button>
+                        <div id="sol-e11" class="hidden mt-3 p-3 bg-white rounded border text-sm text-gray-700">
+                            <strong>Solución paso a paso:</strong> 
+                            1. Identificamos el sinónimo "no obstante", que en el diccionario lógico corresponde a la conjunción adversativa (∧).<br>
+                            2. Si p: Llueve a cántaros, q: Las calles están secas. Se formaliza como <strong>p ∧ q</strong>.
+                        </div>
+                    </div>
+
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejercicio 12</span>
+                        <p class="font-semibold text-gray-800 mt-2">Verifique si p → q es lógicamente equivalente a su contrapositiva ~q → ~p.</p>
+                        <button onclick="toggleSol('sol-e12')" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow">Mostrar solución</button>
+                        <div id="sol-e12" class="hidden mt-3 p-3 bg-white rounded border text-sm text-gray-700">
+                            <strong>Solución paso a paso:</strong> Sus tablas de verdad coinciden idénticamente en todas las filas. Sí, forman una tautología y <strong>son lógicamente equivalentes</strong>.
+                        </div>
+                    </div>
+
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejercicio 13</span>
+                        <p class="font-semibold text-gray-800 mt-2">Si (p ∨ q) → r es Falsa, ¿qué se puede afirmar de r y de (p ∨ q)?</p>
+                        <button onclick="toggleSol('sol-e13')" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow">Mostrar solución</button>
+                        <div id="sol-e13" class="hidden mt-3 p-3 bg-white rounded border text-sm text-gray-700">
+                            <strong>Solución paso a paso:</strong> Para que una condicional sea falsa, el antecedente (p ∨ q) debe ser Verdadero y el consecuente (r) debe ser Falso.
+                        </div>
+                    </div>
+
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejercicio 14</span>
+                        <p class="font-semibold text-gray-800 mt-2">Determine si [(p ∨ q) ∧ ~p] → q es una tautología.</p>
+                        <button onclick="toggleSol('sol-e14')" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow">Mostrar solución</button>
+                        <div id="sol-e14" class="hidden mt-3 p-3 bg-white rounded border text-sm text-gray-700">
+                            <strong>Solución paso a paso:</strong> Analizando todas las combinaciones en tabla de verdad, la columna final arroja V en todas las filas. Por lo tanto, <strong>es una tautología</strong>.
+                        </div>
+                    </div>
+
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejercicio 15</span>
+                        <p class="font-semibold text-gray-800 mt-2">Aplique leyes de De Morgan para demostrar la equivalencia entre ~(p ∧ q) y ~p ∨ ~q.</p>
+                        <button onclick="toggleSol('sol-e15')" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow">Mostrar solución</button>
+                        <div id="sol-e15" class="hidden mt-3 p-3 bg-white rounded border text-sm text-gray-700">
+                            <strong>Solución paso a paso:</strong> La negación de una conjunción es equivalente a la disyunción de las negaciones individuales según las leyes de De Morgan, resultando en una tautología bicondicional.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECCIÓN 4: REFLEXIÓN CRÍTICA -->
+            <section id="tab-reflexion" class="hidden space-y-6">
+                <div class="border-b-2 border-[#1269A8] pb-2">
+                    <h2 class="text-2xl font-bold text-[#1269A8]">Preguntas de Reflexión Crítica</h2>
+                    <p class="text-gray-600 text-sm">Análisis sobre la ambigüedad del lenguaje natural y la precisión de los sinónimos lógicos.</p>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="card-custom p-5 shadow-sm">
+                        <h3 class="font-bold text-lg text-[#1269A8] mb-2">1. La Trascendencia de los Sinónimos en el Razonamiento Legal</h3>
+                        <p class="text-gray-700 text-sm leading-relaxed">
+                            En contratos jurídicos o leyes, el uso de términos como "a menos que", "siempre que", "salvo que" o "condición necesaria" cambia radicalmente el cumplimiento de una cláusula. ¿Por qué es vital que un profesional domine la traducción exacta del lenguaje cotidiano al rigor de los conectivos lógicos?
+                        </p>
+                    </div>
+
+                    <div class="card-custom p-5 shadow-sm">
+                        <h3 class="font-bold text-lg text-[#1269A8] mb-2">2. Conectivos Adversativos vs. Conjunción</h3>
+                        <p class="text-gray-700 text-sm leading-relaxed">
+                            En el español cotidiano, palabras como "pero", "sin embargo" y "aunque" aportan un matiz de contraste u oposición psicológica. Sin embargo, en lógica matemática se agrupan dentro de la conjunción (∧). ¿Se pierde información semántica al tratarlas igual, o la lógica solo evalúa el valor de verdad conjunto?
+                        </p>
+                    </div>
+
+                    <div class="card-custom p-5 shadow-sm">
+                        <h3 class="font-bold text-lg text-[#1269A8] mb-2">3. Automatización y Procesamiento de Lenguaje Natural (PLN)</h3>
+                        <p class="text-gray-700 text-sm leading-relaxed">
+                            Los algoritmos de inteligencia artificial que analizan textos legales o médicos deben traducir oraciones complejas con múltiples sinónimos lógicos a estructuras binarias. ¿Cómo crees que el catálogo de sinónimos ayuda a resolver esta tarea?
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECCIÓN 5: EVALUACIÓN FORMATIVA -->
+            <section id="tab-evaluacion" class="hidden space-y-6">
+                <div class="border-b-2 border-[#1269A8] pb-2">
+                    <h2 class="text-2xl font-bold text-[#1269A8]">Evaluación Formativa</h2>
+                    <p class="text-gray-600 text-sm">Problemas de refuerzo y traducción lógica con soluciones ocultas.</p>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Evaluación 1</span>
+                        <p class="font-semibold text-gray-800 mt-2">Simbolice: "Es inadmisible que el presupuesto sea bajo, a menos que se apruebe el fondo de rescate".</p>
+                        <button onclick="toggleSol('sol-ev1')" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow">Mostrar solución</button>
+                        <div id="sol-ev1" class="hidden mt-3 p-3 bg-white rounded border text-sm text-gray-700">
+                            <strong>Solución paso a paso:</strong> 
+                            1. "Es inadmisible que" equivale a negación externa: ~p.<br>
+                            2. "a menos que" equivale a disyunción inclusiva (∨).<br>
+                            3. Simbolización formal: <strong>~p ∨ q</strong>.
+                        </div>
+                    </div>
+
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Evaluación 2</span>
+                        <p class="font-semibold text-gray-800 mt-2">Dadas p: V y q: F, determine el valor de verdad de la proposición compuesta: (p ∧ ~q) → p.</p>
+                        <button onclick="toggleSol('sol-ev2')" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow">Mostrar solución</button>
+                        <div id="sol-ev2" class="hidden mt-3 p-3 bg-white rounded border text-sm text-gray-700">
+                            <strong>Solución paso a paso:</strong> Antecedente (V ∧ V) = V. Consecuente = V. Condicional final (V → V) = <strong>Verdadero (V)</strong>.
+                        </div>
+                    </div>
+
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Evaluación 3</span>
+                        <p class="font-semibold text-gray-800 mt-2">¿Cuál es el valor de verdad de "Si 5 + 2 = 8, entonces la Tierra es plana"?</p>
+                        <button onclick="toggleSol('sol-ev3')" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow">Mostrar solución</button>
+                        <div id="sol-ev3" class="hidden mt-3 p-3 bg-white rounded border text-sm text-gray-700">
+                            <strong>Solución paso a paso:</strong> Antecedente F y consecuente F da una implicación material vacíamente <strong>Verdadera (V)</strong>.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Pie de página de la Pizarra -->
+        <footer class="bg-[#F2F5E9] border-t-2 border-[#54887D] p-3 text-center text-xs text-gray-600">
+            Colegio Montano — Departamento de Matemática y Diseño Instruccional • Todos los derechos reservados.
+        </footer>
+    </div>
+
+    <!-- Scripts de Interacción -->
+    <script>
+        // Función para alternar entre pestañas de la pizarra
+        function switchTab(tabName) {
+            const tabs = ['teoria', 'ejemplos', 'ejercicios', 'reflexion', 'evaluacion'];
+            tabs.forEach(t => {
+                const section = document.getElementById('tab-' + t);
+                const btn = document.getElementById('btn-' + t);
+                if (t === tabName) {
+                    section.classList.remove('hidden');
+                    btn.className = "flex-1 py-3 px-4 text-center font-bold text-sm md:text-base tab-active transition";
+                } else {
+                    section.classList.add('hidden');
+                    btn.className = "flex-1 py-3 px-4 text-center font-bold text-sm md:text-base tab-inactive transition";
+                }
+            });
+        }
+
+        // Función para mostrar u ocultar soluciones paso a paso
+        function toggleSol(solId) {
+            const solDiv = document.getElementById(solId);
+            if (solDiv.classList.contains('hidden')) {
+                solDiv.classList.remove('hidden');
+                event.target.textContent = "Ocultar solución";
+            } else {
+                solDiv.classList.add('hidden');
+                event.target.textContent = "Mostrar solución";
+            }
+        }
+
+        // Función de Pantalla Completa utilizando Fullscreen API
+        function toggleFullScreen() {
+            const elem = document.getElementById('whiteboard');
+            if (!document.fullscreenElement) {
+                if (elem.requestFullscreen) {
+                    elem.requestFullscreen();
+                } else if (elem.webkitRequestFullscreen) {
+                    elem.webkitRequestFullscreen();
+                } else if (elem.msRequestFullscreen) {
+                    elem.msRequestFullscreen();
+                }
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                }
+            }
+        }
+    </script>
+</body>
+</html>

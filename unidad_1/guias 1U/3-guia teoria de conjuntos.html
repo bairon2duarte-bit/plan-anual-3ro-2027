@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía Interactiva: Lógica y Teoría de Conjuntos - Colegio Montano</title>
+    <!-- Tailwind CSS para diseño moderno y responsivo -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #F2F5E9;
+        }
+        /* Estilo personalizado de pizarra digital con identidad Colegio Montano */
+        .whiteboard-container {
+            background-color: #ffffff;
+            border: 4px solid #F7D615;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(18, 105, 168, 0.15);
+        }
+        .header-bg {
+            background-color: #1269A8;
+        }
+        .tab-active {
+            background-color: #1269A8;
+            color: #ffffff;
+            border-bottom: 4px solid #F7D615;
+        }
+        .tab-inactive {
+            background-color: #88B5C7;
+            color: #1269A8;
+        }
+        .tab-inactive:hover {
+            background-color: #54887D;
+            color: #ffffff;
+        }
+        .card-custom {
+            background-color: #F2F5E9;
+            border-left: 5px solid #54887D;
+            border-radius: 8px;
+        }
+        .badge-level {
+            background-color: #A6B046;
+            color: #ffffff;
+        }
+        .btn-action {
+            background-color: #1269A8;
+            color: #ffffff;
+            transition: all 0.2s ease;
+        }
+        .btn-action:hover {
+            background-color: #54887D;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8 min-h-screen flex flex-col items-center">
+
+    <!-- Contenedor Principal de la Pizarra Digital -->
+    <div id="whiteboard" class="whiteboard-container w-full max-w-6xl flex flex-col overflow-hidden">
+        
+        <!-- Barra Superior / Encabezado con Logo y Botón Fullscreen -->
+        <header class="header-bg p-4 flex flex-col sm:flex-row justify-between items-center text-white gap-4">
+            <div class="flex items-center space-x-4">
+                <!-- Logo Oficial del Colegio Montano -->
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyEop0yf6lZ7Jk9MILZxF1rBj4Oqs5esyhIQ&s" alt="Logo Colegio Montano" class="h-12 w-12 object-contain bg-white rounded-full p-1 shadow">
+                <div>
+                    <h1 class="text-xl md:text-2xl font-bold tracking-wide">Colegio Montano</h1>
+                    <p class="text-xs md:text-sm text-[#F7D615] font-semibold">Pizarra Digital Interactiva — Lógica y Teoría de Conjuntos</p>
+                </div>
+            </div>
+            <div>
+                <!-- Botón de Pantalla Completa -->
+                <button onclick="toggleFullScreen()" class="bg-[#F7D615] text-[#1269A8] font-bold px-4 py-2 rounded-lg shadow hover:bg-yellow-400 transition flex items-center gap-2 text-sm">
+                    <span>[ ⛶ Pantalla Completa ]</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Navegación por Pestañas Horizontales -->
+        <nav class="flex flex-wrap bg-[#88B5C7] border-b-2 border-[#54887D]">
+            <button onclick="switchTab('teoria')" id="btn-teoria" class="flex-1 py-3 px-4 text-center font-bold text-xs md:text-sm tab-active transition">1. Teoría y Conjuntos</button>
+            <button onclick="switchTab('ejemplos')" id="btn-ejemplos" class="flex-1 py-3 px-4 text-center font-bold text-xs md:text-sm tab-inactive transition">2. Ejemplos Resueltos</button>
+            <button onclick="switchTab('ejercicios')" id="btn-ejercicios" class="flex-1 py-3 px-4 text-center font-bold text-xs md:text-sm tab-inactive transition">3. Ejercicios Prácticos</button>
+            <button onclick="switchTab('reflexion')" id="btn-reflexion" class="flex-1 py-3 px-4 text-center font-bold text-xs md:text-sm tab-inactive transition">4. Reflexión Crítica</button>
+            <button onclick="switchTab('evaluacion')" id="btn-evaluacion" class="flex-1 py-3 px-4 text-center font-bold text-xs md:text-sm tab-inactive transition">5. Evaluación Formativa</button>
+        </nav>
+
+        <!-- Contenido Dinámico de las Pestañas -->
+        <main class="p-6 md:p-8 flex-1 overflow-y-auto max-h-[75vh]">
+
+            <!-- SECCIÓN 1: TEORÍA DE CONJUNTOS Y OPERATORIA -->
+            <section id="tab-teoria" class="space-y-6">
+                <div class="border-b-2 border-[#1269A8] pb-2">
+                    <h2 class="text-2xl font-bold text-[#1269A8]">Fundamentos de la Teoría de Conjuntos y Operatoria</h2>
+                    <p class="text-gray-600 text-sm">Conceptos de pertenencia, extensión, comprensión, cardinalidad y operaciones básicas vinculadas con la lógica.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Tarjeta 1: Definición y Formas de Descripción -->
+                    <div class="card-custom p-5 shadow-sm">
+                        <h3 class="font-bold text-lg text-[#1269A8] mb-2">Definición y Notación</h3>
+                        <p class="text-gray-700 text-sm leading-relaxed">
+                            Un conjunto es una colección bien definida de objetos llamados elementos. Se denotan por mayúsculas (\(A, B\)) y sus elementos por minúsculas (\(a \in A\)).<br>
+                            - <strong>Por Extensión:</strong> Enumerando elementos: \(A = \{1, 2, 3\}\).<br>
+                            - <strong>Por Comprensión:</strong> Mediante propiedades: \(A = \{x \mid P(x)\}\).
+                        </p>
+                    </div>
+
+                    <!-- Tarjeta 2: Tipos de Conjuntos y Cardinalidad -->
+                    <div class="card-custom p-5 shadow-sm">
+                        <h3 class="font-bold text-lg text-[#1269A8] mb-2">Cardinalidad y Tipos</h3>
+                        <p class="text-gray-700 text-sm leading-relaxed text-sm">
+                            - <strong>Cardinalidad (\(|A|\)):</strong> Número de elementos distintos.<br>
+                            - <strong>Conjunto Vacío (\(\emptyset\)):</strong> Carece de elementos.<br>
+                            - <strong>Conjunto Potencia (\(\mathcal{P}(A)\)):</strong> Familia de todos los subconjuntos. Su cardinalidad es \(2^n\).
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Tarjeta Amplia: Operaciones con Conjuntos y Álgebra -->
+                <div class="card-custom p-6 shadow-sm space-y-4">
+                    <h3 class="font-bold text-xl text-[#1269A8] border-b pb-2">Operaciones Básicas y Conexión Lógica</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-700">
+                        <div class="bg-white p-4 rounded border border-[#54887D]">
+                            <strong class="text-[#1269A8] block mb-1">1. Intersección (\(A \cap B\)):</strong>
+                            <p class="text-xs">Elementos comunes. Conexión lógica: Conjunción (\(\wedge\)).<br>\(A \cap B = \{x \mid x \in A \wedge x \in B\}\).</p>
+                        </div>
+
+                        <div class="bg-white p-4 rounded border border-[#54887D]">
+                            <strong class="text-[#1269A8] block mb-1">2. Unión (\(A \cup B\)):</strong>
+                            <p class="text-xs">Todos los elementos de ambos. Conexión lógica: Disyunción inclusiva (\(\vee\)).<br>\(A \cup B = \{x \mid x \in A \vee x \in B\}\).</p>
+                        </div>
+
+                        <div class="bg-white p-4 rounded border border-[#54887D]">
+                            <strong class="text-[#1269A8] block mb-1">3. Complemento (\(A'\) o \(A^c\)):</strong>
+                            <p class="text-xs">Elementos de \(U\) que no están en \(A\). Conexión lógica: Negación (\(\sim\)).<br>\(A' = \{x \in U \mid x \notin A\}\).</p>
+                        </div>
+
+                        <div class="bg-white p-4 rounded border border-[#54887D]">
+                            <strong class="text-[#1269A8] block mb-1">4. Diferencia Simétrica (\(A \Delta B\)):</strong>
+                            <p class="text-xs">Elementos de la unión excluyendo la intersección. Conexión lógica: Disyunción exclusiva (\(\underline{\vee}\)).<br>\(A \Delta B = (A \cup B) - (A \cap B)\).</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECCIÓN 2: EJEMPLOS RESUELTOS -->
+            <section id="tab-ejemplos" class="hidden space-y-6">
+                <div class="border-b-2 border-[#1269A8] pb-2">
+                    <h2 class="text-2xl font-bold text-[#1269A8]">Ejemplos Resueltos Paso a Paso</h2>
+                    <p class="text-gray-600 text-sm">Aplicación de extensión, comprensión, conjunto potencia y operatoria conjuntista.</p>
+                </div>
+
+                <!-- Bloque Básico -->
+                <div class="space-y-4">
+                    <h3 class="text-lg font-bold text-[#54887D] bg-[#88B5C7] bg-opacity-30 p-2 rounded">Nivel Básico (Ejemplos 1 al 5)</h3>
+                    
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejemplo 1 - Básico</span>
+                        <p class="font-semibold text-gray-800 mt-2">Escriba por extensión el conjunto \(A = \{x \mid x \text{ es un entero positivo menor que 5}\}\).</p>
+                        <div class="mt-2 text-sm text-gray-700 bg-white p-3 rounded border">
+                            <strong>Solución:</strong> Los enteros positivos menores que 5 son 1, 2, 3 y 4. Por extensión: <strong>\(A = \{1, 2, 3, 4\}\)</strong>.
+                        </div>
+                    </div>
+
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejemplo 2 - Básico</span>
+                        <p class="font-semibold text-gray-800 mt-2">Determine la cardinalidad de \(C = \{a, b, a, a, b\}\).</p>
+                        <div class="mt-2 text-sm text-gray-700 bg-white p-3 rounded border">
+                            <strong>Solución:</strong> Los elementos repetidos se cuentan una sola vez. Los elementos distintos son \(a\) y \(b\). Por tanto, Card\((C) = 2\).
+                        </div>
+                    </div>
+
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejemplo 3 - Básico</span>
+                        <p class="font-semibold text-gray-800 mt-2">Dados \(A = \{1, 2, 3\}\) y \(B = \{3, 4, 5\}\), determine \(A \cap B\).</p>
+                        <div class="mt-2 text-sm text-gray-700 bg-white p-3 rounded border">
+                            <strong>Solución:</strong> El único elemento común en ambos conjuntos es el 3. Resultado: <strong>\(\{3\}\)</strong>.
+                        </div>
+                    </div>
+
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejemplo 4 - Básico</span>
+                        <p class="font-semibold text-gray-800 mt-2">Dados \(A = \{1, 2\}\) y \(B = \{2, 3\}\), determine \(A \cup B\).</p>
+                        <div class="mt-2 text-sm text-gray-700 bg-white p-3 rounded border">
+                            <strong>Solución:</strong> Uniendo todos los elementos sin duplicar: <strong>\(\{1, 2, 3\}\)</strong>.
+                        </div>
+                    </div>
+
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejemplo 5 - Básico</span>
+                        <p class="font-semibold text-gray-800 mt-2">Si el conjunto universal es \(U = \{1, 2, 3, 4, 5\}\) y \(A = \{1, 2\}\), halle el complemento \(A'\).</p>
+                        <div class="mt-2 text-sm text-gray-700 bg-white p-3 rounded border">
+                            <strong>Solución:</strong> Son los elementos de \(U\) que no están en \(A\): <strong>\(\{3, 4, 5\}\)</strong>.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bloque Intermedio -->
+                <div class="space-y-4 pt-4">
+                    <h3 class="text-lg font-bold text-[#54887D] bg-[#88B5C7] bg-opacity-30 p-2 rounded">Nivel Intermedio (Ejemplos 6 al 10)</h3>
+                    
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejemplo 6 - Intermedio</span>
+                        <p class="font-semibold text-gray-800 mt-2">Determine el conjunto potencia \(\mathcal{P}(A)\) de \(A = \{a, b\}\).</p>
+                        <div class="mt-2 text-sm text-gray-700 bg-white p-3 rounded border">
+                            <strong>Solución:</strong> Cardinalidad \(2^2 = 4\) subconjuntos. \(\mathcal{P}(A) = \{\emptyset, \{a\}, \{b\}, \{a, b\}\}\).
+                        </div>
+                    </div>
+
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejemplo 7 - Intermedio</span>
+                        <p class="font-semibold text-gray-800 mt-2">Dados \(A = \{1, 2, 3, 4\}\) y \(B = \{3, 4, 5\}\), calcule la diferencia \(A - B\).</p>
+                        <div class="mt-2 text-sm text-gray-700 bg-white p-3 rounded border">
+                            <strong>Solución:</strong> Elementos que están en \(A\) pero no en \(B\): <strong>\(\{1, 2\}\)</strong>.
+                        </div>
+                    </div>
+
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejemplo 8 - Intermedio</span>
+                        <p class="font-semibold text-gray-800 mt-2">Calcule la diferencia simétrica \(A \Delta B\) si \(A = \{1, 2\}\) y \(B = \{2, 3\}\).</p>
+                        <div class="mt-2 text-sm text-gray-700 bg-white p-3 rounded border">
+                            <strong>Solución:</strong> \((A \cup B) - (A \cap B) = \{1, 2, 3\} - \{2\} =\) <strong>\(\{1, 3\}\)</strong>.
+                        </div>
+                    </div>
+
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejemplo 9 - Intermedio</span>
+                        <p class="font-semibold text-gray-800 mt-2">Exprese por comprensión el conjunto \(A = \{2, 4, 6, 8, 10\}\).</p>
+                        <div class="mt-2 text-sm text-gray-700 bg-white p-3 rounded border">
+                            <strong>Solución:</strong> \(A = \{x \mid x \text{ es un número entero positivo par menor que 12}\}\).
+                        </div>
+                    </div>
+
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejemplo 10 - Intermedio</span>
+                        <p class="font-semibold text-gray-800 mt-2">Compruebe si \(A \cap A' = \emptyset\) para cualquier conjunto \(A\).</p>
+                        <div class="mt-2 text-sm text-gray-700 bg-white p-3 rounded border">
+                            <strong>Solución:</strong> Ningún elemento puede estar simultáneamente en \(A\) y en su complemento \(A'\). Por ende, el resultado es siempre el conjunto vacío \(\emptyset\).
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bloque Avanzado -->
+                <div class="space-y-4 pt-4">
+                    <h3 class="text-lg font-bold text-[#54887D] bg-[#88B5C7] bg-opacity-30 p-2 rounded">Nivel Avanzado (Ejemplos 11 al 15)</h3>
+                    
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejemplo 11 - Avanzado</span>
+                        <p class="font-semibold text-gray-800 mt-2">Determine el conjunto potencia \(\mathcal{P}(A)\) de \(A = \{a, b, c\}\).</p>
+                        <div class="mt-2 text-sm text-gray-700 bg-white p-3 rounded border">
+                            <strong>Solución:</strong> \(2^3 = 8\) elementos. \(\mathcal{P}(A) = \{\emptyset, \{a, b, c\}, \{a\}, \{b\}, \{c\}, \{a, b\}, \{a, c\}, \{b, c\}\}\).
+                        </div>
+                    </div>
+
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejemplo 12 - Avanzado</span>
+                        <p class="font-semibold text-gray-800 mt-2">Verifique las Leyes de De Morgan para conjuntos: \((A \cup B)' = A' \cap B'\).</p>
+                        <div class="mt-2 text-sm text-gray-700 bg-white p-3 rounded border">
+                            <strong>Solución:</strong> Mediante análisis lógico con tablas de verdad y pertenencia, el complemento de la unión equivale exactamente a la intersección de los complementos individuales.
+                        </div>
+                    </div>
+
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejemplo 13 - Avanzado</span>
+                        <p class="font-semibold text-gray-800 mt-2">Demuestre la ley distributiva: \(A \cup (B \cap C) = (A \cup B) \cap (A \cup C)\).</p>
+                        <div class="mt-2 text-sm text-gray-700 bg-white p-3 rounded border">
+                            <strong>Solución:</strong> Se prueba mediante equivalencias lógicas directas utilizando la propiedad distributiva de la disyunción respecto a la conjunción.
+                        </div>
+                    </div>
+
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejemplo 14 - Avanzado</span>
+                        <p class="font-semibold text-gray-800 mt-2">Si \(A \Delta B = A \Delta C\), demuestre mediante la ley de cancelación que \(B = C\).</p>
+                        <div class="mt-2 text-sm text-gray-700 bg-white p-3 rounded border">
+                            <strong>Solución:</strong> Aplicando las propiedades algebraicas de la diferencia simétrica (que cumple con asociativa y elemento neutro \(\emptyset\)), se concluye la igualdad de \(B\) y \(C\).
+                        </div>
+                    </div>
+
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejemplo 15 - Avanzado</span>
+                        <p class="font-semibold text-gray-800 mt-2">Evalúe si la familia \(F = \{\{1\}, \{2, 4\}\}\) cumple con que sus elementos son subconjuntos o conjuntos.</p>
+                        <div class="mt-2 text-sm text-gray-700 bg-white p-3 rounded border">
+                            <strong>Solución:</strong> Sí, \(F\) es una familia de conjuntos porque cada elemento de \(F\) es a su vez un conjunto (\(\{1\} \in F\) y \(\{1\} \subset \text{universo}\)).
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECCIÓN 3: EJERCICIOS PRÁCTICOS CON SOLUCIONES OCULTAS -->
+            <section id="tab-ejercicios" class="hidden space-y-6">
+                <div class="border-b-2 border-[#1269A8] pb-2">
+                    <h2 class="text-2xl font-bold text-[#1269A8]">Ejercicios Prácticos</h2>
+                    <p class="text-gray-600 text-sm">Práctica guiada de teoría de conjuntos y operadores con soluciones paso a paso.</p>
+                </div>
+
+                <!-- Ejercicios Básicos (1-5) -->
+                <div class="space-y-4">
+                    <h3 class="text-lg font-bold text-[#54887D] bg-[#88B5C7] bg-opacity-30 p-2 rounded">Ejercicios Nivel Básico</h3>
+                    
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejercicio 1</span>
+                        <p class="font-semibold text-gray-800 mt-2">Escriba por extensión el conjunto de los primeros cuatro números primos.</p>
+                        <button onclick="toggleSol('sol-e1')" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow">Mostrar solución</button>
+                        <div id="sol-e1" class="hidden mt-3 p-3 bg-white rounded border text-sm text-gray-700">
+                            <strong>Solución paso a paso:</strong> Los primeros cuatro números primos son 2, 3, 5 y 7. Extensión: <strong>\(\{2, 3, 5, 7\}\)</strong>.
+                        </div>
+                    </div>
+
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejercicio 2</span>
+                        <p class="font-semibold text-gray-800 mt-2">Dados \(A = \{1, 3, 5\}\) y \(B = \{3, 5, 7\}\), halle \(A \cup B\).</p>
+                        <button onclick="toggleSol('sol-e2')" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow">Mostrar solución</button>
+                        <div id="sol-e2" class="hidden mt-3 p-3 bg-white rounded border text-sm text-gray-700">
+                            <strong>Solución paso a paso:</strong> Uniendo todos los elementos sin repetir el 3 ni el 5: <strong>\(\{1, 3, 5, 7\}\)</strong>.
+                        </div>
+                    </div>
+
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejercicio 3</span>
+                        <p class="font-semibold text-gray-800 mt-2">Halle la intersección \(A \cap B\) para \(A = \{a, b, c\}\) y \(B = \{b, c, d\}\).</p>
+                        <button onclick="toggleSol('sol-e3')" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow">Mostrar solución</button>
+                        <div id="sol-e3" class="hidden mt-3 p-3 bg-white rounded border text-sm text-gray-700">
+                            <strong>Solución paso a paso:</strong> Los elementos comunes a ambos son \(b\) y \(c\). Resultado: <strong>\(\{b, c\}\)</strong>.
+                        </div>
+                    </div>
+
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejercicio 4</span>
+                        <p class="font-semibold text-gray-800 mt-2">Si \(U = \{1, 2, 3, 4, 5, 6\}\) y \(A = \{2, 4, 6\}\), determine \(A'\).</p>
+                        <button onclick="toggleSol('sol-e4')" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow">Mostrar solución</button>
+                        <div id="sol-e4" class="hidden mt-3 p-3 bg-white rounded border text-sm text-gray-700">
+                            <strong>Solución paso a paso:</strong> Elementos de \(U\) que no están en \(A\): <strong>\(\{1, 3, 5\}\)</strong>.
+                        </div>
+                    </div>
+
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejercicio 5</span>
+                        <p class="font-semibold text-gray-800 mt-2">Determine la cardinalidad del conjunto vacío \(\emptyset\).</p>
+                        <button onclick="toggleSol('sol-e5')" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow">Mostrar solución</button>
+                        <div id="sol-e5" class="hidden mt-3 p-3 bg-white rounded border text-sm text-gray-700">
+                            <strong>Solución paso a paso:</strong> Al carecer de elementos, su cardinalidad es 0.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ejercicios Intermedios (6-10) -->
+                <div class="space-y-4 pt-4">
+                    <h3 class="text-lg font-bold text-[#54887D] bg-[#88B5C7] bg-opacity-30 p-2 rounded">Ejercicios Nivel Intermedio</h3>
+                    
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejercicio 6</span>
+                        <p class="font-semibold text-gray-800 mt-2">Determine el número de elementos del conjunto potencia \(\mathcal{P}(A)\) si \(A = \{1, 2, 3, 4\}\).</p>
+                        <button onclick="toggleSol('sol-e6')" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow">Mostrar solución</button>
+                        <div id="sol-e6" class="hidden mt-3 p-3 bg-white rounded border text-sm text-gray-700">
+                            <strong>Solución paso a paso:</strong> Aplicando \(2^n\) con \(n = 4\), obtenemos \(2^4 = 16\) subconjuntos.
+                        </div>
+                    </div>
+
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejercicio 7</span>
+                        <p class="font-semibold text-gray-800 mt-2">Dados \(A = \{1, 2, 3, 4\}\) y \(B = \{3, 4, 5, 6\}\), calcule \(A - B\).</p>
+                        <button onclick="toggleSol('sol-e7')" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow">Mostrar solución</button>
+                        <div id="sol-e7" class="hidden mt-3 p-3 bg-white rounded border text-sm text-gray-700">
+                            <strong>Solución paso a paso:</strong> Elementos en \(A\) que no están en \(B\): <strong>\(\{1, 2\}\)</strong>.
+                        </div>
+                    </div>
+
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejercicio 8</span>
+                        <p class="font-semibold text-gray-800 mt-2">Calcule la diferencia simétrica \(A \Delta B\) si \(A = \{1, 2\}\) y \(B = \{2, 3, 4\}\).</p>
+                        <button onclick="toggleSol('sol-e8')" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow">Mostrar solución</button>
+                        <div id="sol-e8" class="hidden mt-3 p-3 bg-white rounded border text-sm text-gray-700">
+                            <strong>Solución paso a paso:</strong> \((A \cup B) = \{1, 2, 3, 4\}\). Intersección \((A \cap B) = \{2\}\). Excluyendo la intersección: <strong>\(\{1, 3, 4\}\)</strong>.
+                        </div>
+                    </div>
+
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejercicio 9</span>
+                        <p class="font-semibold text-gray-800 mt-2">Verifique si el conjunto \(A = \{x \mid x^2 = 4\}\) y \(B = \{-2, 2\}\) son iguales.</p>
+                        <button onclick="toggleSol('sol-e9')" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow">Mostrar solución</button>
+                        <div id="sol-e9" class="hidden mt-3 p-3 bg-white rounded border text-sm text-gray-700">
+                            <strong>Solución paso a paso:</strong> Las soluciones de \(x^2 = 4\) son \(-2\) y \(2\). Ambos conjuntos tienen exactamente los mismos elementos, por lo tanto <strong>sí son iguales</strong>.
+                        </div>
+                    </div>
+
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejercicio 10</span>
+                        <p class="font-semibold text-gray-800 mt-2">Simplifique la operación \(A \cup \emptyset\).</p>
+                        <button onclick="toggleSol('sol-e10')" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow">Mostrar solución</button>
+                        <div id="sol-e10" class="hidden mt-3 p-3 bg-white rounded border text-sm text-gray-700">
+                            <strong>Solución paso a paso:</strong> Por la ley de identidad de la unión, unirse con el vacío deja intacto al conjunto \(A\).
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ejercicios Avanzados (11-15) -->
+                <div class="space-y-4 pt-4">
+                    <h3 class="text-lg font-bold text-[#54887D] bg-[#88B5C7] bg-opacity-30 p-2 rounded">Ejercicios Nivel Avanzado</h3>
+                    
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejercicio 11</span>
+                        <p class="font-semibold text-gray-800 mt-2">Demuestre mediante leyes de conjuntos que \((A')' = A\) (Ley involutiva).</p>
+                        <button onclick="toggleSol('sol-e11')" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow">Mostrar solución</button>
+                        <div id="sol-e11" class="hidden mt-3 p-3 bg-white rounded border text-sm text-gray-700">
+                            <strong>Solución paso a paso:</strong> Negar dos veces una proposición lógica o tomar el complemento de un complemento devuelve el conjunto original \(A\).
+                        </div>
+                    </div>
+
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejercicio 12</span>
+                        <p class="font-semibold text-gray-800 mt-2">Dados \(A = \{1, 2\}\) y \(B = \{2, 3\}\) con \(U = \{1, 2, 3, 4\}\), calcule \((A \cup B)'\).</p>
+                        <button onclick="toggleSol('sol-e12')" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow">Mostrar solución</button>
+                        <div id="sol-e12" class="hidden mt-3 p-3 bg-white rounded border text-sm text-gray-700">
+                            <strong>Solución paso a paso:</strong> \(A \cup B = \{1, 2, 3\}\). Su complemento respecto a \(U\) es <strong>\(\{4\}\)</strong>.
+                        </div>
+                    </div>
+
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejercicio 13</span>
+                        <p class="font-semibold text-gray-800 mt-2">Compruebe si \(A \cap (B \cup C) = (A \cap B) \cup (A \cap C)\) mediante la ley distributiva.</p>
+                        <button onclick="toggleSol('sol-e13')" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow">Mostrar solución</button>
+                        <div id="sol-e13" class="hidden mt-3 p-3 bg-white rounded border text-sm text-gray-700">
+                            <strong>Solución paso a paso:</strong> Esta es la ley distributiva de la intersección respecto a la unión, que corresponde directamente a la distributiva lógica \(\wedge\) sobre \(\vee\).
+                        </div>
+                    </div>
+
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejercicio 14</span>
+                        <p class="font-semibold text-gray-800 mt-2">Si \(A\) y \(B\) son conjuntos disjuntos, ¿a qué equivale \(A \Delta B\)?</p>
+                        <button onclick="toggleSol('sol-e14')" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow">Mostrar solución</button>
+                        <div id="sol-e14" class="hidden mt-3 p-3 bg-white rounded border text-sm text-gray-700">
+                            <strong>Solución paso a paso:</strong> Si son disjuntos, su intersección es vacía \((A \cap B = \emptyset)\). Por tanto, \(A \Delta B = A \cup B\).
+                        </div>
+                    </div>
+
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejercicio 15</span>
+                        <p class="font-semibold text-gray-800 mt-2">Determine el conjunto potencia del conjunto vacío \(\mathcal{P}(\emptyset)\).</p>
+                        <button onclick="toggleSol('sol-e15')" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow">Mostrar solución</button>
+                        <div id="sol-e15" class="hidden mt-3 p-3 bg-white rounded border text-sm text-gray-700">
+                            <strong>Solución paso a paso:</strong> Como \(|\emptyset| = 0\), el número de subconjuntos es \(2^0 = 1\). El único subconjunto del vacío es él mismo. Por ende, \(\mathcal{P}(\emptyset) = \{\emptyset\}\).
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECCIÓN 4: REFLEXIÓN CRÍTICA -->
+            <section id="tab-reflexion" class="hidden space-y-6">
+                <div class="border-b-2 border-[#1269A8] pb-2">
+                    <h2 class="text-2xl font-bold text-[#1269A8]">Preguntas de Reflexión Crítica</h2>
+                    <p class="text-gray-600 text-sm">Análisis sobre el isomorfismo entre la lógica proposicional y el álgebra de conjuntos.</p>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="card-custom p-5 shadow-sm">
+                        <h3 class="font-bold text-lg text-[#1269A8] mb-2">1. La Dualidad entre Conectivos Lógicos y Operadores de Conjuntos</h3>
+                        <p class="text-gray-700 text-sm leading-relaxed">
+                            La intersección corresponde a la conjunción (\(\wedge\)), la unión a la disyunción (\(\vee\)), y el complemento a la negación (\(\sim\)). ¿Por qué la matemática encuentra estructuras tan idénticas en campos aparentemente distintos como las proposiciones y los conjuntos?
+                        </p>
+                    </div>
+
+                    <div class="card-custom p-5 shadow-sm">
+                        <h3 class="font-bold text-lg text-[#1269A8] mb-2">2. El Poder del Crecimiento Exponencial del Conjunto Potencia</h3>
+                        <p class="text-gray-700 text-sm leading-relaxed">
+                            Si un conjunto tiene solo 10 elementos, su conjunto potencia tiene \(2^{10} = 1024\) subconjuntos. ¿Cómo impacta este crecimiento exponencial en ciencias de la computación, bases de datos y combinatoria al evaluar todas las combinaciones posibles?
+                        </p>
+                    </div>
+
+                    <div class="card-custom p-5 shadow-sm">
+                        <h3 class="font-bold text-lg text-[#1269A8] mb-2">3. La Paradoja de Cantor y los Fundamentos del Infinito</h3>
+                        <p class="text-gray-700 text-sm leading-relaxed">
+                            George Cantor revolucionó la matemática al demostrar que existen diferentes tamaños de infinito (por ejemplo, los números reales son estrictamente más numerosos que los enteros). ¿Cómo cambió nuestra comprensión del infinito formal en la ciencia moderna?
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECCIÓN 5: EVALUACIÓN FORMATIVA -->
+            <section id="tab-evaluacion" class="hidden space-y-6">
+                <div class="border-b-2 border-[#1269A8] pb-2">
+                    <h2 class="text-2xl font-bold text-[#1269A8]">Evaluación Formativa</h2>
+                    <p class="text-gray-600 text-sm">Problemas de refuerzo y aplicación práctica con soluciones ocultas.</p>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Evaluación 1</span>
+                        <p class="font-semibold text-gray-800 mt-2">Si \(A = \{1, 2, 3, 4\}\), \(B = \{3, 4, 5\}\) y \(U = \{1, 2, 3, 4, 5, 6\}\), determine \((A \cap B)'\).</p>
+                        <button onclick="toggleSol('sol-ev1')" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow">Mostrar solución</button>
+                        <div id="sol-ev1" class="hidden mt-3 p-3 bg-white rounded border text-sm text-gray-700">
+                            <strong>Solución paso a paso:</strong> 
+                            1. \(A \cap B = \{3, 4\}\).<br>
+                            2. El complemento respecto a \(U\) es \(\{1, 2, 5, 6\}\).
+                        </div>
+                    </div>
+
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Evaluación 2</span>
+                        <p class="font-semibold text-gray-800 mt-2">Determine el número de subconjuntos de un conjunto \(A\) cuya cardinalidad es 5.</p>
+                        <button onclick="toggleSol('sol-ev2')" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow">Mostrar solución</button>
+                        <div id="sol-ev2" class="hidden mt-3 p-3 bg-white rounded border text-sm text-gray-700">
+                            <strong>Solución paso a paso:</strong> Aplicando la fórmula del conjunto potencia \(2^n\), con \(n = 5\) se obtiene \(2^5 = 32\) subconjuntos.
+                        </div>
+                    </div>
+
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Evaluación 3</span>
+                        <p class="font-semibold text-gray-800 mt-2">Evalúate: Si \(A \subset B\), ¿a qué es igual la intersección \(A \cap B\)?</p>
+                        <button onclick="toggleSol('sol-ev3')" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow">Mostrar solución</button>
+                        <div id="sol-ev3" class="hidden mt-3 p-3 bg-white rounded border text-sm text-gray-700">
+                            <strong>Solución paso a paso:</strong> Si todos los elementos de \(A\) están en \(B\), los elementos comunes a ambos son exactamente los elementos de \(A\). Por tanto, \(A \cap B = A\).
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Pie de página de la Pizarra -->
+        <footer class="bg-[#F2F5E9] border-t-2 border-[#54887D] p-3 text-center text-xs text-gray-600">
+            Colegio Montano — Departamento de Matemática y Diseño Instruccional • Todos los derechos reservados.
+        </footer>
+    </div>
+
+    <!-- Scripts de Interacción -->
+    <script>
+        // Función para alternar entre pestañas de la pizarra
+        function switchTab(tabName) {
+            const tabs = ['teoria', 'ejemplos', 'ejercicios', 'reflexion', 'evaluacion'];
+            tabs.forEach(t => {
+                const section = document.getElementById('tab-' + t);
+                const btn = document.getElementById('btn-' + t);
+                if (t === tabName) {
+                    section.classList.remove('hidden');
+                    btn.className = "flex-1 py-3 px-4 text-center font-bold text-xs md:text-sm tab-active transition";
+                } else {
+                    section.classList.add('hidden');
+                    btn.className = "flex-1 py-3 px-4 text-center font-bold text-xs md:text-sm tab-inactive transition";
+                }
+            });
+        }
+
+        // Función para mostrar u ocultar soluciones paso a paso
+        function toggleSol(solId) {
+            const solDiv = document.getElementById(solId);
+            if (solDiv.classList.contains('hidden')) {
+                solDiv.classList.remove('hidden');
+                event.target.textContent = "Ocultar solución";
+            } else {
+                solDiv.classList.add('hidden');
+                event.target.textContent = "Mostrar solución";
+            }
+        }
+
+        // Función de Pantalla Completa utilizando Fullscreen API
+        function toggleFullScreen() {
+            const elem = document.getElementById('whiteboard');
+            if (!document.fullscreenElement) {
+                if (elem.requestFullscreen) {
+                    elem.requestFullscreen();
+                } else if (elem.webkitRequestFullscreen) {
+                    elem.webkitRequestFullscreen();
+                } else if (elem.msRequestFullscreen) {
+                    elem.msRequestFullscreen();
+                }
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                }
+            }
+        }
+    </script>
+</body>
+</html>

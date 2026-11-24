@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guía Interactiva | Propiedades de la Aritmética - Tercero Básico</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+window.MathJax = {tex:{inlineMath:[['\\(','\\)'],['$','$']],displayMath:[['\\[','\\]']]},options:{skipHtmlTags:['script','noscript','style','textarea','pre','code']}};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+:root{--blue:#1269A8;--yellow:#F7D615;--sage:#54887D;--sky:#88B5C7;--olive:#A6B046;--bg:#F2F5E9}
+*{box-sizing:border-box}body{font-family:'Segoe UI',Tahoma,sans-serif;background:var(--bg)}
+.board{background:white;border:5px solid var(--yellow);border-radius:14px;box-shadow:0 12px 30px #1269a82b}
+.header{background:linear-gradient(135deg,var(--blue),#0e5285)}
+.tab{background:var(--sky);color:#0d4b7a;font-weight:700}.tab.active{background:var(--blue);color:white;border-bottom:4px solid var(--yellow)}
+.panel{display:none}.panel.active{display:block;animation:fade .25s ease}
+@keyframes fade{from{opacity:.4;transform:translateY(5px)}to{opacity:1;transform:none}}
+.theory{background:#F2F5E9;border-left:5px solid var(--sage);border-radius:9px}
+.exercise{background:#f0f7fa;border:1px solid var(--sky);border-left:5px solid var(--blue);border-radius:9px}
+.solution{display:none;background:#e2f0f4;border-left:4px solid var(--sage);padding:12px;border-radius:7px}
+.btn{background:var(--blue);color:white;padding:9px 14px;border-radius:7px;font-weight:700}.btn:hover{background:var(--sage)}
+input.answer{border:1px solid #9ca3af;border-radius:6px;padding:8px;width:100%;max-width:260px}
+.good{color:#166534;font-weight:700}.bad{color:#b91c1c;font-weight:700}
+</style>
+</head>
+<body class="p-3 md:p-6">
+<div class="board max-w-6xl mx-auto overflow-hidden">
+<header class="header text-white p-4 md:p-5 flex flex-col md:flex-row justify-between gap-3 items-center">
+ <div class="flex items-center gap-4">
+  <div class="bg-white text-[#1269A8] rounded-full w-14 h-14 flex items-center justify-center font-black text-xl">CM</div>
+  <div><h1 class="text-xl md:text-2xl font-bold">COLEGIO MONTANO</h1><p class="text-[#F7D615] text-sm font-bold">Guía interactiva de Matemática · Tercero Básico</p><p class="text-sm">Propiedades de la aritmética en los números reales</p></div>
+ </div>
+ <button class="bg-[#F7D615] text-[#1269A8] px-4 py-2 rounded-lg font-bold" onclick="fullScreen()">⛶ Pantalla completa</button>
+</header>
+<div class="bg-[#88B5C7] text-white p-3 text-sm flex flex-col md:flex-row justify-between gap-2">
+ <p><b>Propósito:</b> reconocer, aplicar y justificar las propiedades de las operaciones con números reales.</p>
+ <p class="font-bold"><span class="bg-[#1269A8] px-2 py-1 rounded">Hábito 1: Ser proactivo</span> <span class="bg-[#54887D] px-2 py-1 rounded">Hábito 2: Fin en mente</span></p>
+</div>
+<nav class="grid grid-cols-2 md:grid-cols-5 gap-1 p-2 bg-white">
+ <button class="tab active p-3 rounded" onclick="showTab('teoria',this)">1. Fundamentos</button>
+ <button class="tab p-3 rounded" onclick="showTab('ejemplos',this)">2. Ejemplos</button>
+ <button class="tab p-3 rounded" onclick="showTab('practica',this)">3. Práctica</button>
+ <button class="tab p-3 rounded" onclick="showTab('reto',this)">4. Reto grupal</button>
+ <button class="tab p-3 rounded" onclick="showTab('evaluacion',this)">5. Evaluación</button>
+</nav>
+<main class="p-4 md:p-7 space-y-6">
+<section id="teoria" class="panel active space-y-5">
+ <div class="border-b-2 border-[#1269A8] pb-2"><h2 class="text-2xl font-bold text-[#1269A8]">1. Fundamentos y propiedades</h2><p class="text-sm text-[#54887D] font-semibold">Estudia las condiciones de cada propiedad; no todas se cumplen en todas las operaciones.</p></div>
+ <div class="theory p-4">
+  <h3 class="text-lg font-bold text-[#1269A8]">Conjunto de los números reales y clausura</h3>
+  <p>Los números reales (\(\mathbb R\)) incluyen los racionales y los irracionales. CONAMAT destaca que \(\mathbb R\) es cerrado para la suma y la multiplicación: al sumar o multiplicar dos reales, el resultado también es real.</p>
+  <p class="mt-2 font-semibold">Si \(a,b\in\mathbb R\), entonces \(a+b\in\mathbb R\) y \(ab\in\mathbb R\).</p>
+  <p class="text-sm mt-2">La división exige una condición: \(a/b\) solo está definida si \(b\ne0\).</p>
+ </div>
+ <div class="grid md:grid-cols-2 gap-4">
+  <article class="theory p-4"><h3 class="font-bold text-[#1269A8]">1. Propiedad conmutativa</h3><p>El orden de los sumandos o factores no altera el resultado.</p><p class="text-center font-bold text-lg my-2">\(\ a+b=b+a\quad;\quad ab=ba\)</p><p>Ejemplo: \(-7+12=12+(-7)=5\).</p><p class="text-sm text-red-700 mt-2"><b>Atención:</b> no se aplica a la resta ni a la división. \(8-3\ne3-8\).</p></article>
+  <article class="theory p-4"><h3 class="font-bold text-[#1269A8]">2. Propiedad asociativa</h3><p>La forma de agrupar tres o más sumandos o factores no cambia el resultado.</p><p class="text-center font-bold text-lg my-2">\((a+b)+c=a+(b+c)\)</p><p class="text-center font-bold"> \((ab)c=a(bc)\)</p><p class="text-sm text-red-700 mt-2"><b>Atención:</b> no se aplica a la resta ni a la división.</p></article>
+  <article class="theory p-4"><h3 class="font-bold text-[#1269A8]">3. Elemento neutro</h3><p>Es el número que no modifica al otro número al operar.</p><p class="text-center font-bold text-lg my-2">Suma: \(a+0=a\)</p><p class="text-center font-bold">Multiplicación: \(a\cdot1=a\)</p><p>Ejemplo: \(-\frac{5}{3}+0=-\frac{5}{3}\).</p></article>
+  <article class="theory p-4"><h3 class="font-bold text-[#1269A8]">4. Elemento inverso</h3><p>En la suma, cada real \(a\) tiene inverso aditivo \(-a\).</p><p class="text-center font-bold text-lg my-2">\(a+(-a)=0\)</p><p>Si \(a\ne0\), su inverso multiplicativo es \(1/a\):</p><p class="text-center font-bold">\(a\cdot\frac1a=1\)</p><p class="text-sm text-red-700 mt-2">Cero no tiene inverso multiplicativo.</p></article>
+  <article class="theory p-4 md:col-span-2"><h3 class="font-bold text-[#1269A8]">5. Propiedad distributiva</h3><p>La multiplicación se distribuye sobre la suma o la resta dentro del paréntesis.</p><p class="text-center font-bold text-lg my-2">\(a(b+c)=ab+ac\)</p><p class="text-center font-bold">\(a(b-c)=ab-ac\)</p><p>Ejemplo: \(-3(4-7)=(-3)(4)-(-3)(7)=-12+21=9\).</p></article>
+ </div>
+ <div class="exercise p-4">
+  <h3 class="font-bold text-[#1269A8]">Una distinción fundamental: resta y división</h3>
+  <p>La resta y la división se pueden expresar mediante operaciones inversas, pero no heredan automáticamente las propiedades de suma y multiplicación.</p>
+  <ul class="list-disc pl-6 mt-2 space-y-1"><li>Resta no conmutativa: \(9-4=5\), mientras que \(4-9=-5\).</li><li>Resta no asociativa: \(8-(5-2)=5\), pero \((8-5)-2=1\).</li><li>División no conmutativa: \(12\div3=4\), pero \(3\div12=\frac14\).</li><li>División no asociativa: \(24\div(6\div2)=8\), pero \((24\div6)\div2=2\).</li></ul>
+ </div>
+ <div class="bg-[#fff9d9] border-l-4 border-[#F7D615] p-4 rounded"><b>Hábito 2 – Comenzar con un fin en mente:</b> antes de resolver, identifica qué propiedad necesitas y qué resultado buscas. <b>Hábito 1 – Ser proactivo:</b> verifica por sustitución si la propiedad realmente se cumple.</div>
+</section>
+<section id="ejemplos" class="panel space-y-5">
+ <h2 class="text-2xl font-bold text-[#1269A8]">2. Ejemplos resueltos y análisis de errores</h2>
+ <p class="text-sm text-[#54887D]">Observa el procedimiento y explica por qué es válida cada transformación.</p>
+ <div class="space-y-4">
+  <div class="exercise p-4"><b>Ejemplo 1 · Conmutativa con racionales</b><p class="mt-2">\(-\frac{3}{4}+\frac{5}{6}=\frac{5}{6}-\frac{3}{4}\)</p><p>Denominador común 12: \(-\frac9{12}+\frac{10}{12}=\frac1{12}\). Al cambiar el orden: \(\frac{10}{12}-\frac9{12}=\frac1{12}\).</p><button class="btn mt-2" onclick="toggle('e1',this)">Ocultar explicación</button><div id="e1" class="solution" style="display:block">La propiedad conmutativa permite cambiar el orden de los sumandos, no sus signos. El resultado se conserva.</div></div>
+  <div class="exercise p-4"><b>Ejemplo 2 · Asociativa y signos</b><p class="mt-2">\([(-8)+13]+(-5)\)</p><p>\(=5+(-5)=0\). Reagrupando: \((-8)+[13+(-5)]=(-8)+8=0\).</p><button class="btn mt-2" onclick="toggle('e2',this)">Ocultar explicación</button><div id="e2" class="solution" style="display:block">Se modificó únicamente la agrupación de los sumandos. La asociatividad se cumple para la suma de reales.</div></div>
+  <div class="exercise p-4"><b>Ejemplo 3 · Distributiva con factor negativo</b><p class="mt-2">\(-4(3-2x)\)</p><p>\((-4)(3)+(-4)(-2x)=-12+8x\).</p><button class="btn mt-2" onclick="toggle('e3',this)">Ocultar explicación</button><div id="e3" class="solution" style="display:block">El factor exterior multiplica a cada término. El producto de dos negativos es positivo.</div></div>
+  <div class="exercise p-4"><b>Ejemplo 4 · Inverso multiplicativo</b><p class="mt-2">\(-\frac{7}{9}\cdot\left(-\frac{9}{7}\right)=\frac{63}{63}=1\).</p><button class="btn mt-2" onclick="toggle('e4',this)">Ocultar explicación</button><div id="e4" class="solution" style="display:block">Los dos factores son recíprocos. El inverso multiplicativo de un número no nulo \(a\) es \(1/a\).</div></div>
+  <div class="exercise p-4"><b>Ejemplo 5 · Jerarquía y signos de agrupación</b><p class="mt-2">\(18-2[3+(5-8)^2]\)</p><p>\(=18-2[3+(-3)^2]=18-2(3+9)=18-24=-6\).</p><button class="btn mt-2" onclick="toggle('e5',this)">Ocultar explicación</button><div id="e5" class="solution" style="display:block">Primero paréntesis, luego potencia, después corchetes, multiplicación y finalmente resta. No se distribuye el 2 antes de resolver la potencia sin conservar correctamente la estructura.</div></div>
+ </div>
+</section>
+<section id="practica" class="panel space-y-5">
+ <h2 class="text-2xl font-bold text-[#1269A8]">3. Práctica individual · Nivel intermedio y avanzado</h2>
+ <p>Resuelve en tu cuaderno. Después escribe el resultado o la propiedad solicitada para comprobar tu respuesta.</p>
+ <div class="exercise p-4"><b>1.</b> Identifica la propiedad: \(\left(-\frac{2}{5}\right)+\frac{2}{5}=0\).<div class="mt-2"><input id="q1" class="answer" placeholder="Nombre de la propiedad"><button class="btn ml-2" onclick="checkText('q1',['inverso aditivo','inverso'],'r1')">Comprobar</button><p id="r1" class="mt-2 text-sm"></p></div></div>
+ <div class="exercise p-4"><b>2.</b> Completa usando la distributiva: \(5(2x-3)=\)<div class="mt-2"><input id="q2" class="answer" placeholder="Ejemplo: 10x-15"><button class="btn ml-2" onclick="checkText('q2',['10x-15','10x - 15'],'r2')">Comprobar</button><p id="r2" class="mt-2 text-sm"></p></div></div>
+ <div class="exercise p-4"><b>3.</b> Calcula: \(-18\div[3+(-6)]\).<div class="mt-2"><input id="q3" class="answer" placeholder="Resultado"><button class="btn ml-2" onclick="checkText('q3',['6'],'r3')">Comprobar</button><p id="r3" class="mt-2 text-sm"></p></div></div>
+ <div class="exercise p-4"><b>4.</b> ¿Es válida esta igualdad para todos los reales? \(a-(b-c)=(a-b)-c\). Responde sí o no.<div class="mt-2"><input id="q4" class="answer" placeholder="Sí o no"><button class="btn ml-2" onclick="checkText('q4',['no'],'r4')">Comprobar</button><p id="r4" class="mt-2 text-sm"></p><button class="btn mt-2" onclick="toggle('s4',this)">Ver justificación</button><div id="s4" class="solution">No. Contraejemplo: \(a=8,b=5,c=2\). Lado izquierdo \(=8-(5-2)=5\); lado derecho \(=(8-5)-2=1\).</div></div></div>
+ <div class="exercise p-4"><b>5.</b> Simplifica usando la distributiva y reduce términos: \(3(2x-5)-2(x+4)\).<div class="mt-2"><input id="q5" class="answer" placeholder="Expresión simplificada"><button class="btn ml-2" onclick="checkText('q5',['4x-23','4x - 23'],'r5')">Comprobar</button><p id="r5" class="mt-2 text-sm"></p></div></div>
+ <div class="exercise p-4"><b>6.</b> Evalúa respetando la jerarquía: \(24\div[2(3+1)] + 5^2-7\).<div class="mt-2"><input id="q6" class="answer" placeholder="Resultado"><button class="btn ml-2" onclick="checkText('q6',['21'],'r6')">Comprobar</button><p id="r6" class="mt-2 text-sm"></p></div></div>
+ <div class="exercise p-4"><b>7.</b> Encuentra el error: \(4(7-2)=4(7)-2=26\). Escribe el resultado correcto.<div class="mt-2"><input id="q7" class="answer" placeholder="Resultado correcto"><button class="btn ml-2" onclick="checkText('q7',['20'],'r7')">Comprobar</button><p id="r7" class="mt-2 text-sm"></p></div></div>
+ <div class="bg-[#fff9d9] p-4 rounded"><b>Indicaciones:</b> no basta con obtener el resultado. En los ejercicios 1, 2, 4, 5 y 7 debes escribir en tu cuaderno la propiedad o el error identificado y justificarlo.</div>
+</section>
+<section id="reto" class="panel space-y-5">
+ <h2 class="text-2xl font-bold text-[#1269A8]">4. Reto cooperativo · Auditores de procedimientos</h2>
+ <div class="theory p-5"><p class="font-bold text-[#54887D]">Misión del equipo · Hábito 1: Ser proactivo</p><p>En equipos de tres, analicen cada procedimiento. Determinen si es correcto; si no lo es, localicen el primer paso inválido y propongan una corrección.</p></div>
+ <div class="space-y-3">
+  <div class="exercise p-4"><b>Situación A</b><p>\(6-(2+5)=(6-2)+5=9\)</p><p>¿Se puede retirar el paréntesis conservando los signos? Justifiquen.</p></div>
+  <div class="exercise p-4"><b>Situación B</b><p>\( -3(4-6)=-12-18=-30\)</p><p>Identifiquen el error de signos y escriban la igualdad correcta.</p></div>
+  <div class="exercise p-4"><b>Situación C</b><p>\(12\div(3\div2)=(12\div3)\div2\)</p><p>Construyan los dos resultados y expliquen por qué la división no es asociativa.</p></div>
+ </div>
+ <div class="bg-white border-2 border-[#54887D] rounded-lg p-4"><b>Producto verificable:</b> una hoja con el análisis de A, B y C, la corrección y el nombre de la propiedad o regla involucrada. <br><b>Roles:</b> calculista, verificador de propiedades y portavoz. <br><b>Hábito 2:</b> acuerden primero qué debe contener una solución completa antes de comenzar.</div>
+ <button class="btn" onclick="toggle('claveReto',this)">Mostrar clave orientativa para el docente</button><div id="claveReto" class="solution"><p><b>A:</b> Incorrecto. \(6-(2+5)=6-2-5=-1\). El signo menos delante del paréntesis cambia los signos de todos sus términos.</p><p><b>B:</b> Incorrecto. \(-3(4-6)=(-3)(4)+(-3)(-6)=-12+18=6\).</p><p><b>C:</b> No son iguales: \(12\div(3\div2)=12\div1.5=8\), mientras que \((12\div3)\div2=4\div2=2\).</p></div>
+</section>
+<section id="evaluacion" class="panel space-y-5">
+ <h2 class="text-2xl font-bold text-[#1269A8]">5. Autoevaluación conceptual</h2>
+ <p>Selecciona una respuesta por pregunta. Cada acierto vale 1 punto.</p>
+ <form id="quiz" class="space-y-4">
+  <div class="exercise p-4"><b>1.</b> ¿Qué propiedad justifica \(a(b+c)=ab+ac\)?<div class="mt-2 space-y-1"><label class="block"><input type="radio" name="p1" value="a"> Asociativa</label><label class="block"><input type="radio" name="p1" value="b"> Distributiva</label><label class="block"><input type="radio" name="p1" value="c"> Conmutativa</label></div></div>
+  <div class="exercise p-4"><b>2.</b> ¿Cuál es el elemento neutro de la multiplicación?<div class="mt-2 space-y-1"><label class="block"><input type="radio" name="p2" value="a"> 0</label><label class="block"><input type="radio" name="p2" value="b"> -1</label><label class="block"><input type="radio" name="p2" value="c"> 1</label></div></div>
+  <div class="exercise p-4"><b>3.</b> ¿Cuál operación no es asociativa en los reales?<div class="mt-2 space-y-1"><label class="block"><input type="radio" name="p3" value="a"> Suma</label><label class="block"><input type="radio" name="p3" value="b"> Multiplicación</label><label class="block"><input type="radio" name="p3" value="c"> Resta</label></div></div>
+  <div class="exercise p-4"><b>4.</b> El inverso multiplicativo de \(-\frac{4}{7}\) es:<div class="mt-2 space-y-1"><label class="block"><input type="radio" name="p4" value="a"> \(\frac{7}{4}\)</label><label class="block"><input type="radio" name="p4" value="b"> \(-\frac{7}{4}\)</label><label class="block"><input type="radio" name="p4" value="c"> \(-\frac{4}{7}\)</label></div></div>
+  <div class="exercise p-4"><b>5.</b> ¿Cuál afirmación es verdadera?<div class="mt-2 space-y-1"><label class="block"><input type="radio" name="p5" value="a"> La división es conmutativa.</label><label class="block"><input type="radio" name="p5" value="b"> La resta es asociativa.</label><label class="block"><input type="radio" name="p5" value="c"> Los reales son cerrados para la suma y la multiplicación.</label></div></div>
+  <button type="button" class="btn" onclick="gradeQuiz()">Calificar evaluación</button>
+ </form>
+ <div id="quizResult" class="theory p-4 hidden"></div>
+</section>
+</main>
+<footer class="bg-[#F2F5E9] border-t-2 border-[#54887D] p-3 text-center text-xs text-[#1269A8] font-semibold">Colegio Montano · Departamento de Matemática · Tercero Básico · Guía de aprendizaje interactiva</footer>
+</div>
+<script>
+function showTab(id,btn){document.querySelectorAll('.panel').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');if(window.MathJax)MathJax.typesetPromise();}
+function toggle(id,btn){let e=document.getElementById(id);let open=e.style.display==='block';e.style.display=open?'none':'block';btn.textContent=open?'Mostrar explicación':'Ocultar explicación';}
+function checkText(input,answers,result){let v=document.getElementById(input).value.toLowerCase().replace(/\s+/g,'').replace(/[()]/g,'');let ok=answers.some(a=>v===a.toLowerCase().replace(/\s+/g,'').replace(/[()]/g,''));let el=document.getElementById(result);el.className='mt-2 text-sm '+(ok?'good':'bad');el.textContent=ok?'¡Correcto! Verifica que tu procedimiento también esté escrito en el cuaderno.':'Revisa el procedimiento, los signos y la propiedad aplicada.';}
+function gradeQuiz(){let key={p1:'b',p2:'c',p3:'c',p4:'b',p5:'c'},score=0;for(let k in key){let x=document.querySelector('input[name="'+k+'"]:checked');if(x&&x.value===key[k])score++;}let e=document.getElementById('quizResult');e.classList.remove('hidden');e.innerHTML='<b>Resultado: '+score+'/5 puntos.</b><p>'+(score===5?'Excelente dominio conceptual.':score>=3?'Buen avance. Revisa las propiedades que confundiste.':'Vuelve a estudiar los fundamentos y resuelve nuevamente la evaluación.')+'</p>'; }
+function fullScreen(){let e=document.getElementById('whiteboard')||document.querySelector('.board');if(!document.fullscreenElement)e.requestFullscreen?.();else document.exitFullscreen?.();}
+</script>
+</body>
+</html>

@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía Interactiva: Lógica Proposicional - Colegio Montano</title>
+    <!-- Tailwind CSS para diseño moderno y responsivo -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #F2F5E9;
+        }
+        /* Estilo personalizado de pizarra digital con identidad Colegio Montano */
+        .whiteboard-container {
+            background-color: #ffffff;
+            border: 4px solid #F7D615;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(18, 105, 168, 0.15);
+        }
+        .header-bg {
+            background-color: #1269A8;
+        }
+        .tab-active {
+            background-color: #1269A8;
+            color: #ffffff;
+            border-bottom: 4px solid #F7D615;
+        }
+        .tab-inactive {
+            background-color: #88B5C7;
+            color: #1269A8;
+        }
+        .tab-inactive:hover {
+            background-color: #54887D;
+            color: #ffffff;
+        }
+        .card-custom {
+            background-color: #F2F5E9;
+            border-left: 5px solid #54887D;
+            border-radius: 8px;
+        }
+        .badge-level {
+            background-color: #A6B046;
+            color: #ffffff;
+        }
+        .btn-action {
+            background-color: #1269A8;
+            color: #ffffff;
+            transition: all 0.2s ease;
+        }
+        .btn-action:hover {
+            background-color: #54887D;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8 min-h-screen flex flex-col items-center">
+
+    <!-- Contenedor Principal de la Pizarra Digital -->
+    <div id="whiteboard" class="whiteboard-container w-full max-w-6xl flex flex-col overflow-hidden">
+        
+        <!-- Barra Superior / Encabezado con Logo y Botón Fullscreen -->
+        <header class="header-bg p-4 flex flex-col sm:flex-row justify-between items-center text-white gap-4">
+            <div class="flex items-center space-x-4">
+                <!-- Logo Oficial del Colegio Montano -->
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyEop0yf6lZ7Jk9MILZxF1rBj4Oqs5esyhIQ&s" alt="Logo Colegio Montano" class="h-12 w-12 object-contain bg-white rounded-full p-1 shadow">
+                <div>
+                    <h1 class="text-xl md:text-2xl font-bold tracking-wide">Colegio Montano</h1>
+                    <p class="text-xs md:text-sm text-[#F7D615] font-semibold">Pizarra Digital Interactiva — Lógica Proposicional</p>
+                </div>
+            </div>
+            <div>
+                <!-- Botón de Pantalla Completa -->
+                <button onclick="toggleFullScreen()" class="bg-[#F7D615] text-[#1269A8] font-bold px-4 py-2 rounded-lg shadow hover:bg-yellow-400 transition flex items-center gap-2 text-sm">
+                    <span>[ ⛶ Pantalla Completa ]</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Navegación por Pestañas Horizontales -->
+        <nav class="flex flex-wrap bg-[#88B5C7] border-b-2 border-[#54887D]">
+            <button onclick="switchTab('teoria')" id="btn-teoria" class="flex-1 py-3 px-4 text-center font-bold text-sm md:text-base tab-active transition">1. Teoría</button>
+            <button onclick="switchTab('ejemplos')" id="btn-ejemplos" class="flex-1 py-3 px-4 text-center font-bold text-sm md:text-base tab-inactive transition">2. Ejemplos Resueltos</button>
+            <button onclick="switchTab('ejercicios')" id="btn-ejercicios" class="flex-1 py-3 px-4 text-center font-bold text-sm md:text-base tab-inactive transition">3. Ejercicios Prácticos</button>
+            <button onclick="switchTab('reflexion')" id="btn-reflexion" class="flex-1 py-3 px-4 text-center font-bold text-sm md:text-base tab-inactive transition">4. Reflexión Crítica</button>
+            <button onclick="switchTab('evaluacion')" id="btn-evaluacion" class="flex-1 py-3 px-4 text-center font-bold text-sm md:text-base tab-inactive transition">5. Evaluación Formativa</button>
+        </nav>
+
+        <!-- Contenido Dinámico de las Pestañas -->
+        <main class="p-6 md:p-8 flex-1 overflow-y-auto max-h-[75vh]">
+
+            <!-- SECCIÓN 1: TEORÍA -->
+            <section id="tab-teoria" class="space-y-6">
+                <div class="border-b-2 border-[#1269A8] pb-2">
+                    <h2 class="text-2xl font-bold text-[#1269A8]">Fundamentos de Lógica Proposicional</h2>
+                    <p class="text-gray-600 text-sm">Conceptos básicos, proposiciones, tablas de verdad y clasificación de fórmulas lógicas.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Tarjeta 1 -->
+                    <div class="card-custom p-5 shadow-sm">
+                        <h3 class="font-bold text-lg text-[#1269A8] mb-2">Proposición y Valor de Verdad</h3>
+                        <p class="text-gray-700 text-sm leading-relaxed">
+                            Una proposición es un enunciado u oración declarativa de la cual se puede afirmar si es <strong>falsa (F)</strong> o <strong>verdadera (V)</strong>, pero no ambas a la vez. Su veracidad o falsedad constituye su valor de verdad.
+                        </p>
+                    </div>
+
+                    <!-- Tarjeta 2 -->
+                    <div class="card-custom p-5 shadow-sm">
+                        <h3 class="font-bold text-lg text-[#1269A8] mb-2">Conectivos Lógicos Fundamentales</h3>
+                        <p class="text-gray-700 text-sm leading-relaxed mb-2">Permiten combinar proposiciones simples para formar proposiciones compuestas:</p>
+                        <ul class="list-disc list-inside text-sm text-gray-700 space-y-1">
+                            <li><strong>Negación (~p):</strong> Invierte el valor de verdad.</li>
+                            <li><strong>Conjunción (p ∧ q):</strong> V solo si ambas son V ("y").</li>
+                            <li><strong>Disyunción Inclusiva (p ∨ q):</strong> F solo si ambas son F ("o").</li>
+                            <li><strong>Disyunción Exclusiva (p <u>v</u> q):</strong> V si tienen valores contrarios.</li>
+                            <li><strong>Condicional (p → q):</strong> F solo si antecedente es V y consecuente es F ("si... entonces").</li>
+                            <li><strong>Bicondicional (p ↔ q):</strong> V si ambas tienen el mismo valor ("si y sólo si").</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Tarjeta Ancha: Clasificación de Proposiciones -->
+                <div class="card-custom p-5 shadow-sm">
+                    <h3 class="font-bold text-lg text-[#1269A8] mb-2">Tautología, Contradicción y Contingencia</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-gray-700 mt-3">
+                        <div class="bg-white p-3 rounded border border-[#54887D]">
+                            <span class="font-bold text-[#1269A8]">Tautología:</span> Proposición cuyo valor final es siempre <strong>Verdadero (V)</strong> independientemente de los componentes.
+                        </div>
+                        <div class="bg-white p-3 rounded border border-[#54887D]">
+                            <span class="font-bold text-[#1269A8]">Contradicción:</span> Proposición cuyo valor final es siempre <strong>Falso (F)</strong> en todos los casos.
+                        </div>
+                        <div class="bg-white p-3 rounded border border-[#54887D]">
+                            <span class="font-bold text-[#1269A8]">Contingencia:</span> Proposición que toma valores tanto verdaderos como falsos según sus componentes.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECCIÓN 2: EJEMPLOS RESUELTOS -->
+            <section id="tab-ejemplos" class="hidden space-y-6">
+                <div class="border-b-2 border-[#1269A8] pb-2">
+                    <h2 class="text-2xl font-bold text-[#1269A8]">Ejemplos Resueltos Paso a Paso</h2>
+                    <p class="text-gray-600 text-sm">Analiza el procedimiento detallado para niveles Básico, Intermedio y Avanzado.</p>
+                </div>
+
+                <!-- Bloque Básico -->
+                <div class="space-y-4">
+                    <h3 class="text-lg font-bold text-[#54887D] bg-[#88B5C7] bg-opacity-30 p-2 rounded">Nivel Básico (Ejemplos 1 al 5)</h3>
+                    
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejemplo 1 - Básico</span>
+                        <p class="font-semibold text-gray-800 mt-2">Determinar si la oración "¡Hola, buenos días!" es una proposición.</p>
+                        <div class="mt-2 text-sm text-gray-700 bg-white p-3 rounded border">
+                            <strong>Solución:</strong> No es una proposición, ya que es una expresión exclamativa/saludo y no se le puede asignar un valor de verdad (verdadero o falso).
+                        </div>
+                    </div>
+
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejemplo 2 - Básico</span>
+                        <p class="font-semibold text-gray-800 mt-2">Dada p: "El agua hierve a 100°C", halle el valor de verdad de su negación ~p.</p>
+                        <div class="mt-2 text-sm text-gray-700 bg-white p-3 rounded border">
+                            <strong>Solución:</strong> Sabemos que p es Verdadero (V). Por definición de negación, ~p tiene valor opuesto, por lo tanto ~p es Falso (F).
+                        </div>
+                    </div>
+
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejemplo 3 - Básico</span>
+                        <p class="font-semibold text-gray-800 mt-2">Si p es Verdadero (V) y q es Falso (F), determine el valor de verdad de la conjunción p ∧ q.</p>
+                        <div class="mt-2 text-sm text-gray-700 bg-white p-3 rounded border">
+                            <strong>Solución:</strong> La conjunción es verdadera únicamente si ambas proposiciones son verdaderas. Como q es Falsa, la conjunción p ∧ q es Falsa (F).
+                        </div>
+                    </div>
+
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejemplo 4 - Básico</span>
+                        <p class="font-semibold text-gray-800 mt-2">Si p es Falso (F) y q es Verdadero (V), halle el valor de la disyunción inclusiva p ∨ q.</p>
+                        <div class="mt-2 text-sm text-gray-700 bg-white p-3 rounded border">
+                            <strong>Solución:</strong> La disyunción inclusiva es falsa solo si ambas son falsas. Como q es verdadera, el resultado de p ∨ q es Verdadero (V).
+                        </div>
+                    </div>
+
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejemplo 5 - Básico</span>
+                        <p class="font-semibold text-gray-800 mt-2">¿Cuál es el valor de verdad de la condicional si el antecedente es Verdadero y el consecuente es Falso?</p>
+                        <div class="mt-2 text-sm text-gray-700 bg-white p-3 rounded border">
+                            <strong>Solución:</strong> La regla fundamental de la condicional (p → q) indica que su valor es falso únicamente cuando el antecedente es V y el consecuente es F. Por tanto, es Falso (F).
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bloque Intermedio -->
+                <div class="space-y-4 pt-4">
+                    <h3 class="text-lg font-bold text-[#54887D] bg-[#88B5C7] bg-opacity-30 p-2 rounded">Nivel Intermedio (Ejemplos 6 al 10)</h3>
+                    
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejemplo 6 - Intermedio</span>
+                        <p class="font-semibold text-gray-800 mt-2">Si p: F, q: V, determine el valor de verdad de la expresión compuesta: (p ∨ q) ∧ ~p.</p>
+                        <div class="mt-2 text-sm text-gray-700 bg-white p-3 rounded border">
+                            <strong>Solución:</strong> 
+                            1. Evaluamos el paréntesis: p ∨ q (F ∨ V) da V.<br>
+                            2. Evaluamos la negación de p: ~p (~F) da V.<br>
+                            3. Conectamos con conjunción: V ∧ V da resultado <strong>Verdadero (V)</strong>.
+                        </div>
+                    </div>
+
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejemplo 7 - Intermedio</span>
+                        <p class="font-semibold text-gray-800 mt-2">Dadas p: V y q: F, determine el valor de verdad de la disyunción exclusiva p <u>v</u> q.</p>
+                        <div class="mt-2 text-sm text-gray-700 bg-white p-3 rounded border">
+                            <strong>Solución:</strong> La disyunción exclusiva es verdadera solo si las proposiciones tienen valores contrarios. Como p es V y q es F, el valor es <strong>Verdadero (V)</strong>.
+                        </div>
+                    </div>
+
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejemplo 8 - Intermedio</span>
+                        <p class="font-semibold text-gray-800 mt-2">Calcule el número de filas necesarias para construir la tabla de verdad de una proposición que involucra tres variables simples (p, q, r).</p>
+                        <div class="mt-2 text-sm text-gray-700 bg-white p-3 rounded border">
+                            <strong>Solución:</strong> Se utiliza la fórmula \(2^n\), donde \(n\) es el número de proposiciones simples. Con \(n = 3\), tenemos \(2^3 = 8\) filas.
+                        </div>
+                    </div>
+
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejemplo 9 - Intermedio</span>
+                        <p class="font-semibold text-gray-800 mt-2">Si p es F y q es F, determine el valor de la bicondicional p ↔ q.</p>
+                        <div class="mt-2 text-sm text-gray-700 bg-white p-3 rounded border">
+                            <strong>Solución:</strong> La bicondicional es verdadera si ambas proposiciones tienen valores de verdad iguales (ambas V o ambas F). Como ambas son F, el resultado es <strong>Verdadero (V)</strong>.
+                        </div>
+                    </div>
+
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejemplo 10 - Intermedio</span>
+                        <p class="font-semibold text-gray-800 mt-2">Construya el valor de verdad de ~p → q sabiendo que p es V y q es F.</p>
+                        <div class="mt-2 text-sm text-gray-700 bg-white p-3 rounded border">
+                            <strong>Solución:</strong> 
+                            1. Antecedente (~p): si p es V, entonces ~p es F.<br>
+                            2. Consecuente (q): es F.<br>
+                            3. Condicional (F → F): por regla, antecedente F y consecuente F da <strong>Verdadero (V)</strong>.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bloque Avanzado -->
+                <div class="space-y-4 pt-4">
+                    <h3 class="text-lg font-bold text-[#54887D] bg-[#88B5C7] bg-opacity-30 p-2 rounded">Nivel Avanzado (Ejemplos 11 al 15)</h3>
+                    
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejemplo 11 - Avanzado</span>
+                        <p class="font-semibold text-gray-800 mt-2">Demuestre mediante análisis lógico si la fórmula (p ∧ q) ↔ (q ∧ p) es una tautología.</p>
+                        <div class="mt-2 text-sm text-gray-700 bg-white p-3 rounded border">
+                            <strong>Solución:</strong> Al construir su tabla de verdad para las 4 combinaciones posibles de p y q, las columnas de (p ∧ q) y (q ∧ p) coinciden exactamente en cada fila. Su bicondicional da V en todas las filas, por lo tanto <strong>es una tautología</strong> (equivalencia lógica conmutativa).
+                        </div>
+                    </div>
+
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejemplo 12 - Avanzado</span>
+                        <p class="font-semibold text-gray-800 mt-2">Analice el valor de verdad de la proposición compuesta [p ∧ (q ∨ r)] sabiendo que p es V, q es F y r es V.</p>
+                        <div class="mt-2 text-sm text-gray-700 bg-white p-3 rounded border">
+                            <strong>Solución:</strong> 
+                            1. Paréntesis (q ∨ r): F ∨ V da V.<br>
+                            2. Conjunción principal p ∧ (resultado): V ∧ V da <strong>Verdadero (V)</strong>.
+                        </div>
+                    </div>
+
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejemplo 13 - Avanzado</span>
+                        <p class="font-semibold text-gray-800 mt-2">Determine si la proposición (p ∧ q) ∧ (~p ∧ ~q) resulta en una contradicción.</p>
+                        <div class="mt-2 text-sm text-gray-700 bg-white p-3 rounded border">
+                            <strong>Solución:</strong> Al evaluar las filas, es imposible que simultáneamente (p ∧ q) sea verdadero y su negación total (~p ∧ ~q) sea verdadera. Todos los valores de la columna final resultan F, por lo tanto <strong>es una contradicción</strong>.
+                        </div>
+                    </div>
+
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejemplo 14 - Avanzado</span>
+                        <p class="font-semibold text-gray-800 mt-2">Dada la proposición q ∨ (r ∧ s) con tres variables, determine si corresponde a una contingencia.</p>
+                        <div class="mt-2 text-sm text-gray-700 bg-white p-3 rounded border">
+                            <strong>Solución:</strong> Evaluando los valores en las 8 filas posibles, la columna final arroja tanto resultados verdaderos (V) como falsos (F). Por definición, al no ser ni exclusivamente V ni exclusivamente F, se clasifica como una <strong>contingencia</strong>.
+                        </div>
+                    </div>
+
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejemplo 15 - Avanzado</span>
+                        <p class="font-semibold text-gray-800 mt-2">Si se sabe que la proposición condicional p → q es Falsa, determine inequívocamente los valores de p y q.</p>
+                        <div class="mt-2 text-sm text-gray-700 bg-white p-3 rounded border">
+                            <strong>Solución:</strong> La única condición en la tabla de verdad para que una implicación o condicional sea falsa es que el antecedente sea Verdadero y el consecuente sea Falso. Por lo tanto, obligatoriamente <strong>p es V</strong> y <strong>q es F</strong>.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECCIÓN 3: EJERCICIOS PRÁCTICOS CON SOLUCIONES OCULTAS -->
+            <section id="tab-ejercicios" class="hidden space-y-6">
+                <div class="border-b-2 border-[#1269A8] pb-2">
+                    <h2 class="text-2xl font-bold text-[#1269A8]">Ejercicios Prácticos</h2>
+                    <p class="text-gray-600 text-sm">Pon a prueba tus conocimientos. Utiliza el botón "Mostrar solución" para verificar tu procedimiento paso a paso.</p>
+                </div>
+
+                <!-- Ejercicios Básicos (1-5) -->
+                <div class="space-y-4">
+                    <h3 class="text-lg font-bold text-[#54887D] bg-[#88B5C7] bg-opacity-30 p-2 rounded">Ejercicios Nivel Básico</h3>
+                    
+                    <!-- Ejercicio 1 -->
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejercicio 1</span>
+                        <p class="font-semibold text-gray-800 mt-2">Indique si la expresión "x + 2 = 5" es una proposición en lógica matemática.</p>
+                        <button onclick="toggleSol('sol-e1')" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow">Mostrar solución</button>
+                        <div id="sol-e1" class="hidden mt-3 p-3 bg-white rounded border text-sm text-gray-700">
+                            <strong>Solución paso a paso:</strong> No es una proposición propiamente dicha, ya que contiene una variable (x) y su valor de verdad depende de qué número se le asigne a x (se le llama función proposicional o enunciado abierto hasta que x se reemplaza).
+                        </div>
+                    </div>
+
+                    <!-- Ejercicio 2 -->
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejercicio 2</span>
+                        <p class="font-semibold text-gray-800 mt-2">Si p: "El cielo es azul" (V) y q: "Los peces vuelan" (F), determine el valor de p ∧ q.</p>
+                        <button onclick="toggleSol('sol-e2')" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow">Mostrar solución</button>
+                        <div id="sol-e2" class="hidden mt-3 p-3 bg-white rounded border text-sm text-gray-700">
+                            <strong>Solución paso a paso:</strong> 
+                            1. p es Verdadero (V).<br>
+                            2. q es Falso (F).<br>
+                            3. En la conjunción (∧), basta con que uno sea falso para que el resultado sea <strong>Falso (F)</strong>.
+                        </div>
+                    </div>
+
+                    <!-- Ejercicio 3 -->
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejercicio 3</span>
+                        <p class="font-semibold text-gray-800 mt-2">Si p es F y q es F, determine el valor de verdad de la disyunción inclusiva p ∨ q.</p>
+                        <button onclick="toggleSol('sol-e3')" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow">Mostrar solución</button>
+                        <div id="sol-e3" class="hidden mt-3 p-3 bg-white rounded border text-sm text-gray-700">
+                            <strong>Solución paso a paso:</strong> La regla de la disyunción inclusiva establece que el resultado es falso únicamente cuando ambas proposiciones son falsas. Como p es F y q es F, el resultado es <strong>Falso (F)</strong>.
+                        </div>
+                    </div>
+
+                    <!-- Ejercicio 4 -->
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejercicio 4</span>
+                        <p class="font-semibold text-gray-800 mt-2">Halle la negación de la proposición p: "Todos los estudiantes aprobaron el examen".</p>
+                        <button onclick="toggleSol('sol-e4')" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow">Mostrar solución</button>
+                        <div id="sol-e4" class="hidden mt-3 p-3 bg-white rounded border text-sm text-gray-700">
+                            <strong>Solución paso a paso:</strong> La negación (~p) invierte el sentido de la aseveración universal: ~p: "No es verdad que todos los estudiantes aprobaron el examen" o de forma equivalente "Al menos un estudiante no aprobó el examen".
+                        </div>
+                    </div>
+
+                    <!-- Ejercicio 5 -->
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejercicio 5</span>
+                        <p class="font-semibold text-gray-800 mt-2">Dada p: V y q: V, determine el valor de la condicional p → q.</p>
+                        <button onclick="toggleSol('sol-e5')" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow">Mostrar solución</button>
+                        <div id="sol-e5" class="hidden mt-3 p-3 bg-white rounded border text-sm text-gray-700">
+                            <strong>Solución paso a paso:</strong> Según la primera línea de la tabla de verdad de la condicional, si el antecedente es V y el consecuente es V, el resultado es <strong>Verdadero (V)</strong>.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ejercicios Intermedios (6-10) -->
+                <div class="space-y-4 pt-4">
+                    <h3 class="text-lg font-bold text-[#54887D] bg-[#88B5C7] bg-opacity-30 p-2 rounded">Ejercicios Nivel Intermedio</h3>
+                    
+                    <!-- Ejercicio 6 -->
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejercicio 6</span>
+                        <p class="font-semibold text-gray-800 mt-2">Si p es V y q es F, determine el valor de verdad de la proposición compuesta: (p → q) ∨ q.</p>
+                        <button onclick="toggleSol('sol-e6')" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow">Mostrar solución</button>
+                        <div id="sol-e6" class="hidden mt-3 p-3 bg-white rounded border text-sm text-gray-700">
+                            <strong>Solución paso a paso:</strong> 
+                            1. Evaluamos p → q (V → F) lo cual resulta en F.<br>
+                            2. Sustituimos en la expresión: F ∨ q (F ∨ F).<br>
+                            3. Por regla de la disyunción, F ∨ F da <strong>Falso (F)</strong>.
+                        </div>
+                    </div>
+
+                    <!-- Ejercicio 7 -->
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejercicio 7</span>
+                        <p class="font-semibold text-gray-800 mt-2">Calcule el número de filas de una tabla de verdad con 4 variables proposicionales (p, q, r, s).</p>
+                        <button onclick="toggleSol('sol-e7')" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow">Mostrar solución</button>
+                        <div id="sol-e7" class="hidden mt-3 p-3 bg-white rounded border text-sm text-gray-700">
+                            <strong>Solución paso a paso:</strong> Aplicamos la fórmula \(2^n\). Dado que hay 4 variables (\(n = 4\)), calculamos \(2^4 = 16\) filas.
+                        </div>
+                    </div>
+
+                    <!-- Ejercicio 8 -->
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejercicio 8</span>
+                        <p class="font-semibold text-gray-800 mt-2">Si p es F, q es V y r es V, determine el valor de verdad de ~p ∧ (q ∨ ~r).</p>
+                        <button onclick="toggleSol('sol-e8')" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow">Mostrar solución</button>
+                        <div id="sol-e8" class="hidden mt-3 p-3 bg-white rounded border text-sm text-gray-700">
+                            <strong>Solución paso a paso:</strong> 
+                            1. ~p: como p es F, ~p es V.<br>
+                            2. ~r: como r es V, ~r es F.<br>
+                            3. Paréntesis (q ∨ ~r): V ∨ F da V.<br>
+                            4. Conjunción final: ~p ∧ (resultado) => V ∧ V = <strong>Verdadero (V)</strong>.
+                        </div>
+                    </div>
+
+                    <!-- Ejercicio 9 -->
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejercicio 9</span>
+                        <p class="font-semibold text-gray-800 mt-2">Determine el valor de verdad de la bicondicional p ↔ ~p para cualquier valor de p.</p>
+                        <button onclick="toggleSol('sol-e9')" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow">Mostrar solución</button>
+                        <div id="sol-e9" class="hidden mt-3 p-3 bg-white rounded border text-sm text-gray-700">
+                            <strong>Solución paso a paso:</strong> Como p y su negación ~p siempre tienen valores opuestos (nunca iguales), por la regla de la bicondicional (que exige valores iguales para ser verdadera), el resultado en todas las filas es <strong>Falso (F)</strong> (es una contradicción).
+                        </div>
+                    </div>
+
+                    <!-- Ejercicio 10 -->
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejercicio 10</span>
+                        <p class="font-semibold text-gray-800 mt-2">Si p es V, q es F y la proposición es p <u>v</u> (q ∨ p), determine su valor de verdad final.</p>
+                        <button onclick="toggleSol('sol-e10')" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow">Mostrar solución</button>
+                        <div id="sol-e10" class="hidden mt-3 p-3 bg-white rounded border text-sm text-gray-700">
+                            <strong>Solución paso a paso:</strong> 
+                            1. Paréntesis (q ∨ p): F ∨ V da V.<br>
+                            2. Operación principal p <u>v</u> (resultado): V <u>v</u> V.<br>
+                            3. La disyunción exclusiva exige valores contrarios; como ambos son V, el resultado es <strong>Falso (F)</strong>.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ejercicios Avanzados (11-15) -->
+                <div class="space-y-4 pt-4">
+                    <h3 class="text-lg font-bold text-[#54887D] bg-[#88B5C7] bg-opacity-30 p-2 rounded">Ejercicios Nivel Avanzado</h3>
+                    
+                    <!-- Ejercicio 11 -->
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejercicio 11</span>
+                        <p class="font-semibold text-gray-800 mt-2">Analice y demuestre si la proposición [p ∧ (p → q)] → q es una tautología.</p>
+                        <button onclick="toggleSol('sol-e11')" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow">Mostrar solución</button>
+                        <div id="sol-e11" class="hidden mt-3 p-3 bg-white rounded border text-sm text-gray-700">
+                            <strong>Solución paso a paso:</strong> Esta estructura corresponde a la regla clásica de inferencia "Modus Ponens". Al construir su tabla de verdad completa para las combinaciones de p y q, la columna final resulta en V para todas las filas. Por lo tanto, <strong>es una tautología</strong>.
+                        </div>
+                    </div>
+
+                    <!-- Ejercicio 12 -->
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejercicio 12</span>
+                        <p class="font-semibold text-gray-800 mt-2">Dadas las proposiciones p y q, verifique si (p → q) es lógicamente equivalente a su contrapositiva (~q → ~p).</p>
+                        <button onclick="toggleSol('sol-e12')" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow">Mostrar solución</button>
+                        <div id="sol-e12" class="hidden mt-3 p-3 bg-white rounded border text-sm text-gray-700">
+                            <strong>Solución paso a paso:</strong> Al comparar las columnas finales de las tablas de verdad de p → q y ~q → ~p, ambas coinciden idénticamente en todas las filas (V, F, V, V). Al conectarlas con una bicondicional se forma una tautología, confirmando que <strong>sí son lógicamente equivalentes</strong>.
+                        </div>
+                    </div>
+
+                    <!-- Ejercicio 13 -->
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejercicio 13</span>
+                        <p class="font-semibold text-gray-800 mt-2">Si la proposición compuesta (p ∨ q) → r es Falsa, determine los valores de verdad individuales de p, q y r.</p>
+                        <button onclick="toggleSol('sol-e13')" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow">Mostrar solución</button>
+                        <div id="sol-e13" class="hidden mt-3 p-3 bg-white rounded border text-sm text-gray-700">
+                            <strong>Solución paso a paso:</strong> 
+                            1. Una condicional es falsa solo si su antecedente es V y su consecuente es F. Por ende, r debe ser F.<br>
+                            2. El antecedente (p ∨ q) debe ser Verdadero (V).<br>
+                            3. Para que (p ∨ q) sea V, al menos una de las dos variables (p o q) debe ser Verdadera, o ambas. (Existen múltiples asignaciones válidas donde r = F y (p o q) es V).
+                        </div>
+                    </div>
+
+                    <!-- Ejercicio 14 -->
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejercicio 14</span>
+                        <p class="font-semibold text-gray-800 mt-2">Simplifique o determine si la expresión [(p ∨ q) ∧ ~p] → q constituye una tautología.</p>
+                        <button onclick="toggleSol('sol-e14')" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow">Mostrar solución</button>
+                        <div id="sol-e14" class="hidden mt-3 p-3 bg-white rounded border text-sm text-gray-700">
+                            <strong>Solución paso a paso:</strong> 
+                            Evaluando paso a paso en tabla de verdad: si p es V y q es F, (p ∨ q) es V, pero ~p es F, haciendo la conjunción F. Una condicional con antecedente F es siempre V. Evaluando todas las combinaciones, la columna final resulta enteramente en V, por lo que <strong>es una tautología</strong>.
+                        </div>
+                    </div>
+
+                    <!-- Ejercicio 15 -->
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Ejercicio 15</span>
+                        <p class="font-semibold text-gray-800 mt-2">Si P(p, q) ≡ ~(p ∧ q) y Q(p, q) ≡ ~p ∨ ~q, demuestren aplicando leyes lógicas si son equivalentes (Ley de De Morgan).</p>
+                        <button onclick="toggleSol('sol-e15')" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow">Mostrar solución</button>
+                        <div id="sol-e15" class="hidden mt-3 p-3 bg-white rounded border text-sm text-gray-700">
+                            <strong>Solución paso a paso:</strong> Mediante las leyes de De Morgan de la lógica proposicional, la negación de una conjunción es equivalente a la disyunción de las negaciones. Sus tablas de verdad muestran idénticos resultados en todas las filas, por lo que <strong>P(p, q) ≡ Q(p, q)</strong> es correcto y forman una tautología.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECCIÓN 4: REFLEXIÓN CRÍTICA -->
+            <section id="tab-reflexion" class="hidden space-y-6">
+                <div class="border-b-2 border-[#1269A8] pb-2">
+                    <h2 class="text-2xl font-bold text-[#1269A8]">Preguntas de Reflexión Crítica</h2>
+                    <p class="text-gray-600 text-sm">Cuestionamientos abiertos para análisis conceptual, pensamiento lógico y aplicación en ciencias de la computación.</p>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="card-custom p-5 shadow-sm">
+                        <h3 class="font-bold text-lg text-[#1269A8] mb-2">1. Lógica en la Computación y Electrónica</h3>
+                        <p class="text-gray-700 text-sm leading-relaxed">
+                            ¿De qué manera los conectivos lógicos (como la conjunción, disyunción y negación) son la base fundamental para el diseño de circuitos digitales, microprocesadores y la programación de computadoras modernas? Analiza el papel del sistema binario (0 y 1) frente a los valores F y V.
+                        </p>
+                    </div>
+
+                    <div class="card-custom p-5 shadow-sm">
+                        <h3 class="font-bold text-lg text-[#1269A8] mb-2">2. Paradojas y Límites del Lenguaje</h3>
+                        <p class="text-gray-700 text-sm leading-relaxed">
+                            Una proposición se define estrictamente como un enunciado del cual se puede afirmar que es verdadero o falso, pero no ambos. ¿Cómo se clasifican en lógica aquellas oraciones autoreferenciales o paradojas clásicas (por ejemplo: "Esta frase es falsa") que quiebran esta regla binaria?
+                        </p>
+                    </div>
+
+                    <div class="card-custom p-5 shadow-sm">
+                        <h3 class="font-bold text-lg text-[#1269A8] mb-2">3. Argumentación Cotidiana vs. Rigor Matemático</h3>
+                        <p class="text-gray-700 text-sm leading-relaxed">
+                            En el lenguaje cotidiano, la palabra "o" a menudo se usa exclusivamente (una opción u otra, pero no ambas). Sin embargo, en lógica matemática se distingue claramente entre disyunción inclusiva y exclusiva. ¿Por qué es crucial esta distinción formal al redactar contratos legales, demostraciones científicas o algoritmos informáticos?
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECCIÓN 5: EVALUACIÓN FORMATIVA -->
+            <section id="tab-evaluacion" class="hidden space-y-6">
+                <div class="border-b-2 border-[#1269A8] pb-2">
+                    <h2 class="text-2xl font-bold text-[#1269A8]">Evaluación Formativa</h2>
+                    <p class="text-gray-600 text-sm">Problemas de refuerzo y aplicación práctica con soluciones ocultas para comprobar tu dominio del tema.</p>
+                </div>
+
+                <div class="space-y-4">
+                    <!-- Pregunta 1 -->
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Evaluación 1</span>
+                        <p class="font-semibold text-gray-800 mt-2">Dadas las proposiciones p: "Estudio matemáticas" (V) y q: "Apruebo el curso" (F), determine el valor de verdad de la proposición compuesta: (p ∧ ~q) → p.</p>
+                        <button onclick="toggleSol('sol-ev1')" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow">Mostrar solución</button>
+                        <div id="sol-ev1" class="hidden mt-3 p-3 bg-white rounded border text-sm text-gray-700">
+                            <strong>Solución paso a paso:</strong> 
+                            1. p es V, q es F, por lo tanto ~q es V.<br>
+                            2. Antecedente (p ∧ ~q): V ∧ V da V.<br>
+                            3. Consecuente: p es V.<br>
+                            4. Condicional final (V → V) resulta en <strong>Verdadero (V)</strong>.
+                        </div>
+                    </div>
+
+                    <!-- Pregunta 2 -->
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Evaluación 2</span>
+                        <p class="font-semibold text-gray-800 mt-2">¿Cuál es el valor de verdad de la proposición "Si 5 + 2 = 8, entonces la Tierra es plana"?</p>
+                        <button onclick="toggleSol('sol-ev2')" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow">Mostrar solución</button>
+                        <div id="sol-ev2" class="hidden mt-3 p-3 bg-white rounded border text-sm text-gray-700">
+                            <strong>Solución paso a paso:</strong> 
+                            1. Antecedente (p: "5 + 2 = 8") es Falso (F).<br>
+                            2. Consecuente (q: "La Tierra es plana") es Falso (F).<br>
+                            3. En la tabla de la condicional, si el antecedente es Falso, la implicación es automáticamente <strong>Verdadera (V)</strong> (implicación material vacíamente verdadera).
+                        </div>
+                    </div>
+
+                    <!-- Pregunta 3 -->
+                    <div class="card-custom p-4">
+                        <span class="badge-level text-xs px-2 py-1 rounded font-bold">Evaluación 3</span>
+                        <p class="font-semibold text-gray-800 mt-2">Construya mentalmente y determine si la proposición p ∨ ~p corresponde a una tautología, contradicción o contingencia.</p>
+                        <button onclick="toggleSol('sol-ev3')" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow">Mostrar solución</button>
+                        <div id="sol-ev3" class="hidden mt-3 p-3 bg-white rounded border text-sm text-gray-700">
+                            <strong>Solución paso a paso:</strong> Por la ley del tercio excluido, si p es V, ~p es F (su disyunción es V). Si p es F, ~p es V (su disyunción es V). Como en todas las filas el resultado es Verdadero, se trata de una <strong>Tautología</strong>.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Pie de página de la Pizarra -->
+        <footer class="bg-[#F2F5E9] border-t-2 border-[#54887D] p-3 text-center text-xs text-gray-600">
+            Colegio Montano — Departamento de Matemática y Diseño Instruccional • Todos los derechos reservados.
+        </footer>
+    </div>
+
+    <!-- Scripts de Interacción -->
+    <script>
+        // Función para alternar entre pestañas de la pizarra
+        function switchTab(tabName) {
+            const tabs = ['teoria', 'ejemplos', 'ejercicios', 'reflexion', 'evaluacion'];
+            tabs.forEach(t => {
+                const section = document.getElementById('tab-' + t);
+                const btn = document.getElementById('btn-' + t);
+                if (t === tabName) {
+                    section.classList.remove('hidden');
+                    btn.className = "flex-1 py-3 px-4 text-center font-bold text-sm md:text-base tab-active transition";
+                } else {
+                    section.classList.add('hidden');
+                    btn.className = "flex-1 py-3 px-4 text-center font-bold text-sm md:text-base tab-inactive transition";
+                }
+            });
+        }
+
+        // Función para mostrar u ocultar soluciones paso a paso
+        function toggleSol(solId) {
+            const solDiv = document.getElementById(solId);
+            if (solDiv.classList.contains('hidden')) {
+                solDiv.classList.remove('hidden');
+                event.target.textContent = "Ocultar solución";
+            } else {
+                solDiv.classList.add('hidden');
+                event.target.textContent = "Mostrar solución";
+            }
+        }
+
+        // Función de Pantalla Completa utilizando Fullscreen API
+        function toggleFullScreen() {
+            const elem = document.getElementById('whiteboard');
+            if (!document.fullscreenElement) {
+                if (elem.requestFullscreen) {
+                    elem.requestFullscreen();
+                } else if (elem.webkitRequestFullscreen) {
+                    elem.webkitRequestFullscreen();
+                } else if (elem.msRequestFullscreen) {
+                    elem.msRequestFullscreen();
+                }
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                }
+            }
+        }
+    </script>
+</body>
+</html>
