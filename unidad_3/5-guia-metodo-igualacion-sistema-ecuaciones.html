@@ -1,0 +1,1659 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pizarra Digital - Método de Igualación | Colegio Montano</title>
+    <!-- Carga de Tailwind CSS para utilidades de diseño responsivo y layout -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Configuración de Variables Institucionales Colegio Montano */
+        :root {
+            --azul-principal: #1269A8;
+            --amarillo-brillante: #F7D615;
+            --verde-grisaceo: #54887D;
+            --azul-claro: #88B5C7;
+            --verde-oliva: #A6B046;
+            --blanco-suave: #F2F5E9;
+        }
+
+        /* Tipografía Institucional */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e2e8f0;
+            color: #1e293b;
+            margin: 0;
+            padding: 12px;
+        }
+
+        /* Marco Principal de Pizarra Digital */
+        #pizarra-container {
+            background-color: var(--blanco-suave);
+            border: 5px solid var(--amarillo-brillante);
+            border-radius: 12px;
+            box-shadow: 0 12px 30px rgba(18, 105, 168, 0.25);
+            max-width: 1200px;
+            margin: 0 auto;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 85vh;
+        }
+
+        /* Encabezado de la Pizarra */
+        .pizarra-header {
+            background: linear-gradient(135deg, var(--azul-principal) 0%, #0d4f80 100%);
+            color: white;
+            padding: 16px 24px;
+            border-bottom: 4px solid var(--amarillo-brillante);
+        }
+
+        /* Botón Fullscreen */
+        .btn-fullscreen {
+            background-color: var(--amarillo-brillante);
+            color: #0f172a;
+            font-weight: 700;
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: 2px solid #ffffff;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+        .btn-fullscreen:hover {
+            background-color: #ffe234;
+            transform: translateY(-1px);
+        }
+
+        /* Navegación de Pestañas */
+        .nav-tabs {
+            background-color: #ffffff;
+            border-bottom: 2px solid var(--azul-claro);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            padding: 10px 20px;
+        }
+
+        .tab-btn {
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.92rem;
+            color: var(--azul-principal);
+            background-color: transparent;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .tab-btn:hover {
+            background-color: rgba(136, 181, 199, 0.25);
+            border-color: var(--azul-claro);
+        }
+
+        .tab-btn.active {
+            background-color: var(--azul-principal);
+            color: #ffffff;
+            border-color: var(--amarillo-brillante);
+            box-shadow: 0 3px 8px rgba(18, 105, 168, 0.3);
+        }
+
+        /* Pestaña destacada para el Solucionador */
+        .tab-btn-solucionador {
+            background-color: rgba(247, 214, 21, 0.25);
+            border-color: var(--amarillo-brillante);
+        }
+        .tab-btn-solucionador.active {
+            background-color: var(--azul-principal);
+            color: #ffffff;
+            border-color: var(--amarillo-brillante);
+        }
+
+        /* Tarjetas de Contenido */
+        .card-montano {
+            background-color: #ffffff;
+            border: 2px solid var(--verde-grisaceo);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 18px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Etiquetas de Nivel */
+        .badge-nivel {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .badge-basico {
+            background-color: var(--verde-oliva);
+            color: #ffffff;
+        }
+        .badge-intermedio {
+            background-color: var(--verde-grisaceo);
+            color: #ffffff;
+        }
+        .badge-avanzado {
+            background-color: var(--azul-principal);
+            color: #ffffff;
+            border: 1px solid var(--amarillo-brillante);
+        }
+
+        /* Contenedor de Soluciones Ocultas */
+        .solucion-box {
+            background-color: rgba(136, 181, 199, 0.25);
+            border: 1.5px dashed var(--azul-principal);
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin-top: 12px;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .btn-solucion {
+            background-color: var(--azul-principal);
+            color: white;
+            font-weight: 600;
+            padding: 7px 14px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.2s;
+            margin-top: 10px;
+        }
+        .btn-solucion:hover {
+            background-color: var(--verde-grisaceo);
+        }
+
+        /* Botón Directo para Resolver en Pizarra */
+        .btn-resolver-directo {
+            background-color: var(--amarillo-brillante);
+            color: #0f172a;
+            font-weight: 700;
+            padding: 7px 14px;
+            border-radius: 6px;
+            font-size: 0.88rem;
+            cursor: pointer;
+            border: 1.5px solid #0f172a;
+            transition: all 0.2s ease;
+            margin-top: 10px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .btn-resolver-directo:hover {
+            background-color: #ffe234;
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Bloques Matemáticos Visuales */
+        .math-expr {
+            font-family: 'Cambria Math', 'Times New Roman', serif;
+            font-size: 1.08rem;
+            font-weight: bold;
+            color: var(--azul-principal);
+            background-color: #f8fafc;
+            padding: 2px 8px;
+            border-radius: 4px;
+            border: 1px solid #cbd5e1;
+            display: inline-block;
+        }
+
+        /* Fracción Visual en Línea */
+        .frac {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            vertical-align: middle;
+            margin: 0 4px;
+            font-size: 0.92em;
+            line-height: 1.1;
+        }
+        .frac-num {
+            border-bottom: 1.5px solid currentColor;
+            padding: 0 4px 2px 4px;
+        }
+        .frac-den {
+            padding: 2px 4px 0 4px;
+        }
+
+        /* Llave Visual para Sistemas */
+        .sistema-box {
+            display: inline-flex;
+            align-items: center;
+            background-color: #f8fafc;
+            border: 1.5px solid var(--azul-claro);
+            border-left: 5px solid var(--azul-principal);
+            border-radius: 8px;
+            padding: 6px 14px;
+            font-family: 'Cambria Math', 'Times New Roman', serif;
+            font-weight: bold;
+            color: var(--azul-principal);
+            margin: 4px 0;
+            line-height: 1.5;
+        }
+
+        /* Sub-pestañas de Nivel */
+        .subtab-btn {
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 0.88rem;
+            cursor: pointer;
+            border: 2px solid var(--verde-grisaceo);
+            background-color: #ffffff;
+            color: var(--verde-grisaceo);
+            transition: all 0.2s;
+        }
+        .subtab-btn.active {
+            background-color: var(--verde-grisaceo);
+            color: #ffffff;
+        }
+
+        /* Tarjetas de Paso en el Solucionador */
+        .paso-solver {
+            background-color: #ffffff;
+            border-left: 5px solid var(--azul-principal);
+            border-top: 1px solid #cbd5e1;
+            border-right: 1px solid #cbd5e1;
+            border-bottom: 1px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 14px 16px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Modo Fullscreen */
+        :fullscreen #pizarra-container {
+            max-width: 100%;
+            width: 100vw;
+            height: 100vh;
+            border-radius: 0;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Marco Principal de la Pizarra Digital -->
+    <div id="pizarra-container">
+        
+        <!-- Encabezado Institucional -->
+        <header class="pizarra-header flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-4">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyEop0yf6lZ7Jk9MILZxF1rBj4Oqs5esyhIQ&s" 
+                     alt="Logo Colegio Montano" 
+                     class="w-14 h-14 rounded-lg bg-white p-1 object-contain border-2 border-[#F7D615]"
+                     onerror="this.src='https://placehold.co/60x60/1269A8/F7D615?text=CM'">
+                <div>
+                    <span class="text-xs uppercase tracking-widest font-bold text-[#F7D615] block">Colegio Montano • Tercera Unidad • Matemática</span>
+                    <h1 class="text-xl sm:text-2xl font-bold leading-tight">Método de Igualación en Sistemas de Ecuaciones</h1>
+                    <p class="text-sm text-[#88B5C7] font-semibold">Nivel: Tercero Básico • Guía Interactiva de Pizarra Digital</p>
+                </div>
+            </div>
+            <button id="fullscreen-btn" class="btn-fullscreen flex items-center gap-2" onclick="toggleFullscreen()">
+                <span>⛶ Pantalla completa</span>
+            </button>
+        </header>
+
+        <!-- Barra de Navegación Horizontal -->
+        <nav class="nav-tabs" role="tablist">
+            <button id="tab-teoria" class="tab-btn active" onclick="cambiarSeccion('teoria', this)">📘 1. Teoría</button>
+            <button id="tab-ejemplos" class="tab-btn" onclick="cambiarSeccion('ejemplos', this)">💡 2. Ejemplos Resueltos (15)</button>
+            <button id="tab-ejercicios" class="tab-btn" onclick="cambiarSeccion('ejercicios', this)">✍️ 3. Ejercicios Prácticos (15)</button>
+            <button id="tab-reflexion" class="tab-btn" onclick="cambiarSeccion('reflexion', this)">🧠 4. Reflexión Crítica</button>
+            <button id="tab-evaluacion" class="tab-btn" onclick="cambiarSeccion('evaluacion', this)">✅ 5. Evaluación Formativa</button>
+            <button id="tab-solucionador" class="tab-btn tab-btn-solucionador" onclick="cambiarSeccion('solucionador', this)">🧮 6. Solucionador Paso a Paso</button>
+        </nav>
+
+        <!-- Lienzo Principal de Contenido -->
+        <main class="p-4 sm:p-6 flex-1">
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 1: EXPLICACIÓN TEÓRICA             -->
+            <!-- ========================================== -->
+            <section id="sec-teoria" class="seccion-contenido">
+                <div class="card-montano">
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-3 border-b-2 border-[#F7D615] pb-2">
+                        <h2 class="text-2xl font-bold text-[#1269A8]">¿Qué es el Método de Igualación y en qué se Fundamenta?</h2>
+                        <button class="btn-resolver-directo !mt-0" onclick="abrirEnSolucionador(2, 1, 7, 1, -1, 2, 'y', 'Ejemplo Teórico')">🧮 Probar en Solucionador</button>
+                    </div>
+                    <p class="text-base leading-relaxed mb-4">
+                        El <strong>Método de Igualación</strong> es un procedimiento algebraico exacto para resolver sistemas de ecuaciones lineales <span class="math-expr">2 × 2</span>. Consiste en <strong>despejar la misma incógnita</strong> (ya sea <span class="math-expr">x</span> o <span class="math-expr">y</span>) en ambas ecuaciones del sistema y luego <strong>igualar las dos expresiones obtenidas</strong>.
+                    </p>
+                    <p class="text-base leading-relaxed mb-4">
+                        Su fundamento matemático es la <strong>Propiedad Transitiva de la Igualdad</strong>: si una misma cantidad es igual a dos expresiones distintas (<span class="math-expr">y = Expresión 1</span> y <span class="math-expr">y = Expresión 2</span>), entonces ambas expresiones son iguales entre sí (<span class="math-expr">Expresión 1 = Expresión 2</span>), generando una <strong>ecuación lineal con una sola incógnita</strong>.
+                    </p>
+
+                    <!-- Algoritmo en 5 Pasos -->
+                    <div class="bg-[#F2F5E9] border-2 border-[#A6B046] rounded-xl p-4 my-4">
+                        <h3 class="font-bold text-[#54887D] mb-3">🧭 Procedimiento Sistemático en 5 Pasos (Método de Igualación)</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 text-sm">
+                            <div class="bg-white p-3 rounded-lg border-t-4 border-[#1269A8] shadow-sm">
+                                <strong class="text-[#1269A8] block mb-1">Paso 1: Elegir y Despejar</strong>
+                                <p class="text-slate-700">Elige una incógnita (preferiblemente la que tenga coeficiente <span class="math-expr text-xs">1</span> o <span class="math-expr text-xs">-1</span>) y <strong>despéjala en ambas ecuaciones</strong>.</p>
+                            </div>
+                            <div class="bg-white p-3 rounded-lg border-t-4 border-[#54887D] shadow-sm">
+                                <strong class="text-[#54887D] block mb-1">Paso 2: Igualar Expresiones</strong>
+                                <p class="text-slate-700">Iguala las dos expresiones despejadas (<span class="math-expr text-xs">Expr. 1 = Expr. 2</span>) para eliminar esa incógnita.</p>
+                            </div>
+                            <div class="bg-white p-3 rounded-lg border-t-4 border-[#A6B046] shadow-sm">
+                                <strong class="text-[#54887D] block mb-1">Paso 3: Resolver la Ecuación</strong>
+                                <p class="text-slate-700">Si hay denominadores, aplica <strong>productos cruzados</strong> (multiplicar en cruz) y despeja la primera incógnita.</p>
+                            </div>
+                            <div class="bg-white p-3 rounded-lg border-t-4 border-[#F7D615] shadow-sm">
+                                <strong class="text-[#1269A8] block mb-1">Paso 4: Sustituir el Valor</strong>
+                                <p class="text-slate-700">Reemplaza el número hallado en <strong>cualquiera de los dos despejes</strong> del Paso 1 para obtener la otra variable.</p>
+                            </div>
+                            <div class="bg-white p-3 rounded-lg border-t-4 border-[#1269A8] shadow-sm">
+                                <strong class="text-[#1269A8] block mb-1">Paso 5: Comprobar</strong>
+                                <p class="text-slate-700">Verifica que el par ordenado <span class="math-expr text-xs">(x, y)</span> cumpla ambas ecuaciones originales del sistema.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Explorador Visual SVG de los 3 Casos Algebraicos al Igualar -->
+                <div class="card-montano">
+                    <h3 class="text-xl font-bold text-[#1269A8] mb-2">📐 Interpretación Algebraica al Igualar Ambas Expresiones</h3>
+                    <p class="text-sm text-slate-600 mb-4">Al igualar los despejes y simplificar términos semejantes, siempre ocurrirá uno de estos tres escenarios:</p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <!-- Caso 1: Solución Única -->
+                        <div class="p-4 bg-emerald-50 border-2 border-[#A6B046] rounded-xl text-center flex flex-col justify-between">
+                            <div>
+                                <span class="badge-nivel badge-basico mb-2">Compatible Determinado</span>
+                                <h4 class="font-bold text-[#1269A8]">Solución Única (x, y)</h4>
+                                <div class="my-2 flex justify-center">
+                                    <svg width="190" height="105" viewBox="0 0 190 105" class="bg-white rounded border border-slate-300">
+                                        <rect x="12" y="12" width="166" height="24" rx="5" fill="#e0f2fe" stroke="#1269A8" stroke-width="1.2"/>
+                                        <text x="95" y="28" text-anchor="middle" font-size="11" font-weight="bold" fill="#1269A8">2x + 1 = -x + 7</text>
+                                        <line x1="95" y1="38" x2="95" y2="54" stroke="#54887D" stroke-width="2"/>
+                                        <polygon points="95,58 91,51 99,51" fill="#54887D"/>
+                                        <rect x="28" y="60" width="134" height="32" rx="6" fill="#fef9c3" stroke="#0f172a" stroke-width="1.5"/>
+                                        <text x="95" y="74" text-anchor="middle" font-size="11" font-weight="bold" fill="#0f172a">3x = 6 ➔ x = 2</text>
+                                        <text x="95" y="87" text-anchor="middle" font-size="10" font-weight="bold" fill="#54887D">Solución: (2, 5)</text>
+                                    </svg>
+                                </div>
+                                <p class="text-xs sm:text-sm text-slate-700">La incógnita sobrevive con coeficiente distinto de cero. Se obtiene un <strong>único par ordenado</strong>.</p>
+                            </div>
+                            <button class="btn-resolver-directo justify-center w-full" onclick="abrirEnSolucionador(2, -1, -1, 1, 1, 7, 'y', 'Caso 1: Solución Única')">🧮 Probar este caso</button>
+                        </div>
+
+                        <!-- Caso 2: Sin Solución -->
+                        <div class="p-4 bg-amber-50 border-2 border-[#F7D615] rounded-xl text-center flex flex-col justify-between">
+                            <div>
+                                <span class="badge-nivel badge-avanzado mb-2">Sistema Incompatible</span>
+                                <h4 class="font-bold text-[#1269A8]">Sin Solución (0 = k)</h4>
+                                <div class="my-2 flex justify-center">
+                                    <svg width="190" height="105" viewBox="0 0 190 105" class="bg-white rounded border border-slate-300">
+                                        <rect x="12" y="12" width="166" height="24" rx="5" fill="#e0f2fe" stroke="#1269A8" stroke-width="1.2"/>
+                                        <text x="95" y="28" text-anchor="middle" font-size="11" font-weight="bold" fill="#1269A8">2x - 3 = 2x + 1</text>
+                                        <line x1="95" y1="38" x2="95" y2="54" stroke="#b45309" stroke-width="2"/>
+                                        <polygon points="95,58 91,51 99,51" fill="#b45309"/>
+                                        <rect x="22" y="60" width="146" height="32" rx="6" fill="#fee2e2" stroke="#b91c1c" stroke-width="1.5"/>
+                                        <text x="95" y="74" text-anchor="middle" font-size="11" font-weight="bold" fill="#b91c1c">-3 = 1 (Falsedad)</text>
+                                        <text x="95" y="87" text-anchor="middle" font-size="10" font-weight="bold" fill="#7f1d1d">No existe solución</text>
+                                    </svg>
+                                </div>
+                                <p class="text-xs sm:text-sm text-slate-700">Se cancela la incógnita y queda una <strong>igualdad falsa</strong> (<span class="math-expr text-xs">0 = k</span>). No tiene solución.</p>
+                            </div>
+                            <button class="btn-resolver-directo justify-center w-full" onclick="abrirEnSolucionador(2, -1, 3, 4, -2, -2, 'y', 'Caso 2: Sin Solución')">🧮 Probar este caso</button>
+                        </div>
+
+                        <!-- Caso 3: Infinitas Soluciones -->
+                        <div class="p-4 bg-sky-50 border-2 border-[#88B5C7] rounded-xl text-center flex flex-col justify-between">
+                            <div>
+                                <span class="badge-nivel badge-intermedio mb-2">Compatible Indeterminado</span>
+                                <h4 class="font-bold text-[#1269A8]">Infinitas Soluciones (0 = 0)</h4>
+                                <div class="my-2 flex justify-center">
+                                    <svg width="190" height="105" viewBox="0 0 190 105" class="bg-white rounded border border-slate-300">
+                                        <rect x="12" y="12" width="166" height="24" rx="5" fill="#e0f2fe" stroke="#1269A8" stroke-width="1.2"/>
+                                        <text x="95" y="28" text-anchor="middle" font-size="11" font-weight="bold" fill="#1269A8">-3x + 6 = -3x + 6</text>
+                                        <line x1="95" y1="38" x2="95" y2="54" stroke="#54887D" stroke-width="2"/>
+                                        <polygon points="95,58 91,51 99,51" fill="#54887D"/>
+                                        <rect x="22" y="60" width="146" height="32" rx="6" fill="#dcfce7" stroke="#15803d" stroke-width="1.5"/>
+                                        <text x="95" y="74" text-anchor="middle" font-size="11" font-weight="bold" fill="#15803d">0 = 0 (Identidad)</text>
+                                        <text x="95" y="87" text-anchor="middle" font-size="10" font-weight="bold" fill="#166534">Infinitas soluciones</text>
+                                    </svg>
+                                </div>
+                                <p class="text-xs sm:text-sm text-slate-700">Ambos despejes son idénticos y queda <span class="math-expr text-xs">0 = 0</span>. Tiene <strong>infinitas soluciones</strong>.</p>
+                            </div>
+                            <button class="btn-resolver-directo justify-center w-full" onclick="abrirEnSolucionador(3, 1, 6, 6, 2, 12, 'y', 'Caso 3: Infinitas Soluciones')">🧮 Probar este caso</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 2: EJEMPLOS RESUELTOS (15)         -->
+            <!-- ========================================== -->
+            <section id="sec-ejemplos" class="seccion-contenido hidden">
+                <div class="flex flex-wrap items-center justify-between gap-3 mb-4 bg-white p-4 rounded-xl border-2 border-[#54887D]">
+                    <div>
+                        <h2 class="text-xl font-bold text-[#1269A8]">Ejemplos Resueltos Paso a Paso (Método de Igualación)</h2>
+                        <p class="text-sm text-slate-600">Analiza cómo despejar la misma variable, igualar expresiones, aplicar productos cruzados y verificar.</p>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <button class="subtab-btn active" onclick="filtrarSubnivel('ejemplos', 'basico', this)">Nivel Básico (5)</button>
+                        <button class="subtab-btn" onclick="filtrarSubnivel('ejemplos', 'intermedio', this)">Nivel Intermedio (5)</button>
+                        <button class="subtab-btn" onclick="filtrarSubnivel('ejemplos', 'avanzado', this)">Nivel Avanzado (5)</button>
+                    </div>
+                </div>
+
+                <!-- EJEMPLOS BÁSICOS -->
+                <div id="ejemplos-basico" class="subcontenido-ejemplos space-y-4">
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-basico">Básico • Ejemplo 1 (La variable <span class="font-mono">y</span> ya está despejada)</span>
+                            <button class="btn-resolver-directo !mt-0" onclick="abrirEnSolucionador(-2, 1, 1, -1, 1, 4, 'y', 'Ejemplo Básico 1')">🧮 Resolver en Pizarra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Resolver por igualación el sistema: 
+                            <span class="sistema-box text-sm ml-2"><span>y = 2x + 1 <br> y = x + 4</span></span>
+                        </p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Despeje):</strong> La variable <span class="math-expr">y</span> ya está despejada en ambas ecuaciones.</p>
+                            <p><strong>Paso 2 (Igualación):</strong> Igualamos ambas expresiones de <span class="math-expr">y</span>: <span class="math-expr">2x + 1 = x + 4</span>.</p>
+                            <p><strong>Paso 3 (Resolver para <span class="math-expr">x</span>):</strong> <span class="math-expr">2x - x = 4 - 1 ➔ x = 3</span>.</p>
+                            <p><strong>Paso 4 (Sustituir en Ec. 2):</strong> <span class="math-expr">y = 3 + 4 ➔ y = 7</span>. (Comprobación: <span class="math-expr">2(3) + 1 = 7</span>).</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: Solución = (3, 7) (x = 3, y = 7).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-basico">Básico • Ejemplo 2 (La variable <span class="font-mono">x</span> ya está despejada)</span>
+                            <button class="btn-resolver-directo !mt-0" onclick="abrirEnSolucionador(1, -1, 3, 1, -2, -1, 'x', 'Ejemplo Básico 2')">🧮 Resolver en Pizarra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Resolver igualando <span class="math-expr">x</span> en el sistema: 
+                            <span class="sistema-box text-sm ml-2"><span>x = y + 3 <br> x = 2y - 1</span></span>
+                        </p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Despeje):</strong> <span class="math-expr">x</span> ya está despejada en ambas ecuaciones.</p>
+                            <p><strong>Paso 2 (Igualación):</strong> <span class="math-expr">y + 3 = 2y - 1</span>.</p>
+                            <p><strong>Paso 3 (Resolver para <span class="math-expr">y</span>):</strong> <span class="math-expr">3 + 1 = 2y - y ➔ y = 4</span>.</p>
+                            <p><strong>Paso 4 (Sustituir):</strong> <span class="math-expr">x = 4 + 3 = 7</span>. (Comprobación: <span class="math-expr">2(4) - 1 = 7</span>).</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: Solución = (7, 4) (x = 7, y = 4).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-basico">Básico • Ejemplo 3 (Despeje Directo con Coeficiente 1)</span>
+                            <button class="btn-resolver-directo !mt-0" onclick="abrirEnSolucionador(1, 1, 9, -1, 1, 3, 'y', 'Ejemplo Básico 3')">🧮 Resolver en Pizarra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Resolver por igualación: 
+                            <span class="sistema-box text-sm ml-2"><span>x + y = 9 <br> y - x = 3</span></span>
+                        </p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Despejar <span class="math-expr">y</span> en ambas):</strong> De Ec. 1: <span class="math-expr">y = 9 - x</span>; de Ec. 2: <span class="math-expr">y = 3 + x</span>.</p>
+                            <p><strong>Paso 2 (Igualar):</strong> <span class="math-expr">9 - x = 3 + x</span>.</p>
+                            <p><strong>Paso 3 (Resolver para <span class="math-expr">x</span>):</strong> <span class="math-expr">9 - 3 = x + x ➔ 6 = 2x ➔ x = 3</span>.</p>
+                            <p><strong>Paso 4 (Sustituir):</strong> <span class="math-expr">y = 9 - 3 = 6</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: Solución = (3, 6) (x = 3, y = 6).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-basico">Básico • Ejemplo 4 (Igualación con Signos Negativos)</span>
+                            <button class="btn-resolver-directo !mt-0" onclick="abrirEnSolucionador(1, -1, 5, 1, 2, -1, 'x', 'Ejemplo Básico 4')">🧮 Resolver en Pizarra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Resolver despejando <span class="math-expr">x</span> por igualación: 
+                            <span class="sistema-box text-sm ml-2"><span>x - y = 5 <br> x + 2y = -1</span></span>
+                        </p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Despejar <span class="math-expr">x</span> en ambas):</strong> Ec. 1: <span class="math-expr">x = 5 + y</span>; Ec. 2: <span class="math-expr">x = -1 - 2y</span>.</p>
+                            <p><strong>Paso 2 (Igualar):</strong> <span class="math-expr">5 + y = -1 - 2y</span>.</p>
+                            <p><strong>Paso 3 (Resolver para <span class="math-expr">y</span>):</strong> <span class="math-expr">y + 2y = -1 - 5 ➔ 3y = -6 ➔ y = -2</span>.</p>
+                            <p><strong>Paso 4 (Sustituir):</strong> <span class="math-expr">x = 5 + (-2) = 3</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: Solución = (3, -2) (x = 3, y = -2).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-basico">Básico • Ejemplo 5 (Igualación con Solución en el Eje Y)</span>
+                            <button class="btn-resolver-directo !mt-0" onclick="abrirEnSolucionador(-3, 1, 5, 2, 1, 5, 'y', 'Ejemplo Básico 5')">🧮 Resolver en Pizarra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Resolver por igualación: 
+                            <span class="sistema-box text-sm ml-2"><span>y = 3x + 5 <br> 2x + y = 5</span></span>
+                        </p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Despejar <span class="math-expr">y</span>):</strong> Ec. 1 ya está despejada (<span class="math-expr">y = 3x + 5</span>); Ec. 2: <span class="math-expr">y = 5 - 2x</span>.</p>
+                            <p><strong>Paso 2 (Igualar):</strong> <span class="math-expr">3x + 5 = 5 - 2x</span>.</p>
+                            <p><strong>Paso 3 (Resolver para <span class="math-expr">x</span>):</strong> <span class="math-expr">3x + 2x = 5 - 5 ➔ 5x = 0 ➔ x = 0</span>.</p>
+                            <p><strong>Paso 4 (Sustituir):</strong> <span class="math-expr">y = 3(0) + 5 = 5</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: Solución = (0, 5) (x = 0, y = 5).</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EJEMPLOS INTERMEDIOS -->
+                <div id="ejemplos-intermedio" class="subcontenido-ejemplos hidden space-y-4">
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-intermedio">Intermedio • Ejemplo 1 (Despeje con Denominador y Producto Cruzado)</span>
+                            <button class="btn-resolver-directo !mt-0" onclick="abrirEnSolucionador(2, 3, 13, 4, -1, 5, 'y', 'Ejemplo Intermedio 1')">🧮 Resolver en Pizarra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Resolver por igualación despejando <span class="math-expr">y</span>: 
+                            <span class="sistema-box text-sm ml-2"><span>2x + 3y = 13 <br> 4x - y = 5</span></span>
+                        </p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Despejar <span class="math-expr">y</span>):</strong> De Ec. 1: <span class="math-expr">y = (13 - 2x) / 3</span>; de Ec. 2: <span class="math-expr">y = 4x - 5</span>.</p>
+                            <p><strong>Paso 2 (Igualar):</strong> <span class="math-expr">(13 - 2x) / 3 = 4x - 5</span>.</p>
+                            <p><strong>Paso 3 (Multiplicar por 3 y resolver):</strong> <span class="math-expr">13 - 2x = 3(4x - 5) ➔ 13 - 2x = 12x - 15 ➔ 28 = 14x ➔ x = 2</span>.</p>
+                            <p><strong>Paso 4 (Sustituir):</strong> <span class="math-expr">y = 4(2) - 5 = 3</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: Solución = (2, 3) (x = 2, y = 3).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-intermedio">Intermedio • Ejemplo 2 (Doble Denominador y Multiplicación en Cruz)</span>
+                            <button class="btn-resolver-directo !mt-0" onclick="abrirEnSolucionador(3, -2, 4, 5, 3, 13, 'y', 'Ejemplo Intermedio 2')">🧮 Resolver en Pizarra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Resolver por igualación: 
+                            <span class="sistema-box text-sm ml-2"><span>3x - 2y = 4 <br> 5x + 3y = 13</span></span>
+                        </p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Despejar <span class="math-expr">y</span> en ambas):</strong> Ec. 1: <span class="math-expr">y = (3x - 4) / 2</span>; Ec. 2: <span class="math-expr">y = (13 - 5x) / 3</span>.</p>
+                            <p><strong>Paso 2 (Igualar):</strong> <span class="math-expr">(3x - 4) / 2 = (13 - 5x) / 3</span>.</p>
+                            <p><strong>Paso 3 (Productos cruzados):</strong> <span class="math-expr">3(3x - 4) = 2(13 - 5x) ➔ 9x - 12 = 26 - 10x ➔ 19x = 38 ➔ x = 2</span>.</p>
+                            <p><strong>Paso 4 (Sustituir en Ec. 1):</strong> <span class="math-expr">y = (3(2) - 4) / 2 = 2 / 2 = 1</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: Solución = (2, 1) (x = 2, y = 1).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-intermedio">Intermedio • Ejemplo 3 (Detección de Sistema Incompatible por Igualación)</span>
+                            <button class="btn-resolver-directo !mt-0" onclick="abrirEnSolucionador(2, -1, 3, 4, -2, -2, 'y', 'Ejemplo Intermedio 3 (Incompatible)')">🧮 Resolver en Pizarra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Aplicar el método de igualación al sistema: 
+                            <span class="sistema-box text-sm ml-2"><span>2x - y = 3 <br> 4x - 2y = -2</span></span>
+                        </p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Despejar <span class="math-expr">y</span> en ambas):</strong> Ec. 1: <span class="math-expr">y = 2x - 3</span>; Ec. 2: <span class="math-expr">y = (4x + 2) / 2 = 2x + 1</span>.</p>
+                            <p><strong>Paso 2 (Igualar):</strong> <span class="math-expr">2x - 3 = 2x + 1</span>.</p>
+                            <p><strong>Paso 3 (Simplificar):</strong> Restando <span class="math-expr">2x</span> en ambos lados queda <span class="math-expr">-3 = 1</span>, lo cual es una <strong>igualdad falsa</strong>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: Sistema incompatible; NO tiene solución.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-intermedio">Intermedio • Ejemplo 4 (Detección de Sistema Indeterminado por Igualación)</span>
+                            <button class="btn-resolver-directo !mt-0" onclick="abrirEnSolucionador(3, 1, 6, 6, 2, 12, 'y', 'Ejemplo Intermedio 4 (Indeterminado)')">🧮 Resolver en Pizarra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Resolver por igualación: 
+                            <span class="sistema-box text-sm ml-2"><span>3x + y = 6 <br> 6x + 2y = 12</span></span>
+                        </p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Despejar <span class="math-expr">y</span>):</strong> Ec. 1: <span class="math-expr">y = 6 - 3x</span>; Ec. 2: <span class="math-expr">y = (12 - 6x) / 2 = 6 - 3x</span>.</p>
+                            <p><strong>Paso 2 (Igualar):</strong> <span class="math-expr">6 - 3x = 6 - 3x</span>.</p>
+                            <p><strong>Paso 3 (Simplificar):</strong> Se obtiene <span class="math-expr">0 = 0</span>, una <strong>identidad algebraica</strong> válida para todo <span class="math-expr">x ∈ ℝ</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: Sistema compatible indeterminado; tiene infinitas soluciones.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-intermedio">Intermedio • Ejemplo 5 (Sistema con Paréntesis Antes de Despejar)</span>
+                            <button class="btn-resolver-directo !mt-0" onclick="abrirEnSolucionador(2, -1, 4, 1, 3, 9, 'x', 'Ejemplo Intermedio 5')">🧮 Resolver en Pizarra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Simplificar paréntesis y resolver por igualación: 
+                            <span class="sistema-box text-sm ml-2"><span>2(x - 1) - y = 2 <br> x + 3(y - 1) = 6</span></span>
+                        </p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 0 (Reducir paréntesis):</strong> Ec. 1: <span class="math-expr">2x - 2 - y = 2 ➔ 2x - y = 4</span>. Ec. 2: <span class="math-expr">x + 3y - 3 = 6 ➔ x + 3y = 9</span>.</p>
+                            <p><strong>Paso 1 (Despejar <span class="math-expr">x</span> en ambas):</strong> Ec. 1: <span class="math-expr">x = (4 + y) / 2</span>; Ec. 2: <span class="math-expr">x = 9 - 3y</span>.</p>
+                            <p><strong>Paso 2 y 3 (Igualar y resolver):</strong> <span class="math-expr">(4 + y) / 2 = 9 - 3y ➔ 4 + y = 18 - 6y ➔ 7y = 14 ➔ y = 2</span>.</p>
+                            <p><strong>Paso 4 (Sustituir):</strong> <span class="math-expr">x = 9 - 3(2) = 3</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: Solución = (3, 2) (x = 3, y = 2).</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EJEMPLOS AVANZADOS -->
+                <div id="ejemplos-avanzado" class="subcontenido-ejemplos hidden space-y-4">
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-avanzado">Avanzado • Ejemplo 1 (Ecuaciones con Coeficientes Fraccionarios)</span>
+                            <button class="btn-resolver-directo !mt-0" onclick="abrirEnSolucionador(3, 2, 24, 2, -3, 0, 'x', 'Ejemplo Avanzado 1')">🧮 Resolver en Pizarra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Eliminar denominadores y resolver por igualación: 
+                            <span class="sistema-box text-sm ml-2"><span>x/2 + y/3 = 4 <br> x/3 - y/2 = 0</span></span>
+                        </p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 0 (Enteros por MCM = 6):</strong> Ec. 1: <span class="math-expr">3x + 2y = 24</span>; Ec. 2: <span class="math-expr">2x - 3y = 0</span>.</p>
+                            <p><strong>Paso 1 (Despejar <span class="math-expr">x</span>):</strong> Ec. 1: <span class="math-expr">x = (24 - 2y) / 3</span>; Ec. 2: <span class="math-expr">x = 3y / 2</span>.</p>
+                            <p><strong>Paso 2 y 3 (Igualar y cruzar):</strong> <span class="math-expr">(24 - 2y) / 3 = 3y / 2 ➔ 2(24 - 2y) = 3(3y) ➔ 48 - 4y = 9y ➔ 13y = 48 ➔ y = 48/13</span>.</p>
+                            <p><strong>Paso 4 (Sustituir en Ec. 2):</strong> <span class="math-expr">x = (3/2)(48/13) = 72/13</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Solución = (72/13, 48/13) (≈ (5.54, 3.69)).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-avanzado">Avanzado • Ejemplo 2 (Sistema con Coeficientes Decimales)</span>
+                            <button class="btn-resolver-directo !mt-0" onclick="abrirEnSolucionador(5, 2, 16, 15, -4, 8, 'y', 'Ejemplo Avanzado 2')">🧮 Resolver en Pizarra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Resolver por igualación: 
+                            <span class="sistema-box text-sm ml-2"><span>0.5x + 0.2y = 1.6 <br> 1.5x - 0.4y = 0.8</span></span>
+                        </p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 0 (Multiplicar por 10):</strong> Ec. 1: <span class="math-expr">5x + 2y = 16</span>; Ec. 2: <span class="math-expr">15x - 4y = 8</span>.</p>
+                            <p><strong>Paso 1 (Despejar <span class="math-expr">y</span>):</strong> Ec. 1: <span class="math-expr">y = (16 - 5x) / 2</span>; Ec. 2: <span class="math-expr">y = (15x - 8) / 4</span>.</p>
+                            <p><strong>Paso 2 y 3 (Igualar y resolver):</strong> <span class="math-expr">(16 - 5x) / 2 = (15x - 8) / 4 ➔ 2(16 - 5x) = 15x - 8 ➔ 32 - 10x = 15x - 8 ➔ 40 = 25x ➔ x = 1.6</span>.</p>
+                            <p><strong>Paso 4 (Sustituir):</strong> <span class="math-expr">y = (16 - 5(1.6)) / 2 = (16 - 8) / 2 = 4</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Solución = (1.6, 4) (x = 1.6, y = 4).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-avanzado">Avanzado • Ejemplo 3 (Aplicación en Contexto Guatemala: Librería)</span>
+                            <button class="btn-resolver-directo !mt-0" onclick="abrirEnSolucionador(3, 2, 43, 5, 4, 77, 'y', 'Ejemplo Avanzado 3 (Librería)')">🧮 Resolver en Pizarra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">En una librería de la Zona 1, Andrea compró <span class="math-expr">3</span> cuadernos y <span class="math-expr">2</span> marcadores por <span class="math-expr">Q43</span>. Carlos compró <span class="math-expr">5</span> cuadernos y <span class="math-expr">4</span> marcadores del mismo tipo por <span class="math-expr">Q77</span>. Halla el precio de cada artículo por igualación.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Planteamiento (<span class="math-expr">x</span> = cuaderno, <span class="math-expr">y</span> = marcador):</strong> <span class="math-expr">3x + 2y = 43</span> y <span class="math-expr">5x + 4y = 77</span>.</p>
+                            <p><strong>Paso 1 (Despejar <span class="math-expr">y</span>):</strong> Ec. 1: <span class="math-expr">y = (43 - 3x) / 2</span>; Ec. 2: <span class="math-expr">y = (77 - 5x) / 4</span>.</p>
+                            <p><strong>Paso 2 y 3 (Igualar y resolver):</strong> <span class="math-expr">(43 - 3x) / 2 = (77 - 5x) / 4 ➔ 2(43 - 3x) = 77 - 5x ➔ 86 - 6x = 77 - 5x ➔ x = 9</span>.</p>
+                            <p><strong>Paso 4 (Sustituir):</strong> <span class="math-expr">y = (43 - 3(9)) / 2 = 16 / 2 = 8</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Cada cuaderno cuesta Q9 y cada marcador cuesta Q8.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-avanzado">Avanzado • Ejemplo 4 (Incógnitas en Ambos Miembros Antes de Ordenar)</span>
+                            <button class="btn-resolver-directo !mt-0" onclick="abrirEnSolucionador(2, -3, 1, 3, -1, 12, 'y', 'Ejemplo Avanzado 4')">🧮 Resolver en Pizarra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Ordenar términos y resolver por igualación: 
+                            <span class="sistema-box text-sm ml-2"><span>4x - 2y = 2x + y + 1 <br> 3x + 2y = 3y + 12</span></span>
+                        </p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 0 (Transponer términos):</strong> Ec. 1: <span class="math-expr">2x - 3y = 1</span>; Ec. 2: <span class="math-expr">3x - y = 12</span>.</p>
+                            <p><strong>Paso 1 (Despejar <span class="math-expr">y</span>):</strong> Ec. 1: <span class="math-expr">y = (2x - 1) / 3</span>; Ec. 2: <span class="math-expr">y = 3x - 12</span>.</p>
+                            <p><strong>Paso 2 y 3 (Igualar y resolver):</strong> <span class="math-expr">(2x - 1) / 3 = 3x - 12 ➔ 2x - 1 = 9x - 36 ➔ 35 = 7x ➔ x = 5</span>.</p>
+                            <p><strong>Paso 4 (Sustituir):</strong> <span class="math-expr">y = 3(5) - 12 = 3</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Solución = (5, 3) (x = 5, y = 3).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-avanzado">Avanzado • Ejemplo 5 (Hallar Parámetro <span class="font-mono">k</span> por Igualación)</span>
+                            <button class="btn-resolver-directo !mt-0" onclick="abrirEnSolucionador(3, -1, 4, 6, -2, 5, 'y', 'Ejemplo Avanzado 5 (k = 6)')">🧮 Probar con k = 6</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Determinar el valor de <span class="math-expr">k</span> para que el sistema 
+                            <span class="sistema-box text-sm mx-1"><span>3x - y = 4 <br> kx - 2y = 5</span></span> 
+                            <strong>no tenga solución</strong> al aplicar igualación.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Despejar <span class="math-expr">y</span> en ambas):</strong> Ec. 1: <span class="math-expr">y = 3x - 4</span>; Ec. 2: <span class="math-expr">y = (kx - 5) / 2 = (k/2)x - 2.5</span>.</p>
+                            <p><strong>Paso 2 (Igualar):</strong> <span class="math-expr">3x - 4 = (k/2)x - 2.5</span>.</p>
+                            <p><strong>Paso 3 (Condición para que se cancele <span class="math-expr">x</span>):</strong> Necesitamos que los coeficientes de <span class="math-expr">x</span> sean iguales: <span class="math-expr">k / 2 = 3 ➔ k = 6</span> (quedando la falsedad <span class="math-expr">-4 = -2.5</span>).</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: k = 6.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 3: EJERCICIOS PRÁCTICOS (15)       -->
+            <!-- ========================================== -->
+            <section id="sec-ejercicios" class="seccion-contenido hidden">
+                <div class="flex flex-wrap items-center justify-between gap-3 mb-4 bg-white p-4 rounded-xl border-2 border-[#54887D]">
+                    <div>
+                        <h2 class="text-xl font-bold text-[#1269A8]">Práctica Guiada en Pizarra (Método de Igualación)</h2>
+                        <p class="text-sm text-slate-600">Despeja la misma incógnita en ambas ecuaciones, iguala y comprueba tus resultados.</p>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <button class="subtab-btn active" onclick="filtrarSubnivel('ejercicios', 'basico', this)">Básico (5)</button>
+                        <button class="subtab-btn" onclick="filtrarSubnivel('ejercicios', 'intermedio', this)">Intermedio (5)</button>
+                        <button class="subtab-btn" onclick="filtrarSubnivel('ejercicios', 'avanzado', this)">Avanzado (5)</button>
+                    </div>
+                </div>
+
+                <!-- EJERCICIOS BÁSICOS -->
+                <div id="ejercicios-basico" class="subcontenido-ejercicios space-y-4">
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 1</span>
+                        <p class="font-semibold text-base">Resuelve por igualación: <span class="math-expr">{ y = 3x - 2 ; y = x + 6 }</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-eb1', this)">Mostrar solución</button>
+                            <button class="btn-resolver-directo" onclick="abrirEnSolucionador(-3, 1, -2, -1, 1, 6, 'y', 'Ejercicio Básico 1')">🧮 Resolver en Pizarra</button>
+                        </div>
+                        <div id="sol-eb1" class="solucion-box">
+                            <p><strong>Despejes:</strong> <span class="math-expr">y = 3x - 2</span> y <span class="math-expr">y = x + 6</span>.<br>
+                            <strong>Igualando:</strong> <span class="math-expr">3x - 2 = x + 6 ➔ 2x = 8 ➔ x = 4</span>.<br>
+                            <strong>Sustituyendo:</strong> <span class="math-expr">y = 4 + 6 = 10</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Solución = (4, 10) (x = 4, y = 10).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 2</span>
+                        <p class="font-semibold text-base">Resuelve igualando <span class="math-expr">x</span>: <span class="math-expr">{ x = 4y - 5 ; x = 2y + 3 }</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-eb2', this)">Mostrar solución</button>
+                            <button class="btn-resolver-directo" onclick="abrirEnSolucionador(1, -4, -5, 1, -2, 3, 'x', 'Ejercicio Básico 2')">🧮 Resolver en Pizarra</button>
+                        </div>
+                        <div id="sol-eb2" class="solucion-box">
+                            <p><strong>Despejes:</strong> <span class="math-expr">x = 4y - 5</span> y <span class="math-expr">x = 2y + 3</span>.<br>
+                            <strong>Igualando:</strong> <span class="math-expr">4y - 5 = 2y + 3 ➔ 2y = 8 ➔ y = 4</span>.<br>
+                            <strong>Sustituyendo:</strong> <span class="math-expr">x = 2(4) + 3 = 11</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Solución = (11, 4) (x = 11, y = 4).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 3</span>
+                        <p class="font-semibold text-base">Despeja <span class="math-expr">y</span> en ambas ecuaciones y resuelve por igualación: <span class="math-expr">{ x + y = 11 ; y - x = 5 }</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-eb3', this)">Mostrar solución</button>
+                            <button class="btn-resolver-directo" onclick="abrirEnSolucionador(1, 1, 11, -1, 1, 5, 'y', 'Ejercicio Básico 3')">🧮 Resolver en Pizarra</button>
+                        </div>
+                        <div id="sol-eb3" class="solucion-box">
+                            <p><strong>Despeje 1:</strong> <span class="math-expr">y = 11 - x</span>. <strong>Despeje 2:</strong> <span class="math-expr">y = 5 + x</span>.<br>
+                            <strong>Igualando:</strong> <span class="math-expr">11 - x = 5 + x ➔ 6 = 2x ➔ x = 3</span>.<br>
+                            <strong>Sustituyendo:</strong> <span class="math-expr">y = 11 - 3 = 8</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Solución = (3, 8) (x = 3, y = 8).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 4</span>
+                        <p class="font-semibold text-base">Despeja <span class="math-expr">x</span> en ambas ecuaciones y resuelve: <span class="math-expr">{ x + 3y = 10 ; x - y = 2 }</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-eb4', this)">Mostrar solución</button>
+                            <button class="btn-resolver-directo" onclick="abrirEnSolucionador(1, 3, 10, 1, -1, 2, 'x', 'Ejercicio Básico 4')">🧮 Resolver en Pizarra</button>
+                        </div>
+                        <div id="sol-eb4" class="solucion-box">
+                            <p><strong>Despeje 1:</strong> <span class="math-expr">x = 10 - 3y</span>. <strong>Despeje 2:</strong> <span class="math-expr">x = 2 + y</span>.<br>
+                            <strong>Igualando:</strong> <span class="math-expr">10 - 3y = 2 + y ➔ 8 = 4y ➔ y = 2</span>.<br>
+                            <strong>Sustituyendo:</strong> <span class="math-expr">x = 2 + 2 = 4</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Solución = (4, 2) (x = 4, y = 2).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 5</span>
+                        <p class="font-semibold text-base">Resuelve por igualación: <span class="math-expr">{ 2x + y = 7 ; x + y = 4 }</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-eb5', this)">Mostrar solución</button>
+                            <button class="btn-resolver-directo" onclick="abrirEnSolucionador(2, 1, 7, 1, 1, 4, 'y', 'Ejercicio Básico 5')">🧮 Resolver en Pizarra</button>
+                        </div>
+                        <div id="sol-eb5" class="solucion-box">
+                            <p><strong>Despeje 1:</strong> <span class="math-expr">y = 7 - 2x</span>. <strong>Despeje 2:</strong> <span class="math-expr">y = 4 - x</span>.<br>
+                            <strong>Igualando:</strong> <span class="math-expr">7 - 2x = 4 - x ➔ 3 = x</span>.<br>
+                            <strong>Sustituyendo:</strong> <span class="math-expr">y = 4 - 3 = 1</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Solución = (3, 1) (x = 3, y = 1).</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EJERCICIOS INTERMEDIOS -->
+                <div id="ejercicios-intermedio" class="subcontenido-ejercicios hidden space-y-4">
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 1</span>
+                        <p class="font-semibold text-base">Resuelve por igualación despejando <span class="math-expr">y</span>: <span class="math-expr">{ 3x + 2y = 16 ; 2x - y = 6 }</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ei1', this)">Mostrar solución</button>
+                            <button class="btn-resolver-directo" onclick="abrirEnSolucionador(3, 2, 16, 2, -1, 6, 'y', 'Ejercicio Intermedio 1')">🧮 Resolver en Pizarra</button>
+                        </div>
+                        <div id="sol-ei1" class="solucion-box">
+                            <p><strong>Despejes:</strong> Ec. 1: <span class="math-expr">y = (16 - 3x) / 2</span>; Ec. 2: <span class="math-expr">y = 2x - 6</span>.<br>
+                            <strong>Igualando:</strong> <span class="math-expr">(16 - 3x) / 2 = 2x - 6 ➔ 16 - 3x = 4x - 12 ➔ 28 = 7x ➔ x = 4</span>.<br>
+                            <strong>Sustituyendo:</strong> <span class="math-expr">y = 2(4) - 6 = 2</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Solución = (4, 2) (x = 4, y = 2).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 2</span>
+                        <p class="font-semibold text-base">Aplica productos cruzados al resolver por igualación: <span class="math-expr">{ 4x + 3y = 18 ; 5x - 2y = 11 }</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ei2', this)">Mostrar solución</button>
+                            <button class="btn-resolver-directo" onclick="abrirEnSolucionador(4, 3, 18, 5, -2, 11, 'y', 'Ejercicio Intermedio 2')">🧮 Resolver en Pizarra</button>
+                        </div>
+                        <div id="sol-ei2" class="solucion-box">
+                            <p><strong>Despejando <span class="math-expr">y</span>:</strong> Ec. 1: <span class="math-expr">y = (18 - 4x) / 3</span>; Ec. 2: <span class="math-expr">y = (5x - 11) / 2</span>.<br>
+                            <strong>Igualando y cruzando:</strong> <span class="math-expr">2(18 - 4x) = 3(5x - 11) ➔ 36 - 8x = 15x - 33 ➔ 69 = 23x ➔ x = 3</span>.<br>
+                            <strong>Sustituyendo:</strong> <span class="math-expr">y = (18 - 4(3)) / 3 = 6 / 3 = 2</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Solución = (3, 2) (x = 3, y = 2).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 3</span>
+                        <p class="font-semibold text-base">Clasifica el sistema aplicando el método de igualación: <span class="math-expr">{ 3x - y = 4 ; 6x - 2y = 10 }</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ei3', this)">Mostrar solución</button>
+                            <button class="btn-resolver-directo" onclick="abrirEnSolucionador(3, -1, 4, 6, -2, 10, 'y', 'Ejercicio Intermedio 3')">🧮 Resolver en Pizarra</button>
+                        </div>
+                        <div id="sol-ei3" class="solucion-box">
+                            <p><strong>Despejando <span class="math-expr">y</span>:</strong> Ec. 1: <span class="math-expr">y = 3x - 4</span>; Ec. 2: <span class="math-expr">y = (6x - 10) / 2 = 3x - 5</span>.<br>
+                            <strong>Igualando:</strong> <span class="math-expr">3x - 4 = 3x - 5 ➔ -4 = -5</span> (Falsedad).</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Sistema incompatible; NO tiene solución.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 4</span>
+                        <p class="font-semibold text-base">Clasifica el sistema aplicando el método de igualación: <span class="math-expr">{ 2x + 4y = 8 ; x + 2y = 4 }</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ei4', this)">Mostrar solución</button>
+                            <button class="btn-resolver-directo" onclick="abrirEnSolucionador(2, 4, 8, 1, 2, 4, 'x', 'Ejercicio Intermedio 4')">🧮 Resolver en Pizarra</button>
+                        </div>
+                        <div id="sol-ei4" class="solucion-box">
+                            <p><strong>Despejando <span class="math-expr">x</span>:</strong> Ec. 1: <span class="math-expr">x = (8 - 4y) / 2 = 4 - 2y</span>; Ec. 2: <span class="math-expr">x = 4 - 2y</span>.<br>
+                            <strong>Igualando:</strong> <span class="math-expr">4 - 2y = 4 - 2y ➔ 0 = 0</span> (Identidad).</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Sistema compatible indeterminado; tiene infinitas soluciones.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 5</span>
+                        <p class="font-semibold text-base">Reduce paréntesis y resuelve por igualación: <span class="math-expr">{ 3(x + 1) + y = 11 ; 2x - (y - 2) = 5 }</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ei5', this)">Mostrar solución</button>
+                            <button class="btn-resolver-directo" onclick="abrirEnSolucionador(3, 1, 8, 2, -1, 3, 'y', 'Ejercicio Intermedio 5')">🧮 Resolver en Pizarra</button>
+                        </div>
+                        <div id="sol-ei5" class="solucion-box">
+                            <p><strong>Ordenando:</strong> Ec. 1: <span class="math-expr">3x + y = 8 ➔ y = 8 - 3x</span>; Ec. 2: <span class="math-expr">2x - y = 3 ➔ y = 2x - 3</span>.<br>
+                            <strong>Igualando:</strong> <span class="math-expr">8 - 3x = 2x - 3 ➔ 11 = 5x ➔ x = 2.2</span> (o <span class="math-expr">11/5</span>).<br>
+                            <strong>Sustituyendo:</strong> <span class="math-expr">y = 2(2.2) - 3 = 1.4</span> (o <span class="math-expr">7/5</span>).</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Solución = (2.2, 1.4) o (11/5, 7/5).</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EJERCICIOS AVANZADOS -->
+                <div id="ejercicios-avanzado" class="subcontenido-ejercicios hidden space-y-4">
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 1</span>
+                        <p class="font-semibold text-base">Elimina fracciones y resuelve por igualación: <span class="math-expr">{ x/3 + y/4 = 3 ; x/2 - y/3 = 1 }</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ea1', this)">Mostrar solución</button>
+                            <button class="btn-resolver-directo" onclick="abrirEnSolucionador(4, 3, 36, 3, -2, 6, 'y', 'Ejercicio Avanzado 1')">🧮 Resolver en Pizarra</button>
+                        </div>
+                        <div id="sol-ea1" class="solucion-box">
+                            <p><strong>Enteros:</strong> Ec. 1 (×12): <span class="math-expr">4x + 3y = 36</span>; Ec. 2 (×6): <span class="math-expr">3x - 2y = 6</span>.<br>
+                            <strong>Despejando <span class="math-expr">y</span>:</strong> <span class="math-expr">(36 - 4x) / 3 = (3x - 6) / 2 ➔ 2(36 - 4x) = 3(3x - 6) ➔ 72 - 8x = 9x - 18 ➔ 90 = 17x ➔ x = 90/17</span>.<br>
+                            <strong>Sustituyendo:</strong> <span class="math-expr">y = (3(90/17) - 6) / 2 = (168/17) / 2 = 84/17</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Solución = (90/17, 84/17).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 2</span>
+                        <p class="font-semibold text-base">Resuelve por igualación con decimales: <span class="math-expr">{ 0.2x + 0.5y = 2.4 ; 0.4x - 0.3y = 0.9 }</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ea2', this)">Mostrar solución</button>
+                            <button class="btn-resolver-directo" onclick="abrirEnSolucionador(2, 5, 24, 4, -3, 9, 'x', 'Ejercicio Avanzado 2')">🧮 Resolver en Pizarra</button>
+                        </div>
+                        <div id="sol-ea2" class="solucion-box">
+                            <p><strong>Por 10:</strong> <span class="math-expr">2x + 5y = 24</span> y <span class="math-expr">4x - 3y = 9</span>.<br>
+                            <strong>Despejando <span class="math-expr">x</span>:</strong> <span class="math-expr">(24 - 5y) / 2 = (9 + 3y) / 4 ➔ 2(24 - 5y) = 9 + 3y ➔ 48 - 10y = 9 + 3y ➔ 39 = 13y ➔ y = 3</span>.<br>
+                            <strong>Sustituyendo:</strong> <span class="math-expr">x = (24 - 5(3)) / 2 = 9 / 2 = 4.5</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Solución = (4.5, 3) (x = 4.5, y = 3).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 3</span>
+                        <p class="font-semibold text-base">Para una actividad cultural en el colegio, se vendieron <span class="math-expr">120</span> boletos entre estudiantes (<span class="math-expr">Q15</span>) y padres de familia (<span class="math-expr">Q25</span>), recaudando <span class="math-expr">Q2,300</span>. Halla cuántos boletos de cada tipo se vendieron usando igualación.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ea3', this)">Mostrar solución</button>
+                            <button class="btn-resolver-directo" onclick="abrirEnSolucionador(1, 1, 120, 15, 25, 2300, 'y', 'Ejercicio Avanzado 3 (Boletos)')">🧮 Resolver en Pizarra</button>
+                        </div>
+                        <div id="sol-ea3" class="solucion-box">
+                            <p><strong>Sistema:</strong> <span class="math-expr">x + y = 120</span> y <span class="math-expr">15x + 25y = 2300</span>.<br>
+                            <strong>Despejando <span class="math-expr">y</span>:</strong> <span class="math-expr">120 - x = (2300 - 15x) / 25 ➔ 25(120 - x) = 2300 - 15x ➔ 3000 - 25x = 2300 - 15x ➔ 700 = 10x ➔ x = 70</span>.<br>
+                            <strong>Sustituyendo:</strong> <span class="math-expr">y = 120 - 70 = 50</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Se vendieron 70 boletos de estudiante y 50 de padre de familia.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 4</span>
+                        <p class="font-semibold text-base">Ordena términos y resuelve por igualación: <span class="math-expr">{ 5x - y = 3x + y + 6 ; 2x + 4y = y + 15 }</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ea4', this)">Mostrar solución</button>
+                            <button class="btn-resolver-directo" onclick="abrirEnSolucionador(2, -2, 6, 2, 3, 15, 'x', 'Ejercicio Avanzado 4')">🧮 Resolver en Pizarra</button>
+                        </div>
+                        <div id="sol-ea4" class="solucion-box">
+                            <p><strong>Ordenando:</strong> Ec. 1: <span class="math-expr">2x - 2y = 6 ➔ x - y = 3 ➔ x = y + 3</span>; Ec. 2: <span class="math-expr">2x + 3y = 15 ➔ x = (15 - 3y) / 2</span>.<br>
+                            <strong>Igualando:</strong> <span class="math-expr">y + 3 = (15 - 3y) / 2 ➔ 2y + 6 = 15 - 3y ➔ 5y = 9 ➔ y = 1.8</span>.<br>
+                            <strong>Sustituyendo:</strong> <span class="math-expr">x = 1.8 + 3 = 4.8</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Solución = (4.8, 1.8) o (24/5, 9/5).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 5</span>
+                        <p class="font-semibold text-base">Halla el valor de <span class="math-expr">k</span> para que el sistema <span class="math-expr">{ 4x - 2y = 10 ; kx + 3y = 7 }</span> <strong>no tenga solución</strong> al igualar <span class="math-expr">y</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ea5', this)">Mostrar solución</button>
+                            <button class="btn-resolver-directo" onclick="abrirEnSolucionador(4, -2, 10, -6, 3, 7, 'y', 'Ejercicio Avanzado 5 (k = -6)')">🧮 Probar con k = -6</button>
+                        </div>
+                        <div id="sol-ea5" class="solucion-box">
+                            <p><strong>Despejando <span class="math-expr">y</span>:</strong> Ec. 1: <span class="math-expr">y = 2x - 5</span>; Ec. 2: <span class="math-expr">y = (-kx + 7) / 3 = (-k/3)x + 7/3</span>.<br>
+                            <strong>Igualando coeficientes de <span class="math-expr">x</span>:</strong> <span class="math-expr">-k / 3 = 2 ➔ k = -6</span> (quedando la falsedad <span class="math-expr">-5 = 7/3</span>).</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: k = -6.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 4: PREGUNTAS DE REFLEXIÓN CRÍTICA  -->
+            <!-- ========================================== -->
+            <section id="sec-reflexion" class="seccion-contenido hidden">
+                <div class="card-montano">
+                    <h2 class="text-2xl font-bold text-[#1269A8] mb-2">🧠 Análisis Conceptual y Pensamiento Crítico (Método de Igualación)</h2>
+                    <p class="text-sm text-slate-600 mb-4">Reflexiona sobre la estrategia algebraica y las propiedades que hacen funcionar el método de igualación.</p>
+
+                    <div class="space-y-4">
+                        <div class="p-4 bg-[#F2F5E9] rounded-xl border-2 border-[#54887D]">
+                            <h3 class="font-bold text-lg text-[#1269A8]">1. ¿Cómo decidir estratégicamente si conviene despejar <span class="math-expr">x</span> o despejar <span class="math-expr">y</span>?</h3>
+                            <p class="mt-1">Aunque el resultado final es idéntico despejando cualquiera de las dos incógnitas, ¿qué criterio práctico debes observar en los coeficientes del sistema antes de empezar?</p>
+                            <button class="btn-solucion" onclick="toggleSolucion('ref-1', this)">Ver análisis conceptual</button>
+                            <div id="ref-1" class="solucion-box">
+                                <p><strong>Análisis:</strong> Conviene despejar la variable que tenga <strong>coeficiente <span class="math-expr">1</span> o <span class="math-expr">-1</span></strong> (o coeficientes divisibles entre sí), ya que esto evita generar fracciones con denominadores grandes en el Paso 1 y simplifica el despeje algebraico.</p>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-[#F2F5E9] rounded-xl border-2 border-[#54887D]">
+                            <h3 class="font-bold text-lg text-[#1269A8]">2. ¿Por qué multiplicar en cruz elimina los denominadores al igualar fracciones?</h3>
+                            <p class="mt-1">Cuando obtenemos una igualdad de la forma <span class="math-expr">(A) / m = (B) / n</span>, aplicamos el producto cruzado <span class="math-expr">n·A = m·B</span>. ¿Qué propiedad de las igualdades justifica este paso?</p>
+                            <button class="btn-solucion" onclick="toggleSolucion('ref-2', this)">Ver análisis conceptual</button>
+                            <div id="ref-2" class="solucion-box">
+                                <p><strong>Análisis:</strong> Se justifica por la <strong>Propiedad Uniforme de la Multiplicación</strong>: al multiplicar ambos miembros de la ecuación por el mínimo común múltiplo <span class="math-expr">m·n</span>, el denominador <span class="math-expr">m</span> se cancela a la izquierda dejando factor <span class="math-expr">n</span>, y el denominador <span class="math-expr">n</span> se cancela a la derecha dejando factor <span class="math-expr">m</span>.</p>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-[#F2F5E9] rounded-xl border-2 border-[#54887D]">
+                            <h3 class="font-bold text-lg text-[#1269A8]">3. ¿Qué ocurre cuando al igualar se elimina la variable y queda <span class="math-expr">7 = 12</span>?</h3>
+                            <p class="mt-1">Si al resolver la ecuación resultante del Paso 2 los términos con la incógnita se cancelan por completo y queda una proposición numérica falsa como <span class="math-expr">7 = 12</span>, ¿qué significa esto sobre el sistema?</p>
+                            <button class="btn-solucion" onclick="toggleSolucion('ref-3', this)">Ver análisis conceptual</button>
+                            <div id="ref-3" class="solucion-box">
+                                <p><strong>Análisis:</strong> Significa que <strong>no existe ningún par ordenado <span class="math-expr">(x, y)</span></strong> que pueda hacer verdaderas ambas ecuaciones simultáneamente. El sistema es <strong>incompatible</strong> (geométricamente corresponde a dos rectas paralelas que nunca se intersecan).</p>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-[#F2F5E9] rounded-xl border-2 border-[#54887D]">
+                            <h3 class="font-bold text-lg text-[#1269A8]">4. ¿En qué se diferencia el Método de Igualación del Método de Sustitución?</h3>
+                            <p class="mt-1">Ambos métodos comienzan despejando una incógnita, pero siguen caminos distintos en el segundo paso. Explica cuál es esa diferencia clave.</p>
+                            <button class="btn-solucion" onclick="toggleSolucion('ref-4', this)">Ver análisis conceptual</button>
+                            <div id="ref-4" class="solucion-box">
+                                <p><strong>Análisis:</strong> En <strong>Sustitución</strong>, se despeja una variable en <em>una sola ecuación</em> y se reemplaza dentro de la otra ecuación. En <strong>Igualación</strong>, se despeja <em>la misma variable en ambas ecuaciones</em> y luego se igualan entre sí las dos expresiones obtenidas.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 5: EVALUACIÓN FORMATIVA            -->
+            <!-- ========================================== -->
+            <section id="sec-evaluacion" class="seccion-contenido hidden">
+                <div class="card-montano">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b-2 border-[#F7D615] pb-3 mb-4">
+                        <div>
+                            <h2 class="text-2xl font-bold text-[#1269A8]">✅ Evaluación Formativa de Comprobación (Método de Igualación)</h2>
+                            <p class="text-sm text-slate-600">Resuelve cada reactivo aplicando los 5 pasos del método de igualación y verifica tu procedimiento.</p>
+                        </div>
+                        <span class="badge-nivel badge-avanzado mt-2 sm:mt-0">5 Reactivos de Comprobación</span>
+                    </div>
+
+                    <div class="space-y-4">
+                        <!-- Pregunta 1 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 1 • Planteamiento de la Igualación</span>
+                            <p class="font-bold text-base mt-1">Al despejar <span class="math-expr">y</span> en ambas ecuaciones del sistema <span class="math-expr">{ 3x + y = 10 ; 2x - y = 5 }</span>, ¿qué ecuación resulta al igualar ambas expresiones?</p>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="btn-solucion" onclick="toggleSolucion('eval-1', this)">Mostrar solución</button>
+                                <button class="btn-resolver-directo" onclick="abrirEnSolucionador(3, 1, 10, 2, -1, 5, 'y', 'Evaluación • Reactivo 1')">🧮 Comprobar en Solucionador</button>
+                            </div>
+                            <div id="eval-1" class="solucion-box">
+                                <p><strong>Despeje Ec. 1:</strong> <span class="math-expr">y = 10 - 3x</span>.<br>
+                                <strong>Despeje Ec. 2:</strong> <span class="math-expr">y = 2x - 5</span>.<br>
+                                <strong>Igualación:</strong> <span class="math-expr">10 - 3x = 2x - 5 ➔ 15 = 5x ➔ x = 3, y = 1</span>.</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: Ecuación igualada: 10 - 3x = 2x - 5; Solución = (3, 1).</p>
+                            </div>
+                        </div>
+
+                        <!-- Pregunta 2 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 2 • Productos Cruzados en Igualación</span>
+                            <p class="font-bold text-base mt-1">Resuelve por igualación despejando <span class="math-expr">x</span>: <span class="math-expr">{ 2x + 3y = 12 ; 3x - 2y = 5 }</span>.</p>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="btn-solucion" onclick="toggleSolucion('eval-2', this)">Mostrar solución</button>
+                                <button class="btn-resolver-directo" onclick="abrirEnSolucionador(2, 3, 12, 3, -2, 5, 'x', 'Evaluación • Reactivo 2')">🧮 Comprobar en Solucionador</button>
+                            </div>
+                            <div id="eval-2" class="solucion-box">
+                                <p><strong>Despejando <span class="math-expr">x</span>:</strong> <span class="math-expr">(12 - 3y) / 2 = (5 + 2y) / 3</span>.<br>
+                                <strong>Multiplicando en cruz:</strong> <span class="math-expr">3(12 - 3y) = 2(5 + 2y) ➔ 36 - 9y = 10 + 4y ➔ 26 = 13y ➔ y = 2</span>.<br>
+                                <strong>Sustituyendo:</strong> <span class="math-expr">x = (12 - 3(2)) / 2 = 3</span>.</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: Solución = (3, 2) (x = 3, y = 2).</p>
+                            </div>
+                        </div>
+
+                        <!-- Pregunta 3 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 3 • Detección de Identidad o Falsedad</span>
+                            <p class="font-bold text-base mt-1">Al aplicar el método de igualación en <span class="math-expr">{ 4x - 2y = 6 ; 2x - y = 3 }</span>, ¿qué expresión se obtiene al simplificar la igualdad y cuántas soluciones tiene?</p>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="btn-solucion" onclick="toggleSolucion('eval-3', this)">Mostrar solución</button>
+                                <button class="btn-resolver-directo" onclick="abrirEnSolucionador(4, -2, 6, 2, -1, 3, 'y', 'Evaluación • Reactivo 3')">🧮 Comprobar en Solucionador</button>
+                            </div>
+                            <div id="eval-3" class="solucion-box">
+                                <p><strong>Despejando <span class="math-expr">y</span>:</strong> Ec. 1: <span class="math-expr">y = (4x - 6) / 2 = 2x - 3</span>; Ec. 2: <span class="math-expr">y = 2x - 3</span>.<br>
+                                <strong>Igualando:</strong> <span class="math-expr">2x - 3 = 2x - 3 ➔ 0 = 0</span> (Identidad).</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: Se obtiene 0 = 0; el sistema tiene infinitas soluciones.</p>
+                            </div>
+                        </div>
+
+                        <!-- Pregunta 4 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 4 • Resolución con Coordenadas Negativas</span>
+                            <p class="font-bold text-base mt-1">Encuentra la solución por igualación del sistema: <span class="math-expr">{ x + 2y = -1 ; 3x - y = 11 }</span>.</p>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="btn-solucion" onclick="toggleSolucion('eval-4', this)">Mostrar solución</button>
+                                <button class="btn-resolver-directo" onclick="abrirEnSolucionador(1, 2, -1, 3, -1, 11, 'x', 'Evaluación • Reactivo 4')">🧮 Comprobar en Solucionador</button>
+                            </div>
+                            <div id="eval-4" class="solucion-box">
+                                <p><strong>Despejando <span class="math-expr">x</span>:</strong> Ec. 1: <span class="math-expr">x = -1 - 2y</span>; Ec. 2: <span class="math-expr">x = (11 + y) / 3</span>.<br>
+                                <strong>Igualando:</strong> <span class="math-expr">-1 - 2y = (11 + y) / 3 ➔ -3 - 6y = 11 + y ➔ -14 = 7y ➔ y = -2</span>.<br>
+                                <strong>Sustituyendo:</strong> <span class="math-expr">x = -1 - 2(-2) = 3</span>.</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: Solución = (3, -2) (x = 3, y = -2).</p>
+                            </div>
+                        </div>
+
+                        <!-- Pregunta 5 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 5 • Problema de Aplicación (Contexto Guatemala)</span>
+                            <p class="font-bold text-base mt-1">La suma de dos números es <span class="math-expr">45</span> y su diferencia es <span class="math-expr">13</span>. Plantea el sistema y halla ambos números utilizando el método de igualación.</p>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="btn-solucion" onclick="toggleSolucion('eval-5', this)">Mostrar solución</button>
+                                <button class="btn-resolver-directo" onclick="abrirEnSolucionador(1, 1, 45, 1, -1, 13, 'x', 'Evaluación • Reactivo 5')">🧮 Comprobar en Solucionador</button>
+                            </div>
+                            <div id="eval-5" class="solucion-box">
+                                <p><strong>Sistema:</strong> <span class="math-expr">x + y = 45</span> y <span class="math-expr">x - y = 13</span>.<br>
+                                <strong>Despejando <span class="math-expr">x</span>:</strong> <span class="math-expr">x = 45 - y</span> y <span class="math-expr">x = 13 + y</span>.<br>
+                                <strong>Igualando:</strong> <span class="math-expr">45 - y = 13 + y ➔ 32 = 2y ➔ y = 16</span>.<br>
+                                <strong>Sustituyendo:</strong> <span class="math-expr">x = 45 - 16 = 29</span>.</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: Los números son 29 y 16 (29, 16).</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 6: SOLUCIONADOR PASO A PASO        -->
+            <!-- ========================================== -->
+            <section id="sec-solucionador" class="seccion-contenido hidden">
+                <div class="card-montano">
+                    <!-- Encabezado y Selector de Presets -->
+                    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b-2 border-[#F7D615] pb-4 mb-5">
+                        <div>
+                            <div class="flex flex-wrap items-center gap-2">
+                                <span class="badge-nivel badge-avanzado">Herramienta de Pizarra Digital</span>
+                                <span id="solver-preset-badge" class="text-xs font-bold text-[#54887D] bg-[#F2F5E9] px-2.5 py-1 rounded-full border border-[#54887D]">Sistema Personalizado</span>
+                            </div>
+                            <h2 class="text-2xl font-bold text-[#1269A8] mt-1">🧮 Solucionador Algebraico Paso a Paso (Método de Igualación)</h2>
+                            <p class="text-sm text-slate-600">Ingresa los coeficientes <span class="font-mono font-bold text-[#1269A8]">a₁x + b₁y = c₁</span> y <span class="font-mono font-bold text-[#1269A8]">a₂x + b₂y = c₂</span>, elige qué incógnita despejar y observa todo el procedimiento desarrollado.</p>
+                        </div>
+
+                        <div class="w-full lg:w-80">
+                            <label for="solver-preset-select" class="block text-xs font-bold uppercase text-[#54887D] mb-1">⚡ Cargar Sistema de la Guía:</label>
+                            <select id="solver-preset-select" onchange="cargarPresetSolucionador(this.value)" class="w-full p-2.5 rounded-lg border-2 border-[#1269A8] bg-[#F2F5E9] font-semibold text-sm text-[#0f172a] focus:outline-none focus:ring-2 focus:ring-[#F7D615]">
+                                <option value="">-- Seleccionar ejemplo o ejercicio --</option>
+                                <optgroup label="📘 Ejemplos Resueltos">
+                                    <option value="-2|1|1|-1|1|4|y|Ej. Básico 1">Ej. Básico 1: y = 2x + 1 ; y = x + 4</option>
+                                    <option value="1|-1|3|1|-2|-1|x|Ej. Básico 2">Ej. Básico 2: x = y + 3 ; x = 2y - 1</option>
+                                    <option value="1|1|9|-1|1|3|y|Ej. Básico 3">Ej. Básico 3: x + y = 9 ; y - x = 3</option>
+                                    <option value="2|3|13|4|-1|5|y|Ej. Intermedio 1">Ej. Intermedio 1: 2x + 3y = 13 ; 4x - y = 5</option>
+                                    <option value="3|-2|4|5|3|13|y|Ej. Intermedio 2">Ej. Intermedio 2: 3x - 2y = 4 ; 5x + 3y = 13</option>
+                                    <option value="2|-1|3|4|-2|-2|y|Ej. Intermedio 3 (Incompatible)">Ej. Intermedio 3: Sin Solución (0 = k)</option>
+                                    <option value="3|1|6|6|2|12|y|Ej. Intermedio 4 (Indeterminado)">Ej. Intermedio 4: Infinitas Soluciones (0 = 0)</option>
+                                    <option value="3|2|24|2|-3|0|x|Ej. Avanzado 1 (Fracciones)">Ej. Avanzado 1: Fraccionario (MCM 6)</option>
+                                    <option value="3|2|43|5|4|77|y|Ej. Avanzado 3 (Librería Q)">Ej. Avanzado 3: Librería (Quetzales)</option>
+                                </optgroup>
+                                <optgroup label="✍️ Ejercicios Prácticos">
+                                    <option value="-3|1|-2|-1|1|6|y|Ejerc. Básico 1">Ejerc. Básico 1: y = 3x - 2 ; y = x + 6</option>
+                                    <option value="3|2|16|2|-1|6|y|Ejerc. Intermedio 1">Ejerc. Intermedio 1: 3x + 2y = 16 ; 2x - y = 6</option>
+                                    <option value="4|3|18|5|-2|11|y|Ejerc. Intermedio 2">Ejerc. Intermedio 2: 4x + 3y = 18 ; 5x - 2y = 11</option>
+                                    <option value="1|1|120|15|25|2300|y|Ejerc. Avanzado 3 (Boletos)">Ejerc. Avanzado 3: Boletos Culturales</option>
+                                </optgroup>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Grid Principal: Configuración Izquierda + Desarrollo Paso a Paso Derecha -->
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                        
+                        <!-- Panel Izquierdo: Entrada de Coeficientes -->
+                        <div class="lg:col-span-5 space-y-4">
+                            
+                            <!-- Ecuación 1 -->
+                            <div class="p-4 rounded-xl bg-sky-50 border-2 border-[#1269A8]">
+                                <span class="font-bold text-sm text-[#1269A8] block mb-2">Ecuación 1: <span class="font-mono">a₁x + b₁y = c₁</span></span>
+                                <div class="flex items-center gap-1.5 font-mono font-bold text-base">
+                                    <input id="coef-a1" type="number" step="any" value="2" class="w-16 p-2 text-center rounded-lg border-2 border-[#88B5C7] bg-white text-[#0f172a]" oninput="ejecutarSolucionador()">
+                                    <span class="text-[#1269A8]">x +</span>
+                                    <input id="coef-b1" type="number" step="any" value="3" class="w-16 p-2 text-center rounded-lg border-2 border-[#88B5C7] bg-white text-[#0f172a]" oninput="ejecutarSolucionador()">
+                                    <span class="text-[#1269A8]">y =</span>
+                                    <input id="coef-c1" type="number" step="any" value="13" class="w-20 p-2 text-center rounded-lg border-2 border-[#88B5C7] bg-white text-[#0f172a]" oninput="ejecutarSolucionador()">
+                                </div>
+                            </div>
+
+                            <!-- Ecuación 2 -->
+                            <div class="p-4 rounded-xl bg-emerald-50 border-2 border-[#54887D]">
+                                <span class="font-bold text-sm text-[#54887D] block mb-2">Ecuación 2: <span class="font-mono">a₂x + b₂y = c₂</span></span>
+                                <div class="flex items-center gap-1.5 font-mono font-bold text-base">
+                                    <input id="coef-a2" type="number" step="any" value="4" class="w-16 p-2 text-center rounded-lg border-2 border-[#A6B046] bg-white text-[#0f172a]" oninput="ejecutarSolucionador()">
+                                    <span class="text-[#54887D]">x +</span>
+                                    <input id="coef-b2" type="number" step="any" value="-1" class="w-16 p-2 text-center rounded-lg border-2 border-[#A6B046] bg-white text-[#0f172a]" oninput="ejecutarSolucionador()">
+                                    <span class="text-[#54887D]">y =</span>
+                                    <input id="coef-c2" type="number" step="any" value="5" class="w-20 p-2 text-center rounded-lg border-2 border-[#A6B046] bg-white text-[#0f172a]" oninput="ejecutarSolucionador()">
+                                </div>
+                            </div>
+
+                            <!-- Selector de Variable a Despejar -->
+                            <div class="p-4 rounded-xl bg-[#F2F5E9] border-2 border-[#A6B046]">
+                                <label class="block text-xs font-bold uppercase text-[#54887D] mb-2">🎯 Elige la incógnita a despejar en ambas ecuaciones:</label>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <button id="btn-despejar-y" onclick="cambiarVariableDespeje('y')" class="py-2.5 px-3 rounded-lg font-bold text-sm bg-[#1269A8] text-white border-2 border-[#F7D615] shadow cursor-pointer">
+                                        Despejar e Igualar "y"
+                                    </button>
+                                    <button id="btn-despejar-x" onclick="cambiarVariableDespeje('x')" class="py-2.5 px-3 rounded-lg font-bold text-sm bg-white text-[#1269A8] border-2 border-[#1269A8] cursor-pointer">
+                                        Despejar e Igualar "x"
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Botón de Ejecución -->
+                            <button onclick="ejecutarSolucionador()" class="w-full bg-[#1269A8] hover:bg-[#0d4f80] text-white font-bold py-3 px-4 rounded-xl shadow-md transition cursor-pointer text-base">
+                                🧮 Desarrollar Método de Igualación
+                            </button>
+
+                            <!-- Tarjeta de Resultado Final -->
+                            <div id="solver-resumen-box" class="p-4 rounded-xl bg-gradient-to-br from-[#1269A8] to-[#0d4f80] text-white border-2 border-[#F7D615] shadow-md">
+                                <span class="text-xs uppercase tracking-wider font-bold text-[#F7D615] block">Resultado del Sistema</span>
+                                <h3 id="solver-titulo-final" class="text-xl font-bold mt-0.5">Solución Única: (2, 3)</h3>
+                                <p id="solver-detalle-final" class="text-xs sm:text-sm text-[#F2F5E9] mt-1">x = 2 , y = 3</p>
+                            </div>
+                        </div>
+
+                        <!-- Panel Derecho: Pasos Detallados del Método de Igualación -->
+                        <div class="lg:col-span-7 space-y-3" id="solver-pasos-contenedor">
+                            <!-- Generado dinámicamente por JS -->
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Pie de Pizarra -->
+        <footer class="bg-[#1269A8] text-white text-center py-3 px-4 text-xs sm:text-sm border-t-2 border-[#F7D615]">
+            <strong>Colegio Montano</strong> • Departamento de Matemática • Tercera Unidad • Pizarra Digital Interactiva
+        </footer>
+    </div>
+
+    <!-- Scripts de Interactividad y Motor Paso a Paso del Método de Igualación -->
+    <script>
+        /* =========================================================================
+           1. NAVEGACIÓN DE PESTAÑAS Y PANTALLA COMPLETA
+           ========================================================================= */
+
+        function cambiarSeccion(seccionId, botonActivo) {
+            const secciones = document.querySelectorAll('.seccion-contenido');
+            secciones.forEach(sec => sec.classList.add('hidden'));
+
+            const target = document.getElementById('sec-' + seccionId);
+            if (target) {
+                target.classList.remove('hidden');
+            }
+
+            const botones = document.querySelectorAll('.tab-btn');
+            botones.forEach(btn => btn.classList.remove('active'));
+            if (botonActivo) {
+                botonActivo.classList.add('active');
+            }
+
+            if (seccionId === 'solucionador') {
+                ejecutarSolucionador();
+            }
+        }
+
+        function filtrarSubnivel(grupo, nivel, botonActivo) {
+            const contenedores = document.querySelectorAll('.subcontenido-' + grupo);
+            contenedores.forEach(cont => cont.classList.add('hidden'));
+
+            const target = document.getElementById(grupo + '-' + nivel);
+            if (target) {
+                target.classList.remove('hidden');
+            }
+
+            const parent = botonActivo.parentElement;
+            const subBotones = parent.querySelectorAll('.subtab-btn');
+            subBotones.forEach(btn => btn.classList.remove('active'));
+            botonActivo.classList.add('active');
+        }
+
+        function toggleSolucion(solucionId, boton) {
+            const box = document.getElementById(solucionId);
+            if (!box) return;
+
+            if (box.style.display === 'block') {
+                box.style.display = 'none';
+                boton.textContent = boton.textContent.replace('Ocultar', 'Mostrar').replace('Ocultar análisis conceptual', 'Ver análisis conceptual');
+            } else {
+                box.style.display = 'block';
+                if (boton.textContent.includes('Ver análisis')) {
+                    boton.textContent = 'Ocultar análisis conceptual';
+                } else {
+                    boton.textContent = 'Ocultar solución';
+                }
+            }
+        }
+
+        function toggleFullscreen() {
+            const btn = document.getElementById('fullscreen-btn');
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().then(() => {
+                    btn.innerHTML = '<span>✖ Salir de pantalla completa</span>';
+                }).catch(err => {
+                    console.warn('Error al intentar activar pantalla completa:', err);
+                });
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen().then(() => {
+                        btn.innerHTML = '<span>⛶ Pantalla completa</span>';
+                    });
+                }
+            }
+        }
+
+        document.addEventListener('fullscreenchange', () => {
+            const btn = document.getElementById('fullscreen-btn');
+            if (!document.fullscreenElement && btn) {
+                btn.innerHTML = '<span>⛶ Pantalla completa</span>';
+            }
+        });
+
+        /* =========================================================================
+           2. UTILIDADES MATEMÁTICAS DE FORMATO Y FRACCIONES EXACTAS
+           ========================================================================= */
+
+        let variableDespejeActual = 'y';
+
+        function fmt(n) {
+            if (Math.abs(n) < 1e-9) return '0';
+            const r = Math.round(n * 10000) / 10000;
+            return Number.isInteger(r) ? r.toString() : r.toFixed(2).replace(/\.?0+$/, '');
+        }
+
+        function gcd(a, b) {
+            a = Math.abs(Math.round(a));
+            b = Math.abs(Math.round(b));
+            while (b !== 0) {
+                const t = b;
+                b = a % b;
+                a = t;
+            }
+            return a || 1;
+        }
+
+        /**
+         * Formatea un número racional num/den de forma limpia (entero si es exacto, o fracción simplificada si ambos son enteros).
+         */
+        function formatearRacional(num, den) {
+            if (Math.abs(den) < 1e-9) return 'Indefinido';
+            if (Math.abs(num) < 1e-9) return '0';
+
+            const val = num / den;
+            if (Math.abs(val - Math.round(val)) < 1e-7) {
+                return Math.round(val).toString();
+            }
+
+            // Si num y den son enteros, simplificamos fracción exacta
+            if (Number.isInteger(num) && Number.isInteger(den)) {
+                const signo = (num * den < 0) ? -1 : 1;
+                const g = gcd(num, den);
+                const nSimp = signo * (Math.abs(num) / g);
+                const dSimp = Math.abs(den) / g;
+                return `${nSimp}/${dSimp} (≈ ${fmt(val)})`;
+            }
+
+            return fmt(val);
+        }
+
+        /**
+         * Construye la cadena legible de una ecuación lineal ax + by = c.
+         */
+        function formatearEcuacionOriginal(a, b, c) {
+            const partes = [];
+            if (Math.abs(a) > 1e-9) {
+                partes.push(Math.abs(a - 1) < 1e-9 ? 'x' : (Math.abs(a + 1) < 1e-9 ? '-x' : `${fmt(a)}x`));
+            }
+            if (Math.abs(b) > 1e-9) {
+                const absB = Math.abs(b);
+                const termB = Math.abs(absB - 1) < 1e-9 ? 'y' : `${fmt(absB)}y`;
+                if (partes.length === 0) {
+                    partes.push(b < 0 ? `-${termB}` : termB);
+                } else {
+                    partes.push(b < 0 ? `- ${termB}` : `+ ${termB}`);
+                }
+            }
+            if (partes.length === 0) partes.push('0');
+            return `${partes.join(' ')} = ${fmt(c)}`;
+        }
+
+        /**
+         * Construye la expresión del numerador (constante + coefVar * varNombre) al despejar la otra incógnita.
+         * Ejemplo: si despejamos y de ax + by = c => by = c - ax => numerador = "c - ax"
+         */
+        function formatearNumeradorDespeje(constante, coefOtraVar, nombreOtraVar) {
+            const EPS = 1e-9;
+            if (Math.abs(coefOtraVar) < EPS) return fmt(constante);
+
+            const absC = Math.abs(coefOtraVar);
+            const termVar = Math.abs(absC - 1) < EPS ? nombreOtraVar : `${fmt(absC)}${nombreOtraVar}`;
+
+            if (Math.abs(constante) < EPS) {
+                return coefOtraVar < 0 ? `-${termVar}` : termVar;
+            }
+            return coefOtraVar < 0
+                ? `${fmt(constante)} - ${termVar}`
+                : `${fmt(constante)} + ${termVar}`;
+        }
+
+        /**
+         * Genera HTML visual para (numerador / denominador) o solo numerador si denominador === 1.
+         */
+        function htmlFraccionDespeje(constante, coefOtraVar, nombreOtraVar, denominador) {
+            // Si denominador es negativo, invertimos signos para presentación estándar limpia
+            if (denominador < 0) {
+                constante = -constante;
+                coefOtraVar = -coefOtraVar;
+                denominador = -denominador;
+            }
+
+            const numStr = formatearNumeradorDespeje(constante, coefOtraVar, nombreOtraVar);
+            if (Math.abs(denominador - 1) < 1e-9) {
+                return `<span class="math-expr">${numStr}</span>`;
+            }
+
+            // Si ambos términos del numerador son divisibles exactamente entre el denominador entero, mostramos también la forma simplificada
+            if (Number.isInteger(constante) && Number.isInteger(coefOtraVar) && Number.isInteger(denominador) &&
+                constante % denominador === 0 && coefOtraVar % denominador === 0) {
+                const simpStr = formatearNumeradorDespeje(constante / denominador, coefOtraVar / denominador, nombreOtraVar);
+                return `<span class="math-expr"><span class="frac"><span class="frac-num">${numStr}</span><span class="frac-den">${fmt(denominador)}</span></span> = ${simpStr}</span>`;
+            }
+
+            return `<span class="math-expr"><span class="frac"><span class="frac-num">${numStr}</span><span class="frac-den">${fmt(denominador)}</span></span></span>`;
+        }
+
+        /* =========================================================================
+           3. CONTROL DEL SOLUCIONADOR PASO A PASO (MÉTODO DE IGUALACIÓN)
+           ========================================================================= */
+
+        function abrirEnSolucionador(a1, b1, c1, a2, b2, c2, varDespeje, etiqueta) {
+            document.getElementById('coef-a1').value = a1;
+            document.getElementById('coef-b1').value = b1;
+            document.getElementById('coef-c1').value = c1;
+            document.getElementById('coef-a2').value = a2;
+            document.getElementById('coef-b2').value = b2;
+            document.getElementById('coef-c2').value = c2;
+            document.getElementById('solver-preset-badge').textContent = etiqueta || 'Sistema Cargado';
+
+            cambiarVariableDespeje(varDespeje || 'y', false);
+            const btnTab6 = document.getElementById('tab-solucionador');
+            cambiarSeccion('solucionador', btnTab6);
+        }
+
+        function cargarPresetSolucionador(valor) {
+            if (!valor) return;
+            const [a1, b1, c1, a2, b2, c2, v, nombre] = valor.split('|');
+            document.getElementById('coef-a1').value = parseFloat(a1);
+            document.getElementById('coef-b1').value = parseFloat(b1);
+            document.getElementById('coef-c1').value = parseFloat(c1);
+            document.getElementById('coef-a2').value = parseFloat(a2);
+            document.getElementById('coef-b2').value = parseFloat(b2);
+            document.getElementById('coef-c2').value = parseFloat(c2);
+            document.getElementById('solver-preset-badge').textContent = nombre;
+            cambiarVariableDespeje(v, true);
+        }
+
+        function cambiarVariableDespeje(variable, recalcular = true) {
+            variableDespejeActual = variable;
+            const btnY = document.getElementById('btn-despejar-y');
+            const btnX = document.getElementById('btn-despejar-x');
+
+            if (variable === 'y') {
+                btnY.className = 'py-2.5 px-3 rounded-lg font-bold text-sm bg-[#1269A8] text-white border-2 border-[#F7D615] shadow cursor-pointer';
+                btnX.className = 'py-2.5 px-3 rounded-lg font-bold text-sm bg-white text-[#1269A8] border-2 border-[#1269A8] cursor-pointer';
+            } else {
+                btnX.className = 'py-2.5 px-3 rounded-lg font-bold text-sm bg-[#1269A8] text-white border-2 border-[#F7D615] shadow cursor-pointer';
+                btnY.className = 'py-2.5 px-3 rounded-lg font-bold text-sm bg-white text-[#1269A8] border-2 border-[#1269A8] cursor-pointer';
+            }
+
+            if (recalcular) ejecutarSolucionador();
+        }
+
+        /**
+         * Genera y renderiza los 5 pasos completos del Método de Igualación.
+         */
+        function ejecutarSolucionador() {
+            const a1 = parseFloat(document.getElementById('coef-a1').value);
+            const b1 = parseFloat(document.getElementById('coef-b1').value);
+            const c1 = parseFloat(document.getElementById('coef-c1').value);
+            const a2 = parseFloat(document.getElementById('coef-a2').value);
+            const b2 = parseFloat(document.getElementById('coef-b2').value);
+            const c2 = parseFloat(document.getElementById('coef-c2').value);
+
+            const contenedor = document.getElementById('solver-pasos-contenedor');
+            const resumenBox = document.getElementById('solver-resumen-box');
+            const tituloFinal = document.getElementById('solver-titulo-final');
+            const detalleFinal = document.getElementById('solver-detalle-final');
+
+            if ([a1, b1, c1, a2, b2, c2].some(v => isNaN(v))) {
+                contenedor.innerHTML = `<div class="paso-solver border-red-600 text-red-700 font-bold">⚠️ Por favor, completa todos los coeficientes numéricos del sistema.</div>`;
+                return;
+            }
+
+            const EPS = 1e-9;
+            const eq1Str = formatearEcuacionOriginal(a1, b1, c1);
+            const eq2Str = formatearEcuacionOriginal(a2, b2, c2);
+
+            // Determinar qué variable se despeja (vDesp) y cuál queda en la ecuación igualada (vOtra)
+            let vDesp = variableDespejeActual;
+            let vOtra = vDesp === 'y' ? 'x' : 'y';
+
+            // Coeficientes asociados al despeje: coefDesp * vDesp = c - coefOtra * vOtra
+            let d1 = vDesp === 'y' ? b1 : a1;
+            let o1 = vDesp === 'y' ? a1 : b1;
+            let d2 = vDesp === 'y' ? b2 : a2;
+            let o2 = vDesp === 'y' ? a2 : b2;
+
+            // Si el coeficiente de la variable elegida es 0 en alguna ecuación, sugerimos o cambiamos automáticamente
+            if (Math.abs(d1) < EPS || Math.abs(d2) < EPS) {
+                const altD1 = vDesp === 'y' ? a1 : b1;
+                const altD2 = vDesp === 'y' ? a2 : b2;
+                if (Math.abs(altD1) > EPS && Math.abs(altD2) > EPS) {
+                    contenedor.innerHTML = `
+                        <div class="paso-solver border-amber-500">
+                            <strong class="text-amber-800 block mb-1">💡 Sugerencia Pedagógica</strong>
+                            <p class="text-sm text-slate-700">La variable <strong>${vDesp}</strong> tiene coeficiente <strong>0</strong> en una de las ecuaciones, por lo que no puede despejarse en ambas. Haz clic en <strong>"Despejar e Igualar '${vOtra}'"</strong> para resolver este sistema directamente.</p>
+                        </div>`;
+                    tituloFinal.textContent = `Cambia la variable de despeje a "${vOtra}"`;
+                    detalleFinal.textContent = `La variable "${vDesp}" no aparece en ambas ecuaciones.`;
+                    resumenBox.style.background = 'linear-gradient(135deg, #b45309 0%, #78350f 100%)';
+                    return;
+                } else {
+                    contenedor.innerHTML = `<div class="paso-solver border-red-600 text-red-700 font-bold">⚠️ El sistema no tiene una variable común con coeficiente distinto de cero en ambas ecuaciones.</div>`;
+                    return;
+                }
+            }
+
+            // Normalizar denominadores positivos para productos cruzados limpios
+            let numC1 = c1, numO1 = -o1, den1 = d1;
+            if (den1 < 0) { numC1 = -numC1; numO1 = -numO1; den1 = -den1; }
+
+            let numC2 = c2, numO2 = -o2, den2 = d2;
+            if (den2 < 0) { numC2 = -numC2; numO2 = -numO2; den2 = -den2; }
+
+            const expr1HTML = htmlFraccionDespeje(numC1, numO1, vOtra, den1);
+            const expr2HTML = htmlFraccionDespeje(numC2, numO2, vOtra, den2);
+
+            // Paso 3: Productos cruzados: den2 * (numC1 + numO1 * vOtra) = den1 * (numC2 + numO2 * vOtra)
+            const izqConst = den2 * numC1;
+            const izqVar = den2 * numO1;
+            const derConst = den1 * numC2;
+            const derVar = den1 * numO2;
+
+            // Agrupación: (izqVar - derVar) * vOtra = derConst - izqConst
+            const coefFinalVar = izqVar - derVar;
+            const coefFinalConst = derConst - izqConst;
+
+            let htmlPasos = `
+                <!-- PASO 1 -->
+                <div class="paso-solver">
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-xs font-extrabold uppercase tracking-wider text-[#1269A8]">Paso 1 • Despejar "${vDesp}" en ambas ecuaciones</span>
+                        <span class="text-xs font-semibold text-slate-500">Sistema: ${eq1Str} ; ${eq2Str}</span>
+                    </div>
+                    <div class="text-sm sm:text-base space-y-1.5 mt-2">
+                        <p>• De Ec. 1 (<span class="font-mono font-bold">${eq1Str}</span>): <span class="math-expr">${vDesp} =</span> ${expr1HTML}</p>
+                        <p>• De Ec. 2 (<span class="font-mono font-bold">${eq2Str}</span>): <span class="math-expr">${vDesp} =</span> ${expr2HTML}</p>
+                    </div>
+                </div>
+
+                <!-- PASO 2 -->
+                <div class="paso-solver" style="border-left-color: #54887D;">
+                    <span class="text-xs font-extrabold uppercase tracking-wider text-[#54887D] block mb-1">Paso 2 • Igualar ambas expresiones obtenidas</span>
+                    <p class="text-sm text-slate-700 mb-2">Por propiedad transitiva (<span class="font-mono font-bold">${vDesp} = ${vDesp}</span>), igualamos ambos despejes:</p>
+                    <div class="bg-[#F2F5E9] p-2.5 rounded-lg text-center">
+                        ${expr1HTML} <span class="font-bold text-lg mx-2 text-[#1269A8]">=</span> ${expr2HTML}
+                    </div>
+                </div>
+            `;
+
+            // Paso 3: Resolución de la ecuación lineal resultante
+            const lineaCruzada = (Math.abs(den1 - 1) > EPS || Math.abs(den2 - 1) > EPS)
+                ? `<p>• Aplicando <strong>productos cruzados</strong>: <span class="math-expr">${fmt(den2)}(${formatearNumeradorDespeje(numC1, numO1, vOtra)}) = ${fmt(den1)}(${formatearNumeradorDespeje(numC2, numO2, vOtra)})</span></p>
+                   <p>• Desarrollando paréntesis: <span class="math-expr">${formatearNumeradorDespeje(izqConst, izqVar, vOtra)} = ${formatearNumeradorDespeje(derConst, derVar, vOtra)}</span></p>`
+                : '';
+
+            // Evaluar tipo de solución
+            if (Math.abs(coefFinalVar) < EPS) {
+                if (Math.abs(coefFinalConst) < EPS) {
+                    // Infinitas soluciones (0 = 0)
+                    htmlPasos += `
+                        <div class="paso-solver" style="border-left-color: #A6B046;">
+                            <span class="text-xs font-extrabold uppercase tracking-wider text-[#54887D] block mb-1">Paso 3 • Simplificar la Ecuación Resultante</span>
+                            <div class="text-sm sm:text-base space-y-1.5 mt-1">
+                                ${lineaCruzada}
+                                <p>• Agrupando términos semejantes: <span class="math-expr">0 = 0</span> (<strong>Identidad algebraica</strong>).</p>
+                                <p class="font-bold text-[#54887D]">Conclusión: Ambas ecuaciones son equivalentes. El sistema tiene INFINITAS SOLUCIONES.</p>
+                            </div>
+                        </div>`;
+                    tituloFinal.textContent = 'Infinitas Soluciones (0 = 0)';
+                    detalleFinal.textContent = 'Sistema Compatible Indeterminado: ambas ecuaciones representan la misma recta.';
+                    resumenBox.style.background = 'linear-gradient(135deg, #54887D 0%, #375c54 100%)';
+                } else {
+                    // Sin solución (0 = k)
+                    htmlPasos += `
+                        <div class="paso-solver" style="border-left-color: #b45309;">
+                            <span class="text-xs font-extrabold uppercase tracking-wider text-amber-800 block mb-1">Paso 3 • Simplificar la Ecuación Resultante</span>
+                            <div class="text-sm sm:text-base space-y-1.5 mt-1">
+                                ${lineaCruzada}
+                                <p>• Agrupando términos semejantes: <span class="math-expr">0 = ${fmt(coefFinalConst)}</span> (<strong>Igualdad falsa</strong>).</p>
+                                <p class="font-bold text-amber-800">Conclusión: Se cancela la variable y queda una contradicción. El sistema NO TIENE SOLUCIÓN.</p>
+                            </div>
+                        </div>`;
+                    tituloFinal.textContent = `Sin Solución (0 = ${fmt(coefFinalConst)})`;
+                    detalleFinal.textContent = 'Sistema Incompatible: no existe ningún par (x, y) que satisfaga ambas ecuaciones.';
+                    resumenBox.style.background = 'linear-gradient(135deg, #b45309 0%, #78350f 100%)';
+                }
+            } else {
+                // Solución Única
+                const valOtra = coefFinalConst / coefFinalVar;
+                const valOtraStr = formatearRacional(coefFinalConst, coefFinalVar);
+
+                // Paso 4: Sustituir en el primer despeje
+                const numDesp = numC1 + numO1 * valOtra;
+                const valDesp = numDesp / den1;
+                const valDespStr = formatearRacional(Math.round(numDesp * 1e6) / 1e6, den1);
+
+                const solX = vDesp === 'x' ? valDesp : valOtra;
+                const solY = vDesp === 'y' ? valDesp : valOtra;
+                const solXStr = vDesp === 'x' ? valDespStr : valOtraStr;
+                const solYStr = vDesp === 'y' ? valDespStr : valOtraStr;
+
+                // Paso 5: Verificación en ambas ecuaciones
+                const check1 = a1 * solX + b1 * solY;
+                const check2 = a2 * solX + b2 * solY;
+
+                htmlPasos += `
+                    <div class="paso-solver" style="border-left-color: #A6B046;">
+                        <span class="text-xs font-extrabold uppercase tracking-wider text-[#54887D] block mb-1">Paso 3 • Resolver la ecuación lineal para "${vOtra}"</span>
+                        <div class="text-sm sm:text-base space-y-1.5 mt-1">
+                            ${lineaCruzada}
+                            <p>• Agrupando términos con <span class="font-mono font-bold">${vOtra}</span> y constantes: <span class="math-expr">${fmt(coefFinalVar)}${vOtra} = ${fmt(coefFinalConst)}</span></p>
+                            <p>• Despejando <span class="font-mono font-bold">${vOtra}</span>: <span class="math-expr">${vOtra} = ${valOtraStr}</span></p>
+                        </div>
+                    </div>
+
+                    <div class="paso-solver" style="border-left-color: #F7D615;">
+                        <span class="text-xs font-extrabold uppercase tracking-wider text-[#1269A8] block mb-1">Paso 4 • Sustituir "${vOtra}" en el primer despeje para hallar "${vDesp}"</span>
+                        <div class="text-sm sm:text-base space-y-1.5 mt-1">
+                            <p>• Reemplazando <span class="font-mono font-bold">${vOtra} = ${fmt(valOtra)}</span> en el despeje de la Ec. 1:</p>
+                            <p>• <span class="math-expr">${vDesp} = (${fmt(numC1)} ${numO1 >= 0 ? '+' : '-'} ${fmt(Math.abs(numO1))}(${fmt(valOtra)})) / ${fmt(den1)} = ${valDespStr}</span></p>
+                        </div>
+                    </div>
+
+                    <div class="paso-solver">
+                        <span class="text-xs font-extrabold uppercase tracking-wider text-[#54887D] block mb-1">Paso 5 • Comprobación en ambas ecuaciones originales</span>
+                        <div class="text-xs sm:text-sm space-y-1 mt-1 text-slate-700">
+                            <p>✔ Ec. 1: <span class="font-mono font-bold">${fmt(a1)}(${fmt(solX)}) + ${fmt(b1)}(${fmt(solY)}) = ${fmt(check1)}</span> (coincide con <span class="font-mono font-bold">${fmt(c1)}</span>)</p>
+                            <p>✔ Ec. 2: <span class="font-mono font-bold">${fmt(a2)}(${fmt(solX)}) + ${fmt(b2)}(${fmt(solY)}) = ${fmt(check2)}</span> (coincide con <span class="font-mono font-bold">${fmt(c2)}</span>)</p>
+                        </div>
+                    </div>
+                `;
+
+                tituloFinal.textContent = `Solución Única: (${fmt(solX)}, ${fmt(solY)})`;
+                detalleFinal.textContent = `x = ${solXStr}   |   y = ${solYStr}`;
+                resumenBox.style.background = 'linear-gradient(135deg, #1269A8 0%, #0d4f80 100%)';
+            }
+
+            contenedor.innerHTML = htmlPasos;
+        }
+
+        // Inicializar solucionador al cargar la ventana
+        window.onload = function () {
+            ejecutarSolucionador();
+        };
+    </script>
+</body>
+</html>

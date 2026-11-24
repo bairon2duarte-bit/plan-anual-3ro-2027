@@ -1,0 +1,1666 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pizarra Digital - Modelación y Resolución de Problemas | Colegio Montano</title>
+    <!-- Carga de Tailwind CSS para utilidades de diseño responsivo y layout -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Configuración de Variables Institucionales Colegio Montano */
+        :root {
+            --azul-principal: #1269A8;
+            --amarillo-brillante: #F7D615;
+            --verde-grisaceo: #54887D;
+            --azul-claro: #88B5C7;
+            --verde-oliva: #A6B046;
+            --blanco-suave: #F2F5E9;
+        }
+
+        /* Tipografía Institucional */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e2e8f0;
+            color: #1e293b;
+            margin: 0;
+            padding: 12px;
+        }
+
+        /* Marco Principal de Pizarra Digital */
+        #pizarra-container {
+            background-color: var(--blanco-suave);
+            border: 5px solid var(--amarillo-brillante);
+            border-radius: 12px;
+            box-shadow: 0 12px 30px rgba(18, 105, 168, 0.25);
+            max-width: 1200px;
+            margin: 0 auto;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 85vh;
+        }
+
+        /* Encabezado de la Pizarra */
+        .pizarra-header {
+            background: linear-gradient(135deg, var(--azul-principal) 0%, #0d4f80 100%);
+            color: white;
+            padding: 16px 24px;
+            border-bottom: 4px solid var(--amarillo-brillante);
+        }
+
+        /* Botón Fullscreen */
+        .btn-fullscreen {
+            background-color: var(--amarillo-brillante);
+            color: #0f172a;
+            font-weight: 700;
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: 2px solid #ffffff;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+        .btn-fullscreen:hover {
+            background-color: #ffe234;
+            transform: translateY(-1px);
+        }
+
+        /* Navegación de Pestañas */
+        .nav-tabs {
+            background-color: #ffffff;
+            border-bottom: 2px solid var(--azul-claro);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            padding: 10px 20px;
+        }
+
+        .tab-btn {
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.92rem;
+            color: var(--azul-principal);
+            background-color: transparent;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .tab-btn:hover {
+            background-color: rgba(136, 181, 199, 0.25);
+            border-color: var(--azul-claro);
+        }
+
+        .tab-btn.active {
+            background-color: var(--azul-principal);
+            color: #ffffff;
+            border-color: var(--amarillo-brillante);
+            box-shadow: 0 3px 8px rgba(18, 105, 168, 0.3);
+        }
+
+        /* Pestaña destacada para el Laboratorio */
+        .tab-btn-lab {
+            background-color: rgba(247, 214, 21, 0.25);
+            border-color: var(--amarillo-brillante);
+        }
+        .tab-btn-lab.active {
+            background-color: var(--azul-principal);
+            color: #ffffff;
+            border-color: var(--amarillo-brillante);
+        }
+
+        /* Tarjetas de Contenido */
+        .card-montano {
+            background-color: #ffffff;
+            border: 2px solid var(--verde-grisaceo);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 18px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Etiquetas de Nivel */
+        .badge-nivel {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .badge-basico {
+            background-color: var(--verde-oliva);
+            color: #ffffff;
+        }
+        .badge-intermedio {
+            background-color: var(--verde-grisaceo);
+            color: #ffffff;
+        }
+        .badge-avanzado {
+            background-color: var(--azul-principal);
+            color: #ffffff;
+            border: 1px solid var(--amarillo-brillante);
+        }
+
+        /* Contenedor de Soluciones Ocultas */
+        .solucion-box {
+            background-color: rgba(136, 181, 199, 0.25);
+            border: 1.5px dashed var(--azul-principal);
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin-top: 12px;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .btn-solucion {
+            background-color: var(--azul-principal);
+            color: white;
+            font-weight: 600;
+            padding: 7px 14px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.2s;
+            margin-top: 10px;
+        }
+        .btn-solucion:hover {
+            background-color: var(--verde-grisaceo);
+        }
+
+        /* Botón Directo para Cargar en Laboratorio */
+        .btn-cargar-lab {
+            background-color: var(--amarillo-brillante);
+            color: #0f172a;
+            font-weight: 700;
+            padding: 7px 14px;
+            border-radius: 6px;
+            font-size: 0.88rem;
+            cursor: pointer;
+            border: 1.5px solid #0f172a;
+            transition: all 0.2s ease;
+            margin-top: 10px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .btn-cargar-lab:hover {
+            background-color: #ffe234;
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Bloques Matemáticos Visuales */
+        .math-expr {
+            font-family: 'Cambria Math', 'Times New Roman', serif;
+            font-size: 1.05rem;
+            font-weight: bold;
+            color: var(--azul-principal);
+            background-color: #f8fafc;
+            padding: 2px 8px;
+            border-radius: 4px;
+            border: 1px solid #cbd5e1;
+            display: inline-block;
+        }
+
+        /* Llave Visual para Sistemas */
+        .sistema-box {
+            display: inline-flex;
+            align-items: center;
+            background-color: #f8fafc;
+            border: 1.5px solid var(--azul-claro);
+            border-left: 5px solid var(--azul-principal);
+            border-radius: 8px;
+            padding: 6px 14px;
+            font-family: 'Cambria Math', 'Times New Roman', serif;
+            font-weight: bold;
+            color: var(--azul-principal);
+            margin: 4px 0;
+            line-height: 1.5;
+        }
+
+        /* Sub-pestañas de Nivel */
+        .subtab-btn {
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 0.88rem;
+            cursor: pointer;
+            border: 2px solid var(--verde-grisaceo);
+            background-color: #ffffff;
+            color: var(--verde-grisaceo);
+            transition: all 0.2s;
+        }
+        .subtab-btn.active {
+            background-color: var(--verde-grisaceo);
+            color: #ffffff;
+        }
+
+        /* Tarjetas de Paso en el Laboratorio */
+        .paso-lab {
+            background-color: #ffffff;
+            border-left: 5px solid var(--azul-principal);
+            border-top: 1px solid #cbd5e1;
+            border-right: 1px solid #cbd5e1;
+            border-bottom: 1px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 14px 16px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Modo Fullscreen */
+        :fullscreen #pizarra-container {
+            max-width: 100%;
+            width: 100vw;
+            height: 100vh;
+            border-radius: 0;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Marco Principal de la Pizarra Digital -->
+    <div id="pizarra-container">
+        
+        <!-- Encabezado Institucional -->
+        <header class="pizarra-header flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-4">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyEop0yf6lZ7Jk9MILZxF1rBj4Oqs5esyhIQ&s" 
+                     alt="Logo Colegio Montano" 
+                     class="w-14 h-14 rounded-lg bg-white p-1 object-contain border-2 border-[#F7D615]"
+                     onerror="this.src='https://placehold.co/60x60/1269A8/F7D615?text=CM'">
+                <div>
+                    <span class="text-xs uppercase tracking-widest font-bold text-[#F7D615] block">Colegio Montano • Tercera Unidad • Matemática</span>
+                    <h1 class="text-xl sm:text-2xl font-bold leading-tight">Modelación y Resolución de Problemas mediante Sistemas de Ecuaciones</h1>
+                    <p class="text-sm text-[#88B5C7] font-semibold">Nivel: Tercero Básico • Guía Interactiva de Pizarra Digital</p>
+                </div>
+            </div>
+            <button id="fullscreen-btn" class="btn-fullscreen flex items-center gap-2" onclick="toggleFullscreen()">
+                <span>⛶ Pantalla completa</span>
+            </button>
+        </header>
+
+        <!-- Barra de Navegación Horizontal -->
+        <nav class="nav-tabs" role="tablist">
+            <button id="tab-teoria" class="tab-btn active" onclick="cambiarSeccion('teoria', this)">📘 1. Teoría</button>
+            <button id="tab-ejemplos" class="tab-btn" onclick="cambiarSeccion('ejemplos', this)">💡 2. Ejemplos Resueltos (15)</button>
+            <button id="tab-ejercicios" class="tab-btn" onclick="cambiarSeccion('ejercicios', this)">✍️ 3. Ejercicios Prácticos (15)</button>
+            <button id="tab-reflexion" class="tab-btn" onclick="cambiarSeccion('reflexion', this)">🧠 4. Reflexión Crítica</button>
+            <button id="tab-evaluacion" class="tab-btn" onclick="cambiarSeccion('evaluacion', this)">✅ 5. Evaluación Formativa</button>
+            <button id="tab-laboratorio" class="tab-btn tab-btn-lab" onclick="cambiarSeccion('laboratorio', this)">🧩 6. Laboratorio de Modelación</button>
+        </nav>
+
+        <!-- Lienzo Principal de Contenido -->
+        <main class="p-4 sm:p-6 flex-1">
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 1: EXPLICACIÓN TEÓRICA             -->
+            <!-- ========================================== -->
+            <section id="sec-teoria" class="seccion-contenido">
+                <div class="card-montano">
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-3 border-b-2 border-[#F7D615] pb-2">
+                        <h2 class="text-2xl font-bold text-[#1269A8]">¿Qué es la Modelación Matemática mediante Sistemas de Ecuaciones?</h2>
+                        <button class="btn-cargar-lab !mt-0" onclick="cargarPlantillaLab('cafe')">🧩 Probar en Laboratorio</button>
+                    </div>
+                    <p class="text-base leading-relaxed mb-4">
+                        <strong>Modelar un problema real</strong> consiste en traducir una situación cotidiana, comercial, científica o geométrica desde el <em>lenguaje verbal</em> hacia un <strong>modelo algebraico</strong> formado por dos ecuaciones lineales con dos incógnitas (<span class="math-expr">2 × 2</span>). Cuando en un problema aparecen <strong>dos cantidades desconocidas</strong> y se nos proporcionan <strong>dos condiciones independientes</strong> entre ellas, un sistema de ecuaciones permite hallar exactamente ambas magnitudes.
+                    </p>
+
+                    <!-- Ciclo de Modelación en 5 Pasos -->
+                    <div class="bg-[#F2F5E9] border-2 border-[#A6B046] rounded-xl p-4 my-4">
+                        <h3 class="font-bold text-[#54887D] mb-3">🧭 Ciclo de Modelación Matemática en 5 Pasos</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 text-sm">
+                            <div class="bg-white p-3 rounded-lg border-t-4 border-[#1269A8] shadow-sm">
+                                <strong class="text-[#1269A8] block mb-1">Paso 1: Comprender el Contexto</strong>
+                                <p class="text-slate-700">Lee con atención el enunciado, identifica los datos conocidos, las unidades de medida y lo que se pregunta.</p>
+                            </div>
+                            <div class="bg-white p-3 rounded-lg border-t-4 border-[#54887D] shadow-sm">
+                                <strong class="text-[#54887D] block mb-1">Paso 2: Definir Incógnitas (x, y)</strong>
+                                <p class="text-slate-700">Asigna claramente qué representa <span class="math-expr text-xs">x</span> y qué representa <span class="math-expr text-xs">y</span>, especificando sus <strong>unidades</strong> (Q, libras, años, km/h).</p>
+                            </div>
+                            <div class="bg-white p-3 rounded-lg border-t-4 border-[#A6B046] shadow-sm">
+                                <strong class="text-[#54887D] block mb-1">Paso 3: Plantear el Sistema 2×2</strong>
+                                <p class="text-slate-700">Traduce cada condición del problema en una ecuación lineal (<span class="math-expr text-xs">a₁x + b₁y = c₁</span> y <span class="math-expr text-xs">a₂x + b₂y = c₂</span>).</p>
+                            </div>
+                            <div class="bg-white p-3 rounded-lg border-t-4 border-[#F7D615] shadow-sm">
+                                <strong class="text-[#1269A8] block mb-1">Paso 4: Resolver el Sistema</strong>
+                                <p class="text-slate-700">Elige el método algebraico más conveniente (<strong>Eliminación</strong>, <strong>Sustitución</strong> o <strong>Igualación</strong>) y calcula <span class="math-expr text-xs">(x, y)</span>.</p>
+                            </div>
+                            <div class="bg-white p-3 rounded-lg border-t-4 border-[#1269A8] shadow-sm">
+                                <strong class="text-[#1269A8] block mb-1">Paso 5: Interpretar y Validar</strong>
+                                <p class="text-slate-700">Redacta la respuesta con unidades y comprueba que tenga <strong>sentido real</strong> (sin precios, edades o cantidades negativas).</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tabla de Traducción de Lenguaje Verbal a Algebraico -->
+                    <div class="mt-5">
+                        <h3 class="text-lg font-bold text-[#1269A8] mb-2">📖 Diccionario de Traducción: Del Lenguaje Verbal al Lenguaje Algebraico</h3>
+                        <div class="overflow-x-auto rounded-xl border-2 border-[#88B5C7]">
+                            <table class="w-full text-left border-collapse bg-white text-sm">
+                                <thead>
+                                    <tr class="bg-[#1269A8] text-white">
+                                        <th class="p-3 border-b border-[#88B5C7]">Expresión en Lenguaje Verbal</th>
+                                        <th class="p-3 border-b border-[#88B5C7]">Traducción Algebraica</th>
+                                        <th class="p-3 border-b border-[#88B5C7]">Ejemplo Contextual</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-200">
+                                    <tr class="hover:bg-sky-50">
+                                        <td class="p-3 font-medium">La suma de dos cantidades es 45</td>
+                                        <td class="p-3"><span class="math-expr text-xs">x + y = 45</span></td>
+                                        <td class="p-3 text-slate-600">Entre boletos de adulto y niño se vendieron 45 entradas.</td>
+                                    </tr>
+                                    <tr class="hover:bg-sky-50">
+                                        <td class="p-3 font-medium">La diferencia entre el mayor y el menor es 12</td>
+                                        <td class="p-3"><span class="math-expr text-xs">x - y = 12</span></td>
+                                        <td class="p-3 text-slate-600">Carlos es 12 años mayor que su hermana Ana.</td>
+                                    </tr>
+                                    <tr class="hover:bg-sky-50">
+                                        <td class="p-3 font-medium">El triple de uno excede al doble del otro en 8</td>
+                                        <td class="p-3"><span class="math-expr text-xs">3x - 2y = 8</span></td>
+                                        <td class="p-3 text-slate-600">Tres cuadernos cuestan Q8 más que dos estuches.</td>
+                                    </tr>
+                                    <tr class="hover:bg-sky-50">
+                                        <td class="p-3 font-medium">El perímetro de un rectángulo mide 60 m</td>
+                                        <td class="p-3"><span class="math-expr text-xs">2x + 2y = 60</span></td>
+                                        <td class="p-3 text-slate-600">Dos largos (<span class="font-mono">x</span>) más dos anchos (<span class="font-mono">y</span>) suman 60 m.</td>
+                                    </tr>
+                                    <tr class="hover:bg-sky-50">
+                                        <td class="p-3 font-medium">Valor total de billetes de Q10 y Q20 es Q250</td>
+                                        <td class="p-3"><span class="math-expr text-xs">10x + 20y = 250</span></td>
+                                        <td class="p-3 text-slate-600"><span class="font-mono">x</span> billetes de Q10 y <span class="font-mono">y</span> billetes de Q20 suman Q250.</td>
+                                    </tr>
+                                    <tr class="hover:bg-sky-50">
+                                        <td class="p-3 font-medium">Mezcla de concentraciones al 20% y 50%</td>
+                                        <td class="p-3"><span class="math-expr text-xs">0.20x + 0.50y = C</span></td>
+                                        <td class="p-3 text-slate-600">Cantidad pura aportada por <span class="font-mono">x</span> litros y <span class="font-mono">y</span> litros.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3 Tarjetas SVG de Arquetipos de Problemas -->
+                <div class="card-montano">
+                    <h3 class="text-xl font-bold text-[#1269A8] mb-2">📐 Arquetipos Clásicos de Problemas Modelados con Sistemas 2×2</h3>
+                    <p class="text-sm text-slate-600 mb-4">Reconocer la estructura del problema facilita plantear inmediatamente las dos ecuaciones:</p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <!-- Arquetipo 1: Mezclas y Concentraciones -->
+                        <div class="p-4 bg-emerald-50 border-2 border-[#A6B046] rounded-xl text-center flex flex-col justify-between">
+                            <div>
+                                <span class="badge-nivel badge-basico mb-2">Arquetipo 1 • Mezclas</span>
+                                <h4 class="font-bold text-[#1269A8]">Mezclas y Concentraciones</h4>
+                                <div class="my-2 flex justify-center">
+                                    <svg width="215" height="114" viewBox="0 0 215 114" class="bg-white rounded border border-slate-300">
+                                        <rect x="12" y="10" width="84" height="36" rx="5" fill="#e0f2fe" stroke="#1269A8" stroke-width="1.3"/>
+                                        <text x="54" y="25" text-anchor="middle" font-size="10" font-weight="bold" fill="#1269A8">Tipo A (x)</text>
+                                        <text x="54" y="39" text-anchor="middle" font-size="9.5" fill="#0f172a">Q20/lb o 20%</text>
+                                        <text x="107" y="33" text-anchor="middle" font-size="14" font-weight="bold" fill="#54887D">+</text>
+                                        <rect x="119" y="10" width="84" height="36" rx="5" fill="#fef9c3" stroke="#b45309" stroke-width="1.3"/>
+                                        <text x="161" y="25" text-anchor="middle" font-size="10" font-weight="bold" fill="#92400e">Tipo B (y)</text>
+                                        <text x="161" y="39" text-anchor="middle" font-size="9.5" fill="#0f172a">Q35/lb o 50%</text>
+                                        <rect x="16" y="56" width="183" height="46" rx="6" fill="#f0fdf4" stroke="#15803d" stroke-width="1.4"/>
+                                        <text x="107" y="74" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#166534">Ec. 1 (Masa): x + y = Total</text>
+                                        <text x="107" y="91" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#1269A8">Ec. 2 (Valor): p₁x + p₂y = Valor</text>
+                                    </svg>
+                                </div>
+                                <p class="text-xs sm:text-sm text-slate-700">Una ecuación expresa la <strong>cantidad total mezclada</strong> (<span class="math-expr text-xs">x + y</span>) y la segunda expresa el <strong>costo o sustancia pura total</strong>.</p>
+                            </div>
+                            <button class="btn-cargar-lab justify-center w-full" onclick="cargarPlantillaLab('cafe')">🧩 Probar Mezcla de Café</button>
+                        </div>
+
+                        <!-- Arquetipo 2: Compras, Tarifas y Dinero -->
+                        <div class="p-4 bg-amber-50 border-2 border-[#F7D615] rounded-xl text-center flex flex-col justify-between">
+                            <div>
+                                <span class="badge-nivel badge-avanzado mb-2">Arquetipo 2 • Comercio (Q)</span>
+                                <h4 class="font-bold text-[#1269A8]">Compras, Tarifas y Dinero</h4>
+                                <div class="my-2 flex justify-center">
+                                    <svg width="215" height="114" viewBox="0 0 215 114" class="bg-white rounded border border-slate-300">
+                                        <rect x="12" y="10" width="191" height="38" rx="5" fill="#fef3c7" stroke="#b45309" stroke-width="1.3"/>
+                                        <text x="107" y="25" text-anchor="middle" font-size="10" font-weight="bold" fill="#92400e">Billetes o Productos (x, y)</text>
+                                        <text x="107" y="40" text-anchor="middle" font-size="9.5" fill="#0f172a">Cantidad total vs. Total en Quetzales (Q)</text>
+                                        <rect x="16" y="56" width="183" height="46" rx="6" fill="#eff6ff" stroke="#1269A8" stroke-width="1.4"/>
+                                        <text x="107" y="74" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#1269A8">Ec. 1 (Unidades): x + y = N</text>
+                                        <text x="107" y="91" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#54887D">Ec. 2 (Dinero): v₁x + v₂y = Q_total</text>
+                                    </svg>
+                                </div>
+                                <p class="text-xs sm:text-sm text-slate-700">Distingue siempre entre el <strong>número de artículos o billetes</strong> y su <strong>valor monetario acumulado en Quetzales</strong>.</p>
+                            </div>
+                            <button class="btn-cargar-lab justify-center w-full" onclick="cargarPlantillaLab('billetes')">🧩 Probar Billetes en Q</button>
+                        </div>
+
+                        <!-- Arquetipo 3: Edades, Geometría y Movimiento -->
+                        <div class="p-4 bg-sky-50 border-2 border-[#88B5C7] rounded-xl text-center flex flex-col justify-between">
+                            <div>
+                                <span class="badge-nivel badge-intermedio mb-2">Arquetipo 3 • Relaciones</span>
+                                <h4 class="font-bold text-[#1269A8]">Edades, Geometría y Movimiento</h4>
+                                <div class="my-2 flex justify-center">
+                                    <svg width="215" height="114" viewBox="0 0 215 114" class="bg-white rounded border border-slate-300">
+                                        <rect x="12" y="10" width="90" height="38" rx="5" fill="#e0f2fe" stroke="#1269A8" stroke-width="1.3"/>
+                                        <text x="57" y="25" text-anchor="middle" font-size="10" font-weight="bold" fill="#1269A8">Hoy / A favor</text>
+                                        <text x="57" y="40" text-anchor="middle" font-size="9.5" fill="#0f172a">x + y = S o v + c</text>
+                                        <rect x="113" y="10" width="90" height="38" rx="5" fill="#ecfdf5" stroke="#54887D" stroke-width="1.3"/>
+                                        <text x="158" y="25" text-anchor="middle" font-size="10" font-weight="bold" fill="#54887D">+t años / Contra</text>
+                                        <text x="158" y="40" text-anchor="middle" font-size="9.5" fill="#0f172a">x+t = k(y+t) o v - c</text>
+                                        <rect x="16" y="56" width="183" height="46" rx="6" fill="#f8fafc" stroke="#54887D" stroke-width="1.4"/>
+                                        <text x="107" y="74" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#1269A8">Dos instantes o trayectos</text>
+                                        <text x="107" y="91" text-anchor="middle" font-size="10" font-weight="bold" fill="#54887D">Distancia = Velocidad × Tiempo</text>
+                                    </svg>
+                                </div>
+                                <p class="text-xs sm:text-sm text-slate-700">Compara <strong>dos momentos en el tiempo</strong> (edades hoy y en <span class="math-expr text-xs">t</span> años) o trayectos <strong>a favor y en contra</strong> de una corriente.</p>
+                            </div>
+                            <button class="btn-cargar-lab justify-center w-full" onclick="cargarPlantillaLab('velocidades')">🧩 Probar Velocidades</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 2: EJEMPLOS RESUELTOS (15)         -->
+            <!-- ========================================== -->
+            <section id="sec-ejemplos" class="seccion-contenido hidden">
+                <div class="flex flex-wrap items-center justify-between gap-3 mb-4 bg-white p-4 rounded-xl border-2 border-[#54887D]">
+                    <div>
+                        <h2 class="text-xl font-bold text-[#1269A8]">Ejemplos Resueltos Paso a Paso (Modelación de Problemas)</h2>
+                        <p class="text-sm text-slate-600">Observa la definición de variables con unidades, el planteamiento del sistema 2×2, la resolución y la interpretación contextual.</p>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <button class="subtab-btn active" onclick="filtrarSubnivel('ejemplos', 'basico', this)">Nivel Básico (5)</button>
+                        <button class="subtab-btn" onclick="filtrarSubnivel('ejemplos', 'intermedio', this)">Nivel Intermedio (5)</button>
+                        <button class="subtab-btn" onclick="filtrarSubnivel('ejemplos', 'avanzado', this)">Nivel Avanzado (5)</button>
+                    </div>
+                </div>
+
+                <!-- EJEMPLOS BÁSICOS -->
+                <div id="ejemplos-basico" class="subcontenido-ejemplos space-y-4">
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-basico">Básico • Ejemplo 1 (Suma y diferencia de dos números)</span>
+                            <button class="btn-cargar-lab !mt-0" onclick="cargarEnLaboratorio(1, 1, 48, 1, -1, 14, 'Número mayor', 'unidades', 'Número menor', 'unidades', 'eliminacion', 'Ejemplo Básico 1')">🧩 Cargar en Laboratorio</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">La suma de dos números es <span class="math-expr">48</span> y su diferencia es <span class="math-expr">14</span>. Encuentra ambos números.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>1. Variables:</strong> Sea <span class="math-expr">x</span> = número mayor, <span class="math-expr">y</span> = número menor.</p>
+                            <p><strong>2. Sistema 2×2:</strong> <span class="math-expr">x + y = 48</span> y <span class="math-expr">x - y = 14</span>.</p>
+                            <p><strong>3. Resolución (Eliminación):</strong> Sumando verticalmente: <span class="math-expr">2x = 62 ➔ x = 31</span>. En Ec. 1: <span class="math-expr">31 + y = 48 ➔ y = 17</span>.</p>
+                            <p class="font-bold text-[#54887D]">4. Respuesta Contextual: Los números son 31 y 17 (31 + 17 = 48 y 31 - 17 = 14).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-basico">Básico • Ejemplo 2 (Perímetro de una cancha rectangular)</span>
+                            <button class="btn-cargar-lab !mt-0" onclick="cargarEnLaboratorio(2, 2, 90, 1, -1, 11, 'Largo de la cancha', 'metros', 'Ancho de la cancha', 'metros', 'sustitucion', 'Ejemplo Básico 2')">🧩 Cargar en Laboratorio</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">El perímetro de una cancha rectangular del colegio mide <span class="math-expr">90 m</span> y el largo excede al ancho en <span class="math-expr">11 m</span>. Halla sus dimensiones.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>1. Variables:</strong> Sea <span class="math-expr">x</span> = largo (metros), <span class="math-expr">y</span> = ancho (metros).</p>
+                            <p><strong>2. Sistema 2×2:</strong> <span class="math-expr">2x + 2y = 90</span> y <span class="math-expr">x - y = 11</span>.</p>
+                            <p><strong>3. Resolución (Sustitución):</strong> De Ec. 2: <span class="math-expr">x = y + 11</span>. Sustituyendo en Ec. 1: <span class="math-expr">2(y + 11) + 2y = 90 ➔ 4y = 68 ➔ y = 17</span>; <span class="math-expr">x = 17 + 11 = 28</span>.</p>
+                            <p class="font-bold text-[#54887D]">4. Respuesta Contextual: La cancha mide 28 metros de largo por 17 metros de ancho.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-basico">Básico • Ejemplo 3 (Compra en librería escolar en Quetzales)</span>
+                            <button class="btn-cargar-lab !mt-0" onclick="cargarEnLaboratorio(3, 2, 34, 1, 2, 18, 'Precio cuaderno', 'Quetzales (Q)', 'Precio lapicero', 'Quetzales (Q)', 'eliminacion', 'Ejemplo Básico 3')">🧩 Cargar en Laboratorio</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">En una librería de Guatemala, <span class="math-expr">3</span> cuadernos y <span class="math-expr">2</span> lapiceros cuestan <span class="math-expr">Q34</span>, mientras que <span class="math-expr">1</span> cuaderno y <span class="math-expr">2</span> lapiceros cuestan <span class="math-expr">Q18</span>. ¿Cuánto cuesta cada artículo?</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>1. Variables:</strong> Sea <span class="math-expr">x</span> = precio de un cuaderno (Q), <span class="math-expr">y</span> = precio de un lapicero (Q).</p>
+                            <p><strong>2. Sistema 2×2:</strong> <span class="math-expr">3x + 2y = 34</span> y <span class="math-expr">x + 2y = 18</span>.</p>
+                            <p><strong>3. Resolución (Eliminación):</strong> Multiplicando Ec. 2 por <span class="math-expr">-1</span> y sumando: <span class="math-expr">2x = 16 ➔ x = 8</span>. En Ec. 2: <span class="math-expr">8 + 2y = 18 ➔ y = 5</span>.</p>
+                            <p class="font-bold text-[#54887D]">4. Respuesta Contextual: Cada cuaderno cuesta Q8 y cada lapicero cuesta Q5.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-basico">Básico • Ejemplo 4 (Boletos de kermés escolar)</span>
+                            <button class="btn-cargar-lab !mt-0" onclick="cargarEnLaboratorio(1, 1, 120, 25, 10, 2100, 'Boletos de adulto', 'boletos', 'Boletos de estudiante', 'boletos', 'sustitucion', 'Ejemplo Básico 4')">🧩 Cargar en Laboratorio</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Para una kermés del Colegio Montano se vendieron <span class="math-expr">120</span> boletos en total. El boleto de adulto costó <span class="math-expr">Q25</span> y el de estudiante <span class="math-expr">Q10</span>, recaudándose <span class="math-expr">Q2,100</span>. ¿Cuántos boletos de cada tipo se vendieron?</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>1. Variables:</strong> Sea <span class="math-expr">x</span> = boletos de adulto, <span class="math-expr">y</span> = boletos de estudiante.</p>
+                            <p><strong>2. Sistema 2×2:</strong> <span class="math-expr">x + y = 120</span> y <span class="math-expr">25x + 10y = 2100</span>.</p>
+                            <p><strong>3. Resolución (Sustitución):</strong> <span class="math-expr">y = 120 - x</span>. En Ec. 2: <span class="math-expr">25x + 10(120 - x) = 2100 ➔ 15x = 900 ➔ x = 60</span>; <span class="math-expr">y = 60</span>.</p>
+                            <p class="font-bold text-[#54887D]">4. Respuesta Contextual: Se vendieron 60 boletos de adulto y 60 boletos de estudiante.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-basico">Básico • Ejemplo 5 (Ángulos suplementarios)</span>
+                            <button class="btn-cargar-lab !mt-0" onclick="cargarEnLaboratorio(1, 1, 180, 1, -3, 20, 'Ángulo mayor', 'grados (°)', 'Ángulo menor', 'grados (°)', 'sustitucion', 'Ejemplo Básico 5')">🧩 Cargar en Laboratorio</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Dos ángulos son suplementarios (suman <span class="math-expr">180°</span>) y el mayor mide <span class="math-expr">20°</span> más que el triple del menor. Halla la medida de cada ángulo.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>1. Variables:</strong> Sea <span class="math-expr">x</span> = ángulo mayor (°), <span class="math-expr">y</span> = ángulo menor (°).</p>
+                            <p><strong>2. Sistema 2×2:</strong> <span class="math-expr">x + y = 180</span> y <span class="math-expr">x - 3y = 20</span>.</p>
+                            <p><strong>3. Resolución (Sustitución):</strong> <span class="math-expr">x = 3y + 20</span>. En Ec. 1: <span class="math-expr">(3y + 20) + y = 180 ➔ 4y = 160 ➔ y = 40</span>; <span class="math-expr">x = 140</span>.</p>
+                            <p class="font-bold text-[#54887D]">4. Respuesta Contextual: Los ángulos miden 140° y 40°.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EJEMPLOS INTERMEDIOS -->
+                <div id="ejemplos-intermedio" class="subcontenido-ejemplos hidden space-y-4">
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-intermedio">Intermedio • Ejemplo 1 (Billetes de Q20 y Q50 en caja)</span>
+                            <button class="btn-cargar-lab !mt-0" onclick="cargarEnLaboratorio(1, 1, 28, 20, 50, 950, 'Billetes de Q20', 'billetes', 'Billetes de Q50', 'billetes', 'eliminacion', 'Ejemplo Intermedio 1')">🧩 Cargar en Laboratorio</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Un cajero tiene <span class="math-expr">28</span> billetes entre denominaciones de <span class="math-expr">Q20</span> y <span class="math-expr">Q50</span>, que suman un total de <span class="math-expr">Q950</span>. ¿Cuántos billetes de cada denominación tiene?</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>1. Variables:</strong> Sea <span class="math-expr">x</span> = billetes de Q20, <span class="math-expr">y</span> = billetes de Q50.</p>
+                            <p><strong>2. Sistema 2×2:</strong> <span class="math-expr">x + y = 28</span> y <span class="math-expr">20x + 50y = 950</span>.</p>
+                            <p><strong>3. Resolución (Eliminación):</strong> Multiplicando Ec. 1 por <span class="math-expr">-20</span>: <span class="math-expr">-20x - 20y = -560</span>. Sumando con Ec. 2: <span class="math-expr">30y = 390 ➔ y = 13</span>; <span class="math-expr">x = 15</span>.</p>
+                            <p class="font-bold text-[#54887D]">4. Respuesta Contextual: Tiene 15 billetes de Q20 y 13 billetes de Q50.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-intermedio">Intermedio • Ejemplo 2 (Problema de edades en dos momentos)</span>
+                            <button class="btn-cargar-lab !mt-0" onclick="cargarEnLaboratorio(1, -2, 0, 1, -3, -10, 'Edad actual del padre', 'años', 'Edad actual del hijo', 'años', 'igualacion', 'Ejemplo Intermedio 2')">🧩 Cargar en Laboratorio</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Hoy la edad de un padre es el doble de la edad de su hijo. Hace <span class="math-expr">10</span> años, la edad del padre era el triple de la edad del hijo. Halla sus edades actuales.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>1. Variables:</strong> Sea <span class="math-expr">x</span> = edad actual del padre (años), <span class="math-expr">y</span> = edad actual del hijo (años).</p>
+                            <p><strong>2. Sistema 2×2:</strong> Hoy: <span class="math-expr">x = 2y ➔ x - 2y = 0</span>. Hace 10 años: <span class="math-expr">x - 10 = 3(y - 10) ➔ x - 3y = -20</span>.</p>
+                            <p><strong>3. Resolución (Igualación):</strong> <span class="math-expr">2y = 3y - 20 ➔ y = 20</span>; <span class="math-expr">x = 40</span>.</p>
+                            <p class="font-bold text-[#54887D]">4. Respuesta Contextual: El padre tiene 40 años y el hijo tiene 20 años.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-intermedio">Intermedio • Ejemplo 3 (Mezcla de café de Antigua y Huehuetenango)</span>
+                            <button class="btn-cargar-lab !mt-0" onclick="cargarEnLaboratorio(1, 1, 30, 24, 36, 864, 'Café de Q24/lb', 'libras', 'Café de Q36/lb', 'libras', 'eliminacion', 'Ejemplo Intermedio 3')">🧩 Cargar en Laboratorio</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Un tostador mezcla café de <span class="math-expr">Q24/lb</span> con café de <span class="math-expr">Q36/lb</span> para obtener <span class="math-expr">30 libras</span> de una mezcla que se vende a <span class="math-expr">Q28.80/lb</span> (<span class="math-expr">30 × 28.80 = Q864</span>). ¿Cuántas libras de cada tipo usó?</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>1. Variables:</strong> Sea <span class="math-expr">x</span> = libras de café de Q24/lb, <span class="math-expr">y</span> = libras de café de Q36/lb.</p>
+                            <p><strong>2. Sistema 2×2:</strong> <span class="math-expr">x + y = 30</span> y <span class="math-expr">24x + 36y = 864</span>.</p>
+                            <p><strong>3. Resolución (Eliminación):</strong> Multiplicando Ec. 1 por <span class="math-expr">-24</span>: <span class="math-expr">-24x - 24y = -720</span>. Sumando: <span class="math-expr">12y = 144 ➔ y = 12</span>; <span class="math-expr">x = 18</span>.</p>
+                            <p class="font-bold text-[#54887D]">4. Respuesta Contextual: Se usaron 18 libras de café de Q24/lb y 12 libras de café de Q36/lb.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-intermedio">Intermedio • Ejemplo 4 (Granja con gallinas y conejos)</span>
+                            <button class="btn-cargar-lab !mt-0" onclick="cargarEnLaboratorio(1, 1, 35, 2, 4, 94, 'Cantidad de gallinas', 'aves', 'Cantidad de conejos', 'animales', 'eliminacion', 'Ejemplo Intermedio 4')">🧩 Cargar en Laboratorio</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">En una granja hay <span class="math-expr">35</span> animales entre gallinas (<span class="math-expr">2</span> patas) y conejos (<span class="math-expr">4</span> patas). Si en total se cuentan <span class="math-expr">94</span> patas, ¿cuántas gallinas y cuántos conejos hay?</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>1. Variables:</strong> Sea <span class="math-expr">x</span> = gallinas, <span class="math-expr">y</span> = conejos.</p>
+                            <p><strong>2. Sistema 2×2:</strong> <span class="math-expr">x + y = 35</span> y <span class="math-expr">2x + 4y = 94</span>.</p>
+                            <p><strong>3. Resolución (Eliminación):</strong> Ec. 1 por <span class="math-expr">-2</span>: <span class="math-expr">-2x - 2y = -70</span>. Sumando: <span class="math-expr">2y = 24 ➔ y = 12</span>; <span class="math-expr">x = 23</span>.</p>
+                            <p class="font-bold text-[#54887D]">4. Respuesta Contextual: Hay 23 gallinas y 12 conejos.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-intermedio">Intermedio • Ejemplo 5 (Examen de opción múltiple con puntos descontados)</span>
+                            <button class="btn-cargar-lab !mt-0" onclick="cargarEnLaboratorio(1, 1, 40, 4, -1, 115, 'Respuestas correctas', 'preguntas', 'Respuestas incorrectas', 'preguntas', 'eliminacion', 'Ejemplo Intermedio 5')">🧩 Cargar en Laboratorio</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Un examen de <span class="math-expr">40</span> preguntas otorga <span class="math-expr">4</span> puntos por cada acierto y resta <span class="math-expr">1</span> punto por cada error. Si un estudiante respondió todas y obtuvo <span class="math-expr">115</span> puntos, ¿cuántas acertó?</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>1. Variables:</strong> Sea <span class="math-expr">x</span> = respuestas correctas, <span class="math-expr">y</span> = respuestas incorrectas.</p>
+                            <p><strong>2. Sistema 2×2:</strong> <span class="math-expr">x + y = 40</span> y <span class="math-expr">4x - y = 115</span>.</p>
+                            <p><strong>3. Resolución (Eliminación directa):</strong> Sumando verticalmente: <span class="math-expr">5x = 155 ➔ x = 31</span>; <span class="math-expr">y = 9</span>.</p>
+                            <p class="font-bold text-[#54887D]">4. Respuesta Contextual: Acertó 31 preguntas y falló 9.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EJEMPLOS AVANZADOS -->
+                <div id="ejemplos-avanzado" class="subcontenido-ejemplos hidden space-y-4">
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-avanzado">Avanzado • Ejemplo 1 (Navegación a favor y en contra de la corriente)</span>
+                            <button class="btn-cargar-lab !mt-0" onclick="cargarEnLaboratorio(1, 1, 18, 1, -1, 12, 'Velocidad lancha agua tranquila', 'km/h', 'Velocidad de la corriente', 'km/h', 'eliminacion', 'Ejemplo Avanzado 1')">🧩 Cargar en Laboratorio</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Una lancha en Río Dulce recorre <span class="math-expr">36 km</span> en <span class="math-expr">2 horas</span> a favor de la corriente (<span class="math-expr">v = 18 km/h</span>), y de regreso recorre los mismos <span class="math-expr">36 km</span> en <span class="math-expr">3 horas</span> en contra de la corriente (<span class="math-expr">v = 12 km/h</span>). Halla la velocidad de la lancha en agua tranquila y la de la corriente.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>1. Variables:</strong> Sea <span class="math-expr">x</span> = velocidad de la lancha (km/h), <span class="math-expr">y</span> = velocidad de la corriente (km/h).</p>
+                            <p><strong>2. Sistema 2×2 (<span class="math-expr">v = d/t</span>):</strong> A favor: <span class="math-expr">x + y = 18</span>. En contra: <span class="math-expr">x - y = 12</span>.</p>
+                            <p><strong>3. Resolución (Eliminación):</strong> Sumando: <span class="math-expr">2x = 30 ➔ x = 15</span>; <span class="math-expr">y = 3</span>.</p>
+                            <p class="font-bold text-[#1269A8]">4. Respuesta Contextual: La lancha viaja a 15 km/h en agua tranquila y la corriente a 3 km/h.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-avanzado">Avanzado • Ejemplo 2 (Mezcla química de soluciones porcentuales)</span>
+                            <button class="btn-cargar-lab !mt-0" onclick="cargarEnLaboratorio(1, 1, 20, 20, 50, 620, 'Solución al 20%', 'litros', 'Solución al 50%', 'litros', 'eliminacion', 'Ejemplo Avanzado 2')">🧩 Cargar en Laboratorio</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Un laboratorio escolar necesita preparar <span class="math-expr">20 litros</span> de solución ácida al <span class="math-expr">31%</span> mezclando una solución al <span class="math-expr">20%</span> con otra al <span class="math-expr">50%</span>. ¿Cuántos litros de cada solución debe usar?</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>1. Variables:</strong> Sea <span class="math-expr">x</span> = litros al 20%, <span class="math-expr">y</span> = litros al 50%.</p>
+                            <p><strong>2. Sistema 2×2:</strong> <span class="math-expr">x + y = 20</span> y <span class="math-expr">0.20x + 0.50y = 0.31(20) = 6.2 ➔ 20x + 50y = 620</span>.</p>
+                            <p><strong>3. Resolución (Eliminación):</strong> Ec. 1 por <span class="math-expr">-20</span> y sumando: <span class="math-expr">30y = 220 ➔ y = 22/3 ≈ 7.33 L</span>; <span class="math-expr">x = 38/3 ≈ 12.67 L</span>.</p>
+                            <p class="font-bold text-[#1269A8]">4. Respuesta Contextual: Debe mezclar 38/3 litros (≈ 12.67 L) al 20% y 22/3 litros (≈ 7.33 L) al 50%.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-avanzado">Avanzado • Ejemplo 3 (Inversión dividida en dos tasas de interés anual)</span>
+                            <button class="btn-cargar-lab !mt-0" onclick="cargarEnLaboratorio(1, 1, 15000, 5, 8, 99000, 'Capital al 5% anual', 'Quetzales (Q)', 'Capital al 8% anual', 'Quetzales (Q)', 'eliminacion', 'Ejemplo Avanzado 3')">🧩 Cargar en Laboratorio</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Una cooperativa invierte <span class="math-expr">Q15,000</span> en dos cuentas: una rinde <span class="math-expr">5%</span> anual y la otra <span class="math-expr">8%</span> anual. Si al cabo de un año gana <span class="math-expr">Q990</span> de interés total (<span class="math-expr">0.05x + 0.08y = 990</span>), ¿cuánto invirtió en cada cuenta?</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>1. Variables:</strong> Sea <span class="math-expr">x</span> = capital al 5% (Q), <span class="math-expr">y</span> = capital al 8% (Q).</p>
+                            <p><strong>2. Sistema 2×2 (×100 en Ec. 2):</strong> <span class="math-expr">x + y = 15000</span> y <span class="math-expr">5x + 8y = 99000</span>.</p>
+                            <p><strong>3. Resolución (Eliminación):</strong> Ec. 1 por <span class="math-expr">-5</span> y sumando: <span class="math-expr">3y = 24000 ➔ y = 8000</span>; <span class="math-expr">x = 7000</span>.</p>
+                            <p class="font-bold text-[#1269A8]">4. Respuesta Contextual: Invirtió Q7,000 al 5% anual y Q8,000 al 8% anual.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-avanzado">Avanzado • Ejemplo 4 (Número de dos cifras con dígitos invertidos)</span>
+                            <button class="btn-cargar-lab !mt-0" onclick="cargarEnLaboratorio(1, 1, 11, 9, -9, 27, 'Cifra de las decenas', 'dígito', 'Cifra de las unidades', 'dígito', 'eliminacion', 'Ejemplo Avanzado 4')">🧩 Cargar en Laboratorio</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">La suma de los dígitos de un número de dos cifras es <span class="math-expr">11</span>. Si se invierten sus cifras (<span class="math-expr">10y + x</span>), el nuevo número es <span class="math-expr">27</span> unidades menor que el original (<span class="math-expr">10x + y</span>). ¿Cuál es el número original?</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>1. Variables:</strong> Sea <span class="math-expr">x</span> = dígito de las decenas, <span class="math-expr">y</span> = dígito de las unidades.</p>
+                            <p><strong>2. Sistema 2×2:</strong> <span class="math-expr">x + y = 11</span> y <span class="math-expr">(10x + y) - (10y + x) = 27 ➔ 9x - 9y = 27</span>.</p>
+                            <p><strong>3. Resolución (Eliminación):</strong> Dividiendo Ec. 2 entre <span class="math-expr">9</span>: <span class="math-expr">x - y = 3</span>. Sumando con Ec. 1: <span class="math-expr">2x = 14 ➔ x = 7</span>; <span class="math-expr">y = 4</span>.</p>
+                            <p class="font-bold text-[#1269A8]">4. Respuesta Contextual: El número original es 74 (y al invertir sus dígitos se obtiene 47; 74 - 47 = 27).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-avanzado">Avanzado • Ejemplo 5 (Fracción equivalente al sumar o restar)</span>
+                            <button class="btn-cargar-lab !mt-0" onclick="cargarEnLaboratorio(3, -2, -1, 2, -1, 1, 'Numerador', 'unidades', 'Denominador', 'unidades', 'eliminacion', 'Ejemplo Avanzado 5')">🧩 Cargar en Laboratorio</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Si al numerador y al denominador de una fracción se les suma <span class="math-expr">1</span>, resulta <span class="math-expr">2/3</span>. Si a ambos se les resta <span class="math-expr">1</span>, resulta <span class="math-expr">1/2</span>. Halla la fracción original.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>1. Variables:</strong> Sea <span class="math-expr">x</span> = numerador, <span class="math-expr">y</span> = denominador.</p>
+                            <p><strong>2. Sistema 2×2:</strong> <span class="math-expr">(x + 1)/(y + 1) = 2/3 ➔ 3x - 2y = -1</span> y <span class="math-expr">(x - 1)/(y - 1) = 1/2 ➔ 2x - y = 1</span>.</p>
+                            <p><strong>3. Resolución (Eliminación):</strong> Ec. 2 por <span class="math-expr">-2</span>: <span class="math-expr">-4x + 2y = -2</span>. Sumando con Ec. 1: <span class="math-expr">-x = -3 ➔ x = 3</span>; <span class="math-expr">y = 5</span>.</p>
+                            <p class="font-bold text-[#1269A8]">4. Respuesta Contextual: La fracción original es 3/5.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 3: EJERCICIOS PRÁCTICOS (15)       -->
+            <!-- ========================================== -->
+            <section id="sec-ejercicios" class="seccion-contenido hidden">
+                <div class="flex flex-wrap items-center justify-between gap-3 mb-4 bg-white p-4 rounded-xl border-2 border-[#54887D]">
+                    <div>
+                        <h2 class="text-xl font-bold text-[#1269A8]">Práctica Guiada de Modelación (15 Problemas)</h2>
+                        <p class="text-sm text-slate-600">Define las variables con unidades, plantea las dos ecuaciones, resuelve y verifica tu interpretación.</p>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <button class="subtab-btn active" onclick="filtrarSubnivel('ejercicios', 'basico', this)">Básico (5)</button>
+                        <button class="subtab-btn" onclick="filtrarSubnivel('ejercicios', 'intermedio', this)">Intermedio (5)</button>
+                        <button class="subtab-btn" onclick="filtrarSubnivel('ejercicios', 'avanzado', this)">Avanzado (5)</button>
+                    </div>
+                </div>
+
+                <!-- EJERCICIOS BÁSICOS -->
+                <div id="ejercicios-basico" class="subcontenido-ejercicios space-y-4">
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 1</span>
+                        <p class="font-semibold text-base">La suma de dos números es <span class="math-expr">64</span> y su diferencia es <span class="math-expr">18</span>. Encuentra ambos números.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-eb1', this)">Mostrar solución</button>
+                            <button class="btn-cargar-lab" onclick="cargarEnLaboratorio(1, 1, 64, 1, -1, 18, 'Número mayor', 'unidades', 'Número menor', 'unidades', 'eliminacion', 'Ejercicio Básico 1')">🧩 Cargar en Laboratorio</button>
+                        </div>
+                        <div id="sol-eb1" class="solucion-box">
+                            <p><strong>Sistema:</strong> <span class="math-expr">x + y = 64</span> y <span class="math-expr">x - y = 18</span>. Sumando: <span class="math-expr">2x = 82 ➔ x = 41</span>; <span class="math-expr">y = 23</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Los números son 41 y 23.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 2</span>
+                        <p class="font-semibold text-base">El perímetro de un terreno rectangular mide <span class="math-expr">110 m</span> y el largo mide <span class="math-expr">15 m</span> más que el ancho. Halla el largo y el ancho.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-eb2', this)">Mostrar solución</button>
+                            <button class="btn-cargar-lab" onclick="cargarEnLaboratorio(2, 2, 110, 1, -1, 15, 'Largo', 'metros', 'Ancho', 'metros', 'sustitucion', 'Ejercicio Básico 2')">🧩 Cargar en Laboratorio</button>
+                        </div>
+                        <div id="sol-eb2" class="solucion-box">
+                            <p><strong>Sistema:</strong> <span class="math-expr">2x + 2y = 110</span> y <span class="math-expr">x - y = 15</span>. Resolviendo: <span class="math-expr">x = 35 m</span>, <span class="math-expr">y = 20 m</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: 35 metros de largo y 20 metros de ancho.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 3</span>
+                        <p class="font-semibold text-base">En la cafetería del colegio, <span class="math-expr">2</span> refacciones y <span class="math-expr">3</span> jugos cuestan <span class="math-expr">Q39</span>, mientras que <span class="math-expr">4</span> refacciones y <span class="math-expr">3</span> jugos cuestan <span class="math-expr">Q63</span>. Halla el precio de cada producto.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-eb3', this)">Mostrar solución</button>
+                            <button class="btn-cargar-lab" onclick="cargarEnLaboratorio(2, 3, 39, 4, 3, 63, 'Precio refacción', 'Quetzales (Q)', 'Precio jugo', 'Quetzales (Q)', 'eliminacion', 'Ejercicio Básico 3')">🧩 Cargar en Laboratorio</button>
+                        </div>
+                        <div id="sol-eb3" class="solucion-box">
+                            <p><strong>Sistema:</strong> <span class="math-expr">2x + 3y = 39</span> y <span class="math-expr">4x + 3y = 63</span>. Restando: <span class="math-expr">2x = 24 ➔ x = 12</span>; <span class="math-expr">y = 5</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Cada refacción cuesta Q12 y cada jugo cuesta Q5.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 4</span>
+                        <p class="font-semibold text-base">En un parqueo hay <span class="math-expr">45</span> vehículos entre motocicletas (<span class="math-expr">2</span> llantas) y automóviles (<span class="math-expr">4</span> llantas). Si se cuentan <span class="math-expr">140</span> llantas en total, ¿cuántos vehículos de cada tipo hay?</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-eb4', this)">Mostrar solución</button>
+                            <button class="btn-cargar-lab" onclick="cargarEnLaboratorio(1, 1, 45, 2, 4, 140, 'Motocicletas', 'vehículos', 'Automóviles', 'vehículos', 'eliminacion', 'Ejercicio Básico 4')">🧩 Cargar en Laboratorio</button>
+                        </div>
+                        <div id="sol-eb4" class="solucion-box">
+                            <p><strong>Sistema:</strong> <span class="math-expr">x + y = 45</span> y <span class="math-expr">2x + 4y = 140</span>. Resolviendo: <span class="math-expr">x = 20</span> motos, <span class="math-expr">y = 25</span> automóviles.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Hay 20 motocicletas y 25 automóviles.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 5</span>
+                        <p class="font-semibold text-base">Dos ángulos complementarios suman <span class="math-expr">90°</span> y su diferencia es <span class="math-expr">24°</span>. Encuentra la medida de cada ángulo.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-eb5', this)">Mostrar solución</button>
+                            <button class="btn-cargar-lab" onclick="cargarEnLaboratorio(1, 1, 90, 1, -1, 24, 'Ángulo mayor', 'grados (°)', 'Ángulo menor', 'grados (°)', 'eliminacion', 'Ejercicio Básico 5')">🧩 Cargar en Laboratorio</button>
+                        </div>
+                        <div id="sol-eb5" class="solucion-box">
+                            <p><strong>Sistema:</strong> <span class="math-expr">x + y = 90</span> y <span class="math-expr">x - y = 24</span>. Sumando: <span class="math-expr">2x = 114 ➔ x = 57°</span>; <span class="math-expr">y = 33°</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Los ángulos miden 57° y 33°.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EJERCICIOS INTERMEDIOS -->
+                <div id="ejercicios-intermedio" class="subcontenido-ejercicios hidden space-y-4">
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 1</span>
+                        <p class="font-semibold text-base">Lucía tiene <span class="math-expr">32</span> billetes entre denominaciones de <span class="math-expr">Q10</span> y <span class="math-expr">Q50</span>, sumando <span class="math-expr">Q960</span>. ¿Cuántos billetes de cada valor tiene?</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ei1', this)">Mostrar solución</button>
+                            <button class="btn-cargar-lab" onclick="cargarEnLaboratorio(1, 1, 32, 10, 50, 960, 'Billetes de Q10', 'billetes', 'Billetes de Q50', 'billetes', 'eliminacion', 'Ejercicio Intermedio 1')">🧩 Cargar en Laboratorio</button>
+                        </div>
+                        <div id="sol-ei1" class="solucion-box">
+                            <p><strong>Sistema:</strong> <span class="math-expr">x + y = 32</span> y <span class="math-expr">10x + 50y = 960</span>. Resolviendo: <span class="math-expr">x = 16</span> de Q10 y <span class="math-expr">y = 16</span> de Q50.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Tiene 16 billetes de Q10 y 16 billetes de Q50.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 2</span>
+                        <p class="font-semibold text-base">La edad actual de Andrea es el triple de la edad de su primo Mateo. Dentro de <span class="math-expr">6</span> años, la edad de Andrea será el doble de la de Mateo. Halla sus edades actuales.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ei2', this)">Mostrar solución</button>
+                            <button class="btn-cargar-lab" onclick="cargarEnLaboratorio(1, -3, 0, 1, -2, 6, 'Edad de Andrea', 'años', 'Edad de Mateo', 'años', 'igualacion', 'Ejercicio Intermedio 2')">🧩 Cargar en Laboratorio</button>
+                        </div>
+                        <div id="sol-ei2" class="solucion-box">
+                            <p><strong>Sistema:</strong> <span class="math-expr">x - 3y = 0</span> y <span class="math-expr">x + 6 = 2(y + 6) ➔ x - 2y = 6</span>. Resolviendo: <span class="math-expr">y = 6</span>, <span class="math-expr">x = 18</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Andrea tiene 18 años y Mateo tiene 6 años.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 3</span>
+                        <p class="font-semibold text-base">Se mezclan nueces de <span class="math-expr">Q40/lb</span> con almendras de <span class="math-expr">Q60/lb</span> para preparar <span class="math-expr">20 libras</span> que cuestan en total <span class="math-expr">Q960</span> (<span class="math-expr">Q48/lb</span>). ¿Cuántas libras de cada fruto seco se utilizaron?</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ei3', this)">Mostrar solución</button>
+                            <button class="btn-cargar-lab" onclick="cargarEnLaboratorio(1, 1, 20, 40, 60, 960, 'Nueces Q40/lb', 'libras', 'Almendras Q60/lb', 'libras', 'eliminacion', 'Ejercicio Intermedio 3')">🧩 Cargar en Laboratorio</button>
+                        </div>
+                        <div id="sol-ei3" class="solucion-box">
+                            <p><strong>Sistema:</strong> <span class="math-expr">x + y = 20</span> y <span class="math-expr">40x + 60y = 960</span>. Resolviendo: <span class="math-expr">x = 12 lb</span> de nueces y <span class="math-expr">y = 8 lb</span> de almendras.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: 12 libras de nueces y 8 libras de almendras.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 4</span>
+                        <p class="font-semibold text-base">En un torneo de baloncesto, un equipo anotó <span class="math-expr">88</span> puntos en <span class="math-expr">38</span> tiros encestados (entre canastas de <span class="math-expr">2</span> puntos y triples de <span class="math-expr">3</span> puntos). ¿Cuántas canastas de cada tipo encestó?</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ei4', this)">Mostrar solución</button>
+                            <button class="btn-cargar-lab" onclick="cargarEnLaboratorio(1, 1, 38, 2, 3, 88, 'Canastas de 2 pts', 'canastas', 'Triples de 3 pts', 'canastas', 'eliminacion', 'Ejercicio Intermedio 4')">🧩 Cargar en Laboratorio</button>
+                        </div>
+                        <div id="sol-ei4" class="solucion-box">
+                            <p><strong>Sistema:</strong> <span class="math-expr">x + y = 38</span> y <span class="math-expr">2x + 3y = 88</span>. Resolviendo: <span class="math-expr">x = 26</span> de 2 puntos y <span class="math-expr">y = 12</span> triples.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Encestó 26 canastas de 2 puntos y 12 triples.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 5</span>
+                        <p class="font-semibold text-base">En un teatro de Guatemala se vendieron <span class="math-expr">250</span> entradas. Las entradas VIP costaron <span class="math-expr">Q80</span> y las generales <span class="math-expr">Q45</span>, logrando una taquilla total de <span class="math-expr">Q14,750</span>. ¿Cuántas entradas de cada localidad se vendieron?</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ei5', this)">Mostrar solución</button>
+                            <button class="btn-cargar-lab" onclick="cargarEnLaboratorio(1, 1, 250, 80, 45, 14750, 'Entradas VIP', 'entradas', 'Entradas Generales', 'entradas', 'sustitucion', 'Ejercicio Intermedio 5')">🧩 Cargar en Laboratorio</button>
+                        </div>
+                        <div id="sol-ei5" class="solucion-box">
+                            <p><strong>Sistema:</strong> <span class="math-expr">x + y = 250</span> y <span class="math-expr">80x + 45y = 14750</span>. Resolviendo: <span class="math-expr">x = 100</span> VIP y <span class="math-expr">y = 150</span> generales.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Se vendieron 100 entradas VIP y 150 generales.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EJERCICIOS AVANZADOS -->
+                <div id="ejercicios-avanzado" class="subcontenido-ejercicios hidden space-y-4">
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 1</span>
+                        <p class="font-semibold text-base">Un ciclista recorre <span class="math-expr">48 km</span> a favor del viento en <span class="math-expr">2 horas</span> (<span class="math-expr">24 km/h</span>) y regresa los <span class="math-expr">48 km</span> en contra del viento en <span class="math-expr">3 horas</span> (<span class="math-expr">16 km/h</span>). Halla la velocidad del ciclista sin viento y la velocidad del viento.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ea1', this)">Mostrar solución</button>
+                            <button class="btn-cargar-lab" onclick="cargarEnLaboratorio(1, 1, 24, 1, -1, 16, 'Velocidad ciclista', 'km/h', 'Velocidad viento', 'km/h', 'eliminacion', 'Ejercicio Avanzado 1')">🧩 Cargar en Laboratorio</button>
+                        </div>
+                        <div id="sol-ea1" class="solucion-box">
+                            <p><strong>Sistema:</strong> <span class="math-expr">x + y = 24</span> y <span class="math-expr">x - y = 16</span>. Sumando: <span class="math-expr">2x = 40 ➔ x = 20 km/h</span>, <span class="math-expr">y = 4 km/h</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Ciclista a 20 km/h y viento a 4 km/h.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 2</span>
+                        <p class="font-semibold text-base">¿Cuántos litros de alcohol al <span class="math-expr">15%</span> y cuántos litros al <span class="math-expr">45%</span> deben mezclarse para obtener <span class="math-expr">30 litros</span> de solución al <span class="math-expr">25%</span> (<span class="math-expr">0.25 × 30 = 7.5 L</span> puros)?</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ea2', this)">Mostrar solución</button>
+                            <button class="btn-cargar-lab" onclick="cargarEnLaboratorio(1, 1, 30, 15, 45, 750, 'Alcohol al 15%', 'litros', 'Alcohol al 45%', 'litros', 'eliminacion', 'Ejercicio Avanzado 2')">🧩 Cargar en Laboratorio</button>
+                        </div>
+                        <div id="sol-ea2" class="solucion-box">
+                            <p><strong>Sistema:</strong> <span class="math-expr">x + y = 30</span> y <span class="math-expr">15x + 45y = 750</span>. Resolviendo: <span class="math-expr">x = 20 L</span> al 15% y <span class="math-expr">y = 10 L</span> al 45%.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: 20 litros al 15% y 10 litros al 45%.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 3</span>
+                        <p class="font-semibold text-base">Un emprendedor invierte <span class="math-expr">Q20,000</span> en dos fondos: uno al <span class="math-expr">6%</span> anual y otro al <span class="math-expr">9%</span> anual, obteniendo <span class="math-expr">Q1,560</span> de ganancia en un año (<span class="math-expr">6x + 9y = 156000</span>). ¿Cuánto colocó en cada fondo?</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ea3', this)">Mostrar solución</button>
+                            <button class="btn-cargar-lab" onclick="cargarEnLaboratorio(1, 1, 20000, 6, 9, 156000, 'Fondo al 6% anual', 'Quetzales (Q)', 'Fondo al 9% anual', 'Quetzales (Q)', 'eliminacion', 'Ejercicio Avanzado 3')">🧩 Cargar en Laboratorio</button>
+                        </div>
+                        <div id="sol-ea3" class="solucion-box">
+                            <p><strong>Sistema:</strong> <span class="math-expr">x + y = 20000</span> y <span class="math-expr">6x + 9y = 156000</span>. Resolviendo: <span class="math-expr">x = Q8,000</span> al 6% y <span class="math-expr">y = Q12,000</span> al 9%.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Invirtió Q8,000 al 6% y Q12,000 al 9%.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 4</span>
+                        <p class="font-semibold text-base">La suma de las dos cifras de un número es <span class="math-expr">13</span>. Si se invierten sus cifras, el número resultante supera al original en <span class="math-expr">45</span> unidades (<span class="math-expr">9y - 9x = 45</span>). Halla el número original.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ea4', this)">Mostrar solución</button>
+                            <button class="btn-cargar-lab" onclick="cargarEnLaboratorio(1, 1, 13, -9, 9, 45, 'Cifra de decenas', 'dígito', 'Cifra de unidades', 'dígito', 'eliminacion', 'Ejercicio Avanzado 4')">🧩 Cargar en Laboratorio</button>
+                        </div>
+                        <div id="sol-ea4" class="solucion-box">
+                            <p><strong>Sistema:</strong> <span class="math-expr">x + y = 13</span> y <span class="math-expr">-x + y = 5</span>. Sumando: <span class="math-expr">2y = 18 ➔ y = 9</span>, <span class="math-expr">x = 4</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: El número original es 49 (invertido es 94; 94 - 49 = 45).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 5</span>
+                        <p class="font-semibold text-base">Un taller fabrica mesas (<span class="math-expr">4</span> horas de carpintería y <span class="math-expr">2</span> horas de pintura) y sillas (<span class="math-expr">2</span> horas de carpintería y <span class="math-expr">3</span> horas de pintura). Si dispone de <span class="math-expr">64</span> horas de carpintería y <span class="math-expr">56</span> horas de pintura, ¿cuántas mesas y sillas puede producir exactamente?</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ea5', this)">Mostrar solución</button>
+                            <button class="btn-cargar-lab" onclick="cargarEnLaboratorio(4, 2, 64, 2, 3, 56, 'Mesas fabricadas', 'mesas', 'Sillas fabricadas', 'sillas', 'eliminacion', 'Ejercicio Avanzado 5')">🧩 Cargar en Laboratorio</button>
+                        </div>
+                        <div id="sol-ea5" class="solucion-box">
+                            <p><strong>Sistema:</strong> <span class="math-expr">4x + 2y = 64</span> y <span class="math-expr">2x + 3y = 56</span>. Resolviendo: <span class="math-expr">x = 10</span> mesas y <span class="math-expr">y = 12</span> sillas.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Puede fabricar 10 mesas y 12 sillas.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 4: PREGUNTAS DE REFLEXIÓN CRÍTICA  -->
+            <!-- ========================================== -->
+            <section id="sec-reflexion" class="seccion-contenido hidden">
+                <div class="card-montano">
+                    <h2 class="text-2xl font-bold text-[#1269A8] mb-2">🧠 Análisis Conceptual y Pensamiento Crítico (Modelación Real)</h2>
+                    <p class="text-sm text-slate-600 mb-4">Reflexiona sobre la validez física y contextual de las soluciones matemáticas obtenidas en problemas reales.</p>
+
+                    <div class="space-y-4">
+                        <div class="p-4 bg-[#F2F5E9] rounded-xl border-2 border-[#54887D]">
+                            <h3 class="font-bold text-lg text-[#1269A8]">1. ¿Qué ocurre si el sistema matemático tiene solución única, pero arroja valores negativos o decimales para objetos indivisibles?</h3>
+                            <p class="mt-1">Supón que planteas un problema para hallar cuántos boletos de cine o cuántas bicicletas se vendieron y obtienes <span class="math-expr">x = 14.5</span> o <span class="math-expr">y = -3</span>. ¿Es válida la solución en el contexto real?</p>
+                            <button class="btn-solucion" onclick="toggleSolucion('ref-1', this)">Ver análisis conceptual</button>
+                            <div id="ref-1" class="solucion-box">
+                                <p><strong>Análisis:</strong> Aunque el par ordenado sea matemáticamente correcto para el sistema de ecuaciones, <strong>no tiene sentido en el mundo real</strong> porque las cantidades de personas, billetes, animales o artículos son <strong>variables discretas enteras no negativas</strong> (<span class="math-expr">x, y ∈ {0, 1, 2, ...}</span>). Este resultado alerta que hubo un error al plantear las ecuaciones o que los datos del enunciado son inconsistentes.</p>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-[#F2F5E9] rounded-xl border-2 border-[#54887D]">
+                            <h3 class="font-bold text-lg text-[#1269A8]">2. ¿Por qué es crítico verificar la consistencia de unidades antes de escribir las ecuaciones?</h3>
+                            <p class="mt-1">Si un problema indica que un vehículo viaja <span class="math-expr">30 minutos</span> a velocidad <span class="math-expr">x</span> (en <span class="math-expr">km/h</span>) y recorre <span class="math-expr">25 km</span>, ¿por qué sería un grave error escribir <span class="math-expr">30x = 25</span>?</p>
+                            <button class="btn-solucion" onclick="toggleSolucion('ref-2', this)">Ver análisis conceptual</button>
+                            <div id="ref-2" class="solucion-box">
+                                <p><strong>Análisis:</strong> Porque <span class="math-expr">km/h</span> exige que el tiempo esté expresado en <strong>horas</strong> (<span class="math-expr">30 min = 0.5 h</span>), no en minutos. Escribir <span class="math-expr">30x = 25</span> produciría una velocidad <span class="math-expr">60</span> veces menor que la real. Toda ecuación física o económica exige homogeneidad de unidades (Quetzales con Quetzales, horas con horas, litros con litros).</p>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-[#F2F5E9] rounded-xl border-2 border-[#54887D]">
+                            <h3 class="font-bold text-lg text-[#1269A8]">3. ¿Cómo elegir entre Eliminación, Sustitución o Igualación al resolver un modelo real?</h3>
+                            <p class="mt-1">Una vez que ya tradujiste el enunciado a dos ecuaciones <span class="math-expr">2 × 2</span>, ¿qué criterio práctico te permite resolverlo en menos pasos y sin fracciones innecesarias?</p>
+                            <button class="btn-solucion" onclick="toggleSolucion('ref-3', this)">Ver análisis conceptual</button>
+                            <div id="ref-3" class="solucion-box">
+                                <p><strong>Análisis:</strong><br>
+                                • Usa <strong>Eliminación (Suma o Resta)</strong> cuando ambas ecuaciones están en forma estándar (<span class="math-expr">Ax + By = C</span>), como en compras, billetes y mezclas.<br>
+                                • Usa <strong>Sustitución</strong> cuando una condición viene expresada como despeje directo (por ejemplo, <em>"el largo es el doble del ancho más 5"</em>: <span class="math-expr">x = 2y + 5</span>).<br>
+                                • Usa <strong>Igualación</strong> cuando la misma variable aparece despejada en ambas condiciones (por ejemplo, dos tarifas <span class="math-expr">y = m₁x + b₁</span> y <span class="math-expr">y = m₂x + b₂</span>).</p>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-[#F2F5E9] rounded-xl border-2 border-[#54887D]">
+                            <h3 class="font-bold text-lg text-[#1269A8]">4. ¿Por qué no basta con encontrar <span class="math-expr">(x, y)</span> sin volver a leer la pregunta final del problema?</h3>
+                            <p class="mt-1">Supón que defines <span class="math-expr">x</span> como el precio de un cuaderno y <span class="math-expr">y</span> como el precio de un lápiz, obtienes <span class="math-expr">(12, 3)</span>, pero la pregunta final dice: <em>"¿Cuánto pagará un estudiante por 5 cuadernos y 4 lápices?"</em></p>
+                            <button class="btn-solucion" onclick="toggleSolucion('ref-4', this)">Ver análisis conceptual</button>
+                            <div id="ref-4" class="solucion-box">
+                                <p><strong>Análisis:</strong> Hallar <span class="math-expr">(x, y)</span> resuelve el sistema algebraico, pero el <strong>Paso 5 del ciclo de modelación</strong> exige responder exactamente la pregunta del contexto: <span class="math-expr">5(12) + 4(3) = Q72</span>. Omitir la lectura final es una de las causas más frecuentes de pérdida de puntos en evaluaciones de problemas aplicados.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 5: EVALUACIÓN FORMATIVA            -->
+            <!-- ========================================== -->
+            <section id="sec-evaluacion" class="seccion-contenido hidden">
+                <div class="card-montano">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b-2 border-[#F7D615] pb-3 mb-4">
+                        <div>
+                            <h2 class="text-2xl font-bold text-[#1269A8]">✅ Evaluación Formativa de Comprobación (Modelación 2×2)</h2>
+                            <p class="text-sm text-slate-600">Plantea el sistema correspondiente a cada situación, resuélvelo y verifica tu respuesta.</p>
+                        </div>
+                        <span class="badge-nivel badge-avanzado mt-2 sm:mt-0">5 Reactivos de Comprobación</span>
+                    </div>
+
+                    <div class="space-y-4">
+                        <!-- Pregunta 1 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 1 • Comercio en Quetzales</span>
+                            <p class="font-bold text-base mt-1">En una panadería, <span class="math-expr">3</span> pasteles y <span class="math-expr">4</span> cafés cuestan <span class="math-expr">Q66</span>, mientras que <span class="math-expr">5</span> pasteles y <span class="math-expr">2</span> cafés cuestan <span class="math-expr">Q82</span>. ¿Cuánto cuesta cada pastel y cada café?</p>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="btn-solucion" onclick="toggleSolucion('eval-1', this)">Mostrar solución</button>
+                                <button class="btn-cargar-lab" onclick="cargarEnLaboratorio(3, 4, 66, 5, 2, 82, 'Precio pastel', 'Quetzales (Q)', 'Precio café', 'Quetzales (Q)', 'eliminacion', 'Evaluación • Reactivo 1')">🧩 Comprobar en Laboratorio</button>
+                            </div>
+                            <div id="eval-1" class="solucion-box">
+                                <p><strong>Sistema:</strong> <span class="math-expr">3x + 4y = 66</span> y <span class="math-expr">5x + 2y = 82</span>. Multiplicando Ec. 2 por <span class="math-expr">-2</span> y sumando: <span class="math-expr">-7x = -98 ➔ x = 14</span>; <span class="math-expr">y = 6</span>.</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: Cada pastel cuesta Q14 y cada café cuesta Q6.</p>
+                            </div>
+                        </div>
+
+                        <!-- Pregunta 2 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 2 • Billetes en Caja</span>
+                            <p class="font-bold text-base mt-1">Una alcancía contiene <span class="math-expr">24</span> billetes entre billetes de <span class="math-expr">Q5</span> y de <span class="math-expr">Q20</span>, que suman <span class="math-expr">Q300</span>. ¿Cuántos billetes de cada denominación hay?</p>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="btn-solucion" onclick="toggleSolucion('eval-2', this)">Mostrar solución</button>
+                                <button class="btn-cargar-lab" onclick="cargarEnLaboratorio(1, 1, 24, 5, 20, 300, 'Billetes de Q5', 'billetes', 'Billetes de Q20', 'billetes', 'eliminacion', 'Evaluación • Reactivo 2')">🧩 Comprobar en Laboratorio</button>
+                            </div>
+                            <div id="eval-2" class="solucion-box">
+                                <p><strong>Sistema:</strong> <span class="math-expr">x + y = 24</span> y <span class="math-expr">5x + 20y = 300</span>. Resolviendo: <span class="math-expr">15y = 180 ➔ y = 12</span> de Q20 y <span class="math-expr">x = 12</span> de Q5.</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: Hay 12 billetes de Q5 y 12 billetes de Q20.</p>
+                            </div>
+                        </div>
+
+                        <!-- Pregunta 3 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 3 • Geometría (Rectángulo)</span>
+                            <p class="font-bold text-base mt-1">El perímetro de un jardín rectangular es <span class="math-expr">54 m</span> y el largo es el doble del ancho. Halla el largo y el ancho del jardín.</p>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="btn-solucion" onclick="toggleSolucion('eval-3', this)">Mostrar solución</button>
+                                <button class="btn-cargar-lab" onclick="cargarEnLaboratorio(2, 2, 54, 1, -2, 0, 'Largo del jardín', 'metros', 'Ancho del jardín', 'metros', 'sustitucion', 'Evaluación • Reactivo 3')">🧩 Comprobar en Laboratorio</button>
+                            </div>
+                            <div id="eval-3" class="solucion-box">
+                                <p><strong>Sistema:</strong> <span class="math-expr">2x + 2y = 54</span> y <span class="math-expr">x = 2y ➔ x - 2y = 0</span>. Sustituyendo: <span class="math-expr">6y = 54 ➔ y = 9 m</span>, <span class="math-expr">x = 18 m</span>.</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: 18 metros de largo y 9 metros de ancho.</p>
+                            </div>
+                        </div>
+
+                        <!-- Pregunta 4 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 4 • Edades</span>
+                            <p class="font-bold text-base mt-1">La suma de las edades actuales de Carlos y Sofía es <span class="math-expr">34</span> años. Dentro de <span class="math-expr">4</span> años, la edad de Carlos será el doble de la edad de Sofía. ¿Qué edad tiene cada uno hoy?</p>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="btn-solucion" onclick="toggleSolucion('eval-4', this)">Mostrar solución</button>
+                                <button class="btn-cargar-lab" onclick="cargarEnLaboratorio(1, 1, 34, 1, -2, 4, 'Edad actual de Carlos', 'años', 'Edad actual de Sofía', 'años', 'sustitucion', 'Evaluación • Reactivo 4')">🧩 Comprobar en Laboratorio</button>
+                            </div>
+                            <div id="eval-4" class="solucion-box">
+                                <p><strong>Sistema:</strong> <span class="math-expr">x + y = 34</span> y <span class="math-expr">x + 4 = 2(y + 4) ➔ x - 2y = 4</span>. Resolviendo: <span class="math-expr">3y = 30 ➔ y = 10</span>, <span class="math-expr">x = 24</span>.</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: Carlos tiene 24 años y Sofía tiene 10 años.</p>
+                            </div>
+                        </div>
+
+                        <!-- Pregunta 5 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 5 • Mezclas Comerciales</span>
+                            <p class="font-bold text-base mt-1">Un comerciante mezcla frijol negro de <span class="math-expr">Q6/lb</span> con frijol rojo de <span class="math-expr">Q9/lb</span> para obtener <span class="math-expr">40 libras</span> que vende en total a <span class="math-expr">Q285</span>. ¿Cuántas libras de cada clase mezcló?</p>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="btn-solucion" onclick="toggleSolucion('eval-5', this)">Mostrar solución</button>
+                                <button class="btn-cargar-lab" onclick="cargarEnLaboratorio(1, 1, 40, 6, 9, 285, 'Frijol negro Q6/lb', 'libras', 'Frijol rojo Q9/lb', 'libras', 'eliminacion', 'Evaluación • Reactivo 5')">🧩 Comprobar en Laboratorio</button>
+                            </div>
+                            <div id="eval-5" class="solucion-box">
+                                <p><strong>Sistema:</strong> <span class="math-expr">x + y = 40</span> y <span class="math-expr">6x + 9y = 285</span>. Resolviendo: <span class="math-expr">3y = 45 ➔ y = 15 lb</span> de frijol rojo y <span class="math-expr">x = 25 lb</span> de frijol negro.</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: Mezcló 25 libras de frijol negro y 15 libras de frijol rojo.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 6: LABORATORIO DE MODELACIÓN       -->
+            <!-- ========================================== -->
+            <section id="sec-laboratorio" class="seccion-contenido hidden">
+                <div class="card-montano">
+                    <!-- Encabezado y Plantillas Listas -->
+                    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b-2 border-[#F7D615] pb-4 mb-5">
+                        <div>
+                            <div class="flex flex-wrap items-center gap-2">
+                                <span class="badge-nivel badge-avanzado">Simulador Interactivo de Pizarra</span>
+                                <span id="lab-preset-badge" class="text-xs font-bold text-[#54887D] bg-[#F2F5E9] px-2.5 py-1 rounded-full border border-[#54887D]">Plantilla: Mezcla de Café</span>
+                            </div>
+                            <h2 class="text-2xl font-bold text-[#1269A8] mt-1">🧩 Laboratorio de Modelación y Resolución Paso a Paso</h2>
+                            <p class="text-sm text-slate-600">Define las variables con sus unidades, ajusta el sistema <span class="font-mono font-bold text-[#1269A8]">a₁x + b₁y = c₁</span> y <span class="font-mono font-bold text-[#1269A8]">a₂x + b₂y = c₂</span>, elige el método algebraico y valida la interpretación real.</p>
+                        </div>
+
+                        <!-- 4 Plantillas Listas -->
+                        <div class="flex flex-wrap gap-1.5">
+                            <button onclick="cargarPlantillaLab('cafe')" class="text-xs font-bold px-2.5 py-1.5 rounded-lg bg-emerald-100 text-emerald-900 border border-emerald-500 hover:bg-emerald-200 cursor-pointer">☕ Mezclas de café</button>
+                            <button onclick="cargarPlantillaLab('billetes')" class="text-xs font-bold px-2.5 py-1.5 rounded-lg bg-amber-100 text-amber-900 border border-amber-500 hover:bg-amber-200 cursor-pointer">💵 Billetes en Q</button>
+                            <button onclick="cargarPlantillaLab('edades')" class="text-xs font-bold px-2.5 py-1.5 rounded-lg bg-sky-100 text-sky-900 border border-sky-500 hover:bg-sky-200 cursor-pointer">🎂 Edades</button>
+                            <button onclick="cargarPlantillaLab('velocidades')" class="text-xs font-bold px-2.5 py-1.5 rounded-lg bg-purple-100 text-purple-900 border border-purple-500 hover:bg-purple-200 cursor-pointer">🚤 Velocidades</button>
+                        </div>
+                    </div>
+
+                    <!-- Grid Principal: Configuración Izquierda + Desarrollo Paso a Paso Derecha -->
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                        
+                        <!-- Panel Izquierdo: Variables, Coeficientes y Selector de Método -->
+                        <div class="lg:col-span-5 space-y-4">
+                            
+                            <!-- Definición de Variables y Unidades -->
+                            <div class="p-3.5 rounded-xl bg-[#F2F5E9] border-2 border-[#A6B046] space-y-2.5">
+                                <span class="text-xs font-extrabold uppercase text-[#54887D] block">1️⃣ Definición de Variables y Unidades</span>
+                                <div class="grid grid-cols-12 gap-2 items-center">
+                                    <span class="col-span-2 font-mono font-bold text-[#1269A8] text-sm">x =</span>
+                                    <input id="lab-var-x-nombre" type="text" value="Café de Q24/lb" placeholder="Significado de x" class="col-span-6 p-1.5 text-xs sm:text-sm rounded border border-[#88B5C7] bg-white font-semibold" oninput="ejecutarLaboratorio()">
+                                    <input id="lab-var-x-unidad" type="text" value="libras" placeholder="Unidad" class="col-span-4 p-1.5 text-xs sm:text-sm rounded border border-[#88B5C7] bg-white" oninput="ejecutarLaboratorio()">
+                                </div>
+                                <div class="grid grid-cols-12 gap-2 items-center">
+                                    <span class="col-span-2 font-mono font-bold text-[#54887D] text-sm">y =</span>
+                                    <input id="lab-var-y-nombre" type="text" value="Café de Q36/lb" placeholder="Significado de y" class="col-span-6 p-1.5 text-xs sm:text-sm rounded border border-[#A6B046] bg-white font-semibold" oninput="ejecutarLaboratorio()">
+                                    <input id="lab-var-y-unidad" type="text" value="libras" placeholder="Unidad" class="col-span-4 p-1.5 text-xs sm:text-sm rounded border border-[#A6B046] bg-white" oninput="ejecutarLaboratorio()">
+                                </div>
+                            </div>
+
+                            <!-- Vista Previa del Sistema con Llave -->
+                            <div class="p-3 rounded-xl bg-white border-2 border-[#1269A8] flex items-center justify-between gap-2">
+                                <div>
+                                    <span class="text-xs font-bold uppercase text-[#54887D] block">2️⃣ Modelo Algebraico 2×2:</span>
+                                    <div class="sistema-box text-base mt-1">
+                                        <span id="lab-preview-sistema">x + y = 30 <br> 24x + 36y = 864</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Ecuación 1 -->
+                            <div class="p-3.5 rounded-xl bg-sky-50 border-2 border-[#1269A8]">
+                                <span class="font-bold text-xs sm:text-sm text-[#1269A8] block mb-2">Condición 1 (Ecuación 1): <span class="font-mono">a₁x + b₁y = c₁</span></span>
+                                <div class="flex items-center gap-1.5 font-mono font-bold text-base">
+                                    <input id="lab-a1" type="number" step="any" value="1" class="w-16 p-2 text-center rounded-lg border-2 border-[#88B5C7] bg-white text-[#0f172a]" oninput="ejecutarLaboratorio()">
+                                    <span class="text-[#1269A8]">x +</span>
+                                    <input id="lab-b1" type="number" step="any" value="1" class="w-16 p-2 text-center rounded-lg border-2 border-[#88B5C7] bg-white text-[#0f172a]" oninput="ejecutarLaboratorio()">
+                                    <span class="text-[#1269A8]">y =</span>
+                                    <input id="lab-c1" type="number" step="any" value="30" class="w-20 p-2 text-center rounded-lg border-2 border-[#88B5C7] bg-white text-[#0f172a]" oninput="ejecutarLaboratorio()">
+                                </div>
+                            </div>
+
+                            <!-- Ecuación 2 -->
+                            <div class="p-3.5 rounded-xl bg-emerald-50 border-2 border-[#54887D]">
+                                <span class="font-bold text-xs sm:text-sm text-[#54887D] block mb-2">Condición 2 (Ecuación 2): <span class="font-mono">a₂x + b₂y = c₂</span></span>
+                                <div class="flex items-center gap-1.5 font-mono font-bold text-base">
+                                    <input id="lab-a2" type="number" step="any" value="24" class="w-16 p-2 text-center rounded-lg border-2 border-[#A6B046] bg-white text-[#0f172a]" oninput="ejecutarLaboratorio()">
+                                    <span class="text-[#54887D]">x +</span>
+                                    <input id="lab-b2" type="number" step="any" value="36" class="w-16 p-2 text-center rounded-lg border-2 border-[#A6B046] bg-white text-[#0f172a]" oninput="ejecutarLaboratorio()">
+                                    <span class="text-[#54887D]">y =</span>
+                                    <input id="lab-c2" type="number" step="any" value="864" class="w-20 p-2 text-center rounded-lg border-2 border-[#A6B046] bg-white text-[#0f172a]" oninput="ejecutarLaboratorio()">
+                                </div>
+                            </div>
+
+                            <!-- Selector de Método Algebraico -->
+                            <div class="p-3.5 rounded-xl bg-white border-2 border-[#54887D]">
+                                <label class="block text-xs font-extrabold uppercase text-[#54887D] mb-2">3️⃣ Selecciona el Método Algebraico de Resolución:</label>
+                                <div class="grid grid-cols-3 gap-1.5">
+                                    <button id="btn-metodo-eliminacion" onclick="cambiarMetodoLab('eliminacion')" class="py-2 px-2 rounded-lg font-bold text-xs bg-[#1269A8] text-white border-2 border-[#F7D615] shadow cursor-pointer">
+                                        Eliminación
+                                    </button>
+                                    <button id="btn-metodo-sustitucion" onclick="cambiarMetodoLab('sustitucion')" class="py-2 px-2 rounded-lg font-bold text-xs bg-white text-[#1269A8] border-2 border-[#1269A8] cursor-pointer">
+                                        Sustitución
+                                    </button>
+                                    <button id="btn-metodo-igualacion" onclick="cambiarMetodoLab('igualacion')" class="py-2 px-2 rounded-lg font-bold text-xs bg-white text-[#1269A8] border-2 border-[#1269A8] cursor-pointer">
+                                        Igualación
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Tarjeta de Conclusión Contextual Final -->
+                            <div id="lab-resumen-box" class="p-4 rounded-xl bg-gradient-to-br from-[#1269A8] to-[#0d4f80] text-white border-2 border-[#F7D615] shadow-md">
+                                <span class="text-xs uppercase tracking-wider font-bold text-[#F7D615] block">Interpretación Final del Problema</span>
+                                <h3 id="lab-titulo-final" class="text-lg sm:text-xl font-bold mt-0.5">Solución: (18, 12)</h3>
+                                <p id="lab-detalle-final" class="text-xs sm:text-sm text-[#F2F5E9] mt-1">x = 18 libras | y = 12 libras</p>
+                            </div>
+                        </div>
+
+                        <!-- Panel Derecho: Desarrollo Completo de Modelación y Validación -->
+                        <div class="lg:col-span-7 space-y-3" id="lab-pasos-contenedor">
+                            <!-- Generado dinámicamente por JS -->
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Pie de Pizarra -->
+        <footer class="bg-[#1269A8] text-white text-center py-3 px-4 text-xs sm:text-sm border-t-2 border-[#F7D615]">
+            <strong>Colegio Montano</strong> • Departamento de Matemática • Tercera Unidad • Pizarra Digital Interactiva
+        </footer>
+    </div>
+
+    <!-- Scripts de Interactividad y Motor Exacto de Fracciones del Laboratorio de Modelación -->
+    <script>
+        /* =========================================================================
+           1. NAVEGACIÓN DE PESTAÑAS Y PANTALLA COMPLETA
+           ========================================================================= */
+
+        function cambiarSeccion(seccionId, botonActivo) {
+            const secciones = document.querySelectorAll('.seccion-contenido');
+            secciones.forEach(sec => sec.classList.add('hidden'));
+
+            const target = document.getElementById('sec-' + seccionId);
+            if (target) {
+                target.classList.remove('hidden');
+            }
+
+            const botones = document.querySelectorAll('.tab-btn');
+            botones.forEach(btn => btn.classList.remove('active'));
+            if (botonActivo) {
+                botonActivo.classList.add('active');
+            }
+
+            if (seccionId === 'laboratorio') {
+                ejecutarLaboratorio();
+            }
+        }
+
+        function filtrarSubnivel(grupo, nivel, botonActivo) {
+            const contenedores = document.querySelectorAll('.subcontenido-' + grupo);
+            contenedores.forEach(cont => cont.classList.add('hidden'));
+
+            const target = document.getElementById(grupo + '-' + nivel);
+            if (target) {
+                target.classList.remove('hidden');
+            }
+
+            const parent = botonActivo.parentElement;
+            const subBotones = parent.querySelectorAll('.subtab-btn');
+            subBotones.forEach(btn => btn.classList.remove('active'));
+            botonActivo.classList.add('active');
+        }
+
+        function toggleSolucion(solucionId, boton) {
+            const box = document.getElementById(solucionId);
+            if (!box) return;
+
+            if (box.style.display === 'block') {
+                box.style.display = 'none';
+                boton.textContent = boton.textContent.replace('Ocultar', 'Mostrar').replace('Ocultar análisis conceptual', 'Ver análisis conceptual');
+            } else {
+                box.style.display = 'block';
+                if (boton.textContent.includes('Ver análisis')) {
+                    boton.textContent = 'Ocultar análisis conceptual';
+                } else {
+                    boton.textContent = 'Ocultar solución';
+                }
+            }
+        }
+
+        function toggleFullscreen() {
+            const btn = document.getElementById('fullscreen-btn');
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().then(() => {
+                    btn.innerHTML = '<span>✖ Salir de pantalla completa</span>';
+                }).catch(err => {
+                    console.warn('Error al intentar activar pantalla completa:', err);
+                });
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen().then(() => {
+                        btn.innerHTML = '<span>⛶ Pantalla completa</span>';
+                    });
+                }
+            }
+        }
+
+        document.addEventListener('fullscreenchange', () => {
+            const btn = document.getElementById('fullscreen-btn');
+            if (!document.fullscreenElement && btn) {
+                btn.innerHTML = '<span>⛶ Pantalla completa</span>';
+            }
+        });
+
+        /* =========================================================================
+           2. ARITMÉTICA RACIONAL EXACTA (FRACCIONES, GCD Y LCM CON BIGINT)
+           ========================================================================= */
+
+        let metodoLabActual = 'eliminacion'; // 'eliminacion' | 'sustitucion' | 'igualacion'
+
+        function gcdBig(a, b) {
+            a = a < 0n ? -a : a;
+            b = b < 0n ? -b : b;
+            while (b !== 0n) {
+                const t = b;
+                b = a % b;
+                a = t;
+            }
+            return a === 0n ? 1n : a;
+        }
+
+        function lcmBig(a, b) {
+            a = a < 0n ? -a : a;
+            b = b < 0n ? -b : b;
+            if (a === 0n || b === 0n) return 0n;
+            return (a / gcdBig(a, b)) * b;
+        }
+
+        function toFrac(val) {
+            if (!isFinite(val) || Math.abs(val) < 1e-12) return { n: 0n, d: 1n };
+            const str = val.toString().toLowerCase();
+            if (str.includes('e')) {
+                const fixed = val.toFixed(10).replace(/0+$/, '').replace(/\.$/, '');
+                return toFrac(parseFloat(fixed));
+            }
+            if (!str.includes('.')) {
+                return { n: BigInt(Math.round(val)), d: 1n };
+            }
+            const parts = str.split('.');
+            const decLen = BigInt(parts[1].length);
+            const den = 10n ** decLen;
+            const sign = val < 0 ? -1n : 1n;
+            const intPart = BigInt(parts[0].replace('-', '') || '0');
+            const fracPart = BigInt(parts[1]);
+            const num = sign * (intPart * den + fracPart);
+            return normFrac(num, den);
+        }
+
+        function normFrac(n, d) {
+            if (d === 0n) return { n: 0n, d: 0n };
+            if (n === 0n) return { n: 0n, d: 1n };
+            if (d < 0n) {
+                n = -n;
+                d = -d;
+            }
+            const g = gcdBig(n, d);
+            return { n: n / g, d: d / g };
+        }
+
+        function addFrac(f1, f2) { return normFrac(f1.n * f2.d + f2.n * f1.d, f1.d * f2.d); }
+        function subFrac(f1, f2) { return normFrac(f1.n * f2.d - f2.n * f1.d, f1.d * f2.d); }
+        function mulFrac(f1, f2) { return normFrac(f1.n * f2.n, f1.d * f2.d); }
+        function divFrac(f1, f2) { return normFrac(f1.n * f2.d, f1.d * f2.n); }
+        function negFrac(f) { return { n: -f.n, d: f.d }; }
+
+        function fracToStr(f, includeApprox = false) {
+            if (f.d === 0n) return 'Indefinido';
+            if (f.n === 0n) return '0';
+            if (f.d === 1n) return f.n.toString();
+            const base = `${f.n.toString()}/${f.d.toString()}`;
+            if (includeApprox) {
+                const approx = Number(f.n) / Number(f.d);
+                return `${base} (≈ ${approx.toFixed(2).replace(/\.?0+$/, '')})`;
+            }
+            return base;
+        }
+
+        function fracToCoefStr(f, variable, isFirst) {
+            if (f.n === 0n) return '';
+            const isNeg = f.n < 0n;
+            const absF = { n: isNeg ? -f.n : f.n, d: f.d };
+            const isOne = absF.n === 1n && absF.d === 1n;
+            const coefPart = isOne ? variable : `${fracToStr(absF)}${variable}`;
+            if (isFirst) return isNeg ? `-${coefPart}` : coefPart;
+            return isNeg ? `- ${coefPart}` : `+ ${coefPart}`;
+        }
+
+        function formatearEcuacionFrac(fa, fb, fc) {
+            const partes = [];
+            if (fa.n !== 0n) partes.push(fracToCoefStr(fa, 'x', true));
+            if (fb.n !== 0n) partes.push(fracToCoefStr(fb, 'y', partes.length === 0));
+            if (partes.length === 0) partes.push('0');
+            return `${partes.join(' ')} = ${fracToStr(fc)}`;
+        }
+
+        function formatearBinomioFrac(fConst, fCoef, varName) {
+            if (fCoef.n === 0n) return fracToStr(fConst);
+            const isNeg = fCoef.n < 0n;
+            const absC = { n: isNeg ? -fCoef.n : fCoef.n, d: fCoef.d };
+            const isOne = absC.n === 1n && absC.d === 1n;
+            const termVar = isOne ? varName : `${fracToStr(absC)}${varName}`;
+            if (fConst.n === 0n) return isNeg ? `-${termVar}` : termVar;
+            return isNeg ? `${fracToStr(fConst)} - ${termVar}` : `${fracToStr(fConst)} + ${termVar}`;
+        }
+
+        /* =========================================================================
+           3. PLANTILLAS Y CONTROL DEL LABORATORIO DE MODELACIÓN
+           ========================================================================= */
+
+        const PLANTILLAS_LAB = {
+            cafe: {
+                a1: 1, b1: 1, c1: 30,
+                a2: 24, b2: 36, c2: 864,
+                nomX: 'Café de Q24/lb', uniX: 'libras',
+                nomY: 'Café de Q36/lb', uniY: 'libras',
+                metodo: 'eliminacion',
+                etiqueta: 'Plantilla: Mezcla de Café (Q)'
+            },
+            billetes: {
+                a1: 1, b1: 1, c1: 28,
+                a2: 20, b2: 50, c2: 950,
+                nomX: 'Billetes de Q20', uniX: 'billetes',
+                nomY: 'Billetes de Q50', uniY: 'billetes',
+                metodo: 'eliminacion',
+                etiqueta: 'Plantilla: Billetes en Quetzales (Q)'
+            },
+            edades: {
+                a1: 1, b1: -2, c1: 0,
+                a2: 1, b2: -3, c2: -20,
+                nomX: 'Edad actual del padre', uniX: 'años',
+                nomY: 'Edad actual del hijo', uniY: 'años',
+                metodo: 'igualacion',
+                etiqueta: 'Plantilla: Edades en Dos Momentos'
+            },
+            velocidades: {
+                a1: 1, b1: 1, c1: 18,
+                a2: 1, b2: -1, c2: 12,
+                nomX: 'Velocidad lancha agua tranquila', uniX: 'km/h',
+                nomY: 'Velocidad de la corriente', uniY: 'km/h',
+                metodo: 'eliminacion',
+                etiqueta: 'Plantilla: Velocidades en Río Dulce'
+            }
+        };
+
+        function cargarPlantillaLab(clave) {
+            const p = PLANTILLAS_LAB[clave];
+            if (!p) return;
+            cargarEnLaboratorio(p.a1, p.b1, p.c1, p.a2, p.b2, p.c2, p.nomX, p.uniX, p.nomY, p.uniY, p.metodo, p.etiqueta);
+        }
+
+        function cargarEnLaboratorio(a1, b1, c1, a2, b2, c2, nomX, uniX, nomY, uniY, metodo, etiqueta) {
+            document.getElementById('lab-a1').value = a1;
+            document.getElementById('lab-b1').value = b1;
+            document.getElementById('lab-c1').value = c1;
+            document.getElementById('lab-a2').value = a2;
+            document.getElementById('lab-b2').value = b2;
+            document.getElementById('lab-c2').value = c2;
+            document.getElementById('lab-var-x-nombre').value = nomX || 'Variable x';
+            document.getElementById('lab-var-x-unidad').value = uniX || 'unidades';
+            document.getElementById('lab-var-y-nombre').value = nomY || 'Variable y';
+            document.getElementById('lab-var-y-unidad').value = uniY || 'unidades';
+            document.getElementById('lab-preset-badge').textContent = etiqueta || 'Problema Cargado';
+
+            cambiarMetodoLab(metodo || 'eliminacion', false);
+
+            const btnTab6 = document.getElementById('tab-laboratorio');
+            cambiarSeccion('laboratorio', btnTab6);
+        }
+
+        function cambiarMetodoLab(metodo, recalcular = true) {
+            metodoLabActual = metodo;
+            const metodos = ['eliminacion', 'sustitucion', 'igualacion'];
+            metodos.forEach(m => {
+                const btn = document.getElementById('btn-metodo-' + m);
+                if (!btn) return;
+                if (m === metodo) {
+                    btn.className = 'py-2 px-2 rounded-lg font-bold text-xs bg-[#1269A8] text-white border-2 border-[#F7D615] shadow cursor-pointer';
+                } else {
+                    btn.className = 'py-2 px-2 rounded-lg font-bold text-xs bg-white text-[#1269A8] border-2 border-[#1269A8] cursor-pointer';
+                }
+            });
+            if (recalcular) ejecutarLaboratorio();
+        }
+
+        /**
+         * Genera el desarrollo algebraico paso a paso según el método elegido (Eliminación, Sustitución o Igualación)
+         * y realiza la validación contextual automática.
+         */
+        function ejecutarLaboratorio() {
+            const rawA1 = parseFloat(document.getElementById('lab-a1').value);
+            const rawB1 = parseFloat(document.getElementById('lab-b1').value);
+            const rawC1 = parseFloat(document.getElementById('lab-c1').value);
+            const rawA2 = parseFloat(document.getElementById('lab-a2').value);
+            const rawB2 = parseFloat(document.getElementById('lab-b2').value);
+            const rawC2 = parseFloat(document.getElementById('lab-c2').value);
+
+            const nomX = document.getElementById('lab-var-x-nombre').value.trim() || 'Incógnita x';
+            const uniX = document.getElementById('lab-var-x-unidad').value.trim() || 'unidades';
+            const nomY = document.getElementById('lab-var-y-nombre').value.trim() || 'Incógnita y';
+            const uniY = document.getElementById('lab-var-y-unidad').value.trim() || 'unidades';
+
+            const contenedor = document.getElementById('lab-pasos-contenedor');
+            const resumenBox = document.getElementById('lab-resumen-box');
+            const tituloFinal = document.getElementById('lab-titulo-final');
+            const detalleFinal = document.getElementById('lab-detalle-final');
+            const previewSistema = document.getElementById('lab-preview-sistema');
+
+            if ([rawA1, rawB1, rawC1, rawA2, rawB2, rawC2].some(v => isNaN(v))) {
+                contenedor.innerHTML = `<div class="paso-lab border-red-600 text-red-700 font-bold">⚠️ Por favor, completa todos los coeficientes numéricos del modelo.</div>`;
+                return;
+            }
+
+            const a1 = toFrac(rawA1), b1 = toFrac(rawB1), c1 = toFrac(rawC1);
+            const a2 = toFrac(rawA2), b2 = toFrac(rawB2), c2 = toFrac(rawC2);
+
+            const eq1Str = formatearEcuacionFrac(a1, b1, c1);
+            const eq2Str = formatearEcuacionFrac(a2, b2, c2);
+            previewSistema.innerHTML = `${eq1Str} <br> ${eq2Str}`;
+
+            // Determinante principal D = a1*b2 - a2*b1
+            const D = subFrac(mulFrac(a1, b2), mulFrac(a2, b1));
+            const Dx = subFrac(mulFrac(c1, b2), mulFrac(c2, b1));
+            const Dy = subFrac(mulFrac(a1, c2), mulFrac(a2, c1));
+
+            let htmlPasos = `
+                <!-- PASO 1 Y 2: DEFINICIÓN Y PLANTEAMIENTO -->
+                <div class="paso-lab">
+                    <span class="text-xs font-extrabold uppercase tracking-wider text-[#1269A8] block mb-1">Paso 1 y 2 • Variables Definidas y Modelo 2×2</span>
+                    <div class="text-xs sm:text-sm text-slate-700 space-y-1">
+                        <p>• <span class="font-mono font-bold text-[#1269A8]">x</span> = <strong>${nomX}</strong> (en <em>${uniX}</em>) &nbsp;&nbsp;|&nbsp;&nbsp; <span class="font-mono font-bold text-[#54887D]">y</span> = <strong>${nomY}</strong> (en <em>${uniY}</em>)</p>
+                        <p>• <strong>Ec. 1:</strong> <span class="math-expr text-sm">${eq1Str}</span> &nbsp;&nbsp; <strong>Ec. 2:</strong> <span class="math-expr text-sm">${eq2Str}</span></p>
+                    </div>
+                </div>
+            `;
+
+            // Casos especiales: sin solución o infinitas soluciones
+            if (D.n === 0n) {
+                if (Dx.n === 0n && Dy.n === 0n) {
+                    htmlPasos += `
+                        <div class="paso-lab" style="border-left-color: #54887D;">
+                            <span class="text-xs font-extrabold uppercase tracking-wider text-[#54887D] block mb-1">Paso 3 y 4 • Resolución Algebraica (${metodoLabActual.toUpperCase()})</span>
+                            <p class="text-sm text-slate-700">Al reducir el sistema se obtiene la identidad <span class="math-expr">0 = 0</span>. Ambas condiciones del problema expresan exactamente la misma relación, por lo que existen <strong>infinitas combinaciones</strong> que cumplen el enunciado (falta una segunda condición independiente).</p>
+                        </div>`;
+                    tituloFinal.textContent = 'Infinitas Soluciones (Modelo Indeterminado)';
+                    detalleFinal.textContent = 'Se requiere una segunda condición independiente para fijar una única respuesta.';
+                    resumenBox.style.background = 'linear-gradient(135deg, #54887D 0%, #375c54 100%)';
+                } else {
+                    htmlPasos += `
+                        <div class="paso-lab" style="border-left-color: #b45309;">
+                            <span class="text-xs font-extrabold uppercase tracking-wider text-amber-800 block mb-1">Paso 3 y 4 • Resolución Algebraica (${metodoLabActual.toUpperCase()})</span>
+                            <p class="text-sm text-slate-700">Al simplificar el sistema se llega a una <strong>contradicción numérica</strong> (<span class="math-expr">0 = k ≠ 0</span>). Las condiciones planteadas son incompatibles entre sí y <strong>no existe solución</strong>.</p>
+                        </div>`;
+                    tituloFinal.textContent = 'Sin Solución (Modelo Incompatible)';
+                    detalleFinal.textContent = 'Las dos condiciones del problema se contradicen entre sí.';
+                    resumenBox.style.background = 'linear-gradient(135deg, #b45309 0%, #78350f 100%)';
+                }
+                contenedor.innerHTML = htmlPasos;
+                return;
+            }
+
+            // Solución única exacta
+            const solX = divFrac(Dx, D);
+            const solY = divFrac(Dy, D);
+
+            // Desarrollo específico según el método seleccionado
+            if (metodoLabActual === 'eliminacion') {
+                // Eliminar y si b1 != 0 y b2 != 0, sino x
+                const elimY = (b1.n !== 0n && b2.n !== 0n);
+                const k1 = elimY ? b1 : a1;
+                const k2 = elimY ? b2 : a2;
+                const vElim = elimY ? 'y' : 'x';
+                const vSob = elimY ? 'x' : 'y';
+
+                const n1 = k1.n * k2.d, n2 = k2.n * k1.d;
+                const abs1 = n1 < 0n ? -n1 : n1, abs2 = n2 < 0n ? -n2 : n2;
+                const M = lcmBig(abs1, abs2);
+                const f1 = { n: M / abs1, d: 1n };
+                const mismoSigno = (n1 > 0n && n2 > 0n) || (n1 < 0n && n2 < 0n);
+                const f2 = { n: mismoSigno ? -(M / abs2) : (M / abs2), d: 1n };
+
+                const neq1 = formatearEcuacionFrac(mulFrac(f1, a1), mulFrac(f1, b1), mulFrac(f1, c1));
+                const neq2 = formatearEcuacionFrac(mulFrac(f2, a2), mulFrac(f2, b2), mulFrac(f2, c2));
+                const coefSob = elimY ? addFrac(mulFrac(f1, a1), mulFrac(f2, a2)) : addFrac(mulFrac(f1, b1), mulFrac(f2, b2));
+                const rhsSob = addFrac(mulFrac(f1, c1), mulFrac(f2, c2));
+                const valSob = elimY ? solX : solY;
+                const valElim = elimY ? solY : solX;
+
+                htmlPasos += `
+                    <div class="paso-lab" style="border-left-color: #54887D;">
+                        <span class="text-xs font-extrabold uppercase tracking-wider text-[#54887D] block mb-1">Paso 3 • Resolución por Método de Eliminación (Suma o Resta)</span>
+                        <div class="text-xs sm:text-sm space-y-1.5 mt-1">
+                            <p>• Igualamos coeficientes de <strong>"${vElim}"</strong> con signos opuestos (multiplicando Ec. 1 por <span class="font-mono font-bold">${fracToStr(f1)}</span> y Ec. 2 por <span class="font-mono font-bold">${fracToStr(f2)}</span>):</p>
+                            <p>&nbsp;&nbsp;<span class="font-mono font-bold text-[#1269A8]">${neq1}</span> &nbsp; y &nbsp; <span class="font-mono font-bold text-[#54887D]">${neq2}</span></p>
+                            <p>• Sumando verticalmente: <span class="math-expr">${fracToStr(coefSob)}${vSob} = ${fracToStr(rhsSob)} ➔ ${vSob} = ${fracToStr(valSob, true)}</span></p>
+                            <p>• Sustituyendo <span class="font-mono font-bold">${vSob} = ${fracToStr(valSob)}</span> en una ecuación original: <span class="math-expr">${vElim} = ${fracToStr(valElim, true)}</span></p>
+                        </div>
+                    </div>`;
+            } else if (metodoLabActual === 'sustitucion') {
+                // Despejar x en Ec. 1 si a1 != 0, sino y en Ec. 1
+                const despX = a1.n !== 0n;
+                const vDesp = despX ? 'x' : 'y';
+                const vOtra = despX ? 'y' : 'x';
+                const cDesp = despX ? a1 : b1;
+                const cOtra = despX ? b1 : a1;
+
+                const termConst = divFrac(c1, cDesp);
+                const termCoef = negFrac(divFrac(cOtra, cDesp));
+                const binomio = formatearBinomioFrac(termConst, termCoef, vOtra);
+
+                const valOtra = despX ? solY : solX;
+                const valDesp = despX ? solX : solY;
+
+                htmlPasos += `
+                    <div class="paso-lab" style="border-left-color: #54887D;">
+                        <span class="text-xs font-extrabold uppercase tracking-wider text-[#54887D] block mb-1">Paso 3 • Resolución por Método de Sustitución</span>
+                        <div class="text-xs sm:text-sm space-y-1.5 mt-1">
+                            <p>• Despejando <strong>"${vDesp}"</strong> en la Ecuación 1: <span class="math-expr">${vDesp} = ${binomio}</span></p>
+                            <p>• Sustituyendo entre paréntesis en la Ecuación 2 (<span class="font-mono font-bold">${eq2Str}</span>) y reduciendo términos:</p>
+                            <p>&nbsp;&nbsp;Se obtiene <span class="math-expr">${vOtra} = ${fracToStr(valOtra, true)}</span></p>
+                            <p>• Sustituyendo <span class="font-mono font-bold">${vOtra} = ${fracToStr(valOtra)}</span> en el despeje inicial: <span class="math-expr">${vDesp} = ${fracToStr(valDesp, true)}</span></p>
+                        </div>
+                    </div>`;
+            } else {
+                // Igualación: despejar y en ambas si b1 != 0 y b2 != 0, sino x en ambas
+                const despY = (b1.n !== 0n && b2.n !== 0n);
+                const vDesp = despY ? 'y' : 'x';
+                const vOtra = despY ? 'x' : 'y';
+                const d1 = despY ? b1 : a1;
+                const o1 = despY ? a1 : b1;
+                const d2 = despY ? b2 : a2;
+                const o2 = despY ? a2 : b2;
+
+                const exp1 = formatearBinomioFrac(divFrac(c1, d1), negFrac(divFrac(o1, d1)), vOtra);
+                const exp2 = formatearBinomioFrac(divFrac(c2, d2), negFrac(divFrac(o2, d2)), vOtra);
+                const valOtra = despY ? solX : solY;
+                const valDesp = despY ? solY : solX;
+
+                htmlPasos += `
+                    <div class="paso-lab" style="border-left-color: #54887D;">
+                        <span class="text-xs font-extrabold uppercase tracking-wider text-[#54887D] block mb-1">Paso 3 • Resolución por Método de Igualación</span>
+                        <div class="text-xs sm:text-sm space-y-1.5 mt-1">
+                            <p>• Despejamos <strong>"${vDesp}"</strong> en ambas ecuaciones:</p>
+                            <p>&nbsp;&nbsp;De Ec. 1: <span class="math-expr">${vDesp} = ${exp1}</span> &nbsp;|&nbsp; De Ec. 2: <span class="math-expr">${vDesp} = ${exp2}</span></p>
+                            <p>• Igualando ambas expresiones (<span class="font-mono font-bold">${exp1} = ${exp2}</span>) y despejando <span class="font-mono font-bold">${vOtra}</span>:</p>
+                            <p>&nbsp;&nbsp;<span class="math-expr">${vOtra} = ${fracToStr(valOtra, true)}</span> &nbsp;➔&nbsp; Sustituyendo: <span class="math-expr">${vDesp} = ${fracToStr(valDesp, true)}</span></p>
+                        </div>
+                    </div>`;
+            }
+
+            // Paso 4: Comprobación numérica en ambas condiciones
+            const check1 = addFrac(mulFrac(a1, solX), mulFrac(b1, solY));
+            const check2 = addFrac(mulFrac(a2, solX), mulFrac(b2, solY));
+
+            // Paso 5: Validación contextual automática (signos y naturaleza entera/fraccionaria)
+            const numX = Number(solX.n) / Number(solX.d);
+            const numY = Number(solY.n) / Number(solY.d);
+            const hayNegativos = numX < 0 || numY < 0;
+            const hayFracciones = solX.d !== 1n || solY.d !== 1n;
+
+            let alertaContextual = '';
+            if (hayNegativos) {
+                alertaContextual = `<div class="mt-2 p-2.5 rounded-lg bg-amber-100 border border-amber-500 text-amber-900 text-xs font-semibold">⚠️ <strong>Alerta de Validación Contextual:</strong> Al menos una incógnita resultó negativa (<span class="font-mono">${fracToStr(solX)}</span>, <span class="font-mono">${fracToStr(solY)}</span>). Verifica si en el contexto del problema (precios, edades, cantidades físicas) los valores negativos carecen de sentido real.</div>`;
+            } else if (hayFracciones) {
+                alertaContextual = `<div class="mt-2 p-2.5 rounded-lg bg-sky-100 border border-sky-500 text-sky-900 text-xs font-semibold">ℹ️ <strong>Nota de Validación Contextual:</strong> La solución contiene fracciones (<span class="font-mono">${fracToStr(solX)}</span> y <span class="font-mono">${fracToStr(solY)}</span>). Esto es válido para magnitudes continuas (litros, libras, Quetzales con centavos, km/h), pero revisa el planteamiento si se trata de objetos indivisibles (billetes, boletos, animales).</div>`;
+            } else {
+                alertaContextual = `<div class="mt-2 p-2.5 rounded-lg bg-emerald-100 border border-emerald-500 text-emerald-900 text-xs font-semibold">✅ <strong>Validación Contextual Exitosa:</strong> Ambos valores son enteros positivos, coherentes con las condiciones del problema.</div>`;
+            }
+
+            htmlPasos += `
+                <div class="paso-lab" style="border-left-color: #A6B046;">
+                    <span class="text-xs font-extrabold uppercase tracking-wider text-[#54887D] block mb-1">Paso 4 • Comprobación en Ambas Condiciones del Problema</span>
+                    <div class="text-xs sm:text-sm space-y-1 mt-1 text-slate-700">
+                        <p>✔ Condición 1: <span class="font-mono font-bold">${fracToStr(a1)}(${fracToStr(solX)}) + ${fracToStr(b1)}(${fracToStr(solY)}) = ${fracToStr(check1)}</span> (coincide con <span class="font-mono font-bold">${fracToStr(c1)}</span>)</p>
+                        <p>✔ Condición 2: <span class="font-mono font-bold">${fracToStr(a2)}(${fracToStr(solX)}) + ${fracToStr(b2)}(${fracToStr(solY)}) = ${fracToStr(check2)}</span> (coincide con <span class="font-mono font-bold">${fracToStr(c2)}</span>)</p>
+                    </div>
+                </div>
+
+                <div class="paso-lab" style="border-left-color: #F7D615;">
+                    <span class="text-xs font-extrabold uppercase tracking-wider text-[#1269A8] block mb-1">Paso 5 • Interpretación y Respuesta Contextualizada</span>
+                    <div class="text-xs sm:text-sm space-y-1 mt-1 text-slate-800">
+                        <p>• <strong>${nomX}:</strong> <span class="math-expr text-sm">${fracToStr(solX, true)} ${uniX}</span></p>
+                        <p>• <strong>${nomY}:</strong> <span class="math-expr text-sm">${fracToStr(solY, true)} ${uniY}</span></p>
+                        ${alertaContextual}
+                    </div>
+                </div>
+            `;
+
+            tituloFinal.textContent = `Solución: (${fracToStr(solX)}, ${fracToStr(solY)})`;
+            detalleFinal.textContent = `${nomX}: ${fracToStr(solX, true)} ${uniX}  |  ${nomY}: ${fracToStr(solY, true)} ${uniY}`;
+            resumenBox.style.background = hayNegativos
+                ? 'linear-gradient(135deg, #b45309 0%, #78350f 100%)'
+                : 'linear-gradient(135deg, #1269A8 0%, #0d4f80 100%)';
+
+            contenedor.innerHTML = htmlPasos;
+        }
+
+        // Inicializar laboratorio al cargar la ventana
+        window.onload = function () {
+            ejecutarLaboratorio();
+        };
+    </script>
+</body>
+</html>

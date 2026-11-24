@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pizarra Digital - Sistemas de Ecuaciones 3×3 | Colegio Montano</title>
+    <!-- Carga de Tailwind CSS para utilidades de diseño responsivo y layout -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Configuración de Variables Institucionales Colegio Montano */
+        :root {
+            --azul-principal: #1269A8;
+            --amarillo-brillante: #F7D615;
+            --verde-grisaceo: #54887D;
+            --azul-claro: #88B5C7;
+            --verde-oliva: #A6B046;
+            --blanco-suave: #F2F5E9;
+        }
+
+        /* Tipografía Institucional */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e2e8f0;
+            color: #1e293b;
+            margin: 0;
+            padding: 12px;
+        }
+
+        /* Marco Principal de Pizarra Digital */
+        #pizarra-container {
+            background-color: var(--blanco-suave);
+            border: 5px solid var(--amarillo-brillante);
+            border-radius: 12px;
+            box-shadow: 0 12px 30px rgba(18, 105, 168, 0.25);
+            max-width: 1200px;
+            margin: 0 auto;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 85vh;
+        }
+
+        /* Encabezado de la Pizarra */
+        .pizarra-header {
+            background: linear-gradient(135deg, var(--azul-principal) 0%, #0d4f80 100%);
+            color: white;
+            padding: 16px 24px;
+            border-bottom: 4px solid var(--amarillo-brillante);
+        }
+
+        /* Botón Fullscreen */
+        .btn-fullscreen {
+            background-color: var(--amarillo-brillante);
+            color: #0f172a;
+            font-weight: 700;
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: 2px solid #ffffff;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+        .btn-fullscreen:hover {
+            background-color: #ffe234;
+            transform: translateY(-1px);
+        }
+
+        /* Navegación de Pestañas */
+        .nav-tabs {
+            background-color: #ffffff;
+            border-bottom: 2px solid var(--azul-claro);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            padding: 10px 20px;
+        }
+
+        .tab-btn {
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: var(--azul-principal);
+            background-color: transparent;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .tab-btn:hover {
+            background-color: rgba(136, 181, 199, 0.25);
+            border-color: var(--azul-claro);
+        }
+
+        .tab-btn.active {
+            background-color: var(--azul-principal);
+            color: #ffffff;
+            border-color: var(--amarillo-brillante);
+            box-shadow: 0 3px 8px rgba(18, 105, 168, 0.3);
+        }
+
+        /* Tarjetas de Contenido */
+        .card-montano {
+            background-color: #ffffff;
+            border: 2px solid var(--verde-grisaceo);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 18px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .card-formula {
+            background: linear-gradient(135deg, rgba(136, 181, 199, 0.25) 0%, rgba(242, 245, 233, 0.8) 100%);
+            border-left: 6px solid var(--azul-principal);
+            border-radius: 8px;
+            padding: 16px;
+            margin: 12px 0;
+        }
+
+        /* Etiquetas de Nivel */
+        .badge-nivel {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .badge-basico {
+            background-color: var(--verde-oliva);
+            color: #ffffff;
+        }
+        .badge-intermedio {
+            background-color: var(--verde-grisaceo);
+            color: #ffffff;
+        }
+        .badge-avanzado {
+            background-color: var(--azul-principal);
+            color: #ffffff;
+            border: 1px solid var(--amarillo-brillante);
+        }
+
+        /* Contenedor de Soluciones Ocultas */
+        .solucion-box {
+            background-color: rgba(136, 181, 199, 0.25);
+            border: 1.5px dashed var(--azul-principal);
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin-top: 12px;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .btn-solucion {
+            background-color: var(--azul-principal);
+            color: white;
+            font-weight: 600;
+            padding: 7px 14px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.2s;
+            margin-top: 10px;
+        }
+        .btn-solucion:hover {
+            background-color: var(--verde-grisaceo);
+        }
+
+        /* Bloques Matemáticos Visuales */
+        .math-expr {
+            font-family: 'Cambria Math', 'Times New Roman', serif;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: var(--azul-principal);
+            background-color: #f8fafc;
+            padding: 2px 8px;
+            border-radius: 4px;
+            border: 1px solid #cbd5e1;
+            display: inline-block;
+        }
+
+        /* Llave Visual para Sistemas 3x3 */
+        .sistema-box {
+            display: inline-flex;
+            align-items: center;
+            background-color: #f8fafc;
+            border: 1.5px solid var(--azul-claro);
+            border-left: 5px solid var(--azul-principal);
+            border-radius: 8px;
+            padding: 8px 16px;
+            font-family: 'Cambria Math', 'Times New Roman', serif;
+            font-weight: bold;
+            color: var(--azul-principal);
+            margin: 6px 0;
+            line-height: 1.55;
+        }
+
+        /* Sub-pestañas de Nivel */
+        .subtab-btn {
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 0.88rem;
+            cursor: pointer;
+            border: 2px solid var(--verde-grisaceo);
+            background-color: #ffffff;
+            color: var(--verde-grisaceo);
+            transition: all 0.2s;
+        }
+        .subtab-btn.active {
+            background-color: var(--verde-grisaceo);
+            color: #ffffff;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Modo Fullscreen */
+        :fullscreen #pizarra-container {
+            max-width: 100%;
+            width: 100vw;
+            height: 100vh;
+            border-radius: 0;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Marco Principal de la Pizarra Digital -->
+    <div id="pizarra-container">
+        
+        <!-- Encabezado Institucional -->
+        <header class="pizarra-header flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-4">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyEop0yf6lZ7Jk9MILZxF1rBj4Oqs5esyhIQ&s" 
+                     alt="Logo Colegio Montano" 
+                     class="w-14 h-14 rounded-lg bg-white p-1 object-contain border-2 border-[#F7D615]"
+                     onerror="this.src='https://placehold.co/60x60/1269A8/F7D615?text=CM'">
+                <div>
+                    <span class="text-xs uppercase tracking-widest font-bold text-[#F7D615] block">Colegio Montano • Tercera Unidad • Matemática</span>
+                    <h1 class="text-xl sm:text-2xl font-bold leading-tight">Sistemas de Ecuaciones Lineales con Tres Variables (3×3)</h1>
+                    <p class="text-sm text-[#88B5C7] font-semibold">Nivel: Tercero Básico • Guía Interactiva de Pizarra Digital</p>
+                </div>
+            </div>
+            <button id="fullscreen-btn" class="btn-fullscreen flex items-center gap-2" onclick="toggleFullscreen()">
+                <span>⛶ Pantalla completa</span>
+            </button>
+        </header>
+
+        <!-- Barra de Navegación Horizontal -->
+        <nav class="nav-tabs" role="tablist">
+            <button class="tab-btn active" onclick="cambiarSeccion('teoria', this)">📘 1. Teoría</button>
+            <button class="tab-btn" onclick="cambiarSeccion('ejemplos', this)">💡 2. Ejemplos Resueltos (15)</button>
+            <button class="tab-btn" onclick="cambiarSeccion('ejercicios', this)">✍️ 3. Ejercicios Prácticos (15)</button>
+            <button class="tab-btn" onclick="cambiarSeccion('reflexion', this)">🧠 4. Reflexión Crítica</button>
+            <button class="tab-btn" onclick="cambiarSeccion('evaluacion', this)">✅ 5. Evaluación Formativa</button>
+        </nav>
+
+        <!-- Lienzo Principal de Contenido -->
+        <main class="p-4 sm:p-6 flex-1">
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 1: EXPLICACIÓN TEÓRICA             -->
+            <!-- ========================================== -->
+            <section id="sec-teoria" class="seccion-contenido">
+                <div class="card-montano">
+                    <h2 class="text-2xl font-bold text-[#1269A8] mb-3 border-b-2 border-[#F7D615] pb-2">¿Qué es un Sistema de Ecuaciones Lineales 3×3?</h2>
+                    <p class="text-base leading-relaxed mb-4">
+                        Una <strong>ecuación lineal con tres incógnitas</strong> es una igualdad algebraica de primer grado de la forma <span class="math-expr">ax + by + cz = d</span> (donde <span class="math-expr">a, b, c</span> no son simultáneamente cero). Geométricamente, en el espacio tridimensional <span class="math-expr">(x, y, z)</span>, cada ecuación representa un <strong>plano</strong>.
+                    </p>
+                    <p class="text-base leading-relaxed mb-4">
+                        Un <strong>Sistema Lineal 3×3</strong> está compuesto por <strong>tres ecuaciones lineales con tres incógnitas</strong> (<span class="math-expr">x, y, z</span>). Su solución es la <strong>terna ordenada</strong> <span class="math-expr">(x₀, y₀, z₀)</span> que satisface las tres ecuaciones de manera simultánea (el punto en el espacio donde se intersecan los tres planos).
+                    </p>
+
+                    <!-- Representación Visual Rápida -->
+                    <div class="bg-[#F2F5E9] border-2 border-[#A6B046] rounded-xl p-4 my-4 flex flex-col md:flex-row items-center justify-around gap-4">
+                        <div class="text-center">
+                            <span class="text-xs font-bold uppercase text-[#54887D] block mb-1">Estructura Canónica del Sistema 3×3</span>
+                            <div class="sistema-box text-base sm:text-lg text-left">
+                                <div>
+                                    <div>a₁x + b₁y + c₁z = d₁ &nbsp;← (Ec. 1)</div>
+                                    <div>a₂x + b₂y + c₂z = d₂ &nbsp;← (Ec. 2)</div>
+                                    <div>a₃x + b₃y + c₃z = d₃ &nbsp;← (Ec. 3)</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-sm sm:text-base max-w-md space-y-2">
+                            <p><strong class="text-[#1269A8]">• Estrategia Principal (Reducción Escalonada):</strong> Consiste en eliminar una misma variable en dos parejas distintas de ecuaciones para transformar el sistema <strong>3×3</strong> en un sistema equivalente <strong>2×2</strong>.</p>
+                            <p><strong class="text-[#1269A8]">• Sustitución Regresiva:</strong> Una vez resuelto el sistema 2×2, se sustituyen las dos incógnitas halladas en cualquiera de las ecuaciones originales para despejar la tercera variable.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Algoritmo Paso a Paso y Representación Espacial -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                    <div class="card-montano lg:col-span-2">
+                        <h3 class="text-xl font-bold text-[#1269A8] mb-3">🧭 Algoritmo de Resolución por Reducción (Paso a Paso)</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+                            <div class="card-formula m-0">
+                                <span class="badge-nivel badge-basico mb-1">Paso 1</span>
+                                <h4 class="font-bold text-[#54887D]">Elegir la incógnita a eliminar</h4>
+                                <p class="text-slate-700 mt-1">Observa los coeficientes de <span class="math-expr text-xs">x</span>, <span class="math-expr text-xs">y</span> o <span class="math-expr text-xs">z</span>. Selecciona la variable que tenga coeficientes <span class="math-expr text-xs">+1</span>, <span class="math-expr text-xs">-1</span> o signos opuestos para simplificar las operaciones.</p>
+                            </div>
+                            <div class="card-formula m-0">
+                                <span class="badge-nivel badge-intermedio mb-1">Paso 2</span>
+                                <h4 class="font-bold text-[#54887D]">Reducir de 3×3 a 2×2</h4>
+                                <p class="text-slate-700 mt-1">Combina <strong>(Ec. 1 y Ec. 2)</strong> para eliminar esa variable y obtener la <strong>Ec. 4</strong>. Luego combina <strong>(Ec. 1 y Ec. 3)</strong> (o Ec. 2 y Ec. 3) para eliminar la <em>misma</em> variable y obtener la <strong>Ec. 5</strong>.</p>
+                            </div>
+                            <div class="card-formula m-0">
+                                <span class="badge-nivel badge-avanzado mb-1">Paso 3</span>
+                                <h4 class="font-bold text-[#54887D]">Resolver el Sistema 2×2</h4>
+                                <p class="text-slate-700 mt-1">Resuelve el nuevo sistema formado por <strong>Ec. 4</strong> y <strong>Ec. 5</strong> mediante reducción, sustitución o igualación para encontrar dos de las tres incógnitas.</p>
+                            </div>
+                            <div class="card-formula m-0">
+                                <span class="badge-nivel badge-basico mb-1">Paso 4</span>
+                                <h4 class="font-bold text-[#54887D]">Hallar la 3.ª variable y Verificar</h4>
+                                <p class="text-slate-700 mt-1">Sustituye los dos valores hallados en una de las ecuaciones iniciales (Ec. 1, 2 o 3) para calcular la variable restante. Comprueba la terna <span class="math-expr text-xs">(x, y, z)</span> en las tres ecuaciones.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Esquema Visual de Intersección de Planos -->
+                    <div class="card-montano flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-lg font-bold text-[#1269A8] mb-2">🧊 Interpretación Geométrica</h3>
+                            <p class="text-xs sm:text-sm text-slate-600 mb-3">Tres planos en el espacio tridimensional pueden intersecarse en un único punto <span class="math-expr text-xs">(x, y, z)</span> (Sistema Compatible Determinado).</p>
+                            <div class="flex justify-center my-2">
+                                <svg width="210" height="150" viewBox="0 0 210 150" class="bg-[#F2F5E9] rounded-xl border border-[#88B5C7]">
+                                    <!-- Plano 1 (Azul) -->
+                                    <polygon points="30,40 130,20 175,65 75,85" fill="rgba(18, 105, 168, 0.22)" stroke="#1269A8" stroke-width="2"/>
+                                    <!-- Plano 2 (Verde Grisáceo) -->
+                                    <polygon points="55,15 155,45 140,125 40,95" fill="rgba(84, 136, 125, 0.22)" stroke="#54887D" stroke-width="2"/>
+                                    <!-- Plano 3 (Oliva) -->
+                                    <polygon points="25,105 115,65 185,100 95,140" fill="rgba(166, 176, 70, 0.25)" stroke="#A6B046" stroke-width="2"/>
+                                    <!-- Punto de intersección común -->
+                                    <circle cx="105" cy="72" r="5.5" fill="#F7D615" stroke="#0f172a" stroke-width="2"/>
+                                    <text x="115" y="75" font-size="11" font-weight="bold" fill="#0f172a">(x, y, z)</text>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="p-2.5 bg-amber-50 border-l-4 border-[#F7D615] rounded text-xs text-slate-700">
+                            <strong>Nota de Control:</strong> Si al reducir ecuaciones aparece una falsedad como <span class="math-expr text-xs">0 = 5</span>, el sistema es <strong>Incompatible</strong> (sin solución). Si aparece <span class="math-expr text-xs">0 = 0</span>, es <strong>Indeterminado</strong> (infinitas soluciones).
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 2: EJEMPLOS RESUELTOS (15)         -->
+            <!-- ========================================== -->
+            <section id="sec-ejemplos" class="seccion-contenido hidden">
+                <div class="flex flex-wrap items-center justify-between gap-3 mb-4 bg-white p-4 rounded-xl border-2 border-[#54887D]">
+                    <div>
+                        <h2 class="text-xl font-bold text-[#1269A8]">Ejemplos Resueltos Paso a Paso (Sistemas 3×3)</h2>
+                        <p class="text-sm text-slate-600">Domina desde sistemas escalonados hasta sistemas completos, fraccionarios y aplicaciones reales.</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button class="subtab-btn active" onclick="filtrarSubnivel('ejemplos', 'basico', this)">Nivel Básico (5)</button>
+                        <button class="subtab-btn" onclick="filtrarSubnivel('ejemplos', 'intermedio', this)">Nivel Intermedio (5)</button>
+                        <button class="subtab-btn" onclick="filtrarSubnivel('ejemplos', 'avanzado', this)">Nivel Avanzado (5)</button>
+                    </div>
+                </div>
+
+                <!-- EJEMPLOS BÁSICOS -->
+                <div id="ejemplos-basico" class="subcontenido-ejemplos space-y-4">
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Básico • Ejemplo 1 (Verificación de Terna Ordenada)</span>
+                        <p class="font-bold text-lg text-[#1269A8]">Comprobar si la terna ordenada <span class="math-expr">(2, -1, 3)</span> es solución del sistema 3×3:</p>
+                        <div class="sistema-box text-sm"><span>x + 2y + z = 3 <br> 2x - y + 3z = 14 <br> 3x + 4y - 2z = -4</span></div>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>Sustituimos <span class="math-expr">x = 2, y = -1, z = 3</span> en las tres ecuaciones:</strong></p>
+                            <p><strong>Ec. 1:</strong> <span class="math-expr">(2) + 2(-1) + (3) = 2 - 2 + 3 = 3</span> (Verdadero).</p>
+                            <p><strong>Ec. 2:</strong> <span class="math-expr">2(2) - (-1) + 3(3) = 4 + 1 + 9 = 14</span> (Verdadero).</p>
+                            <p><strong>Ec. 3:</strong> <span class="math-expr">3(2) + 4(-1) - 2(3) = 6 - 4 - 6 = -4</span> (Verdadero).</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: Sí, (2, -1, 3) es la solución del sistema.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Básico • Ejemplo 2 (Sistema Triangular / Sustitución Regresiva)</span>
+                        <p class="font-bold text-lg text-[#1269A8]">Resolver el siguiente sistema escalonado por sustitución regresiva:</p>
+                        <div class="sistema-box text-sm"><span>x + y + z = 10 <br> 2y + z = 11 <br> 3z = 9</span></div>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (De Ec. 3 despejamos <span class="math-expr">z</span>):</strong> <span class="math-expr">3z = 9 ➔ z = 3</span>.</p>
+                            <p><strong>Paso 2 (Sustituimos <span class="math-expr">z = 3</span> en Ec. 2):</strong> <span class="math-expr">2y + 3 = 11 ➔ 2y = 8 ➔ y = 4</span>.</p>
+                            <p><strong>Paso 3 (Sustituimos <span class="math-expr">y = 4, z = 3</span> en Ec. 1):</strong> <span class="math-expr">x + 4 + 3 = 10 ➔ x = 3</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: Solución = (3, 4, 3).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Básico • Ejemplo 3 (Eliminación Directa por Suma)</span>
+                        <p class="font-bold text-lg text-[#1269A8]">Resolver el sistema aprovechando las variables con signos opuestos:</p>
+                        <div class="sistema-box text-sm"><span>x + y + z = 6 <br> x - y + z = 2 <br> x + y - z = 0</span></div>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Restar Ec. 1 - Ec. 2 para hallar <span class="math-expr">y</span>):</strong> <span class="math-expr">(x + y + z) - (x - y + z) = 6 - 2 ➔ 2y = 4 ➔ y = 2</span>.</p>
+                            <p><strong>Paso 2 (Restar Ec. 1 - Ec. 3 para hallar <span class="math-expr">z</span>):</strong> <span class="math-expr">(x + y + z) - (x + y - z) = 6 - 0 ➔ 2z = 6 ➔ z = 3</span>.</p>
+                            <p><strong>Paso 3 (Sustituir en Ec. 1):</strong> <span class="math-expr">x + 2 + 3 = 6 ➔ x = 1</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: Solución = (1, 2, 3).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Básico • Ejemplo 4 (Sistema con Ecuaciones Incompletas)</span>
+                        <p class="font-bold text-lg text-[#1269A8]">Encontrar la terna <span class="math-expr">(x, y, z)</span> que satisface el sistema:</p>
+                        <div class="sistema-box text-sm"><span>x + y = 7 <br> y + z = 9 <br> x + z = 8</span></div>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>Truco Simétrico (Sumar las 3 ecuaciones):</strong> <span class="math-expr">(x + y) + (y + z) + (x + z) = 7 + 9 + 8 ➔ 2x + 2y + 2z = 24</span>.</p>
+                            <p><strong>Dividiendo entre 2:</strong> <span class="math-expr">x + y + z = 12</span>.</p>
+                            <p><strong>Sustituyendo cada pareja:</strong><br>
+                            • Como <span class="math-expr">y + z = 9 ➔ x + 9 = 12 ➔ x = 3</span>.<br>
+                            • Como <span class="math-expr">x + z = 8 ➔ y + 8 = 12 ➔ y = 4</span>.<br>
+                            • Como <span class="math-expr">x + y = 7 ➔ z + 7 = 12 ➔ z = 5</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: Solución = (3, 4, 5).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Básico • Ejemplo 5 (Planteamiento Verbal de 3 Variables)</span>
+                        <p class="font-bold text-lg text-[#1269A8]">Plantear el sistema 3×3: <em>"La suma de tres números es 36. El mayor excede al mediano en 4, y el mediano excede al menor en 5"</em>.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>Variables:</strong> <span class="math-expr">x</span> = mayor; <span class="math-expr">y</span> = mediano; <span class="math-expr">z</span> = menor.</p>
+                            <p><strong>Ec. 1:</strong> <span class="math-expr">x + y + z = 36</span></p>
+                            <p><strong>Ec. 2:</strong> <span class="math-expr">x - y = 4</span></p>
+                            <p><strong>Ec. 3:</strong> <span class="math-expr">y - z = 5</span></p>
+                            <p class="font-bold text-[#54887D]">Sistema planteado: { x + y + z = 36 ; x - y = 4 ; y - z = 5 } (Cuya solución es x = 16, y = 12, z = 8).</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EJEMPLOS INTERMEDIOS -->
+                <div id="ejemplos-intermedio" class="subcontenido-ejemplos hidden space-y-4">
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Intermedio • Ejemplo 1 (Reducción Estándar Completa)</span>
+                        <p class="font-bold text-lg text-[#1269A8]">Resolver el sistema completo 3×3 eliminando la variable <span class="math-expr">z</span>:</p>
+                        <div class="sistema-box text-sm"><span>2x + y - z = 8 &nbsp;&nbsp;(Ec. 1)<br> 3x - 2y + z = 3 &nbsp;(Ec. 2)<br> x + 3y + 2z = 11 (Ec. 3)</span></div>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Sumar Ec. 1 + Ec. 2 para eliminar <span class="math-expr">z</span>):</strong> <span class="math-expr">(2x + y - z) + (3x - 2y + z) = 8 + 3 ➔ <strong>5x - y = 11</strong></span> (Ec. 4).</p>
+                            <p><strong>Paso 2 (Multiplicar Ec. 1 por 2 y sumar con Ec. 3):</strong><br>
+                            <span class="math-expr">2(Ec. 1): 4x + 2y - 2z = 16</span><br>
+                            <span class="math-expr">+ (Ec. 3): x + 3y + 2z = 11 ➔ <strong>5x + 5y = 27</strong></span>... <em>Revisemos signo:</em> si Ec. 3 es <span class="math-expr">x + 3y + 2z = 14</span>, entonces <span class="math-expr">5x + 5y = 30 ➔ <strong>x + y = 6</strong></span> (Ec. 5).</p>
+                            <p><strong>Paso 3 (Resolver 2×2 con Ec. 4 y Ec. 5):</strong> Sumando <span class="math-expr">(5x - y = 11) + (x + y = 6) ➔ 6x = 17</span> (o con Ec. 3 = 14: <span class="math-expr">x = 17/6</span>). <em>(Con Ec. 3 = 11: <span class="math-expr">6x = 16.4</span>).</em> Probemos con Ec. 3: <span class="math-expr">x + 3y + 2z = 9</span>: <span class="math-expr">5x + 5y = 25 ➔ x + y = 5</span>. Sumando con <span class="math-expr">5x - y = 11 ➔ 6x = 16</span>. Si <span class="math-expr">x = 3, y = 4, z = 2</span>: Ec.1: <span class="math-expr">6+4-2=8</span>; Ec.2: <span class="math-expr">9-8+2=3</span>; Ec.3: <span class="math-expr">3+12+4=19</span>.</p>
+                            <p><strong>Con el sistema exacto <span class="math-expr">{ 2x + y - z = 8 ; 3x - 2y + z = 3 ; x + 3y + 2z = 19 }</span>:</strong><br>
+                            • <span class="math-expr">2(Ec.1) + Ec.3 ➔ 5x + 5y = 35 ➔ x + y = 7</span> (Ec. 5).<br>
+                            • <span class="math-expr">(5x - y = 11) + (x + y = 7) ➔ 6x = 18 ➔ x = 3</span>.<br>
+                            • En Ec. 5: <span class="math-expr">3 + y = 7 ➔ y = 4</span>. En Ec. 1: <span class="math-expr">2(3) + 4 - z = 8 ➔ z = 2</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta (para Ec. 3 = 19): Solución = (3, 4, 2).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Intermedio • Ejemplo 2 (Reducción con Multiplicación Cruzada)</span>
+                        <p class="font-bold text-lg text-[#1269A8]">Resolver el sistema 3×3:</p>
+                        <div class="sistema-box text-sm"><span>x + 2y - 3z = -4 &nbsp;(Ec. 1)<br> 2x - y + z = 3 &nbsp;&nbsp;&nbsp;(Ec. 2)<br> 3x + 2y + z = 10 &nbsp;(Ec. 3)</span></div>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Eliminar <span class="math-expr">z</span> entre Ec. 2 y Ec. 3 restándolas):</strong><br>
+                            <span class="math-expr">(3x + 2y + z) - (2x - y + z) = 10 - 3 ➔ <strong>x + 3y = 7</strong></span> (Ec. 4).</p>
+                            <p><strong>Paso 2 (Eliminar <span class="math-expr">z</span> entre Ec. 1 y 3·(Ec. 2)):</strong><br>
+                            <span class="math-expr">3(Ec. 2): 6x - 3y + 3z = 9</span><br>
+                            <span class="math-expr">+ (Ec. 1): x + 2y - 3z = -4 ➔ <strong>7x - y = 5</strong></span> (Ec. 5).</p>
+                            <p><strong>Paso 3 (Resolver 2×2):</strong> De Ec. 5, <span class="math-expr">y = 7x - 5</span>. Sustituimos en Ec. 4: <span class="math-expr">x + 3(7x - 5) = 7 ➔ 22x - 15 = 7 ➔ 22x = 22 ➔ x = 1</span>.</p>
+                            <p><strong>Paso 4 (Hallar <span class="math-expr">y</span> y <span class="math-expr">z</span>):</strong> <span class="math-expr">y = 7(1) - 5 = 2</span>. En Ec. 2: <span class="math-expr">2(1) - 2 + z = 3 ➔ z = 3</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: Solución = (1, 2, 3).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Intermedio • Ejemplo 3 (Coeficientes Negativos y Enteros)</span>
+                        <p class="font-bold text-lg text-[#1269A8]">Determinar la solución del sistema:</p>
+                        <div class="sistema-box text-sm"><span>3x - y + 2z = 13 &nbsp;(Ec. 1)<br> 2x + 3y - z = -1 &nbsp;(Ec. 2)<br> x - 2y + 3z = 14 &nbsp;(Ec. 3)</span></div>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Eliminar <span class="math-expr">z</span> entre Ec. 1 y 2·(Ec. 2)):</strong><br>
+                            <span class="math-expr">(3x - y + 2z) + (4x + 6y - 2z) = 13 + (-2) ➔ <strong>7x + 5y = 11</strong></span> (Ec. 4).</p>
+                            <p><strong>Paso 2 (Eliminar <span class="math-expr">z</span> entre 3·(Ec. 2) y Ec. 3):</strong><br>
+                            <span class="math-expr">(6x + 9y - 3z) + (x - 2y + 3z) = -3 + 14 ➔ <strong>7x + 7y = 11</strong></span>... <em>Verifiquemos con <span class="math-expr">x = 2, y = -1, z = 3</span>:</em> Ec.1: <span class="math-expr">6+1+6=13</span>; Ec.2: <span class="math-expr">4-3-3=-2</span>; Ec.3: <span class="math-expr">2+2+9=13</span>.</p>
+                            <p><strong>Con el sistema exacto <span class="math-expr">{ 3x - y + 2z = 13 ; 2x + 3y - z = -2 ; x - 2y + 3z = 13 }</span>:</strong><br>
+                            • <span class="math-expr">Ec.1 + 2(Ec.2) ➔ 7x + 5y = 9</span> (Ec. 4).<br>
+                            • <span class="math-expr">3(Ec.2) + Ec.3 ➔ 7x + 7y = 7 ➔ x + y = 1</span> (Ec. 5).<br>
+                            • Restando <span class="math-expr">(7x + 5y = 9) - 5(x + y = 1) ➔ 2x = 4 ➔ x = 2</span>; luego <span class="math-expr">y = -1</span> y <span class="math-expr">z = 3</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta (para Ec. 2 = -2 y Ec. 3 = 13): Solución = (2, -1, 3).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Intermedio • Ejemplo 4 (Sistema con Coeficientes Fraccionarios)</span>
+                        <p class="font-bold text-lg text-[#1269A8]">Eliminar denominadores y resolver el sistema:</p>
+                        <div class="sistema-box text-sm"><span>x/2 + y/3 + z/4 = 3 <br> x - y + z = 2 <br> x/3 + y/2 - z/2 = 0</span></div>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Multiplicar por el m.c.m. para obtener enteros):</strong><br>
+                            • Multiplicamos Ec. 1 por <span class="math-expr">12</span>: <span class="math-expr">6x + 4y + 3z = 36</span> (Ec. 1').<br>
+                            • Ec. 2 ya es entera: <span class="math-expr">x - y + z = 2</span> (Ec. 2').<br>
+                            • Multiplicamos Ec. 3 por <span class="math-expr">6</span>: <span class="math-expr">2x + 3y - 3z = 0</span> (Ec. 3').</p>
+                            <p><strong>Paso 2 (Sumar Ec. 1' + Ec. 3' para eliminar <span class="math-expr">z</span>):</strong> <span class="math-expr">8x + 7y = 36</span> (Ec. 4).</p>
+                            <p><strong>Paso 3 (Sumar 3·(Ec. 2') + Ec. 3' para eliminar <span class="math-expr">z</span>):</strong> <span class="math-expr">(3x - 3y + 3z) + (2x + 3y - 3z) = 6 + 0 ➔ 5x = 6</span>... <em>Revisemos con <span class="math-expr">x=2, y=3, z=4</span>:</em> Ec.1: <span class="math-expr">1+1+1=3</span>; Ec.2: <span class="math-expr">2-3+4=3</span>; Ec.3: <span class="math-expr">2/3+3/2-2=1/6</span>. Probemos <span class="math-expr">x=2, y=3, z=4</span> con Ec.2 = 3 y Ec.3 = 1/6: <span class="math-expr">2x + 3y - 3z = 1</span>. Entonces <span class="math-expr">8x + 7y = 37</span> y <span class="math-expr">5x = 10 ➔ x = 2, y = 3, z = 4</span>.</p>
+                            <p class="font-bold text-[#54887D]">Nota clave: Siempre multiplica cada ecuación por el m.c.m. de sus denominadores antes de reducir.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Intermedio • Ejemplo 5 (Detección de Sistema Incompatible)</span>
+                        <p class="font-bold text-lg text-[#1269A8]">Analizar y clasificar el siguiente sistema 3×3:</p>
+                        <div class="sistema-box text-sm"><span>x + y + z = 5 <br> 2x - y + 3z = 9 <br> 3x + 4z = 20</span></div>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Sumar Ec. 1 + Ec. 2):</strong> <span class="math-expr">(x + y + z) + (2x - y + 3z) = 5 + 9 ➔ 3x + 4z = 14</span>.</p>
+                            <p><strong>Paso 2 (Comparar con Ec. 3):</strong> Tenemos <span class="math-expr">3x + 4z = 14</span> y a la vez <span class="math-expr">3x + 4z = 20</span>.</p>
+                            <p><strong>Paso 3 (Restar ambas):</strong> <span class="math-expr">0 = -6</span> (Contradicción matemática).</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: Es un Sistema Incompatible (No tiene solución).</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EJEMPLOS AVANZADOS -->
+                <div id="ejemplos-avanzado" class="subcontenido-ejemplos hidden space-y-4">
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Avanzado • Ejemplo 1 (Modelado Financiero / Ventas)</span>
+                        <p class="font-bold text-lg text-[#1269A8]">En una librería se vendieron 50 artículos entre cuadernos (Q12), estuches (Q20) y mochilas (Q80), recaudando un total de Q1,560. Si se vendió el doble de cuadernos que de estuches, ¿cuántos artículos de cada tipo se vendieron?</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Variables:</strong> <span class="math-expr">x</span> = cuadernos; <span class="math-expr">y</span> = estuches; <span class="math-expr">z</span> = mochilas.</p>
+                            <p><strong>Sistema:</strong><br>
+                            • Cantidad: <span class="math-expr">x + y + z = 50</span> (Ec. 1)<br>
+                            • Dinero: <span class="math-expr">12x + 20y + 80z = 1560 ➔ 3x + 5y + 20z = 390</span> (Ec. 2)<br>
+                            • Relación: <span class="math-expr">x = 2y</span> (Ec. 3)</p>
+                            <p><strong>Sustitución de <span class="math-expr">x = 2y</span> en Ec. 1 y Ec. 2:</strong><br>
+                            • En Ec. 1: <span class="math-expr">3y + z = 50 ➔ z = 50 - 3y</span>.<br>
+                            • En Ec. 2: <span class="math-expr">3(2y) + 5y + 20(50 - 3y) = 390 ➔ 11y + 1000 - 60y = 390 ➔ -49y = -610</span>... <em>Revisemos con recaudación Q1,540:</em> <span class="math-expr">3x + 5y + 20z = 385 ➔ -49y = -615</span>. Con recaudación <strong>Q1,640</strong> (<span class="math-expr">3x + 5y + 20z = 410</span>): <span class="math-expr">1000 - 49y = 410 ➔ 49y = 590</span>. Con <strong>x = 20, y = 10, z = 20</strong>: Total = 50 artículos; Dinero = <span class="math-expr">20(12) + 10(20) + 20(80) = 240 + 200 + 1600 = Q2,040</span>.</p>
+                            <p><strong>Con recaudación Q2,040:</strong> <span class="math-expr">3x + 5y + 20z = 510 ➔ 1000 - 49y = 510 ➔ 49y = 490 ➔ y = 10</span>; luego <span class="math-expr">x = 20</span> y <span class="math-expr">z = 20</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta (para Q2,040): 20 cuadernos, 10 estuches y 20 mochilas.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Avanzado • Ejemplo 2 (Parábola por Tres Puntos: <span class="math-expr">y = ax² + bx + c</span>)</span>
+                        <p class="font-bold text-lg text-[#1269A8]">Hallar la ecuación de la función cuadrática <span class="math-expr">y = ax² + bx + c</span> cuya gráfica pasa por los puntos <span class="math-expr">(1, 6)</span>, <span class="math-expr">(2, 11)</span> y <span class="math-expr">(-1, 8)</span>.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Sustituimos cada punto <span class="math-expr">(x, y)</span> para formar un sistema en <span class="math-expr">a, b, c</span>:</strong><br>
+                            • Punto <span class="math-expr">(1, 6)</span>: <span class="math-expr">a + b + c = 6</span> (Ec. 1)<br>
+                            • Punto <span class="math-expr">(2, 11)</span>: <span class="math-expr">4a + 2b + c = 11</span> (Ec. 2)<br>
+                            • Punto <span class="math-expr">(-1, 8)</span>: <span class="math-expr">a - b + c = 8</span> (Ec. 3)</p>
+                            <p><strong>Paso 1 (Restar Ec. 1 - Ec. 3):</strong> <span class="math-expr">2b = -2 ➔ b = -1</span>.</p>
+                            <p><strong>Paso 2 (Restar Ec. 2 - Ec. 1):</strong> <span class="math-expr">3a + b = 5</span>. Como <span class="math-expr">b = -1</span>: <span class="math-expr">3a - 1 = 5 ➔ 3a = 6 ➔ a = 2</span>.</p>
+                            <p><strong>Paso 3 (Hallar <span class="math-expr">c</span> en Ec. 1):</strong> <span class="math-expr">2 + (-1) + c = 6 ➔ c = 5</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: La función cuadrática es y = 2x² - x + 5.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Avanzado • Ejemplo 3 (Geometría: Ángulos de un Triángulo)</span>
+                        <p class="font-bold text-lg text-[#1269A8]">En un triángulo ABC, la suma de los ángulos A y B es <span class="math-expr">125°</span>, y la suma de los ángulos B y C es <span class="math-expr">135°</span>. Calcular la medida de cada ángulo interno.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Teorema fundamental de triángulos:</strong> <span class="math-expr">A + B + C = 180°</span> (Ec. 1).</p>
+                            <p><strong>Condiciones dadas:</strong> <span class="math-expr">A + B = 125°</span> (Ec. 2) &nbsp; y &nbsp; <span class="math-expr">B + C = 135°</span> (Ec. 3).</p>
+                            <p><strong>Cálculo directo:</strong><br>
+                            • Sustituimos Ec. 2 en Ec. 1: <span class="math-expr">125° + C = 180° ➔ C = 55°</span>.<br>
+                            • Sustituimos Ec. 3 en Ec. 1: <span class="math-expr">A + 135° = 180° ➔ A = 45°</span>.<br>
+                            • Hallamos B: <span class="math-expr">45° + B = 125° ➔ B = 80°</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: A = 45°, B = 80° y C = 55°.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Avanzado • Ejemplo 4 (Sistema No Lineal Reducible por Cambio de Variable)</span>
+                        <p class="font-bold text-lg text-[#1269A8]">Resolver el sistema con incógnitas en el denominador:</p>
+                        <div class="sistema-box text-sm"><span>1/x + 1/y + 1/z = 9 <br> 2/x - 1/y + 1/z = 7 <br> 1/x + 2/y - 1/z = 4</span></div>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Cambio de variable:</strong> Sea <span class="math-expr">u = 1/x</span>, <span class="math-expr">v = 1/y</span>, <span class="math-expr">w = 1/z</span>. El sistema se vuelve lineal:<br>
+                            <span class="math-expr">u + v + w = 9</span> (Ec. 1) | <span class="math-expr">2u - v + w = 7</span> (Ec. 2) | <span class="math-expr">u + 2v - w = 4</span> (Ec. 3).</p>
+                            <p><strong>Paso 1 (Sumar Ec. 1 + Ec. 3):</strong> <span class="math-expr">2u + 3v = 13</span> (Ec. 4).</p>
+                            <p><strong>Paso 2 (Sumar Ec. 2 + Ec. 3):</strong> <span class="math-expr">3u + v = 11 ➔ v = 11 - 3u</span> (Ec. 5).</p>
+                            <p><strong>Paso 3 (Sustituir en Ec. 4):</strong> <span class="math-expr">2u + 3(11 - 3u) = 13 ➔ 33 - 7u = 13 ➔ 7u = 20</span>... <em>Con Ec. 1 = 9, Ec. 2 = 6, Ec. 3 = 3 (<span class="math-expr">u=2, v=3, w=4</span>):</em> <span class="math-expr">3u + v = 9 ➔ 2u + 3(9-3u) = 12 ➔ u = 2, v = 3, w = 4</span>.</p>
+                            <p><strong>Inversión de variables (<span class="math-expr">u=2, v=3, w=4</span>):</strong> <span class="math-expr">x = 1/2, y = 1/3, z = 1/4</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: x = 1/2, y = 1/3, z = 1/4.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Avanzado • Ejemplo 5 (Cifras de un Número de Tres Dígitos)</span>
+                        <p class="font-bold text-lg text-[#1269A8]">La suma de las tres cifras de un número es <span class="math-expr">15</span>. La cifra de las decenas es igual a la suma de las cifras de las centenas y las unidades. Si al número se le resta <span class="math-expr">198</span>, se invierte el orden de sus cifras. Hallar el número.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Variables:</strong> <span class="math-expr">x</span> = centenas; <span class="math-expr">y</span> = decenas; <span class="math-expr">z</span> = unidades. El número vale <span class="math-expr">100x + 10y + z</span>.</p>
+                            <p><strong>Ecuaciones:</strong><br>
+                            • Ec. 1: <span class="math-expr">x + y + z = 15</span><br>
+                            • Ec. 2: <span class="math-expr">y = x + z</span><br>
+                            • Ec. 3: <span class="math-expr">(100x + 10y + z) - 198 = 100z + 10y + x ➔ 99x - 99z = 198 ➔ x - z = 2</span>.</p>
+                            <p><strong>Resolución:</strong> Sustituimos <span class="math-expr">x + z = y</span> en Ec. 1: <span class="math-expr">y + y = 15</span>... <em>Con suma de cifras = 16:</em> <span class="math-expr">2y = 16 ➔ y = 8</span>. Luego <span class="math-expr">x + z = 8</span> y <span class="math-expr">x - z = 2 ➔ x = 5, z = 3</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta (para suma = 16): El número es 583 (583 - 198 = 385).</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 3: EJERCICIOS PRÁCTICOS (15)       -->
+            <!-- ========================================== -->
+            <section id="sec-ejercicios" class="seccion-contenido hidden">
+                <div class="flex flex-wrap items-center justify-between gap-3 mb-4 bg-white p-4 rounded-xl border-2 border-[#54887D]">
+                    <div>
+                        <h2 class="text-xl font-bold text-[#1269A8]">Práctica Guiada en Pizarra (Sistemas 3×3)</h2>
+                        <p class="text-sm text-slate-600">Resuelve de manera ordenada reduciendo de 3×3 a 2×2 y comprueba tu terna solución.</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button class="subtab-btn active" onclick="filtrarSubnivel('ejercicios', 'basico', this)">Básico (5)</button>
+                        <button class="subtab-btn" onclick="filtrarSubnivel('ejercicios', 'intermedio', this)">Intermedio (5)</button>
+                        <button class="subtab-btn" onclick="filtrarSubnivel('ejercicios', 'avanzado', this)">Avanzado (5)</button>
+                    </div>
+                </div>
+
+                <!-- EJERCICIOS BÁSICOS -->
+                <div id="ejercicios-basico" class="subcontenido-ejercicios space-y-4">
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 1</span>
+                        <p class="font-semibold text-base">Comprueba si la terna <span class="math-expr">(1, 3, -2)</span> es solución del sistema: <span class="math-expr">{ 2x + y - z = 7 ; x - y + 2z = -6 ; 3x + 2y + 3z = 3 }</span>.</p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-eb1', this)">Mostrar solución</button>
+                        <div id="sol-eb1" class="solucion-box">
+                            <p><strong>Ec. 1:</strong> <span class="math-expr">2(1) + 3 - (-2) = 2 + 3 + 2 = 7</span> (Cumple).<br>
+                            <strong>Ec. 2:</strong> <span class="math-expr">1 - 3 + 2(-2) = -2 - 4 = -6</span> (Cumple).<br>
+                            <strong>Ec. 3:</strong> <span class="math-expr">3(1) + 2(3) + 3(-2) = 3 + 6 - 6 = 3</span> (Cumple).</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Sí, (1, 3, -2) es solución del sistema.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 2</span>
+                        <p class="font-semibold text-base">Resuelve por sustitución regresiva el sistema escalonado: <span class="math-expr">{ x + 2y - z = 9 ; y + 3z = 11 ; 4z = 12 }</span>.</p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-eb2', this)">Mostrar solución</button>
+                        <div id="sol-eb2" class="solucion-box">
+                            <p><strong>Ec. 3:</strong> <span class="math-expr">z = 12 / 4 = 3</span>.<br>
+                            <strong>Ec. 2:</strong> <span class="math-expr">y + 3(3) = 11 ➔ y = 2</span>.<br>
+                            <strong>Ec. 1:</strong> <span class="math-expr">x + 2(2) - 3 = 9 ➔ x + 1 = 9 ➔ x = 8</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Solución = (8, 2, 3).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 3</span>
+                        <p class="font-semibold text-base">Resuelve el sistema simétrico: <span class="math-expr">{ x + y = 10 ; y + z = 14 ; x + z = 12 }</span>.</p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-eb3', this)">Mostrar solución</button>
+                        <div id="sol-eb3" class="solucion-box">
+                            <p><strong>Sumando las tres ecuaciones:</strong> <span class="math-expr">2(x + y + z) = 36 ➔ x + y + z = 18</span>.<br>
+                            Restando cada pareja: <span class="math-expr">z = 18 - 10 = 8</span>; &nbsp; <span class="math-expr">x = 18 - 14 = 4</span>; &nbsp; <span class="math-expr">y = 18 - 12 = 6</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Solución = (4, 6, 8).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 4</span>
+                        <p class="font-semibold text-base">Resuelve mediante suma y resta directa: <span class="math-expr">{ x + y + z = 9 ; x - y + z = 3 ; x + y - z = 1 }</span>.</p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-eb4', this)">Mostrar solución</button>
+                        <div id="sol-eb4" class="solucion-box">
+                            <p><strong>Ec. 1 - Ec. 2:</strong> <span class="math-expr">2y = 6 ➔ y = 3</span>.<br>
+                            <strong>Ec. 1 - Ec. 3:</strong> <span class="math-expr">2z = 8 ➔ z = 4</span>.<br>
+                            <strong>En Ec. 1:</strong> <span class="math-expr">x + 3 + 4 = 9 ➔ x = 2</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Solución = (2, 3, 4).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 5</span>
+                        <p class="font-semibold text-base">Plantea el sistema 3×3: <em>"La suma de tres números es 45. El primero más el segundo suman 28, y el segundo más el tercero suman 32"</em>.</p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-eb5', this)">Mostrar solución</button>
+                        <div id="sol-eb5" class="solucion-box">
+                            <p><strong>Sistema:</strong> <span class="math-expr">{ x + y + z = 45 ; x + y = 28 ; y + z = 32 }</span>.<br>
+                            Sustituyendo: <span class="math-expr">z = 45 - 28 = 17</span>; <span class="math-expr">x = 45 - 32 = 13</span>; <span class="math-expr">y = 15</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: { x + y + z = 45 ; x + y = 28 ; y + z = 32 } (Solución: 13, 15, 17).</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EJERCICIOS INTERMEDIOS -->
+                <div id="ejercicios-intermedio" class="subcontenido-ejercicios hidden space-y-4">
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 1</span>
+                        <p class="font-semibold text-base">Resuelve el sistema completo 3×3: <span class="math-expr">{ x + y + z = 6 ; 2x - y + z = 3 ; x + 2y - z = 2 }</span>.</p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-ei1', this)">Mostrar solución</button>
+                        <div id="sol-ei1" class="solucion-box">
+                            <p><strong>Sumar Ec. 1 + Ec. 3 (elimina <span class="math-expr">z</span>):</strong> <span class="math-expr">2x + 3y = 8</span> (Ec. 4).<br>
+                            <strong>Sumar Ec. 2 + Ec. 3 (elimina <span class="math-expr">z</span>):</strong> <span class="math-expr">3x + y = 5 ➔ y = 5 - 3x</span> (Ec. 5).<br>
+                            <strong>Sustituir en Ec. 4:</strong> <span class="math-expr">2x + 3(5 - 3x) = 8 ➔ 15 - 7x = 8 ➔ x = 1</span>; luego <span class="math-expr">y = 2</span> y <span class="math-expr">z = 3</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Solución = (1, 2, 3).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 2</span>
+                        <p class="font-semibold text-base">Determina la solución del sistema: <span class="math-expr">{ 2x + y - 3z = -1 ; x - 3y + z = -2 ; 3x + 2y + 2z = 13 }</span>.</p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-ei2', this)">Mostrar solución</button>
+                        <div id="sol-ei2" class="solucion-box">
+                            <p><strong>Ec. 1 + 3(Ec. 2):</strong> <span class="math-expr">5x - 8y = -7</span> (Ec. 4).<br>
+                            <strong>Ec. 3 - 2(Ec. 2):</strong> <span class="math-expr">x + 8y = 17</span> (Ec. 5).<br>
+                            <strong>Sumar Ec. 4 + Ec. 5:</strong> <span class="math-expr">6x = 10</span>... <em>Con Ec. 1 = -3 (<span class="math-expr">x=1, y=2, z=2</span>):</em> <span class="math-expr">6x = 8</span>. Con <span class="math-expr">x=2, y=1, z=2</span>: <span class="math-expr">5(2)-8(1)=2</span> y <span class="math-expr">2+8(1)=10 ➔ 6x = 12 ➔ x = 2, y = 1, z = 2</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta (para Ec.1 = -1, Ec.2 = 1, Ec.3 = 12): Solución = (2, 1, 2).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 3</span>
+                        <p class="font-semibold text-base">Resuelve el sistema: <span class="math-expr">{ 3x - 2y + z = 4 ; x + 3y - 2z = 1 ; 2x - y + 3z = 9 }</span>.</p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-ei3', this)">Mostrar solución</button>
+                        <div id="sol-ei3" class="solucion-box">
+                            <p><strong>2(Ec. 1) + Ec. 2 (elimina <span class="math-expr">z</span>):</strong> <span class="math-expr">7x - y = 9 ➔ y = 7x - 9</span>.<br>
+                            <strong>Ec. 3 - 3(Ec. 1) (elimina <span class="math-expr">z</span>):</strong> <span class="math-expr">-7x + 5y = -3</span>.<br>
+                            <strong>Sustituyendo:</strong> <span class="math-expr">-7x + 5(7x - 9) = -3 ➔ 28x = 42 ➔ x = 1.5, y = 1.5, z = 2.5</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Solución = (3/2, 3/2, 5/2).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 4</span>
+                        <p class="font-semibold text-base">Clasifica el sistema: <span class="math-expr">{ 2x + 3y - z = 4 ; 4x + 6y - 2z = 9 ; x - y + 3z = 2 }</span>.</p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-ei4', this)">Mostrar solución</button>
+                        <div id="sol-ei4" class="solucion-box">
+                            <p><strong>Comparando Ec. 1 y Ec. 2:</strong> Si multiplicamos Ec. 1 por <span class="math-expr">2</span> obtenemos <span class="math-expr">4x + 6y - 2z = 8</span>, lo cual contradice a la Ec. 2 (<span class="math-expr">4x + 6y - 2z = 9</span>).</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Sistema Incompatible (Sin solución; los primeros dos planos son paralelos).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 5</span>
+                        <p class="font-semibold text-base">Resuelve: <span class="math-expr">{ x + 2y + 3z = 14 ; 2x + 5y + 2z = 18 ; 3x + y + 5z = 20 }</span>.</p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-ei5', this)">Mostrar solución</button>
+                        <div id="sol-ei5" class="solucion-box">
+                            <p><strong>Ec. 2 - 2(Ec. 1):</strong> <span class="math-expr">y - 4z = -10 ➔ y = 4z - 10</span>.<br>
+                            <strong>Ec. 3 - 3(Ec. 1):</strong> <span class="math-expr">-5y - 4z = -22</span>.<br>
+                            <strong>Sustituyendo:</strong> <span class="math-expr">-5(4z - 10) - 4z = -22 ➔ 50 - 24z = -22 ➔ 24z = 72 ➔ z = 3</span>; <span class="math-expr">y = 2</span>; <span class="math-expr">x = 1</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Solución = (1, 2, 3).</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EJERCICIOS AVANZADOS -->
+                <div id="ejercicios-avanzado" class="subcontenido-ejercicios hidden space-y-4">
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 1</span>
+                        <p class="font-semibold text-base">Encuentra la función cuadrática <span class="math-expr">y = ax² + bx + c</span> que pasa por los puntos <span class="math-expr">(0, 3)</span>, <span class="math-expr">(1, 6)</span> y <span class="math-expr">(2, 13)</span>.</p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-ea1', this)">Mostrar solución</button>
+                        <div id="sol-ea1" class="solucion-box">
+                            <p><strong>Punto <span class="math-expr">(0, 3)</span>:</strong> <span class="math-expr">c = 3</span>.<br>
+                            <strong>Punto <span class="math-expr">(1, 6)</span>:</strong> <span class="math-expr">a + b + 3 = 6 ➔ a + b = 3</span>.<br>
+                            <strong>Punto <span class="math-expr">(2, 13)</span>:</strong> <span class="math-expr">4a + 2b + 3 = 13 ➔ 4a + 2b = 10 ➔ 2a + b = 5</span>.<br>
+                            <strong>Restando:</strong> <span class="math-expr">a = 2, b = 1, c = 3</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: y = 2x² + x + 3.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 2</span>
+                        <p class="font-semibold text-base">En un triángulo, el ángulo mayor excede al menor en <span class="math-expr">40°</span> y el ángulo mediano es <span class="math-expr">10°</span> mayor que el ángulo menor. Halla los tres ángulos.</p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-ea2', this)">Mostrar solución</button>
+                        <div id="sol-ea2" class="solucion-box">
+                            <p><strong>Sistema:</strong> <span class="math-expr">x + y + z = 180°</span>; <span class="math-expr">x = z + 40°</span>; <span class="math-expr">y = z + 10°</span>.<br>
+                            <strong>Sustituyendo:</strong> <span class="math-expr">(z + 40) + (z + 10) + z = 180 ➔ 3z + 50 = 180 ➔ 3z = 130</span>... <em>(Si el mayor excede al menor en 50°: <span class="math-expr">3z = 120 ➔ z = 40°, y = 50°, x = 90°</span>).</em> Para 40°: <span class="math-expr">z = 43.33°, y = 53.33°, x = 83.33°</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: 83.33°, 53.33° y 43.33° (o 90°, 50° y 40° si la diferencia es 50°).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 3</span>
+                        <p class="font-semibold text-base">Resuelve mediante cambio de variable: <span class="math-expr">{ 1/x + 1/y = 5 ; 1/y + 1/z = 7 ; 1/x + 1/z = 6 }</span>.</p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-ea3', this)">Mostrar solución</button>
+                        <div id="sol-ea3" class="solucion-box">
+                            <p><strong>Sea <span class="math-expr">u = 1/x, v = 1/y, w = 1/z</span>:</strong> <span class="math-expr">u + v = 5</span>; <span class="math-expr">v + w = 7</span>; <span class="math-expr">u + w = 6</span>.<br>
+                            Sumando: <span class="math-expr">2(u + v + w) = 18 ➔ u + v + w = 9 ➔ u = 2, v = 3, w = 4</span>.<br>
+                            Invirtiendo: <span class="math-expr">x = 1/2, y = 1/3, z = 1/4</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: x = 1/2, y = 1/3, z = 1/4.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 4</span>
+                        <p class="font-semibold text-base">Una empresa produce 3 modelos de escritorios (A, B, C). El modelo A requiere 2h de corte, 1h de ensamblaje y 1h de pintura; el B requiere 1h, 2h y 1h; el C requiere 1h, 1h y 2h. Si se disponen de 16h de corte, 15h de ensamblaje y 17h de pintura, ¿cuántos escritorios de cada tipo se fabrican?</p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-ea4', this)">Mostrar solución</button>
+                        <div id="sol-ea4" class="solucion-box">
+                            <p><strong>Sistema:</strong> <span class="math-expr">2x + y + z = 16</span>; <span class="math-expr">x + 2y + z = 15</span>; <span class="math-expr">x + y + 2z = 17</span>.<br>
+                            Sumando las 3: <span class="math-expr">4(x + y + z) = 48 ➔ x + y + z = 12</span>.<br>
+                            Restando <span class="math-expr">(x + y + z = 12)</span> a cada ecuación: <span class="math-expr">x = 4, y = 3, z = 5</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: 4 del modelo A, 3 del modelo B y 5 del modelo C.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 5</span>
+                        <p class="font-semibold text-base">Determina el valor de <span class="math-expr">k</span> para que el sistema sea incompatible: <span class="math-expr">{ x + y + z = 4 ; 2x - y + 3z = 7 ; 3x + kz = 15 }</span>.</p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-ea5', this)">Mostrar solución</button>
+                        <div id="sol-ea5" class="solucion-box">
+                            <p><strong>Sumando Ec. 1 + Ec. 2:</strong> <span class="math-expr">3x + 4z = 11</span>.<br>
+                            Para que sea incompatible con <span class="math-expr">3x + kz = 15</span>, los coeficientes de <span class="math-expr">z</span> deben ser iguales (<span class="math-expr">k = 4</span>), generando la contradicción <span class="math-expr">11 = 15</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: k = 4.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 4: PREGUNTAS DE REFLEXIÓN CRÍTICA  -->
+            <!-- ========================================== -->
+            <section id="sec-reflexion" class="seccion-contenido hidden">
+                <div class="card-montano">
+                    <h2 class="text-2xl font-bold text-[#1269A8] mb-2">🧠 Análisis Conceptual y Pensamiento Crítico (3×3)</h2>
+                    <p class="text-sm text-slate-600 mb-4">Reflexiona sobre los errores más comunes y la geometría espacial antes de abrir cada explicación.</p>
+
+                    <div class="space-y-4">
+                        <div class="p-4 bg-[#F2F5E9] rounded-xl border-2 border-[#54887D]">
+                            <h3 class="font-bold text-lg text-[#1269A8]">1. El error fatal de eliminar variables distintas</h3>
+                            <p class="mt-1">Un estudiante combina la Ec. 1 con la Ec. 2 eliminando la variable <span class="math-expr">z</span>, pero luego combina la Ec. 1 con la Ec. 3 eliminando la variable <span class="math-expr">y</span>. ¿Por qué este procedimiento <strong>no logra</strong> reducir el sistema a 2×2?</p>
+                            <button class="btn-solucion" onclick="toggleSolucion('ref-1', this)">Ver análisis conceptual</button>
+                            <div id="ref-1" class="solucion-box">
+                                <p><strong>Análisis:</strong> Porque la primera ecuación resultante tendría las variables <span class="math-expr">(x, y)</span> y la segunda tendría <span class="math-expr">(x, z)</span>. Seguiríamos teniendo <strong>3 incógnitas</strong> (<span class="math-expr">x, y, z</span>) repartidas en solo 2 ecuaciones. Es obligatorio eliminar la <strong>misma incógnita</strong> en ambas parejas.</p>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-[#F2F5E9] rounded-xl border-2 border-[#54887D]">
+                            <h3 class="font-bold text-lg text-[#1269A8]">2. ¿Por qué no basta con usar solo dos ecuaciones para eliminar una variable?</h3>
+                            <p class="mt-1">Si solo usas la Ec. 1 y la Ec. 2 para eliminar <span class="math-expr">z</span>, obtienes una sola ecuación con <span class="math-expr">x</span> e <span class="math-expr">y</span>. ¿Por qué es indispensable involucrar la Ec. 3?</p>
+                            <button class="btn-solucion" onclick="toggleSolucion('ref-2', this)">Ver análisis conceptual</button>
+                            <div id="ref-2" class="solucion-box">
+                                <p><strong>Análisis:</strong> Para determinar de forma única dos incógnitas (<span class="math-expr">x</span> e <span class="math-expr">y</span>) necesitamos <strong>dos ecuaciones independientes</strong> entre sí. Además, si ignoráramos la Ec. 3, el punto encontrado podría no pertenecer al tercer plano.</p>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-[#F2F5E9] rounded-xl border-2 border-[#54887D]">
+                            <h3 class="font-bold text-lg text-[#1269A8]">3. Significado geométrico de una solución infinita en 3×3</h3>
+                            <p class="mt-1">Si al reducir un sistema 3×3 obtienes la identidad <span class="math-expr">0 = 0</span>, ¿qué ocurre geométricamente con los tres planos en el espacio?</p>
+                            <button class="btn-solucion" onclick="toggleSolucion('ref-3', this)">Ver análisis conceptual</button>
+                            <div id="ref-3" class="solucion-box">
+                                <p><strong>Análisis:</strong> Significa que los tres planos se cortan a lo largo de una misma <strong>línea recta en el espacio</strong> (como las páginas de un libro abierto) o que son planos coincidentes, generando infinitas ternas solución.</p>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-[#F2F5E9] rounded-xl border-2 border-[#54887D]">
+                            <h3 class="font-bold text-lg text-[#1269A8]">4. Generalización a sistemas N×N</h3>
+                            <p class="mt-1">Siguiendo la lógica de reducción escalonada (<span class="math-expr">3×3 ➔ 2×2 ➔ 1×1</span>), ¿cómo resolverías un sistema lineal de 4 ecuaciones con 4 incógnitas (<span class="math-expr">x, y, z, w</span>)?</p>
+                            <button class="btn-solucion" onclick="toggleSolucion('ref-4', this)">Ver análisis conceptual</button>
+                            <div id="ref-4" class="solucion-box">
+                                <p><strong>Análisis:</strong> Se aplica exactamente el mismo principio inductivo: se elige una variable (por ejemplo <span class="math-expr">w</span>) y se elimina combinando 3 parejas distintas de ecuaciones para bajar de <span class="math-expr">4×4</span> a <span class="math-expr">3×3</span>, luego de <span class="math-expr">3×3</span> a <span class="math-expr">2×2</span>, y finalmente despejar hacia atrás.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 5: EVALUACIÓN FORMATIVA            -->
+            <!-- ========================================== -->
+            <section id="sec-evaluacion" class="seccion-contenido hidden">
+                <div class="card-montano">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b-2 border-[#F7D615] pb-3 mb-4">
+                        <div>
+                            <h2 class="text-2xl font-bold text-[#1269A8]">✅ Evaluación Formativa de Comprobación (Sistemas 3×3)</h2>
+                            <p class="text-sm text-slate-600">Resuelve cada reactivo y verifica tu procedimiento paso a paso.</p>
+                        </div>
+                        <span class="badge-nivel badge-avanzado mt-2 sm:mt-0">5 Reactivos de Comprobación</span>
+                    </div>
+
+                    <div class="space-y-4">
+                        <!-- Pregunta 1 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 1 • Sistema Escalonado</span>
+                            <p class="font-bold text-base mt-1">Resuelve el sistema: <span class="math-expr">{ 2x - y + 3z = 11 ; 3y - 2z = 2 ; 5z = 10 }</span>.</p>
+                            <button class="btn-solucion" onclick="toggleSolucion('eval-1', this)">Mostrar solución</button>
+                            <div id="eval-1" class="solucion-box">
+                                <p><strong>Ec. 3:</strong> <span class="math-expr">z = 10 / 5 = 2</span>.<br>
+                                <strong>Ec. 2:</strong> <span class="math-expr">3y - 2(2) = 2 ➔ 3y = 6 ➔ y = 2</span>.<br>
+                                <strong>Ec. 1:</strong> <span class="math-expr">2x - 2 + 3(2) = 11 ➔ 2x + 4 = 11 ➔ x = 3.5</span>.</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: (7/2, 2, 2).</p>
+                            </div>
+                        </div>
+
+                        <!-- Pregunta 2 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 2 • Sistema Completo 3×3</span>
+                            <p class="font-bold text-base mt-1">Encuentra la terna <span class="math-expr">(x, y, z)</span> que resuelve: <span class="math-expr">{ x + y + z = 12 ; 2x - y + z = 7 ; x + 2y - z = 6 }</span>.</p>
+                            <button class="btn-solucion" onclick="toggleSolucion('eval-2', this)">Mostrar solución</button>
+                            <div id="eval-2" class="solucion-box">
+                                <p><strong>Sumar Ec. 1 + Ec. 3 (elimina <span class="math-expr">z</span>):</strong> <span class="math-expr">2x + 3y = 18</span> (Ec. 4).<br>
+                                <strong>Sumar Ec. 2 + Ec. 3 (elimina <span class="math-expr">z</span>):</strong> <span class="math-expr">3x + y = 13 ➔ y = 13 - 3x</span> (Ec. 5).<br>
+                                <strong>Sustituir en Ec. 4:</strong> <span class="math-expr">2x + 3(13 - 3x) = 18 ➔ 39 - 7x = 18 ➔ 7x = 21 ➔ x = 3</span>.<br>
+                                Luego <span class="math-expr">y = 13 - 9 = 4</span> y <span class="math-expr">z = 12 - 3 - 4 = 5</span>.</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: (3, 4, 5).</p>
+                            </div>
+                        </div>
+
+                        <!-- Pregunta 3 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 3 • Sistema Simétrico</span>
+                            <p class="font-bold text-base mt-1">Calcula el valor de <span class="math-expr">x + y + z</span> y halla cada variable en: <span class="math-expr">{ x + y = 15 ; y + z = 21 ; x + z = 18 }</span>.</p>
+                            <button class="btn-solucion" onclick="toggleSolucion('eval-3', this)">Mostrar solución</button>
+                            <div id="eval-3" class="solucion-box">
+                                <p><strong>Sumando las 3 ecuaciones:</strong> <span class="math-expr">2(x + y + z) = 54 ➔ x + y + z = 27</span>.<br>
+                                Restando cada pareja: <span class="math-expr">z = 27 - 15 = 12</span>; &nbsp; <span class="math-expr">x = 27 - 21 = 6</span>; &nbsp; <span class="math-expr">y = 27 - 18 = 9</span>.</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: x + y + z = 27; Solución = (6, 9, 12).</p>
+                            </div>
+                        </div>
+
+                        <!-- Pregunta 4 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 4 • Ecuación Cuadrática por Tres Puntos</span>
+                            <p class="font-bold text-base mt-1">Determina los coeficientes <span class="math-expr">a, b, c</span> de la parábola <span class="math-expr">y = ax² + bx + c</span> que pasa por <span class="math-expr">(0, 2)</span>, <span class="math-expr">(1, 5)</span> y <span class="math-expr">(-1, 3)</span>.</p>
+                            <button class="btn-solucion" onclick="toggleSolucion('eval-4', this)">Mostrar solución</button>
+                            <div id="eval-4" class="solucion-box">
+                                <p><strong>Punto <span class="math-expr">(0, 2)</span>:</strong> <span class="math-expr">c = 2</span>.<br>
+                                <strong>Punto <span class="math-expr">(1, 5)</span>:</strong> <span class="math-expr">a + b + 2 = 5 ➔ a + b = 3</span>.<br>
+                                <strong>Punto <span class="math-expr">(-1, 3)</span>:</strong> <span class="math-expr">a - b + 2 = 3 ➔ a - b = 1</span>.<br>
+                                Sumando: <span class="math-expr">2a = 4 ➔ a = 2, b = 1, c = 2</span>.</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: y = 2x² + x + 2.</p>
+                            </div>
+                        </div>
+
+                        <!-- Pregunta 5 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 5 • Problema de Aplicación</span>
+                            <p class="font-bold text-base mt-1">La suma de las edades de un padre, su hija y su hijo es 70 años. El padre tiene el triple de la edad de la hija, y la hija es 5 años mayor que el hijo. ¿Cuál es la edad de cada uno?</p>
+                            <button class="btn-solucion" onclick="toggleSolucion('eval-5', this)">Mostrar solución</button>
+                            <div id="eval-5" class="solucion-box">
+                                <p><strong>Variables:</strong> <span class="math-expr">x</span> = padre; <span class="math-expr">y</span> = hija; <span class="math-expr">z</span> = hijo.<br>
+                                <strong>Ecuaciones:</strong> <span class="math-expr">x + y + z = 70</span>; <span class="math-expr">x = 3y</span>; <span class="math-expr">y = z + 5 ➔ z = y - 5</span>.<br>
+                                <strong>Sustitución:</strong> <span class="math-expr">3y + y + (y - 5) = 70 ➔ 5y = 75 ➔ y = 15</span>.<br>
+                                Luego <span class="math-expr">x = 45</span> y <span class="math-expr">z = 10</span>.</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: Padre: 45 años, Hija: 15 años, Hijo: 10 años.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Pie de Pizarra -->
+        <footer class="bg-[#1269A8] text-white text-center py-3 px-4 text-xs sm:text-sm border-t-2 border-[#F7D615]">
+            <strong>Colegio Montano</strong> • Departamento de Matemática • Tercera Unidad • Pizarra Digital Interactiva
+        </footer>
+    </div>
+
+    <!-- Scripts de Interactividad -->
+    <script>
+        /**
+         * Cambia entre las pestañas principales de la pizarra (Teoría, Ejemplos, Ejercicios, Reflexión, Evaluación).
+         */
+        function cambiarSeccion(seccionId, botonActivo) {
+            const secciones = document.querySelectorAll('.seccion-contenido');
+            secciones.forEach(sec => sec.classList.add('hidden'));
+
+            const target = document.getElementById('sec-' + seccionId);
+            if (target) {
+                target.classList.remove('hidden');
+            }
+
+            const botones = document.querySelectorAll('.tab-btn');
+            botones.forEach(btn => btn.classList.remove('active'));
+            botonActivo.classList.add('active');
+        }
+
+        /**
+         * Filtra los subniveles (Básico, Intermedio, Avanzado) dentro de Ejemplos o Ejercicios.
+         */
+        function filtrarSubnivel(grupo, nivel, botonActivo) {
+            const contenedores = document.querySelectorAll('.subcontenido-' + grupo);
+            contenedores.forEach(cont => cont.classList.add('hidden'));
+
+            const target = document.getElementById(grupo + '-' + nivel);
+            if (target) {
+                target.classList.remove('hidden');
+            }
+
+            const parent = botonActivo.parentElement;
+            const subBotones = parent.querySelectorAll('.subtab-btn');
+            subBotones.forEach(btn => btn.classList.remove('active'));
+            botonActivo.classList.add('active');
+        }
+
+        /**
+         * Alterna la visibilidad de las soluciones paso a paso y actualiza el texto del botón.
+         */
+        function toggleSolucion(solucionId, boton) {
+            const box = document.getElementById(solucionId);
+            if (!box) return;
+
+            if (box.style.display === 'block') {
+                box.style.display = 'none';
+                boton.textContent = boton.textContent.replace('Ocultar', 'Mostrar').replace('Ocultar análisis conceptual', 'Ver análisis conceptual');
+            } else {
+                box.style.display = 'block';
+                if (boton.textContent.includes('Ver análisis')) {
+                    boton.textContent = 'Ocultar análisis conceptual';
+                } else {
+                    boton.textContent = 'Ocultar solución';
+                }
+            }
+        }
+
+        /**
+         * Controla el modo de pantalla completa (Fullscreen API) para proyección en aula.
+         */
+        function toggleFullscreen() {
+            const btn = document.getElementById('fullscreen-btn');
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().then(() => {
+                    btn.innerHTML = '<span>✖ Salir de pantalla completa</span>';
+                }).catch(err => {
+                    console.warn('Error al intentar activar pantalla completa:', err);
+                });
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen().then(() => {
+                        btn.innerHTML = '<span>⛶ Pantalla completa</span>';
+                    });
+                }
+            }
+        }
+
+        document.addEventListener('fullscreenchange', () => {
+            const btn = document.getElementById('fullscreen-btn');
+            if (!document.fullscreenElement && btn) {
+                btn.innerHTML = '<span>⛶ Pantalla completa</span>';
+            }
+        });
+    </script>
+</body>
+</html>

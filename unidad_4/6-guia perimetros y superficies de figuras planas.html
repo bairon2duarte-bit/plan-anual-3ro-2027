@@ -1,0 +1,1602 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía 6: Perímetro y Superficie de Figuras Planas | Colegio Montano</title>
+    <!-- Carga de Tailwind CSS para utilidades de diseño responsivo y layout -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Carga oficial de GeoGebra Classic / Geometry API -->
+    <script src="https://www.geogebra.org/apps/deployggb.js"></script>
+    <style>
+        /* Configuración de Variables Institucionales Colegio Montano */
+        :root {
+            --azul-principal: #1269A8;
+            --amarillo-brillante: #F7D615;
+            --verde-grisaceo: #54887D;
+            --azul-claro: #88B5C7;
+            --verde-oliva: #A6B046;
+            --blanco-suave: #F2F5E9;
+        }
+
+        /* Tipografía Institucional */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e2e8f0;
+            color: #1e293b;
+            margin: 0;
+            padding: 12px;
+        }
+
+        /* Marco Principal de Pizarra Digital */
+        #pizarra-container {
+            background-color: var(--blanco-suave);
+            border: 5px solid var(--amarillo-brillante);
+            border-radius: 12px;
+            box-shadow: 0 12px 30px rgba(18, 105, 168, 0.25);
+            max-width: 1240px;
+            margin: 0 auto;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 86vh;
+        }
+
+        /* Encabezado de la Pizarra */
+        .pizarra-header {
+            background: linear-gradient(135deg, var(--azul-principal) 0%, #0d4f80 100%);
+            color: white;
+            padding: 16px 24px;
+            border-bottom: 4px solid var(--amarillo-brillante);
+        }
+
+        /* Botón Fullscreen */
+        .btn-fullscreen {
+            background-color: var(--amarillo-brillante);
+            color: #0f172a;
+            font-weight: 700;
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: 2px solid #ffffff;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+        .btn-fullscreen:hover {
+            background-color: #ffe234;
+            transform: translateY(-1px);
+        }
+
+        /* Navegación de Pestañas */
+        .nav-tabs {
+            background-color: #ffffff;
+            border-bottom: 2px solid var(--azul-claro);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            padding: 10px 20px;
+        }
+
+        .tab-btn {
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.92rem;
+            color: var(--azul-principal);
+            background-color: transparent;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .tab-btn:hover {
+            background-color: rgba(136, 181, 199, 0.25);
+            border-color: var(--azul-claro);
+        }
+
+        .tab-btn.active {
+            background-color: var(--azul-principal);
+            color: #ffffff;
+            border-color: var(--amarillo-brillante);
+            box-shadow: 0 3px 8px rgba(18, 105, 168, 0.3);
+        }
+
+        /* Pestaña destacada para GeoGebra */
+        .tab-btn-ggb {
+            background-color: rgba(247, 214, 21, 0.28);
+            border-color: var(--amarillo-brillante);
+        }
+        .tab-btn-ggb.active {
+            background-color: var(--azul-principal);
+            color: #ffffff;
+            border-color: var(--amarillo-brillante);
+        }
+
+        /* Tarjetas de Contenido */
+        .card-montano {
+            background-color: #ffffff;
+            border: 2px solid var(--verde-grisaceo);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 18px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Tarjetas Visuales de Fórmulas */
+        .card-formula {
+            background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+            border: 2px solid var(--azul-principal);
+            border-top: 5px solid var(--amarillo-brillante);
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 4px 10px rgba(18, 105, 168, 0.08);
+            transition: transform 0.2s ease;
+        }
+        .card-formula:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Etiquetas de Nivel */
+        .badge-nivel {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .badge-basico {
+            background-color: var(--verde-oliva);
+            color: #ffffff;
+        }
+        .badge-intermedio {
+            background-color: var(--verde-grisaceo);
+            color: #ffffff;
+        }
+        .badge-avanzado {
+            background-color: var(--azul-principal);
+            color: #ffffff;
+            border: 1px solid var(--amarillo-brillante);
+        }
+
+        /* Contenedor de Soluciones Ocultas */
+        .solucion-box {
+            background-color: rgba(136, 181, 199, 0.25);
+            border: 1.5px dashed var(--azul-principal);
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin-top: 12px;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .btn-solucion {
+            background-color: var(--azul-principal);
+            color: white;
+            font-weight: 600;
+            padding: 7px 14px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.2s;
+            margin-top: 10px;
+        }
+        .btn-solucion:hover {
+            background-color: var(--verde-grisaceo);
+        }
+
+        /* Botón Directo para Construir en GeoGebra */
+        .btn-geogebra {
+            background-color: var(--amarillo-brillante);
+            color: #0f172a;
+            font-weight: 700;
+            padding: 7px 14px;
+            border-radius: 6px;
+            font-size: 0.88rem;
+            cursor: pointer;
+            border: 1.5px solid #0f172a;
+            transition: all 0.2s ease;
+            margin-top: 10px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .btn-geogebra:hover {
+            background-color: #ffe234;
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Bloques Matemáticos Visuales */
+        .math-expr {
+            font-family: 'Cambria Math', 'Times New Roman', serif;
+            font-size: 1.05rem;
+            font-weight: bold;
+            color: var(--azul-principal);
+            background-color: #f8fafc;
+            padding: 2px 8px;
+            border-radius: 4px;
+            border: 1px solid #cbd5e1;
+            display: inline-block;
+        }
+
+        /* Sub-pestañas de Nivel */
+        .subtab-btn {
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 0.88rem;
+            cursor: pointer;
+            border: 2px solid var(--verde-grisaceo);
+            background-color: #ffffff;
+            color: var(--verde-grisaceo);
+            transition: all 0.2s;
+        }
+        .subtab-btn.active {
+            background-color: var(--verde-grisaceo);
+            color: #ffffff;
+        }
+
+        /* Contenedor del Applet de GeoGebra */
+        #ggb-wrapper {
+            width: 100%;
+            min-height: 550px;
+            border: 3px solid var(--azul-principal);
+            border-radius: 10px;
+            overflow: hidden;
+            background-color: #ffffff;
+            position: relative;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Modo Fullscreen */
+        :fullscreen #pizarra-container {
+            max-width: 100%;
+            width: 100vw;
+            height: 100vh;
+            border-radius: 0;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Marco Principal de la Pizarra Digital -->
+    <div id="pizarra-container">
+        
+        <!-- Encabezado Institucional -->
+        <header class="pizarra-header flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-4">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyEop0yf6lZ7Jk9MILZxF1rBj4Oqs5esyhIQ&s" 
+                     alt="Logo Colegio Montano" 
+                     class="w-14 h-14 rounded-lg bg-white p-1 object-contain border-2 border-[#F7D615]"
+                     onerror="this.src='https://placehold.co/60x60/1269A8/F7D615?text=CM'">
+                <div>
+                    <span class="text-xs uppercase tracking-widest font-bold text-[#F7D615] block">Colegio Montano • Cuarta Unidad • Matemática</span>
+                    <h1 class="text-xl sm:text-2xl font-bold leading-tight">Perímetro y Superficie de Figuras Planas</h1>
+                    <p class="text-sm text-[#88B5C7] font-semibold">Nivel: Tercero Básico • Cuarta Unidad • Guía Interactiva de Pizarra Digital</p>
+                </div>
+            </div>
+            <button id="fullscreen-btn" class="btn-fullscreen flex items-center gap-2" onclick="toggleFullscreen()">
+                <span>⛶ Pantalla completa</span>
+            </button>
+        </header>
+
+        <!-- Barra de Navegación Horizontal de 6 Pestañas -->
+        <nav class="nav-tabs" role="tablist">
+            <button id="tab-teoria" class="tab-btn active" onclick="cambiarSeccion('teoria', this)">📘 1. Teoría</button>
+            <button id="tab-ejemplos" class="tab-btn" onclick="cambiarSeccion('ejemplos', this)">💡 2. Ejemplos Resueltos (15)</button>
+            <button id="tab-ejercicios" class="tab-btn" onclick="cambiarSeccion('ejercicios', this)">✍️ 3. Ejercicios Prácticos (15)</button>
+            <button id="tab-reflexion" class="tab-btn" onclick="cambiarSeccion('reflexion', this)">🧠 4. Reflexión Crítica</button>
+            <button id="tab-evaluacion" class="tab-btn" onclick="cambiarSeccion('evaluacion', this)">✅ 5. Evaluación Formativa</button>
+            <button id="tab-geogebra" class="tab-btn tab-btn-ggb" onclick="cambiarSeccion('geogebra', this)">📐 6. Laboratorio GeoGebra</button>
+        </nav>
+
+        <!-- Lienzo Principal de Contenido -->
+        <main class="p-4 sm:p-6 flex-1">
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 1: EXPLICACIÓN TEÓRICA             -->
+            <!-- ========================================== -->
+            <section id="sec-teoria" class="seccion-contenido">
+                
+                <!-- 1.1 Perímetro vs. Superficie y Conversión de Unidades -->
+                <div class="card-montano">
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-3 border-b-2 border-[#F7D615] pb-2">
+                        <h2 class="text-2xl font-bold text-[#1269A8]">1. Perímetro vs. Superficie y Conversión de Unidades</h2>
+                        <button class="btn-geogebra !mt-0" onclick="lanzarPlantilla('rectangulo_compuesto')">📐 Áreas Compuestas en GeoGebra</button>
+                    </div>
+                    <p class="text-base leading-relaxed mb-4">
+                        El <strong>perímetro (<span class="math-expr text-xs">P</span>)</strong> es la longitud total del contorno o frontera de una figura plana cerrada y se expresa en <strong>unidades lineales</strong> (<span class="math-expr text-xs">mm, cm, dm, m, km</span>). La <strong>superficie</strong> es la región bidimensional encerrada por el contorno, y su medida numérica es el <strong>área (<span class="math-expr text-xs">A</span>)</strong>, expresada en <strong>unidades cuadradas</strong> (<span class="math-expr text-xs">mm², cm², dm², m², km²</span>) o en medidas agrarias como el <strong>área (<span class="math-expr text-xs">a</span>)</strong> y la <strong>hectárea (<span class="math-expr text-xs">ha</span>)</strong>.
+                    </p>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center">
+                        <!-- Diagrama SVG Comparativo Perímetro vs. Superficie -->
+                        <div class="lg:col-span-5 flex justify-center bg-slate-50 p-3 rounded-xl border border-slate-200">
+                            <svg width="265" height="165" viewBox="0 0 265 165">
+                                <!-- Superficie sombreada -->
+                                <rect x="42" y="26" width="160" height="92" fill="rgba(136,181,199,0.35)" stroke="none"/>
+                                <!-- Cuadrícula ilustrativa de unidades cuadradas -->
+                                <line x1="82" y1="26" x2="82" y2="118" stroke="#88B5C7" stroke-width="1" stroke-dasharray="3,2"/>
+                                <line x1="122" y1="26" x2="122" y2="118" stroke="#88B5C7" stroke-width="1" stroke-dasharray="3,2"/>
+                                <line x1="162" y1="26" x2="162" y2="118" stroke="#88B5C7" stroke-width="1" stroke-dasharray="3,2"/>
+                                <line x1="42" y1="72" x2="202" y2="72" stroke="#88B5C7" stroke-width="1" stroke-dasharray="3,2"/>
+                                <!-- Contorno Perimetral -->
+                                <rect x="42" y="26" width="160" height="92" fill="none" stroke="#1269A8" stroke-width="3.2"/>
+                                <text x="122" y="76" text-anchor="middle" font-size="12" font-weight="bold" fill="#1269A8">SUPERFICIE (Área en u²)</text>
+                                <text x="122" y="18" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#b45309">Perímetro = suma de lados (en u)</text>
+                                <text x="22" y="75" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#b45309">h</text>
+                                <text x="122" y="133" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#0f172a">Base b</text>
+                                <text x="132" y="152" text-anchor="middle" font-size="10" font-weight="bold" fill="#54887D">P = 2(b + h)  |  A = b · h</text>
+                            </svg>
+                        </div>
+
+                        <!-- Conversión de Unidades Lineales, Superficiales y Agrarias -->
+                        <div class="lg:col-span-7 space-y-2.5 text-xs sm:text-sm">
+                            <div class="p-3 bg-sky-50 border-2 border-[#1269A8] rounded-xl">
+                                <strong class="text-[#1269A8] block">📏 Unidades Lineales (Perímetro — base 10):</strong>
+                                <span class="text-slate-700">Cada escalón hacia abajo multiplica por <span class="math-expr text-xs">10</span> y hacia arriba divide entre <span class="math-expr text-xs">10</span>. Ejemplo: <span class="math-expr text-xs">1 m = 100 cm</span>, <span class="math-expr text-xs">1 km = 1000 m</span>.</span>
+                            </div>
+                            <div class="p-3 bg-[#F2F5E9] border-2 border-[#54887D] rounded-xl">
+                                <strong class="text-[#1269A8] block">⬜ Unidades de Superficie (Área — base 100):</strong>
+                                <span class="text-slate-700">Cada escalón hacia abajo multiplica por <span class="math-expr text-xs">100</span> y hacia arriba divide entre <span class="math-expr text-xs">100</span>. Ejemplo: <span class="math-expr text-xs">1 m² = 10 000 cm²</span>, <span class="math-expr text-xs">1 dm² = 100 cm²</span>.</span>
+                            </div>
+                            <div class="p-3 bg-amber-50 border-2 border-[#F7D615] rounded-xl">
+                                <strong class="text-[#1269A8] block">🌾 Medidas Agrarias (Terrenos y Parcelas):</strong>
+                                <span class="text-slate-700"><span class="math-expr text-xs">1 área (a) = 100 m²</span> &nbsp;|&nbsp; <span class="math-expr text-xs">1 hectárea (ha) = 100 áreas = 10 000 m²</span>.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 1.2 Fórmulas de Perímetro y Área de Figuras Poligonales -->
+                <div class="card-montano">
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-3 border-b-2 border-[#F7D615] pb-2">
+                        <h2 class="text-2xl font-bold text-[#1269A8]">2. Perímetro y Área de Triángulos, Cuadriláteros y Polígonos Regulares</h2>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-geogebra !mt-0" onclick="lanzarPlantilla('triangulo_heron')">📐 Triángulo y Herón</button>
+                            <button class="btn-geogebra !mt-0" onclick="lanzarPlantilla('poligono_apotema')">📐 Polígono y Apotema</button>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <!-- Triángulo -->
+                        <div class="card-formula">
+                            <div>
+                                <div class="flex items-center justify-between mb-1">
+                                    <span class="badge-nivel badge-basico">Triángulo</span>
+                                    <svg width="46" height="34" viewBox="0 0 46 34">
+                                        <polygon points="6,29 40,29 18,5" fill="rgba(18,105,168,0.18)" stroke="#1269A8" stroke-width="2"/>
+                                        <line x1="18" y1="5" x2="18" y2="29" stroke="#b45309" stroke-width="1.3" stroke-dasharray="2,2"/>
+                                    </svg>
+                                </div>
+                                <p class="text-xs text-slate-700">Lados <span class="font-mono">a, b, c</span>, base <span class="font-mono">b</span>, altura <span class="font-mono">h</span> y semiperímetro <span class="font-mono">s = P/2</span>:</p>
+                                <div class="my-2 space-y-1 text-center">
+                                    <span class="math-expr text-xs">P = a + b + c</span><br>
+                                    <span class="math-expr text-xs">A = (b · h) / 2</span><br>
+                                    <span class="math-expr text-xs">A = √[s(s-a)(s-b)(s-c)]</span>
+                                </div>
+                            </div>
+                            <button class="btn-geogebra justify-center w-full text-xs" onclick="lanzarPlantilla('triangulo_heron')">📐 Construir en GeoGebra</button>
+                        </div>
+
+                        <!-- Cuadrado -->
+                        <div class="card-formula">
+                            <div>
+                                <div class="flex items-center justify-between mb-1">
+                                    <span class="badge-nivel badge-basico">Cuadrado</span>
+                                    <svg width="46" height="34" viewBox="0 0 46 34">
+                                        <rect x="10" y="4" width="26" height="26" fill="rgba(166,176,70,0.22)" stroke="#A6B046" stroke-width="2"/>
+                                    </svg>
+                                </div>
+                                <p class="text-xs text-slate-700">Lado <span class="font-mono">L</span> y diagonal <span class="font-mono">d = L√2</span>:</p>
+                                <div class="my-2 space-y-1 text-center">
+                                    <span class="math-expr text-xs">P = 4L</span><br>
+                                    <span class="math-expr text-xs">A = L² = d² / 2</span>
+                                </div>
+                            </div>
+                            <button class="btn-geogebra justify-center w-full text-xs" onclick="lanzarPlantilla('triangulo_rectangulo_area')">📐 Construir en GeoGebra</button>
+                        </div>
+
+                        <!-- Rectángulo -->
+                        <div class="card-formula">
+                            <div>
+                                <div class="flex items-center justify-between mb-1">
+                                    <span class="badge-nivel badge-basico">Rectángulo</span>
+                                    <svg width="46" height="34" viewBox="0 0 46 34">
+                                        <rect x="5" y="7" width="36" height="20" fill="rgba(84,136,125,0.22)" stroke="#54887D" stroke-width="2"/>
+                                    </svg>
+                                </div>
+                                <p class="text-xs text-slate-700">Base <span class="font-mono">b</span> y altura <span class="font-mono">h</span>:</p>
+                                <div class="my-2 space-y-1 text-center">
+                                    <span class="math-expr text-xs">P = 2(b + h)</span><br>
+                                    <span class="math-expr text-xs">A = b · h</span>
+                                </div>
+                            </div>
+                            <button class="btn-geogebra justify-center w-full text-xs" onclick="lanzarPlantilla('rectangulo_compuesto')">📐 Construir en GeoGebra</button>
+                        </div>
+
+                        <!-- Paralelogramo -->
+                        <div class="card-formula">
+                            <div>
+                                <div class="flex items-center justify-between mb-1">
+                                    <span class="badge-nivel badge-intermedio">Paralelogramo</span>
+                                    <svg width="46" height="34" viewBox="0 0 46 34">
+                                        <polygon points="12,7 41,7 34,27 5,27" fill="rgba(18,105,168,0.18)" stroke="#1269A8" stroke-width="2"/>
+                                    </svg>
+                                </div>
+                                <p class="text-xs text-slate-700">Lados <span class="font-mono">a, b</span> y altura perpendicular <span class="font-mono">h</span>:</p>
+                                <div class="my-2 space-y-1 text-center">
+                                    <span class="math-expr text-xs">P = 2(a + b)</span><br>
+                                    <span class="math-expr text-xs">A = b · h</span>
+                                </div>
+                            </div>
+                            <button class="btn-geogebra justify-center w-full text-xs" onclick="lanzarPlantilla('cuadrilateros_trapecio')">📐 Construir en GeoGebra</button>
+                        </div>
+
+                        <!-- Rombo -->
+                        <div class="card-formula">
+                            <div>
+                                <div class="flex items-center justify-between mb-1">
+                                    <span class="badge-nivel badge-intermedio">Rombo</span>
+                                    <svg width="46" height="34" viewBox="0 0 46 34">
+                                        <polygon points="23,3 41,17 23,31 5,17" fill="rgba(247,214,21,0.3)" stroke="#b45309" stroke-width="2"/>
+                                    </svg>
+                                </div>
+                                <p class="text-xs text-slate-700">Lado <span class="font-mono">L</span>, diagonal mayor <span class="font-mono">D</span> y diagonal menor <span class="font-mono">d</span>:</p>
+                                <div class="my-2 space-y-1 text-center">
+                                    <span class="math-expr text-xs">P = 4L</span><br>
+                                    <span class="math-expr text-xs">A = (D · d) / 2</span>
+                                </div>
+                            </div>
+                            <button class="btn-geogebra justify-center w-full text-xs" onclick="lanzarPlantilla('cuadrilateros_trapecio')">📐 Construir en GeoGebra</button>
+                        </div>
+
+                        <!-- Trapecio -->
+                        <div class="card-formula">
+                            <div>
+                                <div class="flex items-center justify-between mb-1">
+                                    <span class="badge-nivel badge-intermedio">Trapecio</span>
+                                    <svg width="46" height="34" viewBox="0 0 46 34">
+                                        <polygon points="13,7 33,7 41,27 5,27" fill="rgba(84,136,125,0.2)" stroke="#54887D" stroke-width="2"/>
+                                    </svg>
+                                </div>
+                                <p class="text-xs text-slate-700">Bases <span class="font-mono">B, b</span>, lados <span class="font-mono">c, d</span>, altura <span class="font-mono">h</span> y mediana <span class="font-mono">m</span>:</p>
+                                <div class="my-2 space-y-1 text-center">
+                                    <span class="math-expr text-xs">P = B + b + c + d</span><br>
+                                    <span class="math-expr text-xs">A = ((B + b) · h) / 2 = m · h</span>
+                                </div>
+                            </div>
+                            <button class="btn-geogebra justify-center w-full text-xs" onclick="lanzarPlantilla('cuadrilateros_trapecio')">📐 Construir en GeoGebra</button>
+                        </div>
+
+                        <!-- Polígono Regular con Apotema -->
+                        <div class="card-formula lg:col-span-2">
+                            <div>
+                                <div class="flex items-center justify-between mb-1">
+                                    <span class="badge-nivel badge-avanzado">Polígono Regular de <span class="font-mono">n</span> Lados y Apotema (<span class="font-mono">ap</span>)</span>
+                                    <svg width="52" height="34" viewBox="0 0 52 34">
+                                        <polygon points="26,2 44,9 44,25 26,32 8,25 8,9" fill="rgba(18,105,168,0.18)" stroke="#1269A8" stroke-width="2"/>
+                                        <line x1="26" y1="17" x2="26" y2="32" stroke="#b45309" stroke-width="1.6"/>
+                                    </svg>
+                                </div>
+                                <p class="text-xs text-slate-700">La <strong>apotema (<span class="font-mono">ap</span>)</strong> es el segmento perpendicular trazado desde el centro del polígono regular hasta el punto medio de un lado. Se descompone en <span class="font-mono">n</span> triángulos isósceles de base <span class="font-mono">L</span> y altura <span class="font-mono">ap</span>:</p>
+                                <div class="my-2 flex flex-wrap justify-center gap-3">
+                                    <span class="math-expr text-xs">P = n · L</span>
+                                    <span class="math-expr text-xs">A = (P · ap) / 2</span>
+                                    <span class="math-expr text-xs">A = n · [(L · ap) / 2]</span>
+                                </div>
+                            </div>
+                            <button class="btn-geogebra justify-center w-full text-xs" onclick="lanzarPlantilla('poligono_apotema')">📐 Explorar Apotema en GeoGebra</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 1.3 Circunferencia, Círculo, Sector Circular y Corona Circular -->
+                <div class="card-montano">
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-3 border-b-2 border-[#F7D615] pb-2">
+                        <h2 class="text-2xl font-bold text-[#1269A8]">3. Círculo, Longitud de Arco, Sector y Corona Circular</h2>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-geogebra !mt-0" onclick="lanzarPlantilla('circulo_sector')">📐 Círculo y Sector</button>
+                            <button class="btn-geogebra !mt-0" onclick="lanzarPlantilla('corona_circular')">📐 Corona Circular</button>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <!-- Círculo y Circunferencia -->
+                        <div class="card-formula">
+                            <div>
+                                <span class="badge-nivel badge-basico mb-1">Círculo y Circunferencia</span>
+                                <div class="my-2 flex justify-center">
+                                    <svg width="110" height="85" viewBox="0 0 110 85" class="bg-slate-50 rounded border border-slate-200">
+                                        <circle cx="55" cy="42" r="32" fill="rgba(18,105,168,0.18)" stroke="#1269A8" stroke-width="2.2"/>
+                                        <line x1="55" y1="42" x2="87" y2="42" stroke="#b45309" stroke-width="1.8"/>
+                                        <circle cx="55" cy="42" r="2.5" fill="#0f172a"/>
+                                        <text x="71" y="38" text-anchor="middle" font-size="10" font-weight="bold" fill="#b45309">r</text>
+                                    </svg>
+                                </div>
+                                <p class="text-xs text-slate-700">Con radio <span class="font-mono">r</span> y diámetro <span class="font-mono">d = 2r</span>:</p>
+                                <div class="my-2 space-y-1 text-center">
+                                    <span class="math-expr text-xs">L = 2πr = πd</span><br>
+                                    <span class="math-expr text-xs">A = πr²</span>
+                                </div>
+                            </div>
+                            <button class="btn-geogebra justify-center w-full text-xs" onclick="lanzarPlantilla('circulo_sector')">📐 Ver en GeoGebra</button>
+                        </div>
+
+                        <!-- Sector Circular y Longitud de Arco -->
+                        <div class="card-formula">
+                            <div>
+                                <span class="badge-nivel badge-intermedio mb-1">Sector Circular y Arco</span>
+                                <div class="my-2 flex justify-center">
+                                    <svg width="110" height="85" viewBox="0 0 110 85" class="bg-slate-50 rounded border border-slate-200">
+                                        <circle cx="40" cy="65" r="46" fill="none" stroke="#cbd5e1" stroke-width="1.2" stroke-dasharray="3,2"/>
+                                        <path d="M 40 65 L 86 65 A 46 46 0 0 0 63 25 Z" fill="rgba(247,214,21,0.42)" stroke="#b45309" stroke-width="2"/>
+                                        <text x="54" y="58" font-size="9.5" font-weight="bold" fill="#0f172a">α</text>
+                                        <text x="82" y="42" font-size="9.5" font-weight="bold" fill="#b45309">arco s</text>
+                                    </svg>
+                                </div>
+                                <p class="text-xs text-slate-700">Ángulo central <span class="font-mono">α</span> (en grados sexagesimales) y radio <span class="font-mono">r</span>:</p>
+                                <div class="my-2 space-y-1 text-center">
+                                    <span class="math-expr text-xs">s = 2πr · (α / 360°)</span><br>
+                                    <span class="math-expr text-xs">A = πr² · (α / 360°)</span><br>
+                                    <span class="math-expr text-xs">P_sector = 2r + s</span>
+                                </div>
+                            </div>
+                            <button class="btn-geogebra justify-center w-full text-xs" onclick="lanzarPlantilla('circulo_sector')">📐 Ver en GeoGebra</button>
+                        </div>
+
+                        <!-- Corona Circular -->
+                        <div class="card-formula">
+                            <div>
+                                <span class="badge-nivel badge-avanzado mb-1">Corona Circular</span>
+                                <div class="my-2 flex justify-center">
+                                    <svg width="110" height="85" viewBox="0 0 110 85" class="bg-slate-50 rounded border border-slate-200">
+                                        <circle cx="55" cy="42" r="34" fill="rgba(84,136,125,0.35)" stroke="#1269A8" stroke-width="2"/>
+                                        <circle cx="55" cy="42" r="18" fill="#ffffff" stroke="#b45309" stroke-width="2"/>
+                                        <text x="80" y="38" font-size="9.5" font-weight="bold" fill="#1269A8">R</text>
+                                        <text x="64" y="46" font-size="9.5" font-weight="bold" fill="#b45309">r</text>
+                                    </svg>
+                                </div>
+                                <p class="text-xs text-slate-700">Región entre dos círculos concéntricos de radios <span class="font-mono">R &gt; r</span>:</p>
+                                <div class="my-2 space-y-1 text-center">
+                                    <span class="math-expr text-xs">A = π(R² - r²)</span><br>
+                                    <span class="math-expr text-xs">P_total = 2π(R + r)</span>
+                                </div>
+                            </div>
+                            <button class="btn-geogebra justify-center w-full text-xs" onclick="lanzarPlantilla('corona_circular')">📐 Ver en GeoGebra</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 2: EJEMPLOS RESUELTOS (15)         -->
+            <!-- ========================================== -->
+            <section id="sec-ejemplos" class="seccion-contenido hidden">
+                <div class="flex flex-wrap items-center justify-between gap-3 mb-4 bg-white p-4 rounded-xl border-2 border-[#54887D]">
+                    <div>
+                        <h2 class="text-xl font-bold text-[#1269A8]">Ejemplos Resueltos Paso a Paso (15 Problemas)</h2>
+                        <p class="text-sm text-slate-600">Analiza cada desarrollo y pulsa <strong>"📐 Construir en GeoGebra"</strong> para visualizar la figura interactiva.</p>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <button class="subtab-btn active" onclick="filtrarSubnivel('ejemplos', 'basico', this)">Nivel Básico (5)</button>
+                        <button class="subtab-btn" onclick="filtrarSubnivel('ejemplos', 'intermedio', this)">Nivel Intermedio (5)</button>
+                        <button class="subtab-btn" onclick="filtrarSubnivel('ejemplos', 'avanzado', this)">Nivel Avanzado (5)</button>
+                    </div>
+                </div>
+
+                <!-- EJEMPLOS BÁSICOS (5) -->
+                <div id="ejemplos-basico" class="subcontenido-ejemplos space-y-4">
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-basico">Básico • Ejemplo 1 (Perímetro y área de un rectángulo)</span>
+                            <button class="btn-geogebra !mt-0" onclick="lanzarPlantilla('rectangulo_compuesto')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Un terreno rectangular mide <span class="math-expr">14 m</span> de largo y <span class="math-expr">9 m</span> de ancho. Calcula su perímetro y su área.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Perímetro):</strong> <span class="math-expr">P = 2(14 + 9) = 2 · 23 = 46 m</span>.</p>
+                            <p><strong>Paso 2 (Área):</strong> <span class="math-expr">A = 14 · 9 = 126 m²</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: Perímetro = 46 m y Área = 126 m².</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-basico">Básico • Ejemplo 2 (Área de un triángulo con base y altura)</span>
+                            <button class="btn-geogebra !mt-0" onclick="lanzarPlantilla('triangulo_heron')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Calcula el área de un triángulo cuya base mide <span class="math-expr">12 cm</span> y su altura correspondiente mide <span class="math-expr">7 cm</span>.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Fórmula del área triangular):</strong> <span class="math-expr">A = (b · h) / 2</span>.</p>
+                            <p><strong>Paso 2 (Sustitución):</strong> <span class="math-expr">A = (12 · 7) / 2 = 84 / 2 = 42 cm²</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: El área del triángulo es 42 cm².</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-basico">Básico • Ejemplo 3 (Área de un trapecio)</span>
+                            <button class="btn-geogebra !mt-0" onclick="lanzarPlantilla('cuadrilateros_trapecio')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Un trapecio tiene bases de <span class="math-expr">B = 16 cm</span> y <span class="math-expr">b = 10 cm</span>, y una altura de <span class="math-expr">h = 8 cm</span>. Halla su superficie.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Fórmula del área del trapecio):</strong> <span class="math-expr">A = ((B + b) · h) / 2</span>.</p>
+                            <p><strong>Paso 2 (Cálculo):</strong> <span class="math-expr">A = ((16 + 10) · 8) / 2 = (26 · 8) / 2 = 104 cm²</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: La superficie del trapecio es 104 cm².</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-basico">Básico • Ejemplo 4 (Longitud de circunferencia y área del círculo)</span>
+                            <button class="btn-geogebra !mt-0" onclick="lanzarPlantilla('circulo_sector')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Calcula la longitud de la circunferencia y el área de un círculo de radio <span class="math-expr">r = 6 cm</span> (expresa en términos de <span class="math-expr">π</span> y con <span class="math-expr">π ≈ 3.1416</span>).</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Longitud de circunferencia):</strong> <span class="math-expr">L = 2π(6) = 12π cm ≈ 37.70 cm</span>.</p>
+                            <p><strong>Paso 2 (Área del círculo):</strong> <span class="math-expr">A = π(6²) = 36π cm² ≈ 113.10 cm²</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: L = 12π cm (≈ 37.70 cm) y A = 36π cm² (≈ 113.10 cm²).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-basico">Básico • Ejemplo 5 (Conversión de unidades de superficie)</span>
+                            <button class="btn-geogebra !mt-0" onclick="lanzarPlantilla('rectangulo_compuesto')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Convierte <span class="math-expr">2.5 m²</span> a centímetros cuadrados (<span class="math-expr">cm²</span>) y <span class="math-expr">4500 cm²</span> a decímetros cuadrados (<span class="math-expr">dm²</span>).</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (m² a cm²):</strong> Como <span class="math-expr">1 m² = 10 000 cm²</span>, <span class="math-expr">2.5 · 10 000 = 25 000 cm²</span>.</p>
+                            <p><strong>Paso 2 (cm² a dm²):</strong> Como <span class="math-expr">1 dm² = 100 cm²</span>, <span class="math-expr">4500 / 100 = 45 dm²</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: 25 000 cm² y 45 dm².</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EJEMPLOS INTERMEDIOS (5) -->
+                <div id="ejemplos-intermedio" class="subcontenido-ejemplos hidden space-y-4">
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-intermedio">Intermedio • Ejemplo 1 (Área de polígono regular con apotema)</span>
+                            <button class="btn-geogebra !mt-0" onclick="lanzarPlantilla('poligono_apotema')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Un hexágono regular tiene lado <span class="math-expr">L = 8 cm</span> y apotema <span class="math-expr">ap = 4√3 cm</span> (≈ 6.93 cm). Calcula su perímetro y su área.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Perímetro):</strong> <span class="math-expr">P = 6 · 8 = 48 cm</span>.</p>
+                            <p><strong>Paso 2 (Área con apotema):</strong> <span class="math-expr">A = (P · ap) / 2 = (48 · 4√3) / 2 = 96√3 cm² ≈ 166.28 cm²</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: P = 48 cm y A = 96√3 cm² (≈ 166.28 cm²).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-intermedio">Intermedio • Ejemplo 2 (Longitud de arco y área de sector circular)</span>
+                            <button class="btn-geogebra !mt-0" onclick="lanzarPlantilla('circulo_sector')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">En una circunferencia de radio <span class="math-expr">r = 12 cm</span>, un sector circular tiene un ángulo central de <span class="math-expr">α = 60°</span>. Calcula la longitud del arco <span class="math-expr">s</span> y el área del sector.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Longitud de arco):</strong> <span class="math-expr">s = 2π(12) · (60° / 360°) = 24π · (1/6) = 4π cm ≈ 12.57 cm</span>.</p>
+                            <p><strong>Paso 2 (Área del sector):</strong> <span class="math-expr">A = π(12²) · (60° / 360°) = 144π · (1/6) = 24π cm² ≈ 75.40 cm²</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: Arco s = 4π cm y Área del sector = 24π cm².</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-intermedio">Intermedio • Ejemplo 3 (Área de una corona circular)</span>
+                            <button class="btn-geogebra !mt-0" onclick="lanzarPlantilla('corona_circular')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Una pista circular está formada por dos circunferencias concéntricas de radios <span class="math-expr">R = 10 m</span> y <span class="math-expr">r = 7 m</span>. Halla el área de la corona circular.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Fórmula de corona circular):</strong> <span class="math-expr">A = π(R² - r²)</span>.</p>
+                            <p><strong>Paso 2 (Cálculo):</strong> <span class="math-expr">A = π(10² - 7²) = π(100 - 49) = 51π m² ≈ 160.22 m²</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: Área de la corona = 51π m² (≈ 160.22 m²).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-intermedio">Intermedio • Ejemplo 4 (Fórmula de Herón para área triangular)</span>
+                            <button class="btn-geogebra !mt-0" onclick="lanzarPlantilla('triangulo_heron')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Calcula el perímetro y el área de un triángulo cuyos lados miden <span class="math-expr">a = 13 cm</span>, <span class="math-expr">b = 14 cm</span> y <span class="math-expr">c = 15 cm</span> aplicando la fórmula de Herón.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Perímetro y semiperímetro):</strong> <span class="math-expr">P = 13 + 14 + 15 = 42 cm ➔ s = 42 / 2 = 21 cm</span>.</p>
+                            <p><strong>Paso 2 (Fórmula de Herón):</strong> <span class="math-expr">A = √[21(21 - 13)(21 - 14)(21 - 15)] = √[21 · 8 · 7 · 6] = √7056 = 84 cm²</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: Perímetro = 42 cm y Área = 84 cm².</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-intermedio">Intermedio • Ejemplo 5 (Lado de un cuadrado dada su diagonal)</span>
+                            <button class="btn-geogebra !mt-0" onclick="lanzarPlantilla('triangulo_rectangulo_area')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">La diagonal de un cuadrado mide <span class="math-expr">d = 10 cm</span>. Calcula la longitud de su lado <span class="math-expr">L</span>, su perímetro y su área.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Relación diagonal-lado):</strong> <span class="math-expr">L² + L² = 10² ➔ 2L² = 100 ➔ L² = 50 ➔ L = √50 = 5√2 cm ≈ 7.07 cm</span>.</p>
+                            <p><strong>Paso 2 (Perímetro y área):</strong> <span class="math-expr">P = 4(5√2) = 20√2 cm ≈ 28.28 cm</span>; <span class="math-expr">A = L² = 50 cm²</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: L = 5√2 cm, P = 20√2 cm y A = 50 cm².</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EJEMPLOS AVANZADOS (5) -->
+                <div id="ejemplos-avanzado" class="subcontenido-ejemplos hidden space-y-4">
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-avanzado">Avanzado • Ejemplo 1 (Región sombreada: cuadrado menos círculo inscrito)</span>
+                            <button class="btn-geogebra !mt-0" onclick="lanzarPlantilla('rectangulo_compuesto')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Dentro de un cuadrado de lado <span class="math-expr">L = 12 cm</span> se inscribe un círculo tangente a los cuatro lados. Calcula el área de la región del cuadrado que queda fuera del círculo.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Área del cuadrado):</strong> <span class="math-expr">A_cuadrado = 12² = 144 cm²</span>.</p>
+                            <p><strong>Paso 2 (Área del círculo inscrito):</strong> El diámetro es <span class="math-expr">12 cm</span>, por lo que el radio es <span class="math-expr">r = 6 cm</span>: <span class="math-expr">A_círculo = π(6²) = 36π cm²</span>.</p>
+                            <p><strong>Paso 3 (Resta de áreas):</strong> <span class="math-expr">A_región = (144 - 36π) cm² ≈ 30.90 cm²</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: (144 - 36π) cm² (≈ 30.90 cm²).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-avanzado">Avanzado • Ejemplo 2 (Ecuación con área y bases de un trapecio)</span>
+                            <button class="btn-geogebra !mt-0" onclick="lanzarPlantilla('cuadrilateros_trapecio')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">En un trapecio, la base mayor es el triple de la base menor (<span class="math-expr">B = 3b</span>). Si su altura mide <span class="math-expr">h = 9 cm</span> y su área es <span class="math-expr">144 cm²</span>, calcula las longitudes de ambas bases.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Ecuación de área):</strong> <span class="math-expr">((3b + b) · 9) / 2 = 144 ➔ (4b · 9) / 2 = 144 ➔ 18b = 144</span>.</p>
+                            <p><strong>Paso 2 (Despeje):</strong> <span class="math-expr">b = 144 / 18 = 8 cm</span> y <span class="math-expr">B = 3(8) = 24 cm</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Base menor b = 8 cm y base mayor B = 24 cm.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-avanzado">Avanzado • Ejemplo 3 (Camino perimetral uniforme alrededor de un jardín)</span>
+                            <button class="btn-geogebra !mt-0" onclick="lanzarPlantilla('rectangulo_compuesto')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Un jardín rectangular de <span class="math-expr">20 m</span> por <span class="math-expr">12 m</span> está rodeado por un sendero peatonal de ancho uniforme de <span class="math-expr">2 m</span>. Calcula el área del sendero.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Dimensiones exteriores):</strong> Largo total = <span class="math-expr">20 + 2(2) = 24 m</span>; Ancho total = <span class="math-expr">12 + 2(2) = 16 m</span>.</p>
+                            <p><strong>Paso 2 (Diferencia de áreas):</strong> <span class="math-expr">A_total = 24 · 16 = 384 m²</span>; <span class="math-expr">A_jardín = 20 · 12 = 240 m²</span>. <span class="math-expr">A_sendero = 384 - 240 = 144 m²</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: El área del sendero es 144 m².</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-avanzado">Avanzado • Ejemplo 4 (Triángulo rectángulo y área sobre la hipotenusa)</span>
+                            <button class="btn-geogebra !mt-0" onclick="lanzarPlantilla('triangulo_rectangulo_area')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Los catetos de un triángulo rectángulo miden <span class="math-expr">a = 9 cm</span> y <span class="math-expr">b = 12 cm</span>. Calcula el área del triángulo, la longitud de la hipotenusa y la altura relativa a la hipotenusa.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Área e hipotenusa):</strong> <span class="math-expr">A = (9 · 12) / 2 = 54 cm²</span>; <span class="math-expr">c = √(9² + 12²) = √225 = 15 cm</span>.</p>
+                            <p><strong>Paso 2 (Altura sobre hipotenusa):</strong> Como <span class="math-expr">A = (c · h) / 2 ➔ 54 = (15 · h) / 2 ➔ h = 108 / 15 = 7.2 cm</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Área = 54 cm², hipotenusa = 15 cm y altura = 7.2 cm.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-avanzado">Avanzado • Ejemplo 5 (Superficie agrícola en hectáreas)</span>
+                            <button class="btn-geogebra !mt-0" onclick="lanzarPlantilla('cuadrilateros_trapecio')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Una parcela con forma de trapecio tiene bases de <span class="math-expr">350 m</span> y <span class="math-expr">250 m</span>, y una altura de <span class="math-expr">200 m</span>. Expresa su superficie en metros cuadrados (<span class="math-expr">m²</span>) y en hectáreas (<span class="math-expr">ha</span>).</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Área en m²):</strong> <span class="math-expr">A = ((350 + 250) · 200) / 2 = (600 · 200) / 2 = 60 000 m²</span>.</p>
+                            <p><strong>Paso 2 (Conversión a hectáreas):</strong> Como <span class="math-expr">1 ha = 10 000 m²</span>, <span class="math-expr">60 000 / 10 000 = 6 ha</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: 60 000 m², equivalentes a 6 hectáreas (6 ha).</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 3: EJERCICIOS PRÁCTICOS (15)       -->
+            <!-- ========================================== -->
+            <section id="sec-ejercicios" class="seccion-contenido hidden">
+                <div class="flex flex-wrap items-center justify-between gap-3 mb-4 bg-white p-4 rounded-xl border-2 border-[#54887D]">
+                    <div>
+                        <h2 class="text-xl font-bold text-[#1269A8]">Práctica Guiada en Pizarra (15 Ejercicios)</h2>
+                        <p class="text-sm text-slate-600">Resuelve cada ejercicio en tu cuaderno, despliega la solución y verifica la construcción en GeoGebra.</p>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <button class="subtab-btn active" onclick="filtrarSubnivel('ejercicios', 'basico', this)">Básico (5)</button>
+                        <button class="subtab-btn" onclick="filtrarSubnivel('ejercicios', 'intermedio', this)">Intermedio (5)</button>
+                        <button class="subtab-btn" onclick="filtrarSubnivel('ejercicios', 'avanzado', this)">Avanzado (5)</button>
+                    </div>
+                </div>
+
+                <!-- EJERCICIOS BÁSICOS (5) -->
+                <div id="ejercicios-basico" class="subcontenido-ejercicios space-y-4">
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 1</span>
+                        <p class="font-semibold text-base">Calcula el perímetro y el área de un cuadrado cuyo lado mide <span class="math-expr">11 cm</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-eb1', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="lanzarPlantilla('triangulo_rectangulo_area')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-eb1" class="solucion-box">
+                            <p><strong>Operación:</strong> <span class="math-expr">P = 4 · 11 = 44 cm</span>; <span class="math-expr">A = 11² = 121 cm²</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Perímetro = 44 cm y Área = 121 cm².</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 2</span>
+                        <p class="font-semibold text-base">Un rombo tiene diagonales de <span class="math-expr">18 cm</span> y <span class="math-expr">12 cm</span>. Halla su área.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-eb2', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="lanzarPlantilla('cuadrilateros_trapecio')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-eb2" class="solucion-box">
+                            <p><strong>Operación:</strong> <span class="math-expr">A = (18 · 12) / 2 = 216 / 2 = 108 cm²</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: 108 cm².</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 3</span>
+                        <p class="font-semibold text-base">Un paralelogramo tiene base <span class="math-expr">15 cm</span>, lado oblicuo <span class="math-expr">9 cm</span> y altura perpendicular a la base de <span class="math-expr">7 cm</span>. Calcula su perímetro y su área.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-eb3', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="lanzarPlantilla('cuadrilateros_trapecio')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-eb3" class="solucion-box">
+                            <p><strong>Operación:</strong> <span class="math-expr">P = 2(15 + 9) = 48 cm</span>; <span class="math-expr">A = 15 · 7 = 105 cm²</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Perímetro = 48 cm y Área = 105 cm².</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 4</span>
+                        <p class="font-semibold text-base">Calcula el área de un círculo cuyo diámetro mide <span class="math-expr">14 cm</span> (en términos de <span class="math-expr">π</span>).</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-eb4', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="lanzarPlantilla('circulo_sector')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-eb4" class="solucion-box">
+                            <p><strong>Operación:</strong> Radio <span class="math-expr">r = 14 / 2 = 7 cm</span>. <span class="math-expr">A = π(7²) = 49π cm²</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: 49π cm² (≈ 153.94 cm²).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 5</span>
+                        <p class="font-semibold text-base">Expresa <span class="math-expr">3.2 hectáreas (ha)</span> en metros cuadrados (<span class="math-expr">m²</span>) y en áreas (<span class="math-expr">a</span>).</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-eb5', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="lanzarPlantilla('rectangulo_compuesto')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-eb5" class="solucion-box">
+                            <p><strong>Operación:</strong> <span class="math-expr">3.2 · 10 000 = 32 000 m²</span>; <span class="math-expr">3.2 · 100 = 320 áreas</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: 32 000 m² y 320 áreas.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EJERCICIOS INTERMEDIOS (5) -->
+                <div id="ejercicios-intermedio" class="subcontenido-ejercicios hidden space-y-4">
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 1</span>
+                        <p class="font-semibold text-base">Calcula el área de un pentágono regular (<span class="math-expr">n = 5</span>) cuyo lado mide <span class="math-expr">10 cm</span> y cuya apotema mide <span class="math-expr">6.88 cm</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ei1', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="lanzarPlantilla('poligono_apotema')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-ei1" class="solucion-box">
+                            <p><strong>Resolución:</strong> <span class="math-expr">P = 5 · 10 = 50 cm</span>. <span class="math-expr">A = (50 · 6.88) / 2 = 172 cm²</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: 172 cm².</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 2</span>
+                        <p class="font-semibold text-base">Un sector circular tiene radio <span class="math-expr">r = 9 cm</span> y ángulo central <span class="math-expr">α = 120°</span>. Calcula la longitud del arco y el área del sector.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ei2', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="lanzarPlantilla('circulo_sector')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-ei2" class="solucion-box">
+                            <p><strong>Resolución:</strong> Fracción = <span class="math-expr">120°/360° = 1/3</span>. Arco <span class="math-expr">s = 2π(9)(1/3) = 6π cm</span>; Área = <span class="math-expr">π(81)(1/3) = 27π cm²</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Arco = 6π cm y Área = 27π cm².</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 3</span>
+                        <p class="font-semibold text-base">Calcula el área de una corona circular determinada por radios <span class="math-expr">R = 8 cm</span> y <span class="math-expr">r = 5 cm</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ei3', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="lanzarPlantilla('corona_circular')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-ei3" class="solucion-box">
+                            <p><strong>Resolución:</strong> <span class="math-expr">A = π(8² - 5²) = π(64 - 25) = 39π cm²</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: 39π cm² (≈ 122.52 cm²).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 4</span>
+                        <p class="font-semibold text-base">Halla el área de un triángulo cuyos lados miden <span class="math-expr">7 cm</span>, <span class="math-expr">8 cm</span> y <span class="math-expr">9 cm</span> usando la fórmula de Herón.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ei4', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="lanzarPlantilla('triangulo_heron')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-ei4" class="solucion-box">
+                            <p><strong>Resolución:</strong> <span class="math-expr">s = (7 + 8 + 9)/2 = 12</span>. <span class="math-expr">A = √[12(5)(4)(3)] = √720 = 12√5 cm² ≈ 26.83 cm²</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: 12√5 cm² (≈ 26.83 cm²).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 5</span>
+                        <p class="font-semibold text-base">El área de un trapecio es <span class="math-expr">96 cm²</span> y sus bases miden <span class="math-expr">14 cm</span> y <span class="math-expr">10 cm</span>. Calcula la altura <span class="math-expr">h</span> del trapecio.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ei5', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="lanzarPlantilla('cuadrilateros_trapecio')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-ei5" class="solucion-box">
+                            <p><strong>Resolución:</strong> <span class="math-expr">((14 + 10) · h) / 2 = 96 ➔ 12h = 96 ➔ h = 8 cm</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: h = 8 cm.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EJERCICIOS AVANZADOS (5) -->
+                <div id="ejercicios-avanzado" class="subcontenido-ejercicios hidden space-y-4">
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 1</span>
+                        <p class="font-semibold text-base">Dentro de un círculo de radio <span class="math-expr">r = 10 cm</span> se inscribe un cuadrado cuya diagonal coincide con el diámetro del círculo. Calcula el área de los cuatro segmentos circulares exteriores al cuadrado.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ea1', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="lanzarPlantilla('circulo_sector')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-ea1" class="solucion-box">
+                            <p><strong>Resolución:</strong> <span class="math-expr">A_círculo = π(10²) = 100π cm²</span>. Diagonal del cuadrado = <span class="math-expr">20 cm</span>, por lo que <span class="math-expr">A_cuadrado = 20² / 2 = 200 cm²</span>. Región restante = <span class="math-expr">(100π - 200) cm² ≈ 114.16 cm²</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: (100π - 200) cm² (≈ 114.16 cm²).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 2</span>
+                        <p class="font-semibold text-base">Un rectángulo tiene base <span class="math-expr">x + 6</span> y altura <span class="math-expr">x</span>. Si su perímetro es <span class="math-expr">44 cm</span>, calcula su área.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ea2', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="lanzarPlantilla('rectangulo_compuesto')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-ea2" class="solucion-box">
+                            <p><strong>Resolución:</strong> <span class="math-expr">2((x + 6) + x) = 44 ➔ 4x + 12 = 44 ➔ 4x = 32 ➔ x = 8 cm</span>. Base = <span class="math-expr">14 cm</span> y altura = <span class="math-expr">8 cm</span>: <span class="math-expr">A = 14 · 8 = 112 cm²</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Área = 112 cm².</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 3</span>
+                        <p class="font-semibold text-base">En un hexágono regular de lado <span class="math-expr">L = 6 cm</span>, la apotema mide <span class="math-expr">3√3 cm</span>. Calcula el área de un hexágono regular semejante cuyo perímetro es el triple del original.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ea3', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="lanzarPlantilla('poligono_apotema')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-ea3" class="solucion-box">
+                            <p><strong>Resolución:</strong> Área original = <span class="math-expr">((36) · 3√3) / 2 = 54√3 cm²</span>. Como la razón de semejanza lineal es <span class="math-expr">k = 3</span>, el área se multiplica por <span class="math-expr">k² = 9</span>: <span class="math-expr">9 · 54√3 = 486√3 cm²</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: 486√3 cm² (≈ 841.78 cm²).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 4</span>
+                        <p class="font-semibold text-base">Una corona circular tiene un área de <span class="math-expr">64π cm²</span> y su radio mayor mide <span class="math-expr">R = 10 cm</span>. Calcula el radio menor <span class="math-expr">r</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ea4', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="lanzarPlantilla('corona_circular')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-ea4" class="solucion-box">
+                            <p><strong>Resolución:</strong> <span class="math-expr">π(10² - r²) = 64π ➔ 100 - r² = 64 ➔ r² = 36 ➔ r = 6 cm</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Radio menor r = 6 cm.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 5</span>
+                        <p class="font-semibold text-base">Un patio cuadrado de <span class="math-expr">10 m</span> de lado tiene en cada esquina un sector circular de radio <span class="math-expr">3 m</span> (ángulo de <span class="math-expr">90°</span>) destinado a jardineras. Calcula el área restante del patio sin jardineras.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ea5', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="lanzarPlantilla('rectangulo_compuesto')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-ea5" class="solucion-box">
+                            <p><strong>Resolución:</strong> 4 sectores de <span class="math-expr">90°</span> y radio <span class="math-expr">3 m</span> equivalen a <span class="math-expr">1</span> círculo completo de radio <span class="math-expr">3 m</span>: <span class="math-expr">A_jardineras = π(3²) = 9π m²</span>. Área restante = <span class="math-expr">(100 - 9π) m² ≈ 71.73 m²</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: (100 - 9π) m² (≈ 71.73 m²).</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 4: PREGUNTAS DE REFLEXIÓN CRÍTICA  -->
+            <!-- ========================================== -->
+            <section id="sec-reflexion" class="seccion-contenido hidden">
+                <div class="card-montano">
+                    <h2 class="text-2xl font-bold text-[#1269A8] mb-2">🧠 Análisis Conceptual y Pensamiento Crítico</h2>
+                    <p class="text-sm text-slate-600 mb-4">Reflexiona sobre las relaciones geométricas, el escalamiento dimensional y la coherencia de unidades al medir perímetros y superficies.</p>
+
+                    <div class="space-y-4">
+                        <div class="p-4 bg-[#F2F5E9] rounded-xl border-2 border-[#54887D]">
+                            <h3 class="font-bold text-lg text-[#1269A8]">1. ¿Por qué dos figuras planas con el mismo perímetro NO necesariamente tienen la misma superficie?</h3>
+                            <p class="mt-1">Compara un rectángulo de <span class="math-expr">9 cm × 1 cm</span> y un cuadrado de <span class="math-expr">5 cm × 5 cm</span>, ambos de perímetro <span class="math-expr">20 cm</span>.</p>
+                            <button class="btn-solucion" onclick="toggleSolucion('ref-1', this)">Ver análisis conceptual</button>
+                            <div id="ref-1" class="solucion-box">
+                                <p><strong>Análisis:</strong> El perímetro mide únicamente la longitud del contorno, mientras que el área depende de cómo se distribuye la región interna. Ambos ejemplos tienen <span class="math-expr">P = 20 cm</span>, pero el rectángulo tiene área <span class="math-expr">9 cm²</span> y el cuadrado tiene área <span class="math-expr">25 cm²</span>. De hecho, entre todos los rectángulos de perímetro fijo, el <strong>cuadrado</strong> maximiza el área, y para un perímetro dado, el <strong>círculo</strong> encierra la mayor superficie posible.</p>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-[#F2F5E9] rounded-xl border-2 border-[#54887D]">
+                            <h3 class="font-bold text-lg text-[#1269A8]">2. Si duplicamos (<span class="math-expr">× 2</span>) todas las dimensiones lineales de una figura plana, ¿por cuánto se multiplica su perímetro y por cuánto su área?</h3>
+                            <p class="mt-1">Justifica tu respuesta con un ejemplo numérico y generaliza para un factor de escala <span class="math-expr">k</span>.</p>
+                            <button class="btn-solucion" onclick="toggleSolucion('ref-2', this)">Ver análisis conceptual</button>
+                            <div id="ref-2" class="solucion-box">
+                                <p><strong>Análisis:</strong> El perímetro es una magnitud lineal, por lo que se multiplica por <span class="math-expr">k</span> (si se duplica el lado de un cuadrado de <span class="math-expr">3 cm</span> a <span class="math-expr">6 cm</span>, el perímetro pasa de <span class="math-expr">12 cm</span> a <span class="math-expr">24 cm</span>, es decir, <span class="math-expr">× 2</span>). En cambio, el área es bidimensional (producto de dos longitudes), por lo que se multiplica por <span class="math-expr">k²</span> (el área pasa de <span class="math-expr">9 cm²</span> a <span class="math-expr">36 cm²</span>, es decir, <span class="math-expr">2² = 4</span> veces).</p>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-[#F2F5E9] rounded-xl border-2 border-[#54887D]">
+                            <h3 class="font-bold text-lg text-[#1269A8]">3. ¿Cómo se relacionan el área de un sector circular y la de una corona circular con el cálculo de regiones sombreadas?</h3>
+                            <p class="mt-1">Explica cuándo conviene restar áreas y cuándo calcular una fracción proporcional del círculo.</p>
+                            <button class="btn-solucion" onclick="toggleSolucion('ref-3', this)">Ver análisis conceptual</button>
+                            <div id="ref-3" class="solucion-box">
+                                <p><strong>Análisis:</strong> Un <strong>sector circular</strong> toma una porción angular (<span class="math-expr">α / 360°</span>) de un disco completo, mientras que una <strong>corona circular</strong> (o una región sombreada compuesta) se obtiene por <strong>sustracción de superficies</strong> (<span class="math-expr">A_mayor - A_menor</span>). En problemas complejos de geometría plana se combinan ambas ideas: se calcula el área total y se restan las porciones huecas o no sombreadas.</p>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-[#F2F5E9] rounded-xl border-2 border-[#54887D]">
+                            <h3 class="font-bold text-lg text-[#1269A8]">4. ¿Por qué es indispensable homogeneizar las unidades antes de sustituir en una fórmula de perímetro o área?</h3>
+                            <p class="mt-1">Analiza qué ocurriría si calculamos el área de un rectángulo de base <span class="math-expr">2 m</span> y altura <span class="math-expr">50 cm</span> sin convertir unidades.</p>
+                            <button class="btn-solucion" onclick="toggleSolucion('ref-4', this)">Ver análisis conceptual</button>
+                            <div id="ref-4" class="solucion-box">
+                                <p><strong>Análisis:</strong> Las fórmulas geométricas exigen que todas las longitudes estén expresadas en la misma unidad. Si multiplicamos <span class="math-expr">2 · 50 = 100</span> sin unificar, el número carece de unidad coherente (<span class="math-expr">100 m²</span> sería erróneo porque <span class="math-expr">50 cm = 0.5 m</span> y el área real es <span class="math-expr">2 · 0.5 = 1 m² = 10 000 cm²</span>). Además, al convertir unidades de superficie recordamos que <span class="math-expr">1 m² = 10 000 cm²</span>, no <span class="math-expr">100 cm²</span>.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 5: EVALUACIÓN FORMATIVA            -->
+            <!-- ========================================== -->
+            <section id="sec-evaluacion" class="seccion-contenido hidden">
+                <div class="card-montano">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b-2 border-[#F7D615] pb-3 mb-4">
+                        <div>
+                            <h2 class="text-2xl font-bold text-[#1269A8]">✅ Evaluación Formativa de Comprobación</h2>
+                            <p class="text-sm text-slate-600">Resuelve cada reactivo, verifica tu procedimiento y explora la construcción en GeoGebra.</p>
+                        </div>
+                        <span class="badge-nivel badge-avanzado mt-2 sm:mt-0">5 Reactivos de Comprobación</span>
+                    </div>
+
+                    <div class="space-y-4">
+                        <!-- Reactivo 1 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 1 • Cuadriláteros y Conversión</span>
+                            <p class="font-bold text-base mt-1">Un trapecio tiene bases de <span class="math-expr">18 m</span> y <span class="math-expr">12 m</span>, y altura de <span class="math-expr">10 m</span>. Calcula su área en <span class="math-expr">m²</span> y en áreas (<span class="math-expr">a</span>).</p>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="btn-solucion" onclick="toggleSolucion('eval-1', this)">Mostrar solución</button>
+                                <button class="btn-geogebra" onclick="lanzarPlantilla('cuadrilateros_trapecio')">📐 Construir en GeoGebra</button>
+                            </div>
+                            <div id="eval-1" class="solucion-box">
+                                <p><strong>Resolución:</strong> <span class="math-expr">A = ((18 + 12) · 10) / 2 = 150 m²</span>. Como <span class="math-expr">1 área = 100 m²</span>, equivale a <span class="math-expr">1.5 áreas</span>.</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: 150 m² (1.5 áreas).</p>
+                            </div>
+                        </div>
+
+                        <!-- Reactivo 2 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 2 • Polígono Regular y Apotema</span>
+                            <p class="font-bold text-base mt-1">Un octágono regular (<span class="math-expr">n = 8</span>) tiene lado <span class="math-expr">L = 5 cm</span> y apotema <span class="math-expr">ap = 6.04 cm</span>. Calcula su perímetro y su área.</p>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="btn-solucion" onclick="toggleSolucion('eval-2', this)">Mostrar solución</button>
+                                <button class="btn-geogebra" onclick="lanzarPlantilla('poligono_apotema')">📐 Construir en GeoGebra</button>
+                            </div>
+                            <div id="eval-2" class="solucion-box">
+                                <p><strong>Resolución:</strong> <span class="math-expr">P = 8 · 5 = 40 cm</span>; <span class="math-expr">A = (40 · 6.04) / 2 = 120.8 cm²</span>.</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: Perímetro = 40 cm y Área = 120.8 cm².</p>
+                            </div>
+                        </div>
+
+                        <!-- Reactivo 3 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 3 • Sector Circular</span>
+                            <p class="font-bold text-base mt-1">Calcula el área de un sector circular de radio <span class="math-expr">r = 6 cm</span> y ángulo central <span class="math-expr">α = 90°</span> (en términos de <span class="math-expr">π</span>).</p>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="btn-solucion" onclick="toggleSolucion('eval-3', this)">Mostrar solución</button>
+                                <button class="btn-geogebra" onclick="lanzarPlantilla('circulo_sector')">📐 Construir en GeoGebra</button>
+                            </div>
+                            <div id="eval-3" class="solucion-box">
+                                <p><strong>Resolución:</strong> <span class="math-expr">A = π(6²) · (90° / 360°) = 36π · (1/4) = 9π cm²</span>.</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: 9π cm² (≈ 28.27 cm²).</p>
+                            </div>
+                        </div>
+
+                        <!-- Reactivo 4 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 4 • Corona Circular</span>
+                            <p class="font-bold text-base mt-1">Dos circunferencias concéntricas tienen radios <span class="math-expr">R = 9 cm</span> y <span class="math-expr">r = 6 cm</span>. Calcula el área de la corona circular formada entre ambas.</p>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="btn-solucion" onclick="toggleSolucion('eval-4', this)">Mostrar solución</button>
+                                <button class="btn-geogebra" onclick="lanzarPlantilla('corona_circular')">📐 Construir en GeoGebra</button>
+                            </div>
+                            <div id="eval-4" class="solucion-box">
+                                <p><strong>Resolución:</strong> <span class="math-expr">A = π(9² - 6²) = π(81 - 36) = 45π cm²</span>.</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: 45π cm² (≈ 141.37 cm²).</p>
+                            </div>
+                        </div>
+
+                        <!-- Reactivo 5 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 5 • Fórmula de Herón</span>
+                            <p class="font-bold text-base mt-1">Halla el área de un triángulo cuyos lados miden <span class="math-expr">10 cm</span>, <span class="math-expr">10 cm</span> y <span class="math-expr">12 cm</span>.</p>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="btn-solucion" onclick="toggleSolucion('eval-5', this)">Mostrar solución</button>
+                                <button class="btn-geogebra" onclick="lanzarPlantilla('triangulo_heron')">📐 Construir en GeoGebra</button>
+                            </div>
+                            <div id="eval-5" class="solucion-box">
+                                <p><strong>Resolución:</strong> <span class="math-expr">s = (10 + 10 + 12) / 2 = 16</span>. <span class="math-expr">A = √[16(16 - 10)(16 - 10)(16 - 12)] = √[16 · 6 · 6 · 4] = 4 · 6 · 2 = 48 cm²</span>.</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: 48 cm².</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 6: LABORATORIO INTERACTIVO GEOGEBRA -->
+            <!-- ========================================== -->
+            <section id="sec-geogebra" class="seccion-contenido hidden">
+                <div class="card-montano">
+                    <!-- Encabezado y Selector de Plantillas -->
+                    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 border-b-2 border-[#F7D615] pb-3 mb-4">
+                        <div>
+                            <div class="flex flex-wrap items-center gap-2">
+                                <span class="badge-nivel badge-avanzado">GeoGebra Geometry Interactivo</span>
+                                <span id="ggb-status-badge" class="text-xs font-bold text-[#54887D] bg-[#F2F5E9] px-2.5 py-1 rounded-full border border-[#54887D]">Cargando applet de GeoGebra...</span>
+                            </div>
+                            <h2 class="text-2xl font-bold text-[#1269A8] mt-1">📐 Laboratorio de Perímetro y Superficie de Figuras Planas</h2>
+                            <p class="text-sm text-slate-600">Manipula las figuras en el lienzo o selecciona una de las 7 construcciones preprogramadas.</p>
+                        </div>
+
+                        <!-- Selector Rápido de Plantillas -->
+                        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+                            <select id="ggb-preset-select" onchange="lanzarPlantilla(this.value)" class="p-2 rounded-lg border-2 border-[#1269A8] bg-white font-bold text-xs sm:text-sm text-[#1269A8] cursor-pointer">
+                                <option value="triangulo_heron">1. Triángulo y Fórmula de Herón / Base-Altura</option>
+                                <option value="cuadrilateros_trapecio">2. Cuadriláteros y Trapecio (Superficie)</option>
+                                <option value="poligono_apotema">3. Polígono Regular y Apotema (A = P · ap / 2)</option>
+                                <option value="circulo_sector">4. Círculo y Sector Circular (Arco y Área)</option>
+                                <option value="corona_circular">5. Corona Circular (π(R² - r²))</option>
+                                <option value="rectangulo_compuesto">6. Rectángulo y Áreas Compuestas</option>
+                                <option value="triangulo_rectangulo_area">7. Triángulo Rectángulo y Área</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Botones Rápidos de Construcciones -->
+                    <div class="flex flex-wrap gap-1.5 mb-3">
+                        <button onclick="lanzarPlantilla('triangulo_heron')" class="text-xs font-bold px-2.5 py-1.5 rounded-lg bg-sky-100 text-sky-950 border border-sky-500 hover:bg-sky-200 cursor-pointer">△ Triángulo y Herón</button>
+                        <button onclick="lanzarPlantilla('cuadrilateros_trapecio')" class="text-xs font-bold px-2.5 py-1.5 rounded-lg bg-emerald-100 text-emerald-950 border border-emerald-500 hover:bg-emerald-200 cursor-pointer">⏢ Cuadriláteros y Trapecio</button>
+                        <button onclick="lanzarPlantilla('poligono_apotema')" class="text-xs font-bold px-2.5 py-1.5 rounded-lg bg-indigo-100 text-indigo-950 border border-indigo-500 hover:bg-indigo-200 cursor-pointer">⬡ Polígono y Apotema</button>
+                        <button onclick="lanzarPlantilla('circulo_sector')" class="text-xs font-bold px-2.5 py-1.5 rounded-lg bg-amber-100 text-amber-950 border border-amber-500 hover:bg-amber-200 cursor-pointer">🥧 Círculo y Sector Circular</button>
+                        <button onclick="lanzarPlantilla('corona_circular')" class="text-xs font-bold px-2.5 py-1.5 rounded-lg bg-teal-100 text-teal-950 border border-teal-500 hover:bg-teal-200 cursor-pointer">⭕ Corona Circular</button>
+                        <button onclick="lanzarPlantilla('rectangulo_compuesto')" class="text-xs font-bold px-2.5 py-1.5 rounded-lg bg-lime-100 text-lime-950 border border-lime-500 hover:bg-lime-200 cursor-pointer">▭ Rectángulo Áreas Compuestas</button>
+                        <button onclick="lanzarPlantilla('triangulo_rectangulo_area')" class="text-xs font-bold px-2.5 py-1.5 rounded-lg bg-rose-100 text-rose-950 border border-rose-500 hover:bg-rose-200 cursor-pointer">📐 Triángulo Rectángulo y Área</button>
+                    </div>
+
+                    <!-- Barra de Herramientas Rápidas de Control -->
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-3 p-2.5 bg-[#F2F5E9] rounded-xl border border-[#A6B046]">
+                        <div class="flex flex-wrap gap-2">
+                            <button onclick="limpiarGeoGebra()" class="px-3 py-1.5 rounded-lg bg-white hover:bg-red-50 text-red-700 font-bold text-xs border border-red-400 cursor-pointer">🗑️ Limpiar lienzo</button>
+                            <button onclick="alternarCuadriculaYEjes()" class="px-3 py-1.5 rounded-lg bg-white hover:bg-sky-50 text-[#1269A8] font-bold text-xs border border-[#1269A8] cursor-pointer">⊞ Alternar cuadrícula/ejes</button>
+                            <button onclick="reiniciarPlantillaActual()" class="px-3 py-1.5 rounded-lg bg-white hover:bg-emerald-50 text-[#54887D] font-bold text-xs border border-[#54887D] cursor-pointer">↺ Reiniciar construcción</button>
+                        </div>
+                        <span class="text-xs font-semibold text-[#54887D]">💡 Consejo: Arrastra los puntos en GeoGebra y observa cómo se actualizan perímetros, longitudes y áreas.</span>
+                    </div>
+
+                    <!-- Banner Descriptivo de la Construcción Activa -->
+                    <div id="ggb-info-construccion" class="mb-3 p-3 bg-gradient-to-r from-[#1269A8] to-[#0d4f80] text-white rounded-xl border-2 border-[#F7D615]">
+                        <h3 id="ggb-titulo-construccion" class="font-bold text-base text-[#F7D615]">1. Triángulo y Fórmula de Herón / Base-Altura</h3>
+                        <p id="ggb-desc-construccion" class="text-xs sm:text-sm text-[#F2F5E9] mt-0.5">Arrastra los vértices A, B o C para comparar el área mediante (base · altura)/2 y el semiperímetro s = P/2.</p>
+                    </div>
+
+                    <!-- Lienzo Embebido de GeoGebra -->
+                    <div id="ggb-wrapper">
+                        <div id="ggb-element"></div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Pie de Pizarra -->
+        <footer class="bg-[#1269A8] text-white text-center py-3 px-4 text-xs sm:text-sm border-t-2 border-[#F7D615]">
+            <strong>Colegio Montano</strong> • Departamento de Matemática • Cuarta Unidad • Pizarra Digital Interactiva
+        </footer>
+    </div>
+
+    <!-- Scripts de Interactividad y Motor de Construcciones GeoGebra -->
+    <script>
+        /* =========================================================================
+           1. NAVEGACIÓN DE PESTAÑAS Y PANTALLA COMPLETA
+           ========================================================================= */
+
+        function cambiarSeccion(seccionId, botonActivo) {
+            const secciones = document.querySelectorAll('.seccion-contenido');
+            secciones.forEach(sec => sec.classList.add('hidden'));
+
+            const target = document.getElementById('sec-' + seccionId);
+            if (target) {
+                target.classList.remove('hidden');
+            }
+
+            const botones = document.querySelectorAll('.tab-btn');
+            botones.forEach(btn => btn.classList.remove('active'));
+            if (botonActivo) {
+                botonActivo.classList.add('active');
+            }
+
+            if (seccionId === 'geogebra') {
+                inicializarGeoGebraSiNecesario();
+                setTimeout(() => {
+                    redimensionarGeoGebra();
+                }, 120);
+            }
+        }
+
+        function filtrarSubnivel(grupo, nivel, botonActivo) {
+            const contenedores = document.querySelectorAll('.subcontenido-' + grupo);
+            contenedores.forEach(cont => cont.classList.add('hidden'));
+
+            const target = document.getElementById(grupo + '-' + nivel);
+            if (target) {
+                target.classList.remove('hidden');
+            }
+
+            const parent = botonActivo.parentElement;
+            const subBotones = parent.querySelectorAll('.subtab-btn');
+            subBotones.forEach(btn => btn.classList.remove('active'));
+            botonActivo.classList.add('active');
+        }
+
+        function toggleSolucion(solucionId, boton) {
+            const box = document.getElementById(solucionId);
+            if (!box) return;
+
+            if (box.style.display === 'block') {
+                box.style.display = 'none';
+                boton.textContent = boton.textContent.replace('Ocultar', 'Mostrar').replace('Ocultar análisis conceptual', 'Ver análisis conceptual');
+            } else {
+                box.style.display = 'block';
+                if (boton.textContent.includes('Ver análisis')) {
+                    boton.textContent = 'Ocultar análisis conceptual';
+                } else {
+                    boton.textContent = 'Ocultar solución';
+                }
+            }
+        }
+
+        function toggleFullscreen() {
+            const btn = document.getElementById('fullscreen-btn');
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().then(() => {
+                    btn.innerHTML = '<span>✖ Salir de pantalla completa</span>';
+                    setTimeout(redimensionarGeoGebra, 200);
+                }).catch(err => {
+                    console.warn('Error al intentar activar pantalla completa:', err);
+                });
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen().then(() => {
+                        btn.innerHTML = '<span>⛶ Pantalla completa</span>';
+                        setTimeout(redimensionarGeoGebra, 200);
+                    });
+                }
+            }
+        }
+
+        document.addEventListener('fullscreenchange', () => {
+            const btn = document.getElementById('fullscreen-btn');
+            if (!document.fullscreenElement && btn) {
+                btn.innerHTML = '<span>⛶ Pantalla completa</span>';
+                setTimeout(redimensionarGeoGebra, 200);
+            }
+        });
+
+        /* =========================================================================
+           2. MOTOR DE CONSTRUCCIONES GEOGEBRA Y COLA DE COMANDOS PENDIENTES
+           ========================================================================= */
+
+        let ggbIniciado = false;
+        let ggbListo = false;
+        let cuadriculaYEjesVisibles = true;
+
+        const PLANTILLAS_GGB = {
+            triangulo_heron: {
+                titulo: '1. Triángulo y Fórmula de Herón / Base-Altura',
+                desc: 'Arrastra los vértices A, B o C para comparar el área mediante (base · altura)/2 y el semiperímetro s = P/2.',
+                comandos: [
+                    'SetCoordSystem(-3, 11, -2.5, 8)',
+                    'A = (0, 0)',
+                    'B = (8, 0)',
+                    'C = (3.2, 5.4)',
+                    'tri = Polygon(A, B, C)',
+                    'SetColor(tri, 18, 105, 168)',
+                    'P_pie = Point(Line(A, B), C)',
+                    'alt = Segment(C, P_pie)',
+                    'SetLineStyle(alt, 1)',
+                    'SetColor(alt, 180, 83, 9)',
+                    'per = Perimeter(tri)',
+                    'semip = per / 2',
+                    'Text("Perímetro P = " + per + " | Semiperímetro s = " + semip + " | Área = " + tri, (-2, 7))'
+                ]
+            },
+            cuadrilateros_trapecio: {
+                titulo: '2. Cuadriláteros y Trapecio (Superficie)',
+                desc: 'Observa el trapecio de bases paralelas AB y DC, su altura perpendicular h y su superficie total.',
+                comandos: [
+                    'SetCoordSystem(-2, 12, -2, 7.5)',
+                    'A = (0, 0)',
+                    'B = (10, 0)',
+                    'D = (2, 4.5)',
+                    'C = (7.5, 4.5)',
+                    'trap = Polygon(A, B, C, D)',
+                    'SetColor(trap, 84, 136, 125)',
+                    'pieH = Point(Line(A, B), D)',
+                    'altH = Segment(D, pieH)',
+                    'SetLineStyle(altH, 1)',
+                    'SetColor(altH, 180, 83, 9)',
+                    'bMay = Distance(A, B)',
+                    'bMen = Distance(D, C)',
+                    'Text("B = " + bMay + " | b = " + bMen + " | h = " + altH + " | Área = " + trap, (-1, 6.5))'
+                ]
+            },
+            poligono_apotema: {
+                titulo: '3. Polígono Regular y Apotema (A = P · ap / 2)',
+                desc: 'Hexágono regular con centro O y apotema OM perpendicular al lado AB: su área equivale a (Perímetro · apotema)/2.',
+                comandos: [
+                    'SetCoordSystem(-5.5, 6.5, -4.5, 5)',
+                    'A = (-1.6, -2.6)',
+                    'B = (1.6, -2.6)',
+                    'hex = Polygon(A, B, 6)',
+                    'SetColor(hex, 18, 105, 168)',
+                    'O = Centroid(hex)',
+                    'M = Midpoint(A, B)',
+                    'ap = Segment(O, M)',
+                    'SetColor(ap, 180, 83, 9)',
+                    'per = Perimeter(hex)',
+                    'Text("Perímetro P = " + per + " | Apotema ap = " + ap + " | Área = " + hex, (-4.5, 4.2))'
+                ]
+            },
+            circulo_sector: {
+                titulo: '4. Círculo y Sector Circular (Arco y Área)',
+                desc: 'Observa el círculo de radio r, el sector circular determinado por el ángulo central ∠BOC y su superficie.',
+                comandos: [
+                    'SetCoordSystem(-6.5, 6.5, -5.5, 5.5)',
+                    'O = (0, 0)',
+                    'A = (4, 0)',
+                    'circ = Circle(O, A)',
+                    'SetColor(circ, 18, 105, 168)',
+                    'B = (4, 0)',
+                    'C = (2, 3.464)',
+                    'sec = CircularSector(O, B, C)',
+                    'SetColor(sec, 247, 214, 21)',
+                    'ang = Angle(B, O, C)',
+                    'Text("Área del círculo = " + circ + " | Área del sector = " + sec + " | Ángulo = " + ang, (-5.5, 4.7))'
+                ]
+            },
+            corona_circular: {
+                titulo: '5. Corona Circular (π(R² - r²))',
+                desc: 'Dos circunferencias concéntricas de centro O y radios R = 4.5 y r = 2.2 delimitan la corona circular.',
+                comandos: [
+                    'SetCoordSystem(-6.5, 6.5, -5.5, 5.5)',
+                    'O = (0, 0)',
+                    'P_ext = (4.5, 0)',
+                    'P_int = (2.2, 0)',
+                    'cExt = Circle(O, P_ext)',
+                    'cInt = Circle(O, P_int)',
+                    'SetColor(cExt, 84, 136, 125)',
+                    'SetColor(cInt, 180, 83, 9)',
+                    'areaCorona = cExt - cInt',
+                    'Text("Área exterior = " + cExt + " | Área interior = " + cInt + " | Corona = " + areaCorona, (-5.8, 4.7))'
+                ]
+            },
+            rectangulo_compuesto: {
+                titulo: '6. Rectángulo y Áreas Compuestas',
+                desc: 'Rectángulo ABCD con un rectángulo interior recortado EFGH para ilustrar perímetro y diferencia de superficies.',
+                comandos: [
+                    'SetCoordSystem(-2, 11, -2, 8)',
+                    'A = (0, 0)',
+                    'B = (9, 0)',
+                    'C = (9, 6)',
+                    'D = (0, 6)',
+                    'recExt = Polygon(A, B, C, D)',
+                    'SetColor(recExt, 18, 105, 168)',
+                    'E = (2, 1.5)',
+                    'F = (6, 1.5)',
+                    'G = (6, 4.5)',
+                    'H = (2, 4.5)',
+                    'recInt = Polygon(E, F, G, H)',
+                    'SetColor(recInt, 247, 214, 21)',
+                    'restante = recExt - recInt',
+                    'Text("Área rectángulo = " + recExt + " | Recorte = " + recInt + " | Restante = " + restante, (-1, 7))'
+                ]
+            },
+            triangulo_rectangulo_area: {
+                titulo: '7. Triángulo Rectángulo y Área',
+                desc: 'Triángulo rectángulo en C con catetos a y b e hipotenusa c: el área es (a · b)/2 y también (c · h)/2.',
+                comandos: [
+                    'SetCoordSystem(-2.5, 10, -2, 7.5)',
+                    'C = (0, 0)',
+                    'B = (6, 0)',
+                    'A = (0, 4.5)',
+                    'triRect = Polygon(C, B, A)',
+                    'SetColor(triRect, 166, 176, 70)',
+                    'ang90 = Angle(B, C, A)',
+                    'pieAlt = Point(Line(A, B), C)',
+                    'altHip = Segment(C, pieAlt)',
+                    'SetLineStyle(altHip, 1)',
+                    'SetColor(altHip, 180, 83, 9)',
+                    'hip = Distance(A, B)',
+                    'Text("Perímetro = " + Perimeter(triRect) + " | Área = " + triRect + " | Hipotenusa = " + hip, (-1.8, 6.6))'
+                ]
+            }
+        };
+
+        let pendingCommands = {
+            titulo: PLANTILLAS_GGB.triangulo_heron.titulo,
+            descripcion: PLANTILLAS_GGB.triangulo_heron.desc,
+            comandos: PLANTILLAS_GGB.triangulo_heron.comandos,
+            presetKey: 'triangulo_heron'
+        };
+
+        /**
+         * Inicializa el applet de GeoGebra la primera vez que se accede a la pestaña 6.
+         */
+        function inicializarGeoGebraSiNecesario() {
+            if (ggbIniciado) return;
+            ggbIniciado = true;
+
+            const wrapper = document.getElementById('ggb-wrapper');
+            const ancho = wrapper ? Math.max(wrapper.clientWidth - 6, 320) : 960;
+
+            const params = {
+                id: 'ggbApplet',
+                appName: 'geometry',
+                width: ancho,
+                height: 550,
+                showToolBar: true,
+                showAlgebraInput: true,
+                showMenuBar: false,
+                showResetIcon: false,
+                enableRightClick: true,
+                enableLabelDrags: true,
+                showZoomButtons: true,
+                language: 'es',
+                appletOnLoad: function(api) {
+                    window.ggbApplet = api;
+                    ggbListo = true;
+                    const badge = document.getElementById('ggb-status-badge');
+                    if (badge) {
+                        badge.textContent = '✔ GeoGebra Listo e Interactivo';
+                    }
+                    aplicarComandosEnApplet(pendingCommands.titulo, pendingCommands.descripcion, pendingCommands.comandos);
+                }
+            };
+
+            if (typeof GGBApplet !== 'undefined') {
+                const applet = new GGBApplet(params, true);
+                applet.inject('ggb-element');
+            } else {
+                const badge = document.getElementById('ggb-status-badge');
+                if (badge) {
+                    badge.textContent = '⚠️ Verifica tu conexión para cargar GeoGebra';
+                }
+            }
+        }
+
+        function redimensionarGeoGebra() {
+            if (!ggbListo || !window.ggbApplet) return;
+            const wrapper = document.getElementById('ggb-wrapper');
+            if (wrapper && wrapper.clientWidth > 100) {
+                try {
+                    window.ggbApplet.setSize(wrapper.clientWidth - 6, 550);
+                } catch (e) {
+                    console.warn('No se pudo redimensionar GeoGebra:', e);
+                }
+            }
+        }
+
+        window.addEventListener('resize', () => {
+            if (!document.getElementById('sec-geogebra').classList.contains('hidden')) {
+                redimensionarGeoGebra();
+            }
+        });
+
+        /**
+         * Función central para ejecutar o encolar una construcción en GeoGebra desde cualquier pestaña.
+         */
+        function ejecutarEnGeoGebra(titulo, descripcion, comandos, presetKey) {
+            pendingCommands = {
+                titulo: titulo,
+                descripcion: descripcion,
+                comandos: comandos,
+                presetKey: presetKey || pendingCommands.presetKey
+            };
+
+            const selectEl = document.getElementById('ggb-preset-select');
+            if (selectEl && presetKey && PLANTILLAS_GGB[presetKey]) {
+                selectEl.value = presetKey;
+            }
+
+            const btnTab6 = document.getElementById('tab-geogebra');
+            cambiarSeccion('geogebra', btnTab6);
+
+            if (ggbListo && window.ggbApplet) {
+                aplicarComandosEnApplet(titulo, descripcion, comandos);
+            }
+        }
+
+        function lanzarPlantilla(clavePlantilla) {
+            const plantilla = PLANTILLAS_GGB[clavePlantilla] || PLANTILLAS_GGB.triangulo_heron;
+            ejecutarEnGeoGebra(plantilla.titulo, plantilla.desc, plantilla.comandos, clavePlantilla);
+        }
+
+        function reiniciarPlantillaActual() {
+            aplicarComandosEnApplet(pendingCommands.titulo, pendingCommands.descripcion, pendingCommands.comandos);
+        }
+
+        function aplicarComandosEnApplet(titulo, descripcion, comandos) {
+            const tituloEl = document.getElementById('ggb-titulo-construccion');
+            const descEl = document.getElementById('ggb-desc-construccion');
+            if (tituloEl) tituloEl.textContent = titulo;
+            if (descEl) descEl.textContent = descripcion;
+
+            if (!ggbListo || !window.ggbApplet) return;
+
+            try {
+                window.ggbApplet.reset();
+                window.ggbApplet.setGridVisible(cuadriculaYEjesVisibles);
+                window.ggbApplet.setAxesVisible(cuadriculaYEjesVisibles, cuadriculaYEjesVisibles);
+
+                comandos.forEach(cmd => {
+                    window.ggbApplet.evalCommand(cmd);
+                });
+            } catch (err) {
+                console.error('Error ejecutando comandos en GeoGebra:', err);
+            }
+        }
+
+        function limpiarGeoGebra() {
+            if (!ggbListo || !window.ggbApplet) return;
+            window.ggbApplet.reset();
+            window.ggbApplet.setGridVisible(cuadriculaYEjesVisibles);
+            window.ggbApplet.setAxesVisible(cuadriculaYEjesVisibles, cuadriculaYEjesVisibles);
+            document.getElementById('ggb-titulo-construccion').textContent = 'Lienzo en Blanco (Construcción Libre)';
+            document.getElementById('ggb-desc-construccion').textContent = 'Utiliza las herramientas superiores de GeoGebra para construir polígonos, circunferencias, sectores y calcular perímetros y áreas.';
+        }
+
+        function alternarCuadriculaYEjes() {
+            cuadriculaYEjesVisibles = !cuadriculaYEjesVisibles;
+            if (ggbListo && window.ggbApplet) {
+                window.ggbApplet.setGridVisible(cuadriculaYEjesVisibles);
+                window.ggbApplet.setAxesVisible(cuadriculaYEjesVisibles, cuadriculaYEjesVisibles);
+            }
+        }
+    </script>
+</body>
+</html>

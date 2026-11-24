@@ -1,0 +1,1950 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pizarra Digital - Geometría: Conceptos Básicos y Ángulos | Colegio Montano</title>
+    <!-- Carga de Tailwind CSS para utilidades de diseño responsivo y layout -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Carga oficial de GeoGebra Classic / Geometry API -->
+    <script src="https://www.geogebra.org/apps/deployggb.js"></script>
+    <style>
+        /* Configuración de Variables Institucionales Colegio Montano */
+        :root {
+            --azul-principal: #1269A8;
+            --amarillo-brillante: #F7D615;
+            --verde-grisaceo: #54887D;
+            --azul-claro: #88B5C7;
+            --verde-oliva: #A6B046;
+            --blanco-suave: #F2F5E9;
+        }
+
+        /* Tipografía Institucional */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e2e8f0;
+            color: #1e293b;
+            margin: 0;
+            padding: 12px;
+        }
+
+        /* Marco Principal de Pizarra Digital */
+        #pizarra-container {
+            background-color: var(--blanco-suave);
+            border: 5px solid var(--amarillo-brillante);
+            border-radius: 12px;
+            box-shadow: 0 12px 30px rgba(18, 105, 168, 0.25);
+            max-width: 1240px;
+            margin: 0 auto;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 86vh;
+        }
+
+        /* Encabezado de la Pizarra */
+        .pizarra-header {
+            background: linear-gradient(135deg, var(--azul-principal) 0%, #0d4f80 100%);
+            color: white;
+            padding: 16px 24px;
+            border-bottom: 4px solid var(--amarillo-brillante);
+        }
+
+        /* Botón Fullscreen */
+        .btn-fullscreen {
+            background-color: var(--amarillo-brillante);
+            color: #0f172a;
+            font-weight: 700;
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: 2px solid #ffffff;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+        .btn-fullscreen:hover {
+            background-color: #ffe234;
+            transform: translateY(-1px);
+        }
+
+        /* Navegación de Pestañas */
+        .nav-tabs {
+            background-color: #ffffff;
+            border-bottom: 2px solid var(--azul-claro);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            padding: 10px 20px;
+        }
+
+        .tab-btn {
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.92rem;
+            color: var(--azul-principal);
+            background-color: transparent;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .tab-btn:hover {
+            background-color: rgba(136, 181, 199, 0.25);
+            border-color: var(--azul-claro);
+        }
+
+        .tab-btn.active {
+            background-color: var(--azul-principal);
+            color: #ffffff;
+            border-color: var(--amarillo-brillante);
+            box-shadow: 0 3px 8px rgba(18, 105, 168, 0.3);
+        }
+
+        /* Pestaña destacada para GeoGebra */
+        .tab-btn-ggb {
+            background-color: rgba(247, 214, 21, 0.28);
+            border-color: var(--amarillo-brillante);
+        }
+        .tab-btn-ggb.active {
+            background-color: var(--azul-principal);
+            color: #ffffff;
+            border-color: var(--amarillo-brillante);
+        }
+
+        /* Tarjetas de Contenido */
+        .card-montano {
+            background-color: #ffffff;
+            border: 2px solid var(--verde-grisaceo);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 18px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Etiquetas de Nivel */
+        .badge-nivel {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .badge-basico {
+            background-color: var(--verde-oliva);
+            color: #ffffff;
+        }
+        .badge-intermedio {
+            background-color: var(--verde-grisaceo);
+            color: #ffffff;
+        }
+        .badge-avanzado {
+            background-color: var(--azul-principal);
+            color: #ffffff;
+            border: 1px solid var(--amarillo-brillante);
+        }
+
+        /* Contenedor de Soluciones Ocultas */
+        .solucion-box {
+            background-color: rgba(136, 181, 199, 0.25);
+            border: 1.5px dashed var(--azul-principal);
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin-top: 12px;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .btn-solucion {
+            background-color: var(--azul-principal);
+            color: white;
+            font-weight: 600;
+            padding: 7px 14px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.2s;
+            margin-top: 10px;
+        }
+        .btn-solucion:hover {
+            background-color: var(--verde-grisaceo);
+        }
+
+        /* Botón Directo para Construir en GeoGebra */
+        .btn-geogebra {
+            background-color: var(--amarillo-brillante);
+            color: #0f172a;
+            font-weight: 700;
+            padding: 7px 14px;
+            border-radius: 6px;
+            font-size: 0.88rem;
+            cursor: pointer;
+            border: 1.5px solid #0f172a;
+            transition: all 0.2s ease;
+            margin-top: 10px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .btn-geogebra:hover {
+            background-color: #ffe234;
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Bloques Matemáticos Visuales */
+        .math-expr {
+            font-family: 'Cambria Math', 'Times New Roman', serif;
+            font-size: 1.05rem;
+            font-weight: bold;
+            color: var(--azul-principal);
+            background-color: #f8fafc;
+            padding: 2px 8px;
+            border-radius: 4px;
+            border: 1px solid #cbd5e1;
+            display: inline-block;
+        }
+
+        /* Sub-pestañas de Nivel */
+        .subtab-btn {
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 0.88rem;
+            cursor: pointer;
+            border: 2px solid var(--verde-grisaceo);
+            background-color: #ffffff;
+            color: var(--verde-grisaceo);
+            transition: all 0.2s;
+        }
+        .subtab-btn.active {
+            background-color: var(--verde-grisaceo);
+            color: #ffffff;
+        }
+
+        /* Contenedor del Applet de GeoGebra */
+        #ggb-wrapper {
+            width: 100%;
+            min-height: 540px;
+            border: 3px solid var(--azul-principal);
+            border-radius: 10px;
+            overflow: hidden;
+            background-color: #ffffff;
+            position: relative;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Modo Fullscreen */
+        :fullscreen #pizarra-container {
+            max-width: 100%;
+            width: 100vw;
+            height: 100vh;
+            border-radius: 0;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Marco Principal de la Pizarra Digital -->
+    <div id="pizarra-container">
+        
+        <!-- Encabezado Institucional -->
+        <header class="pizarra-header flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-4">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyEop0yf6lZ7Jk9MILZxF1rBj4Oqs5esyhIQ&s" 
+                     alt="Logo Colegio Montano" 
+                     class="w-14 h-14 rounded-lg bg-white p-1 object-contain border-2 border-[#F7D615]"
+                     onerror="this.src='https://placehold.co/60x60/1269A8/F7D615?text=CM'">
+                <div>
+                    <span class="text-xs uppercase tracking-widest font-bold text-[#F7D615] block">Colegio Montano • Cuarta Unidad • Matemática</span>
+                    <h1 class="text-xl sm:text-2xl font-bold leading-tight">Geometría: Conceptos Básicos y Ángulos</h1>
+                    <p class="text-sm text-[#88B5C7] font-semibold">Nivel: Tercero Básico • Guía Interactiva con Laboratorio GeoGebra</p>
+                </div>
+            </div>
+            <button id="fullscreen-btn" class="btn-fullscreen flex items-center gap-2" onclick="toggleFullscreen()">
+                <span>⛶ Pantalla completa</span>
+            </button>
+        </header>
+
+        <!-- Barra de Navegación Horizontal -->
+        <nav class="nav-tabs" role="tablist">
+            <button id="tab-teoria" class="tab-btn active" onclick="cambiarSeccion('teoria', this)">📘 1. Teoría</button>
+            <button id="tab-ejemplos" class="tab-btn" onclick="cambiarSeccion('ejemplos', this)">💡 2. Ejemplos Resueltos (15)</button>
+            <button id="tab-ejercicios" class="tab-btn" onclick="cambiarSeccion('ejercicios', this)">✍️ 3. Ejercicios Prácticos (15)</button>
+            <button id="tab-reflexion" class="tab-btn" onclick="cambiarSeccion('reflexion', this)">🧠 4. Reflexión Crítica</button>
+            <button id="tab-evaluacion" class="tab-btn" onclick="cambiarSeccion('evaluacion', this)">✅ 5. Evaluación Formativa</button>
+            <button id="tab-geogebra" class="tab-btn tab-btn-ggb" onclick="cambiarSeccion('geogebra', this)">📐 6. Laboratorio GeoGebra</button>
+        </nav>
+
+        <!-- Lienzo Principal de Contenido -->
+        <main class="p-4 sm:p-6 flex-1">
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 1: EXPLICACIÓN TEÓRICA             -->
+            <!-- ========================================== -->
+            <section id="sec-teoria" class="seccion-contenido">
+                
+                <!-- 1.1 Entes Fundamentales y Figuras Lineales -->
+                <div class="card-montano">
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-3 border-b-2 border-[#F7D615] pb-2">
+                        <h2 class="text-2xl font-bold text-[#1269A8]">1. Entes Fundamentales de la Geometría Euclidiana</h2>
+                        <button class="btn-geogebra !mt-0" onclick="construirEnGeoGebra('entes_basicos')">📐 Ver en GeoGebra</button>
+                    </div>
+                    <p class="text-base leading-relaxed mb-4">
+                        La geometría plana parte de tres <strong>conceptos primitivos</strong> que no se definen formalmente mediante otros anteriores, sino que se comprenden de forma intuitiva y se caracterizan por sus propiedades:
+                    </p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-5">
+                        <div class="p-4 bg-sky-50 border-2 border-[#88B5C7] rounded-xl">
+                            <span class="badge-nivel badge-avanzado mb-2">Ente 1 • Adimensional</span>
+                            <h3 class="font-bold text-lg text-[#1269A8]">El Punto (<span class="font-mono">A, B, P</span>)</h3>
+                            <p class="text-sm text-slate-700 mt-1">Indica una <strong>posición exacta</strong> en el espacio. No tiene largo, ancho ni grosor (dimensión cero). Se nombra con letras mayúsculas.</p>
+                        </div>
+                        <div class="p-4 bg-emerald-50 border-2 border-[#54887D] rounded-xl">
+                            <span class="badge-nivel badge-intermedio mb-2">Ente 2 • Unidimensional</span>
+                            <h3 class="font-bold text-lg text-[#1269A8]">La Recta (<span class="math-expr text-xs">↔AB</span> o <span class="font-mono">L</span>)</h3>
+                            <p class="text-sm text-slate-700 mt-1">Sucesión infinita de puntos alineados en una misma dirección que se extiende sin fin en ambos sentidos. Por dos puntos distintos pasa una única recta.</p>
+                        </div>
+                        <div class="p-4 bg-amber-50 border-2 border-[#F7D615] rounded-xl">
+                            <span class="badge-nivel badge-basico mb-2">Ente 3 • Bidimensional</span>
+                            <h3 class="font-bold text-lg text-[#1269A8]">El Plano (<span class="font-mono">π, α</span>)</h3>
+                            <p class="text-sm text-slate-700 mt-1">Superficie llana bidimensional que se extiende infinitamente en todas direcciones. Tres puntos no colineales determinan un único plano.</p>
+                        </div>
+                    </div>
+
+                    <!-- Subconjuntos de la Recta -->
+                    <div class="bg-[#F2F5E9] border-2 border-[#A6B046] rounded-xl p-4">
+                        <h3 class="font-bold text-[#54887D] mb-2">📏 Subconjuntos Importantes de la Recta y Relaciones Posicionales</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-sm">
+                            <div class="bg-white p-3 rounded-lg border-l-4 border-[#1269A8]">
+                                <strong class="text-[#1269A8] block">Semirrecta o Rayo (<span class="math-expr text-xs">→AB</span>)</strong>
+                                <p class="text-slate-700 mt-1">Parte de una recta que tiene un <strong>punto de origen (<span class="font-mono">A</span>)</strong> y se prolonga infinitamente en un solo sentido pasando por <span class="font-mono">B</span>.</p>
+                            </div>
+                            <div class="bg-white p-3 rounded-lg border-l-4 border-[#54887D]">
+                                <strong class="text-[#54887D] block">Segmento de Recta (<span class="math-expr text-xs">AB</span>)</strong>
+                                <p class="text-slate-700 mt-1">Porción finita de recta comprendida entre dos puntos extremos <span class="font-mono">A</span> y <span class="font-mono">B</span>. Tiene una longitud medible.</p>
+                            </div>
+                            <div class="bg-white p-3 rounded-lg border-l-4 border-[#A6B046]">
+                                <strong class="text-[#54887D] block">Punto Medio (<span class="math-expr text-xs">M</span>)</strong>
+                                <p class="text-slate-700 mt-1">Único punto perteneciente al segmento <span class="font-mono">AB</span> que lo divide en dos segmentos congruentes: <span class="math-expr text-xs">AM = MB = AB/2</span>.</p>
+                            </div>
+                            <div class="bg-white p-3 rounded-lg border-l-4 border-[#F7D615]">
+                                <strong class="text-[#1269A8] block">Colineales y Coplanares</strong>
+                                <p class="text-slate-700 mt-1"><strong>Colineales:</strong> puntos situados sobre una misma recta. <strong>Coplanares:</strong> puntos o rectas contenidos en un mismo plano.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 1.2 Definición de Ángulo, Sistema Sexagesimal y Clasificación por Medida -->
+                <div class="card-montano">
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-3 border-b-2 border-[#F7D615] pb-2">
+                        <h2 class="text-2xl font-bold text-[#1269A8]">2. Ángulos: Elementos, Sistema Sexagesimal y Clasificación</h2>
+                        <button class="btn-geogebra !mt-0" onclick="construirEnGeoGebra('clasificacion_angulos')">📐 Ver Clasificación en GeoGebra</button>
+                    </div>
+                    <p class="text-base leading-relaxed mb-3">
+                        Un <strong>ángulo</strong> es la abertura formada por dos rayos (llamados <strong>lados</strong>) que comparten un mismo punto de origen (llamado <strong>vértice</strong>). Se denota como <span class="math-expr">∠ABC</span> o <span class="math-expr">∠B</span>, colocando siempre la letra del vértice en el centro.
+                    </p>
+                    <div class="p-3 bg-sky-50 border border-[#88B5C7] rounded-lg text-sm mb-4">
+                        <strong class="text-[#1269A8]">⏱️ Sistema Sexagesimal:</strong> Divide la circunferencia completa en <span class="math-expr text-xs">360°</span> (grados sexagesimales). Cada grado se subdivide en <span class="math-expr text-xs">60'</span> (minutos) y cada minuto en <span class="math-expr text-xs">60''</span> (segundos): <span class="math-expr text-xs">1° = 60' = 3,600''</span>.
+                    </div>
+
+                    <!-- 6 Tarjetas SVG de Clasificación según su medida -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <!-- Ángulo Agudo -->
+                        <div class="p-4 bg-white border-2 border-[#A6B046] rounded-xl text-center flex flex-col justify-between">
+                            <div>
+                                <span class="badge-nivel badge-basico mb-1">0° &lt; α &lt; 90°</span>
+                                <h4 class="font-bold text-[#1269A8]">Ángulo Agudo</h4>
+                                <div class="my-2 flex justify-center">
+                                    <svg width="180" height="100" viewBox="0 0 180 100" class="bg-slate-50 rounded border border-slate-200">
+                                        <line x1="35" y1="78" x2="150" y2="78" stroke="#1269A8" stroke-width="2.5"/>
+                                        <line x1="35" y1="78" x2="125" y2="22" stroke="#54887D" stroke-width="2.5"/>
+                                        <path d="M 68 78 A 33 33 0 0 0 62 61" fill="none" stroke="#b45309" stroke-width="2"/>
+                                        <circle cx="35" cy="78" r="3.5" fill="#0f172a"/>
+                                        <text x="82" y="69" font-size="11" font-weight="bold" fill="#b45309">α &lt; 90°</text>
+                                    </svg>
+                                </div>
+                                <p class="text-xs text-slate-600">Su abertura es mayor que <span class="font-mono">0°</span> y menor que un cuarto de vuelta (<span class="font-mono">90°</span>).</p>
+                            </div>
+                            <button class="btn-geogebra justify-center w-full" onclick="construirEnGeoGebra('angulo_agudo')">📐 Ver en GeoGebra</button>
+                        </div>
+
+                        <!-- Ángulo Recto -->
+                        <div class="p-4 bg-white border-2 border-[#1269A8] rounded-xl text-center flex flex-col justify-between">
+                            <div>
+                                <span class="badge-nivel badge-avanzado mb-1">α = 90°</span>
+                                <h4 class="font-bold text-[#1269A8]">Ángulo Recto</h4>
+                                <div class="my-2 flex justify-center">
+                                    <svg width="180" height="100" viewBox="0 0 180 100" class="bg-slate-50 rounded border border-slate-200">
+                                        <line x1="45" y1="80" x2="145" y2="80" stroke="#1269A8" stroke-width="2.5"/>
+                                        <line x1="45" y1="80" x2="45" y2="18" stroke="#54887D" stroke-width="2.5"/>
+                                        <rect x="45" y="64" width="16" height="16" fill="rgba(247,214,21,0.35)" stroke="#b45309" stroke-width="1.8"/>
+                                        <circle cx="45" cy="80" r="3.5" fill="#0f172a"/>
+                                        <text x="72" y="66" font-size="11" font-weight="bold" fill="#1269A8">90° (Perpendicular)</text>
+                                    </svg>
+                                </div>
+                                <p class="text-xs text-slate-600">Sus lados son <strong>perpendiculares</strong> y equivale exactamente a un cuarto de giro (<span class="font-mono">90°</span>).</p>
+                            </div>
+                            <button class="btn-geogebra justify-center w-full" onclick="construirEnGeoGebra('angulo_recto')">📐 Ver en GeoGebra</button>
+                        </div>
+
+                        <!-- Ángulo Obtuso -->
+                        <div class="p-4 bg-white border-2 border-[#54887D] rounded-xl text-center flex flex-col justify-between">
+                            <div>
+                                <span class="badge-nivel badge-intermedio mb-1">90° &lt; α &lt; 180°</span>
+                                <h4 class="font-bold text-[#1269A8]">Ángulo Obtuso</h4>
+                                <div class="my-2 flex justify-center">
+                                    <svg width="180" height="100" viewBox="0 0 180 100" class="bg-slate-50 rounded border border-slate-200">
+                                        <line x1="85" y1="78" x2="160" y2="78" stroke="#1269A8" stroke-width="2.5"/>
+                                        <line x1="85" y1="78" x2="25" y2="28" stroke="#54887D" stroke-width="2.5"/>
+                                        <path d="M 113 78 A 28 28 0 0 0 64 60" fill="none" stroke="#b45309" stroke-width="2"/>
+                                        <circle cx="85" cy="78" r="3.5" fill="#0f172a"/>
+                                        <text x="92" y="45" font-size="11" font-weight="bold" fill="#b45309">90° &lt; α &lt; 180°</text>
+                                    </svg>
+                                </div>
+                                <p class="text-xs text-slate-600">Su abertura es mayor que un ángulo recto (<span class="font-mono">90°</span>) y menor que un llano (<span class="font-mono">180°</span>).</p>
+                            </div>
+                            <button class="btn-geogebra justify-center w-full" onclick="construirEnGeoGebra('angulo_obtuso')">📐 Ver en GeoGebra</button>
+                        </div>
+
+                        <!-- Ángulo Llano -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl text-center flex flex-col justify-between">
+                            <div>
+                                <span class="badge-nivel badge-basico mb-1">α = 180°</span>
+                                <h4 class="font-bold text-[#1269A8]">Ángulo Llano</h4>
+                                <div class="my-2 flex justify-center">
+                                    <svg width="180" height="100" viewBox="0 0 180 100" class="bg-slate-50 rounded border border-slate-200">
+                                        <line x1="20" y1="68" x2="160" y2="68" stroke="#1269A8" stroke-width="2.5"/>
+                                        <path d="M 118 68 A 28 28 0 0 0 62 68" fill="rgba(136,181,199,0.3)" stroke="#b45309" stroke-width="2"/>
+                                        <circle cx="90" cy="68" r="3.5" fill="#0f172a"/>
+                                        <text x="90" y="32" text-anchor="middle" font-size="11" font-weight="bold" fill="#1269A8">180° (Rayos opuestos)</text>
+                                    </svg>
+                                </div>
+                                <p class="text-xs text-slate-600">Sus dos lados son <strong>rayos opuestos</strong> que forman una línea recta (<span class="font-mono">180°</span>).</p>
+                            </div>
+                            <button class="btn-geogebra justify-center w-full" onclick="construirEnGeoGebra('angulo_llano')">📐 Ver en GeoGebra</button>
+                        </div>
+
+                        <!-- Ángulo Cóncavo o Entrante -->
+                        <div class="p-4 bg-white border-2 border-[#54887D] rounded-xl text-center flex flex-col justify-between">
+                            <div>
+                                <span class="badge-nivel badge-intermedio mb-1">180° &lt; α &lt; 360°</span>
+                                <h4 class="font-bold text-[#1269A8]">Ángulo Cóncavo (Entrante)</h4>
+                                <div class="my-2 flex justify-center">
+                                    <svg width="180" height="100" viewBox="0 0 180 100" class="bg-slate-50 rounded border border-slate-200">
+                                        <line x1="85" y1="45" x2="155" y2="45" stroke="#1269A8" stroke-width="2.5"/>
+                                        <line x1="85" y1="45" x2="40" y2="82" stroke="#54887D" stroke-width="2.5"/>
+                                        <path d="M 107 45 A 22 22 0 1 0 68 59" fill="none" stroke="#b45309" stroke-width="2"/>
+                                        <circle cx="85" cy="45" r="3.5" fill="#0f172a"/>
+                                        <text x="90" y="18" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#b45309">180° &lt; α &lt; 360°</text>
+                                    </svg>
+                                </div>
+                                <p class="text-xs text-slate-600">Su abertura supera media vuelta (<span class="font-mono">180°</span>) sin completar el giro entero (<span class="font-mono">360°</span>).</p>
+                            </div>
+                            <button class="btn-geogebra justify-center w-full" onclick="construirEnGeoGebra('angulo_concavo')">📐 Ver en GeoGebra</button>
+                        </div>
+
+                        <!-- Ángulo Completo o Perigonal -->
+                        <div class="p-4 bg-white border-2 border-[#F7D615] rounded-xl text-center flex flex-col justify-between">
+                            <div>
+                                <span class="badge-nivel badge-avanzado mb-1">α = 360°</span>
+                                <h4 class="font-bold text-[#1269A8]">Ángulo Completo (Perigonal)</h4>
+                                <div class="my-2 flex justify-center">
+                                    <svg width="180" height="100" viewBox="0 0 180 100" class="bg-slate-50 rounded border border-slate-200">
+                                        <line x1="70" y1="52" x2="155" y2="52" stroke="#1269A8" stroke-width="2.5"/>
+                                        <circle cx="70" cy="52" r="22" fill="rgba(247,214,21,0.28)" stroke="#b45309" stroke-width="2"/>
+                                        <circle cx="70" cy="52" r="3.5" fill="#0f172a"/>
+                                        <text x="122" y="25" text-anchor="middle" font-size="11" font-weight="bold" fill="#1269A8">360° (1 vuelta)</text>
+                                    </svg>
+                                </div>
+                                <p class="text-xs text-slate-600">Representa una rotación completa alrededor del vértice (<span class="font-mono">360°</span>).</p>
+                            </div>
+                            <button class="btn-geogebra justify-center w-full" onclick="construirEnGeoGebra('alrededor_punto')">📐 Ver en GeoGebra</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 1.3 Parejas de Ángulos y Bisectriz -->
+                <div class="card-montano">
+                    <h2 class="text-2xl font-bold text-[#1269A8] mb-3 border-b-2 border-[#F7D615] pb-2">3. Parejas de Ángulos y Bisectriz de un Ángulo</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
+                        <div class="p-4 bg-[#F2F5E9] border-2 border-[#54887D] rounded-xl flex flex-col justify-between">
+                            <div>
+                                <h4 class="font-bold text-base text-[#1269A8]">Ángulos Complementarios</h4>
+                                <p class="mt-1 text-slate-700">Dos ángulos cuyas medidas suman exactamente <span class="math-expr text-xs">90°</span>: <span class="math-expr text-xs">α + β = 90°</span>. El complemento de <span class="font-mono">x</span> es <span class="math-expr text-xs">C(x) = 90° - x</span>.</p>
+                            </div>
+                            <button class="btn-geogebra justify-center w-full" onclick="construirEnGeoGebra('complementarios')">📐 Ver en GeoGebra</button>
+                        </div>
+
+                        <div class="p-4 bg-[#F2F5E9] border-2 border-[#54887D] rounded-xl flex flex-col justify-between">
+                            <div>
+                                <h4 class="font-bold text-base text-[#1269A8]">Adyacentes y Suplementarios</h4>
+                                <p class="mt-1 text-slate-700"><strong>Suplementarios:</strong> suman <span class="math-expr text-xs">180°</span> (<span class="math-expr text-xs">S(x) = 180° - x</span>). Si además comparten vértice y un lado (lados exteriores opuestos), forman un <strong>Par Lineal (Adyacentes)</strong>.</p>
+                            </div>
+                            <button class="btn-geogebra justify-center w-full" onclick="construirEnGeoGebra('suplementarios')">📐 Ver en GeoGebra</button>
+                        </div>
+
+                        <div class="p-4 bg-[#F2F5E9] border-2 border-[#54887D] rounded-xl flex flex-col justify-between">
+                            <div>
+                                <h4 class="font-bold text-base text-[#1269A8]">Opuestos por el Vértice</h4>
+                                <p class="mt-1 text-slate-700">Al intersecarse dos rectas se forman dos pares de ángulos opuestos por el vértice. <strong>Propiedad:</strong> siempre tienen la <strong>misma medida</strong> (<span class="math-expr text-xs">α = γ</span> y <span class="math-expr text-xs">β = δ</span>).</p>
+                            </div>
+                            <button class="btn-geogebra justify-center w-full" onclick="construirEnGeoGebra('opuestos_vertice')">📐 Ver en GeoGebra</button>
+                        </div>
+
+                        <div class="p-4 bg-sky-50 border-2 border-[#1269A8] rounded-xl flex flex-col justify-between md:col-span-2 lg:col-span-3">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                                <div>
+                                    <h4 class="font-bold text-base text-[#1269A8]">✂️ Bisectriz de un Ángulo</h4>
+                                    <p class="mt-1 text-slate-700">Es el rayo con origen en el vértice que divide al ángulo en <strong>dos ángulos congruentes</strong> (de igual medida). Si <span class="math-expr text-xs">→OM</span> es bisectriz de <span class="math-expr text-xs">∠AOB</span>, entonces <span class="math-expr text-xs">m∠AOM = m∠MOB = m∠AOB / 2</span>.</p>
+                                </div>
+                                <button class="btn-geogebra !mt-0 shrink-0" onclick="construirEnGeoGebra('bisectriz')">📐 Construir Bisectriz en GeoGebra</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 2: EJEMPLOS RESUELTOS (15)         -->
+            <!-- ========================================== -->
+            <section id="sec-ejemplos" class="seccion-contenido hidden">
+                <div class="flex flex-wrap items-center justify-between gap-3 mb-4 bg-white p-4 rounded-xl border-2 border-[#54887D]">
+                    <div>
+                        <h2 class="text-xl font-bold text-[#1269A8]">Ejemplos Resueltos Paso a Paso (15 Problemas)</h2>
+                        <p class="text-sm text-slate-600">Analiza cada desarrollo y pulsa <strong>"📐 Construir en GeoGebra"</strong> para visualizar la figura interactiva.</p>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <button class="subtab-btn active" onclick="filtrarSubnivel('ejemplos', 'basico', this)">Nivel Básico (5)</button>
+                        <button class="subtab-btn" onclick="filtrarSubnivel('ejemplos', 'intermedio', this)">Nivel Intermedio (5)</button>
+                        <button class="subtab-btn" onclick="filtrarSubnivel('ejemplos', 'avanzado', this)">Nivel Avanzado (5)</button>
+                    </div>
+                </div>
+
+                <!-- EJEMPLOS BÁSICOS -->
+                <div id="ejemplos-basico" class="subcontenido-ejemplos space-y-4">
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-basico">Básico • Ejemplo 1 (Puntos colineales y adición de segmentos)</span>
+                            <button class="btn-geogebra !mt-0" onclick="construirEnGeoGebra('ej_b1')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Sobre una recta se ubican los puntos consecutivos <span class="math-expr">A</span>, <span class="math-expr">B</span> y <span class="math-expr">C</span>. Si <span class="math-expr">AB = 6 cm</span> y <span class="math-expr">BC = 9 cm</span>, calcula la longitud total <span class="math-expr">AC</span>.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Postulado de adición de segmentos):</strong> Como <span class="font-mono">B</span> está entre <span class="font-mono">A</span> y <span class="font-mono">C</span>, <span class="math-expr">AC = AB + BC</span>.</p>
+                            <p><strong>Paso 2 (Sustitución):</strong> <span class="math-expr">AC = 6 cm + 9 cm = 15 cm</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: AC = 15 cm.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-basico">Básico • Ejemplo 2 (Punto medio de un segmento)</span>
+                            <button class="btn-geogebra !mt-0" onclick="construirEnGeoGebra('ej_b2')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">El punto <span class="math-expr">M</span> es el punto medio del segmento <span class="math-expr">PQ</span>. Si <span class="math-expr">PQ = 18 cm</span>, determina la longitud de <span class="math-expr">PM</span> y <span class="math-expr">MQ</span>.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Propiedad del punto medio):</strong> <span class="math-expr">PM = MQ = PQ / 2</span>.</p>
+                            <p><strong>Paso 2 (Cálculo):</strong> <span class="math-expr">PM = 18 / 2 = 9 cm</span> y <span class="math-expr">MQ = 9 cm</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: PM = 9 cm y MQ = 9 cm.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-basico">Básico • Ejemplo 3 (Complemento y suplemento de un ángulo)</span>
+                            <button class="btn-geogebra !mt-0" onclick="construirEnGeoGebra('ej_b3')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Calcula: a) el ángulo complementario de <span class="math-expr">37°</span>, y b) el ángulo suplementario de <span class="math-expr">112°</span>.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>a) Complemento (<span class="math-expr">90° - α</span>):</strong> <span class="math-expr">90° - 37° = 53°</span> (comprobación: <span class="math-expr">37° + 53° = 90°</span>).</p>
+                            <p><strong>b) Suplemento (<span class="math-expr">180° - β</span>):</strong> <span class="math-expr">180° - 112° = 68°</span> (comprobación: <span class="math-expr">112° + 68° = 180°</span>).</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: a) 53° y b) 68°.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-basico">Básico • Ejemplo 4 (Ángulos adyacentes / Par lineal)</span>
+                            <button class="btn-geogebra !mt-0" onclick="construirEnGeoGebra('ej_b4')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Dos ángulos adyacentes forman un par lineal sobre una recta. Si uno mide <span class="math-expr">48°</span>, halla la medida <span class="math-expr">x</span> del otro ángulo.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Ecuación del par lineal):</strong> Los ángulos adyacentes sobre una recta suman <span class="math-expr">180°</span>: <span class="math-expr">x + 48° = 180°</span>.</p>
+                            <p><strong>Paso 2 (Despeje):</strong> <span class="math-expr">x = 180° - 48° = 132°</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: x = 132°.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-basico">Básico • Ejemplo 5 (Ángulos opuestos por el vértice)</span>
+                            <button class="btn-geogebra !mt-0" onclick="construirEnGeoGebra('ej_b5')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Dos rectas se intersecan formando cuatro ángulos. Si uno de ellos mide <span class="math-expr">65°</span>, encuentra las medidas de los otros tres ángulos.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Opuesto por el vértice):</strong> El ángulo opuesto al de <span class="math-expr">65°</span> mide también <span class="math-expr">65°</span>.</p>
+                            <p><strong>Paso 2 (Adyacentes suplementarios):</strong> Cada uno de los otros dos ángulos mide <span class="math-expr">180° - 65° = 115°</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: Los cuatro ángulos miden 65°, 115°, 65° y 115°.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EJEMPLOS INTERMEDIOS -->
+                <div id="ejemplos-intermedio" class="subcontenido-ejemplos hidden space-y-4">
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-intermedio">Intermedio • Ejemplo 1 (Segmentos con expresiones algebraicas)</span>
+                            <button class="btn-geogebra !mt-0" onclick="construirEnGeoGebra('ej_i1')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Los puntos <span class="math-expr">A, B, C</span> son colineales en ese orden. Si <span class="math-expr">AB = 2x + 3</span>, <span class="math-expr">BC = 3x - 1</span> y <span class="math-expr">AC = 22</span>, halla <span class="math-expr">x</span> y la longitud de <span class="math-expr">AB</span>.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Plantear ecuación):</strong> <span class="math-expr">(2x + 3) + (3x - 1) = 22</span>.</p>
+                            <p><strong>Paso 2 (Resolver):</strong> <span class="math-expr">5x + 2 = 22 ➔ 5x = 20 ➔ x = 4</span>.</p>
+                            <p><strong>Paso 3 (Sustituir en <span class="math-expr">AB</span>):</strong> <span class="math-expr">AB = 2(4) + 3 = 11</span> (y <span class="math-expr">BC = 3(4) - 1 = 11</span>).</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: x = 4 y AB = 11 unidades.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-intermedio">Intermedio • Ejemplo 2 (Bisectriz de un ángulo)</span>
+                            <button class="btn-geogebra !mt-0" onclick="construirEnGeoGebra('ej_i2')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">El rayo <span class="math-expr">→OM</span> es bisectriz de <span class="math-expr">∠AOB</span>. Si <span class="math-expr">m∠AOB = 76°</span> y <span class="math-expr">m∠AOM = (3x + 5)°</span>, determina <span class="math-expr">m∠AOM</span> y el valor de <span class="math-expr">x</span>.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Definición de bisectriz):</strong> <span class="math-expr">m∠AOM = 76° / 2 = 38°</span>.</p>
+                            <p><strong>Paso 2 (Igualar y despejar <span class="math-expr">x</span>):</strong> <span class="math-expr">3x + 5 = 38 ➔ 3x = 33 ➔ x = 11</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: m∠AOM = 38° y x = 11.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-intermedio">Intermedio • Ejemplo 3 (Ángulos complementarios con álgebra)</span>
+                            <button class="btn-geogebra !mt-0" onclick="construirEnGeoGebra('ej_i3')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Dos ángulos complementarios miden <span class="math-expr">(2x + 10)°</span> y <span class="math-expr">(3x - 5)°</span>. Halla el valor de <span class="math-expr">x</span> y la medida de cada ángulo.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Suma = 90°):</strong> <span class="math-expr">(2x + 10) + (3x - 5) = 90 ➔ 5x + 5 = 90</span>.</p>
+                            <p><strong>Paso 2 (Despeje):</strong> <span class="math-expr">5x = 85 ➔ x = 17</span>.</p>
+                            <p><strong>Paso 3 (Sustitución):</strong> <span class="math-expr">2(17) + 10 = 44°</span> y <span class="math-expr">3(17) - 5 = 46°</span> (<span class="math-expr">44° + 46° = 90°</span>).</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: x = 17; los ángulos miden 44° y 46°.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-intermedio">Intermedio • Ejemplo 4 (Ángulos suplementarios en razón 2 : 7)</span>
+                            <button class="btn-geogebra !mt-0" onclick="construirEnGeoGebra('ej_i4')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Dos ángulos suplementarios están en la razón <span class="math-expr">2 : 7</span>. Calcula la medida de cada ángulo.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Representación proporcional):</strong> Sean los ángulos <span class="math-expr">2k</span> y <span class="math-expr">7k</span>.</p>
+                            <p><strong>Paso 2 (Suma = 180°):</strong> <span class="math-expr">2k + 7k = 180° ➔ 9k = 180° ➔ k = 20°</span>.</p>
+                            <p><strong>Paso 3 (Medidas):</strong> <span class="math-expr">2(20°) = 40°</span> y <span class="math-expr">7(20°) = 140°</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: Los ángulos miden 40° y 140°.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-intermedio">Intermedio • Ejemplo 5 (Opuestos por el vértice con incógnita)</span>
+                            <button class="btn-geogebra !mt-0" onclick="construirEnGeoGebra('ej_i5')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Dos ángulos opuestos por el vértice miden <span class="math-expr">(4x - 15)°</span> y <span class="math-expr">(2x + 35)°</span>. Encuentra <span class="math-expr">x</span> y la medida de los ángulos.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Congruencia de opuestos por el vértice):</strong> <span class="math-expr">4x - 15 = 2x + 35</span>.</p>
+                            <p><strong>Paso 2 (Resolver):</strong> <span class="math-expr">2x = 50 ➔ x = 25</span>.</p>
+                            <p><strong>Paso 3 (Medida):</strong> <span class="math-expr">4(25) - 15 = 85°</span> (y los suplementarios miden <span class="math-expr">95°</span>).</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: x = 25; los ángulos opuestos miden 85° cada uno.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EJEMPLOS AVANZADOS -->
+                <div id="ejemplos-avanzado" class="subcontenido-ejemplos hidden space-y-4">
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-avanzado">Avanzado • Ejemplo 1 (Operaciones en Sistema Sexagesimal)</span>
+                            <button class="btn-geogebra !mt-0" onclick="construirEnGeoGebra('ej_a1')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Calcula: a) <span class="math-expr">42° 38' 45'' + 29° 41' 30''</span>, y b) el complemento de <span class="math-expr">34° 25' 40''</span>.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>a) Suma sexagesimal:</strong> Segundos: <span class="math-expr">45'' + 30'' = 75'' = 1' 15''</span>. Minutos: <span class="math-expr">38' + 41' + 1' = 80' = 1° 20'</span>. Grados: <span class="math-expr">42° + 29° + 1° = 72°</span> ➔ <span class="math-expr">72° 20' 15''</span>.</p>
+                            <p><strong>b) Complemento (<span class="math-expr">90° = 89° 59' 60''</span>):</strong> <span class="math-expr">89° 59' 60'' - 34° 25' 40'' = 55° 34' 20''</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: a) 72° 20' 15'' y b) 55° 34' 20''.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-avanzado">Avanzado • Ejemplo 2 (Ángulos consecutivos alrededor de un punto = 360°)</span>
+                            <button class="btn-geogebra !mt-0" onclick="construirEnGeoGebra('alrededor_punto')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Cuatro rayos parten de un punto <span class="math-expr">O</span> formando ángulos consecutivos de <span class="math-expr">90°</span>, <span class="math-expr">(2x + 15)°</span>, <span class="math-expr">(3x - 5)°</span> y <span class="math-expr">110°</span>. Halla <span class="math-expr">x</span>.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Giro completo = 360°):</strong> <span class="math-expr">90 + (2x + 15) + (3x - 5) + 110 = 360</span>.</p>
+                            <p><strong>Paso 2 (Reducir y despejar):</strong> <span class="math-expr">5x + 210 = 360 ➔ 5x = 150 ➔ x = 30</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: x = 30 (los ángulos desconocidos miden 75° y 85°).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-avanzado">Avanzado • Ejemplo 3 (Relación algebraica entre suplemento y complemento)</span>
+                            <button class="btn-geogebra !mt-0" onclick="construirEnGeoGebra('ej_a3')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">El suplemento de un ángulo <span class="math-expr">x</span> es igual al triple de su complemento más <span class="math-expr">10°</span>. Determina la medida del ángulo <span class="math-expr">x</span>.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Traducción):</strong> <span class="math-expr">180 - x = 3(90 - x) + 10</span>.</p>
+                            <p><strong>Paso 2 (Resolver):</strong> <span class="math-expr">180 - x = 270 - 3x + 10 ➔ 2x = 100 ➔ x = 50°</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: El ángulo mide 50° (S(50°) = 130° y 3·C(50°) + 10° = 3(40°) + 10° = 130°).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-avanzado">Avanzado • Ejemplo 4 (Teorema de las bisectrices de un par lineal)</span>
+                            <button class="btn-geogebra !mt-0" onclick="construirEnGeoGebra('bisectrices_par_lineal')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Demuestra algebraicamente qué ángulo forman las bisectrices de dos ángulos adyacentes suplementarios <span class="math-expr">∠AOB</span> y <span class="math-expr">∠BOC</span>.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Par lineal):</strong> <span class="math-expr">m∠AOB + m∠BOC = 180°</span>.</p>
+                            <p><strong>Paso 2 (Bisectrices <span class="math-expr">→OM</span> y <span class="math-expr">→ON</span>):</strong> <span class="math-expr">m∠MON = m∠MOB + m∠BON = m∠AOB/2 + m∠BOC/2 = (m∠AOB + m∠BOC)/2 = 180°/2 = 90°</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Las bisectrices de un par lineal siempre son perpendiculares (forman 90°).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-avanzado">Avanzado • Ejemplo 5 (Aplicación en arquitectura / rampa de acceso)</span>
+                            <button class="btn-geogebra !mt-0" onclick="construirEnGeoGebra('ej_a5')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">En el diseño de una rampa de acceso en un edificio de Ciudad de Guatemala, el ángulo de inclinación respecto al suelo horizontal es complementario a <span class="math-expr">78°</span>, y la viga de soporte superior forma con la rampa un ángulo suplementario al de inclinación. Halla ambos ángulos.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Ángulo de inclinación <span class="math-expr">α</span>):</strong> <span class="math-expr">α = 90° - 78° = 12°</span>.</p>
+                            <p><strong>Paso 2 (Ángulo suplementario <span class="math-expr">β</span>):</strong> <span class="math-expr">β = 180° - 12° = 168°</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: La inclinación es de 12° y el ángulo superior suplementario mide 168°.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 3: EJERCICIOS PRÁCTICOS (15)       -->
+            <!-- ========================================== -->
+            <section id="sec-ejercicios" class="seccion-contenido hidden">
+                <div class="flex flex-wrap items-center justify-between gap-3 mb-4 bg-white p-4 rounded-xl border-2 border-[#54887D]">
+                    <div>
+                        <h2 class="text-xl font-bold text-[#1269A8]">Práctica Guiada en Pizarra (15 Ejercicios)</h2>
+                        <p class="text-sm text-slate-600">Resuelve en tu cuaderno, verifica tu respuesta y construye cada caso en GeoGebra.</p>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <button class="subtab-btn active" onclick="filtrarSubnivel('ejercicios', 'basico', this)">Básico (5)</button>
+                        <button class="subtab-btn" onclick="filtrarSubnivel('ejercicios', 'intermedio', this)">Intermedio (5)</button>
+                        <button class="subtab-btn" onclick="filtrarSubnivel('ejercicios', 'avanzado', this)">Avanzado (5)</button>
+                    </div>
+                </div>
+
+                <!-- EJERCICIOS BÁSICOS -->
+                <div id="ejercicios-basico" class="subcontenido-ejercicios space-y-4">
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 1</span>
+                        <p class="font-semibold text-base">Los puntos <span class="math-expr">P, Q, R</span> son colineales en ese orden. Si <span class="math-expr">PR = 25 cm</span> y <span class="math-expr">PQ = 11 cm</span>, calcula <span class="math-expr">QR</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-eb1', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="construirEnGeoGebra('entes_basicos')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-eb1" class="solucion-box">
+                            <p><strong>Operación:</strong> <span class="math-expr">QR = PR - PQ = 25 - 11 = 14 cm</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: QR = 14 cm.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 2</span>
+                        <p class="font-semibold text-base">Si <span class="math-expr">M</span> es el punto medio de <span class="math-expr">AB</span> y <span class="math-expr">AM = 13.5 cm</span>, ¿cuánto mide todo el segmento <span class="math-expr">AB</span>?</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-eb2', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="construirEnGeoGebra('ej_b2')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-eb2" class="solucion-box">
+                            <p><strong>Operación:</strong> <span class="math-expr">AB = 2 · AM = 2(13.5 cm) = 27 cm</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: AB = 27 cm.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 3</span>
+                        <p class="font-semibold text-base">Halla el ángulo complementario de <span class="math-expr">64°</span> y el ángulo suplementario de <span class="math-expr">64°</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-eb3', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="construirEnGeoGebra('complementarios')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-eb3" class="solucion-box">
+                            <p><strong>Complemento:</strong> <span class="math-expr">90° - 64° = 26°</span>. <strong>Suplemento:</strong> <span class="math-expr">180° - 64° = 116°</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Complemento = 26° y Suplemento = 116°.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 4</span>
+                        <p class="font-semibold text-base">Dos ángulos forman un par lineal. Si el mayor mide <span class="math-expr">127°</span>, ¿cuánto mide el menor?</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-eb4', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="construirEnGeoGebra('suplementarios')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-eb4" class="solucion-box">
+                            <p><strong>Operación:</strong> <span class="math-expr">180° - 127° = 53°</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: El ángulo menor mide 53°.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 5</span>
+                        <p class="font-semibold text-base">Al cortarse dos rectas, uno de los ángulos formados mide <span class="math-expr">138°</span>. Halla las medidas de los otros tres ángulos.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-eb5', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="construirEnGeoGebra('opuestos_vertice')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-eb5" class="solucion-box">
+                            <p><strong>Análisis:</strong> El opuesto por el vértice mide <span class="math-expr">138°</span> y los dos adyacentes miden <span class="math-expr">180° - 138° = 42°</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: 42°, 138° y 42°.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EJERCICIOS INTERMEDIOS -->
+                <div id="ejercicios-intermedio" class="subcontenido-ejercicios hidden space-y-4">
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 1</span>
+                        <p class="font-semibold text-base">Sobre una recta se tienen los puntos consecutivos <span class="math-expr">A, B, C</span>. Si <span class="math-expr">AB = 4x - 2</span>, <span class="math-expr">BC = x + 7</span> y <span class="math-expr">AC = 30</span>, halla <span class="math-expr">x</span> y <span class="math-expr">BC</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ei1', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="construirEnGeoGebra('ej_i1')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-ei1" class="solucion-box">
+                            <p><strong>Ecuación:</strong> <span class="math-expr">(4x - 2) + (x + 7) = 30 ➔ 5x + 5 = 30 ➔ x = 5</span>; <span class="math-expr">BC = 5 + 7 = 12</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: x = 5 y BC = 12.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 2</span>
+                        <p class="font-semibold text-base">El rayo <span class="math-expr">→OP</span> biseca al ángulo <span class="math-expr">∠MON</span>. Si <span class="math-expr">m∠MOP = (4x - 3)°</span> y <span class="math-expr">m∠PON = (2x + 19)°</span>, calcula <span class="math-expr">x</span> y la medida total de <span class="math-expr">∠MON</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ei2', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="construirEnGeoGebra('bisectriz')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-ei2" class="solucion-box">
+                            <p><strong>Igualación:</strong> <span class="math-expr">4x - 3 = 2x + 19 ➔ 2x = 22 ➔ x = 11</span>. Cada mitad mide <span class="math-expr">4(11) - 3 = 41°</span>, así que <span class="math-expr">m∠MON = 82°</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: x = 11 y m∠MON = 82°.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 3</span>
+                        <p class="font-semibold text-base">Dos ángulos complementarios miden <span class="math-expr">(5x - 8)°</span> y <span class="math-expr">(2x + 14)°</span>. Halla <span class="math-expr">x</span> y la medida de cada ángulo.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ei3', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="construirEnGeoGebra('complementarios')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-ei3" class="solucion-box">
+                            <p><strong>Ecuación:</strong> <span class="math-expr">(5x - 8) + (2x + 14) = 90 ➔ 7x + 6 = 90 ➔ 7x = 84 ➔ x = 12</span>. Ángulos: <span class="math-expr">52°</span> y <span class="math-expr">38°</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: x = 12; los ángulos miden 52° y 38°.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 4</span>
+                        <p class="font-semibold text-base">Dos ángulos suplementarios están en razón <span class="math-expr">3 : 5</span>. Determina sus medidas.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ei4', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="construirEnGeoGebra('suplementarios')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-ei4" class="solucion-box">
+                            <p><strong>Ecuación:</strong> <span class="math-expr">3k + 5k = 180° ➔ 8k = 180° ➔ k = 22.5°</span>. Ángulos: <span class="math-expr">3(22.5°) = 67.5°</span> y <span class="math-expr">5(22.5°) = 112.5°</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: 67.5° (67° 30') y 112.5° (112° 30').</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 5</span>
+                        <p class="font-semibold text-base">Dos ángulos opuestos por el vértice miden <span class="math-expr">(6x - 20)°</span> y <span class="math-expr">(4x + 18)°</span>. Calcula <span class="math-expr">x</span> y la medida de los ángulos adyacentes a ellos.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ei5', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="construirEnGeoGebra('opuestos_vertice')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-ei5" class="solucion-box">
+                            <p><strong>Resolución:</strong> <span class="math-expr">6x - 20 = 4x + 18 ➔ 2x = 38 ➔ x = 19</span>. Opuestos = <span class="math-expr">94°</span>; adyacentes = <span class="math-expr">180° - 94° = 86°</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: x = 19; los ángulos adyacentes miden 86° cada uno.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EJERCICIOS AVANZADOS -->
+                <div id="ejercicios-avanzado" class="subcontenido-ejercicios hidden space-y-4">
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 1</span>
+                        <p class="font-semibold text-base">Efectúa en el sistema sexagesimal: <span class="math-expr">180° - 67° 43' 25''</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ea1', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="construirEnGeoGebra('ej_a1')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-ea1" class="solucion-box">
+                            <p><strong>Descomposición:</strong> <span class="math-expr">180° = 179° 59' 60''</span>. Restando: <span class="math-expr">(179 - 67)° (59 - 43)' (60 - 25)'' = 112° 16' 35''</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: 112° 16' 35''.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 2</span>
+                        <p class="font-semibold text-base">Alrededor de un punto <span class="math-expr">O</span> se trazan cuatro ángulos consecutivos de medidas <span class="math-expr">x</span>, <span class="math-expr">2x</span>, <span class="math-expr">3x</span> y <span class="math-expr">4x</span>. Calcula la medida de cada ángulo.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ea2', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="construirEnGeoGebra('alrededor_punto')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-ea2" class="solucion-box">
+                            <p><strong>Ecuación:</strong> <span class="math-expr">x + 2x + 3x + 4x = 360° ➔ 10x = 360° ➔ x = 36°</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Los ángulos miden 36°, 72°, 108° y 144°.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 3</span>
+                        <p class="font-semibold text-base">La diferencia entre el suplemento y el doble del complemento de un ángulo <span class="math-expr">x</span> es <span class="math-expr">35°</span>. Halla la medida de <span class="math-expr">x</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ea3', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="construirEnGeoGebra('ej_a3')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-ea3" class="solucion-box">
+                            <p><strong>Ecuación:</strong> <span class="math-expr">(180 - x) - 2(90 - x) = 35 ➔ 180 - x - 180 + 2x = 35 ➔ x = 35°</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: x = 35°.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 4</span>
+                        <p class="font-semibold text-base">Sean <span class="math-expr">A, B, C, D</span> colineales consecutivos. Si <span class="math-expr">M</span> es punto medio de <span class="math-expr">AB</span>, <span class="math-expr">N</span> es punto medio de <span class="math-expr">CD</span>, <span class="math-expr">AB = 8 cm</span>, <span class="math-expr">BC = 5 cm</span> y <span class="math-expr">CD = 10 cm</span>, halla la distancia <span class="math-expr">MN</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ea4', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="construirEnGeoGebra('entes_basicos')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-ea4" class="solucion-box">
+                            <p><strong>Operación:</strong> <span class="math-expr">MN = MB + BC + CN = (8/2) + 5 + (10/2) = 4 + 5 + 5 = 14 cm</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: MN = 14 cm.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 5</span>
+                        <p class="font-semibold text-base">Un topógrafo mide dos ángulos adyacentes en un terreno: el primero mide <span class="math-expr">68° 35'</span> y juntos forman un ángulo recto (<span class="math-expr">90°</span>). ¿Cuánto mide el segundo ángulo?</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ea5', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="construirEnGeoGebra('complementarios')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-ea5" class="solucion-box">
+                            <p><strong>Operación:</strong> <span class="math-expr">90° - 68° 35' = 89° 60' - 68° 35' = 21° 25'</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: El segundo ángulo mide 21° 25'.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 4: PREGUNTAS DE REFLEXIÓN CRÍTICA  -->
+            <!-- ========================================== -->
+            <section id="sec-reflexion" class="seccion-contenido hidden">
+                <div class="card-montano">
+                    <h2 class="text-2xl font-bold text-[#1269A8] mb-2">🧠 Análisis Conceptual y Pensamiento Crítico</h2>
+                    <p class="text-sm text-slate-600 mb-4">Reflexiona sobre los fundamentos geométricos antes de avanzar a rectas paralelas y triángulos.</p>
+
+                    <div class="space-y-4">
+                        <div class="p-4 bg-[#F2F5E9] rounded-xl border-2 border-[#54887D]">
+                            <h3 class="font-bold text-lg text-[#1269A8]">1. ¿Depende la medida de un ángulo de la longitud con la que dibujemos sus rayos?</h3>
+                            <p class="mt-1">Si prolongamos al doble los lados de un ángulo de <span class="math-expr">40°</span> en GeoGebra, ¿cambia su medida en grados?</p>
+                            <button class="btn-solucion" onclick="toggleSolucion('ref-1', this)">Ver análisis conceptual</button>
+                            <div id="ref-1" class="solucion-box">
+                                <p><strong>Análisis:</strong> <strong>No cambia.</strong> La medida de un ángulo mide la <em>rotación o abertura</em> entre los dos rayos alrededor del vértice, no la longitud de sus lados (los rayos son infinitos por definición). Puedes comprobarlo arrastrando los puntos extremos de los rayos en el Laboratorio GeoGebra.</p>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-[#F2F5E9] rounded-xl border-2 border-[#54887D]">
+                            <h3 class="font-bold text-lg text-[#1269A8]">2. ¿Por qué las bisectrices de dos ángulos adyacentes suplementarios forman siempre un ángulo recto (<span class="math-expr">90°</span>)?</h3>
+                            <p class="mt-1">Sin importar cuánto midan los dos ángulos del par lineal (por ejemplo, <span class="math-expr">30°</span> y <span class="math-expr">150°</span>, o <span class="math-expr">110°</span> y <span class="math-expr">70°</span>), ¿por qué el ángulo entre sus bisectrices es invariante?</p>
+                            <button class="btn-solucion" onclick="toggleSolucion('ref-2', this)">Ver análisis conceptual</button>
+                            <div id="ref-2" class="solucion-box">
+                                <p><strong>Análisis:</strong> Porque los dos ángulos suman <span class="math-expr">α + β = 180°</span>. Cada bisectriz toma exactamente la mitad de su respectivo ángulo, por lo que el ángulo comprendido entre ambas bisectrices es siempre <span class="math-expr">α/2 + β/2 = (α + β)/2 = 180°/2 = 90°</span>. Este es un ejemplo clásico de invariante geométrico.</p>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-[#F2F5E9] rounded-xl border-2 border-[#54887D]">
+                            <h3 class="font-bold text-lg text-[#1269A8]">3. ¿Todo par de ángulos suplementarios son adyacentes? ¿Y todo par de ángulos adyacentes son suplementarios?</h3>
+                            <p class="mt-1">Analiza la diferencia entre una condición de <em>medida</em> (suma = 180°) y una condición de <em>posición</em> (vértice y lado común).</p>
+                            <button class="btn-solucion" onclick="toggleSolucion('ref-3', this)">Ver análisis conceptual</button>
+                            <div id="ref-3" class="solucion-box">
+                                <p><strong>Análisis:</strong><br>
+                                • <strong>No todo par suplementario es adyacente:</strong> Dos ángulos separados de <span class="math-expr">60°</span> y <span class="math-expr">120°</span> en figuras distintas son suplementarios porque suman <span class="math-expr">180°</span>, aunque no compartan vértice ni lado.<br>
+                                • <strong>En geometría euclidiana clásica, un par lineal (ángulos adyacentes cuyos lados exteriores son rayos opuestos) sí es siempre suplementario</strong> porque juntos cubren un ángulo llano (<span class="math-expr">180°</span>).</p>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-[#F2F5E9] rounded-xl border-2 border-[#54887D]">
+                            <h3 class="font-bold text-lg text-[#1269A8]">4. ¿Por qué la astronomía, la cartografía y la topografía siguen utilizando grados, minutos y segundos (<span class="math-expr">° ' ''</span>)?</h3>
+                            <p class="mt-1">¿Qué ventaja aritmética posee el número <span class="math-expr">60</span> (base sexagesimal) frente al número <span class="math-expr">100</span> al dividir ángulos en partes iguales?</p>
+                            <button class="btn-solucion" onclick="toggleSolucion('ref-4', this)">Ver análisis conceptual</button>
+                            <div id="ref-4" class="solucion-box">
+                                <p><strong>Análisis:</strong> El número <span class="math-expr">60</span> tiene <strong>12 divisores exactos</strong> (<span class="math-expr">1, 2, 3, 4, 5, 6, 10, 12, 15, 20, 30, 60</span>), mientras que <span class="math-expr">100</span> no es divisible exactamente entre <span class="math-expr">3, 6, 12</span> ni <span class="math-expr">15</span>. Esto permite dividir grados en tercios (<span class="math-expr">20'</span>), cuartos (<span class="math-expr">15'</span>) o sextos (<span class="math-expr">10'</span>) sin decimales periódicos infinitos, además de ser la base de las coordenadas geográficas (latitud y longitud).</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 5: EVALUACIÓN FORMATIVA            -->
+            <!-- ========================================== -->
+            <section id="sec-evaluacion" class="seccion-contenido hidden">
+                <div class="card-montano">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b-2 border-[#F7D615] pb-3 mb-4">
+                        <div>
+                            <h2 class="text-2xl font-bold text-[#1269A8]">✅ Evaluación Formativa de Comprobación</h2>
+                            <p class="text-sm text-slate-600">Resuelve cada reactivo, verifica tu procedimiento y explora la construcción en GeoGebra.</p>
+                        </div>
+                        <span class="badge-nivel badge-avanzado mt-2 sm:mt-0">5 Reactivos de Comprobación</span>
+                    </div>
+
+                    <div class="space-y-4">
+                        <!-- Pregunta 1 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 1 • Segmentos y Punto Medio</span>
+                            <p class="font-bold text-base mt-1">Sobre una recta se ubican los puntos consecutivos <span class="math-expr">A, B, C</span> donde <span class="math-expr">B</span> es punto medio de <span class="math-expr">AC</span>. Si <span class="math-expr">AB = 3x - 4</span> y <span class="math-expr">BC = x + 10</span>, ¿cuánto mide el segmento total <span class="math-expr">AC</span>?</p>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="btn-solucion" onclick="toggleSolucion('eval-1', this)">Mostrar solución</button>
+                                <button class="btn-geogebra" onclick="construirEnGeoGebra('ej_b2')">📐 Construir en GeoGebra</button>
+                            </div>
+                            <div id="eval-1" class="solucion-box">
+                                <p><strong>Resolución:</strong> <span class="math-expr">3x - 4 = x + 10 ➔ 2x = 14 ➔ x = 7</span>. Luego <span class="math-expr">AB = 3(7) - 4 = 17</span> y <span class="math-expr">AC = 17 + 17 = 34</span>.</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: x = 7 y AC = 34 unidades.</p>
+                            </div>
+                        </div>
+
+                        <!-- Pregunta 2 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 2 • Ángulos Complementarios</span>
+                            <p class="font-bold text-base mt-1">Dos ángulos complementarios miden <span class="math-expr">(3x + 12)°</span> y <span class="math-expr">(2x + 3)°</span>. Halla la medida del ángulo mayor.</p>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="btn-solucion" onclick="toggleSolucion('eval-2', this)">Mostrar solución</button>
+                                <button class="btn-geogebra" onclick="construirEnGeoGebra('complementarios')">📐 Construir en GeoGebra</button>
+                            </div>
+                            <div id="eval-2" class="solucion-box">
+                                <p><strong>Resolución:</strong> <span class="math-expr">5x + 15 = 90 ➔ 5x = 75 ➔ x = 15</span>. Ángulos: <span class="math-expr">3(15) + 12 = 57°</span> y <span class="math-expr">2(15) + 3 = 33°</span>.</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: El ángulo mayor mide 57°.</p>
+                            </div>
+                        </div>
+
+                        <!-- Pregunta 3 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 3 • Par Lineal y Bisectriz</span>
+                            <p class="font-bold text-base mt-1">Los ángulos <span class="math-expr">∠AOB</span> y <span class="math-expr">∠BOC</span> forman un par lineal. Si <span class="math-expr">m∠AOB = 52°</span> y <span class="math-expr">→ON</span> es bisectriz de <span class="math-expr">∠BOC</span>, ¿cuánto mide <span class="math-expr">∠BON</span>?</p>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="btn-solucion" onclick="toggleSolucion('eval-3', this)">Mostrar solución</button>
+                                <button class="btn-geogebra" onclick="construirEnGeoGebra('bisectriz')">📐 Construir en GeoGebra</button>
+                            </div>
+                            <div id="eval-3" class="solucion-box">
+                                <p><strong>Resolución:</strong> <span class="math-expr">m∠BOC = 180° - 52° = 128°</span>. Al trazar su bisectriz: <span class="math-expr">m∠BON = 128° / 2 = 64°</span>.</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: m∠BON = 64°.</p>
+                            </div>
+                        </div>
+
+                        <!-- Pregunta 4 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 4 • Ángulos Opuestos por el Vértice</span>
+                            <p class="font-bold text-base mt-1">Al intersecarse dos rectas, dos ángulos opuestos por el vértice miden <span class="math-expr">(5x - 18)°</span> y <span class="math-expr">(3x + 24)°</span>. Halla <span class="math-expr">x</span> y la medida de cada ángulo.</p>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="btn-solucion" onclick="toggleSolucion('eval-4', this)">Mostrar solución</button>
+                                <button class="btn-geogebra" onclick="construirEnGeoGebra('opuestos_vertice')">📐 Construir en GeoGebra</button>
+                            </div>
+                            <div id="eval-4" class="solucion-box">
+                                <p><strong>Resolución:</strong> <span class="math-expr">5x - 18 = 3x + 24 ➔ 2x = 42 ➔ x = 21</span>. Medida: <span class="math-expr">5(21) - 18 = 87°</span>.</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: x = 21; los ángulos miden 87° cada uno.</p>
+                            </div>
+                        </div>
+
+                        <!-- Pregunta 5 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 5 • Sistema Sexagesimal</span>
+                            <p class="font-bold text-base mt-1">Si un ángulo mide <span class="math-expr">48° 42' 50''</span>, ¿cuál es la medida de su ángulo suplementario?</p>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="btn-solucion" onclick="toggleSolucion('eval-5', this)">Mostrar solución</button>
+                                <button class="btn-geogebra" onclick="construirEnGeoGebra('ej_a1')">📐 Construir en GeoGebra</button>
+                            </div>
+                            <div id="eval-5" class="solucion-box">
+                                <p><strong>Resolución:</strong> <span class="math-expr">180° - 48° 42' 50'' = 179° 59' 60'' - 48° 42' 50'' = 131° 17' 10''</span>.</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: 131° 17' 10''.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 6: LABORATORIO INTERACTIVO GEOGEBRA -->
+            <!-- ========================================== -->
+            <section id="sec-geogebra" class="seccion-contenido hidden">
+                <div class="card-montano">
+                    <!-- Encabezado y Selector de Plantillas -->
+                    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 border-b-2 border-[#F7D615] pb-3 mb-4">
+                        <div>
+                            <div class="flex flex-wrap items-center gap-2">
+                                <span class="badge-nivel badge-avanzado">GeoGebra Geometry Interactivo</span>
+                                <span id="ggb-status-badge" class="text-xs font-bold text-[#54887D] bg-[#F2F5E9] px-2.5 py-1 rounded-full border border-[#54887D]">Cargando applet de GeoGebra...</span>
+                            </div>
+                            <h2 class="text-2xl font-bold text-[#1269A8] mt-1">📐 Laboratorio de Construcciones Geométricas en GeoGebra</h2>
+                            <p class="text-sm text-slate-600">Arrastra los puntos libres en el lienzo, utiliza la barra superior para trazar segmentos, ángulos o bisectrices, o selecciona una construcción lista.</p>
+                        </div>
+
+                        <!-- Selector Rápido de 8 Plantillas -->
+                        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+                            <select id="ggb-preset-select" onchange="construirEnGeoGebra(this.value)" class="p-2 rounded-lg border-2 border-[#1269A8] bg-white font-bold text-xs sm:text-sm text-[#1269A8] cursor-pointer">
+                                <option value="entes_basicos">1. Punto, Recta, Rayo y Segmento</option>
+                                <option value="clasificacion_angulos">2. Clasificación de Ángulos (Agudo, Recto, Obtuso)</option>
+                                <option value="complementarios">3. Ángulos Complementarios (α + β = 90°)</option>
+                                <option value="suplementarios">4. Ángulos Suplementarios / Par Lineal (180°)</option>
+                                <option value="opuestos_vertice">5. Ángulos Opuestos por el Vértice</option>
+                                <option value="bisectriz">6. Bisectriz de un Ángulo</option>
+                                <option value="alrededor_punto">7. Ángulos alrededor de un Punto (360°)</option>
+                                <option value="bisectrices_par_lineal">8. Bisectrices de Par Lineal = 90°</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Barra de Herramientas Rápidas de Pizarra -->
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-3 p-2.5 bg-[#F2F5E9] rounded-xl border border-[#A6B046]">
+                        <div class="flex flex-wrap gap-2">
+                            <button onclick="limpiarGeoGebra()" class="px-3 py-1.5 rounded-lg bg-white hover:bg-red-50 text-red-700 font-bold text-xs border border-red-400 cursor-pointer">🗑️ Limpiar lienzo</button>
+                            <button onclick="toggleCuadriculaGeoGebra()" class="px-3 py-1.5 rounded-lg bg-white hover:bg-sky-50 text-[#1269A8] font-bold text-xs border border-[#1269A8] cursor-pointer">⊞ Alternar Cuadrícula</button>
+                            <button onclick="toggleEjesGeoGebra()" class="px-3 py-1.5 rounded-lg bg-white hover:bg-sky-50 text-[#1269A8] font-bold text-xs border border-[#1269A8] cursor-pointer">┼ Alternar Ejes</button>
+                            <button onclick="toggleGuiaHerramientas()" class="px-3 py-1.5 rounded-lg bg-[#F7D615] hover:bg-[#ffe234] text-[#0f172a] font-bold text-xs border border-[#0f172a] cursor-pointer">🛠️ Guía de Herramientas GeoGebra</button>
+                        </div>
+                        <span class="text-xs font-semibold text-[#54887D]">💡 Consejo: Arrastra cualquier punto azul para ver cómo cambian los ángulos en tiempo real.</span>
+                    </div>
+
+                    <!-- Guía Desplegable de Herramientas de GeoGebra -->
+                    <div id="ggb-guia-herramientas" class="hidden mb-3 p-3 bg-sky-50 border-2 border-[#88B5C7] rounded-xl text-xs sm:text-sm">
+                        <strong class="text-[#1269A8] block mb-1">🛠️ Herramientas Principales en la Barra Superior de GeoGebra:</strong>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-slate-700">
+                            <div>• <strong>Elige y Mueve (Flecha):</strong> Arrastra puntos libres para explorar propiedades dinámicas.</div>
+                            <div>• <strong>Punto / Punto Medio:</strong> Crea puntos nuevos o marca el punto medio de un segmento.</div>
+                            <div>• <strong>Recta / Segmento / Semirrecta:</strong> Traza líneas infinitas, segmentos finitos o rayos.</div>
+                            <div>• <strong>Ángulo:</strong> Haz clic en 3 puntos (lado 1 → vértice → lado 2) para medir su abertura en grados.</div>
+                            <div>• <strong>Bisectriz:</strong> Selecciona los 3 puntos del ángulo (o dos rectas) para trazar su bisectriz exacta.</div>
+                            <div>• <strong>Perpendicular / Paralela:</strong> Traza rectas a 90° o paralelas respecto a otra recta.</div>
+                        </div>
+                    </div>
+
+                    <!-- Banner Descriptivo de la Construcción Activa -->
+                    <div id="ggb-info-construccion" class="mb-3 p-3 bg-gradient-to-r from-[#1269A8] to-[#0d4f80] text-white rounded-xl border-2 border-[#F7D615]">
+                        <h3 id="ggb-titulo-construccion" class="font-bold text-base text-[#F7D615]">1. Entes Fundamentales: Punto, Recta, Rayo y Segmento</h3>
+                        <p id="ggb-desc-construccion" class="text-xs sm:text-sm text-[#F2F5E9] mt-0.5">Observa la diferencia entre un punto libre P, una recta infinita que pasa por A y B, un segmento finito CD con su punto medio M, y un rayo con origen en E.</p>
+                    </div>
+
+                    <!-- Lienzo Embebido de GeoGebra -->
+                    <div id="ggb-wrapper">
+                        <div id="ggb-element"></div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Pie de Pizarra -->
+        <footer class="bg-[#1269A8] text-white text-center py-3 px-4 text-xs sm:text-sm border-t-2 border-[#F7D615]">
+            <strong>Colegio Montano</strong> • Departamento de Matemática • Cuarta Unidad • Pizarra Digital Interactiva
+        </footer>
+    </div>
+
+    <!-- Scripts de Interactividad y Motor de Construcciones GeoGebra -->
+    <script>
+        /* =========================================================================
+           1. NAVEGACIÓN DE PESTAÑAS Y PANTALLA COMPLETA
+           ========================================================================= */
+
+        function cambiarSeccion(seccionId, botonActivo) {
+            const secciones = document.querySelectorAll('.seccion-contenido');
+            secciones.forEach(sec => sec.classList.add('hidden'));
+
+            const target = document.getElementById('sec-' + seccionId);
+            if (target) {
+                target.classList.remove('hidden');
+            }
+
+            const botones = document.querySelectorAll('.tab-btn');
+            botones.forEach(btn => btn.classList.remove('active'));
+            if (botonActivo) {
+                botonActivo.classList.add('active');
+            }
+
+            if (seccionId === 'geogebra') {
+                inicializarGeoGebraSiNecesario();
+                setTimeout(() => {
+                    redimensionarGeoGebra();
+                }, 120);
+            }
+        }
+
+        function filtrarSubnivel(grupo, nivel, botonActivo) {
+            const contenedores = document.querySelectorAll('.subcontenido-' + grupo);
+            contenedores.forEach(cont => cont.classList.add('hidden'));
+
+            const target = document.getElementById(grupo + '-' + nivel);
+            if (target) {
+                target.classList.remove('hidden');
+            }
+
+            const parent = botonActivo.parentElement;
+            const subBotones = parent.querySelectorAll('.subtab-btn');
+            subBotones.forEach(btn => btn.classList.remove('active'));
+            botonActivo.classList.add('active');
+        }
+
+        function toggleSolucion(solucionId, boton) {
+            const box = document.getElementById(solucionId);
+            if (!box) return;
+
+            if (box.style.display === 'block') {
+                box.style.display = 'none';
+                boton.textContent = boton.textContent.replace('Ocultar', 'Mostrar').replace('Ocultar análisis conceptual', 'Ver análisis conceptual');
+            } else {
+                box.style.display = 'block';
+                if (boton.textContent.includes('Ver análisis')) {
+                    boton.textContent = 'Ocultar análisis conceptual';
+                } else {
+                    boton.textContent = 'Ocultar solución';
+                }
+            }
+        }
+
+        function toggleGuiaHerramientas() {
+            const guia = document.getElementById('ggb-guia-herramientas');
+            if (guia) {
+                guia.classList.toggle('hidden');
+            }
+        }
+
+        function toggleFullscreen() {
+            const btn = document.getElementById('fullscreen-btn');
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().then(() => {
+                    btn.innerHTML = '<span>✖ Salir de pantalla completa</span>';
+                    setTimeout(redimensionarGeoGebra, 200);
+                }).catch(err => {
+                    console.warn('Error al intentar activar pantalla completa:', err);
+                });
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen().then(() => {
+                        btn.innerHTML = '<span>⛶ Pantalla completa</span>';
+                        setTimeout(redimensionarGeoGebra, 200);
+                    });
+                }
+            }
+        }
+
+        document.addEventListener('fullscreenchange', () => {
+            const btn = document.getElementById('fullscreen-btn');
+            if (!document.fullscreenElement && btn) {
+                btn.innerHTML = '<span>⛶ Pantalla completa</span>';
+                setTimeout(redimensionarGeoGebra, 200);
+            }
+        });
+
+        /* =========================================================================
+           2. MOTOR DE CONSTRUCCIONES GEOGEBRA Y COLA DE COMANDOS
+           ========================================================================= */
+
+        let ggbIniciado = false;
+        let ggbListo = false;
+        let construccionPendiente = 'entes_basicos';
+        let cuadriculaVisible = true;
+        let ejesVisible = false;
+
+        const CONSTRUCCIONES_GGB = {
+            entes_basicos: {
+                titulo: '1. Entes Fundamentales: Punto, Recta, Rayo y Segmento',
+                desc: 'Arrastra los puntos: P es un punto libre; la recta pasa infinitamente por A y B; el segmento CD tiene longitud finita y punto medio M; el rayo parte de E hacia F.',
+                presetValue: 'entes_basicos',
+                comandos: [
+                    'SetCoordSystem(-7, 7, -4.5, 4.5)',
+                    'P = (-5, 3)',
+                    'SetColor(P, 18, 105, 168)',
+                    'A = (-5, 1.5)',
+                    'B = (4, 1.5)',
+                    'r = Line(A, B)',
+                    'SetColor(r, 18, 105, 168)',
+                    'C = (-5, -0.5)',
+                    'D = (3, -0.5)',
+                    's = Segment(C, D)',
+                    'SetColor(s, 84, 136, 125)',
+                    'M = Midpoint(C, D)',
+                    'SetColor(M, 180, 83, 9)',
+                    'E = (-5, -2.5)',
+                    'F = (1, -2.5)',
+                    'rayo = Ray(E, F)',
+                    'SetColor(rayo, 166, 176, 70)',
+                    'Text("Punto P", (-5.4, 3.4))',
+                    'Text("Recta AB (infinita)", (-1, 1.9))',
+                    'Text("Segmento CD y Punto Medio M", (-2.2, -0.1))',
+                    'Text("Semirrecta o Rayo EF", (-2.2, -2.1))'
+                ]
+            },
+            clasificacion_angulos: {
+                titulo: '2. Clasificación de Ángulos: Agudo, Recto y Obtuso',
+                desc: 'Compara en paralelo un ángulo agudo (45°), un ángulo recto (90°) y un ángulo obtuso (130°). Arrastra los puntos superiores para modificar sus aberturas.',
+                presetValue: 'clasificacion_angulos',
+                comandos: [
+                    'SetCoordSystem(-7.5, 7.5, -3.5, 4.5)',
+                    'O1 = (-6, -1)',
+                    'A1 = (-3.5, -1)',
+                    'B1 = (-4.2, 0.8)',
+                    'r1a = Ray(O1, A1)',
+                    'r1b = Ray(O1, B1)',
+                    'angAgudo = Angle(A1, O1, B1)',
+                    'SetColor(angAgudo, 166, 176, 70)',
+                    'O2 = (-1.5, -1)',
+                    'A2 = (1, -1)',
+                    'B2 = (-1.5, 1.5)',
+                    'r2a = Ray(O2, A2)',
+                    'r2b = Ray(O2, B2)',
+                    'angRecto = Angle(A2, O2, B2)',
+                    'SetColor(angRecto, 18, 105, 168)',
+                    'O3 = (4.5, -1)',
+                    'A3 = (7, -1)',
+                    'B3 = (2.8, 1)',
+                    'r3a = Ray(O3, A3)',
+                    'r3b = Ray(O3, B3)',
+                    'angObtuso = Angle(A3, O3, B3)',
+                    'SetColor(angObtuso, 84, 136, 125)',
+                    'Text("Agudo (< 90°)", (-6, -2.2))',
+                    'Text("Recto (= 90°)", (-1.5, -2.2))',
+                    'Text("Obtuso (> 90°)", (4, -2.2))'
+                ]
+            },
+            angulo_agudo: {
+                titulo: 'Ángulo Agudo Dinámico (0° < α < 90°)',
+                desc: 'Arrastra el punto B para comprobar que mientras la abertura sea menor que 90°, el ángulo permanece agudo.',
+                presetValue: 'clasificacion_angulos',
+                comandos: [
+                    'SetCoordSystem(-5, 6, -3, 5)',
+                    'O = (-1, -1)',
+                    'A = (4, -1)',
+                    'B = (2.5, 2.5)',
+                    'r1 = Ray(O, A)',
+                    'r2 = Ray(O, B)',
+                    'SetColor(r1, 18, 105, 168)',
+                    'SetColor(r2, 84, 136, 125)',
+                    'alpha = Angle(A, O, B)',
+                    'SetColor(alpha, 166, 176, 70)',
+                    'Text("Ángulo Agudo: 0° < α < 90°", (-1, 3.8))'
+                ]
+            },
+            angulo_recto: {
+                titulo: 'Ángulo Recto (α = 90° • Rayos Perpendiculares)',
+                desc: 'Observa el símbolo cuadrado de 90° entre dos rayos perpendiculares.',
+                presetValue: 'clasificacion_angulos',
+                comandos: [
+                    'SetCoordSystem(-5, 6, -3, 5)',
+                    'O = (-1, -1)',
+                    'A = (4, -1)',
+                    'B = (-1, 4)',
+                    'r1 = Ray(O, A)',
+                    'r2 = Ray(O, B)',
+                    'SetColor(r1, 18, 105, 168)',
+                    'SetColor(r2, 84, 136, 125)',
+                    'alpha = Angle(A, O, B)',
+                    'SetColor(alpha, 18, 105, 168)',
+                    'Text("Ángulo Recto: α = 90°", (0.5, 3.8))'
+                ]
+            },
+            angulo_obtuso: {
+                titulo: 'Ángulo Obtuso Dinámico (90° < α < 180°)',
+                desc: 'Arrastra el punto B hacia la izquierda o derecha manteniendo la abertura entre 90° y 180°.',
+                presetValue: 'clasificacion_angulos',
+                comandos: [
+                    'SetCoordSystem(-6, 6, -3, 5)',
+                    'O = (0, -1)',
+                    'A = (4.5, -1)',
+                    'B = (-3, 2.5)',
+                    'r1 = Ray(O, A)',
+                    'r2 = Ray(O, B)',
+                    'SetColor(r1, 18, 105, 168)',
+                    'SetColor(r2, 84, 136, 125)',
+                    'alpha = Angle(A, O, B)',
+                    'SetColor(alpha, 84, 136, 125)',
+                    'Text("Ángulo Obtuso: 90° < α < 180°", (-2, 3.8))'
+                ]
+            },
+            angulo_llano: {
+                titulo: 'Ángulo Llano (α = 180° • Rayos Opuestos)',
+                desc: 'Dos rayos opuestos con origen común O forman una recta y una abertura exacta de 180°.',
+                presetValue: 'suplementarios',
+                comandos: [
+                    'SetCoordSystem(-6, 6, -3, 5)',
+                    'O = (0, 0)',
+                    'A = (4.5, 0)',
+                    'B = (-4.5, 0)',
+                    'r1 = Ray(O, A)',
+                    'r2 = Ray(O, B)',
+                    'SetColor(r1, 18, 105, 168)',
+                    'SetColor(r2, 84, 136, 125)',
+                    'alpha = Angle(A, O, B)',
+                    'SetColor(alpha, 18, 105, 168)',
+                    'Text("Ángulo Llano: α = 180°", (-1.8, 2.8))'
+                ]
+            },
+            angulo_concavo: {
+                titulo: 'Ángulo Cóncavo o Entrante (180° < α < 360°)',
+                desc: 'Observa el arco mayor (entrante) cuya medida supera 180° y es menor que 360°.',
+                presetValue: 'clasificacion_angulos',
+                comandos: [
+                    'SetCoordSystem(-6, 6, -4, 4)',
+                    'O = (0, 0.5)',
+                    'A = (4, 0.5)',
+                    'B = (-3, -2)',
+                    'r1 = Ray(O, A)',
+                    'r2 = Ray(O, B)',
+                    'SetColor(r1, 18, 105, 168)',
+                    'SetColor(r2, 84, 136, 125)',
+                    'alpha = Angle(A, O, B)',
+                    'SetColor(alpha, 180, 83, 9)',
+                    'Text("Ángulo Cóncavo (Entrante): 180° < α < 360°", (-3.5, 3))'
+                ]
+            },
+            complementarios: {
+                titulo: '3. Ángulos Complementarios Adyacentes (α + β = 90°)',
+                desc: 'Los rayos OA y OB son perpendiculares (90°). Arrastra el rayo intermedio OC y verifica que la suma α + β siempre es 90°.',
+                presetValue: 'complementarios',
+                comandos: [
+                    'SetCoordSystem(-4, 7, -2.5, 5.5)',
+                    'O = (0, 0)',
+                    'A = (4.5, 0)',
+                    'B = (0, 4.5)',
+                    'C = (3.5, 2.8)',
+                    'rA = Ray(O, A)',
+                    'rB = Ray(O, B)',
+                    'rC = Ray(O, C)',
+                    'SetColor(rA, 18, 105, 168)',
+                    'SetColor(rB, 18, 105, 168)',
+                    'SetColor(rC, 180, 83, 9)',
+                    'alpha = Angle(A, O, C)',
+                    'beta = Angle(C, O, B)',
+                    'SetColor(alpha, 166, 176, 70)',
+                    'SetColor(beta, 84, 136, 125)',
+                    'Text("Ángulos Complementarios: α + β = 90°", (0.5, 4.8))'
+                ]
+            },
+            suplementarios: {
+                titulo: '4. Ángulos Suplementarios / Par Lineal (α + β = 180°)',
+                desc: 'Arrastra el punto C sobre el rayo intermedio OC y observa cómo cambian α y β manteniendo siempre α + β = 180°.',
+                presetValue: 'suplementarios',
+                comandos: [
+                    'SetCoordSystem(-6, 6, -2.5, 5.5)',
+                    'O = (0, 0)',
+                    'A = (4.8, 0)',
+                    'B = (-4.8, 0)',
+                    'C = (2.2, 3.6)',
+                    'recta = Line(B, A)',
+                    'rC = Ray(O, C)',
+                    'SetColor(recta, 18, 105, 168)',
+                    'SetColor(rC, 180, 83, 9)',
+                    'alpha = Angle(A, O, C)',
+                    'beta = Angle(C, O, B)',
+                    'SetColor(alpha, 166, 176, 70)',
+                    'SetColor(beta, 84, 136, 125)',
+                    'Text("Par Lineal (Suplementarios): α + β = 180°", (-3.5, 4.6))'
+                ]
+            },
+            opuestos_vertice: {
+                titulo: '5. Ángulos Opuestos por el Vértice (Congruentes)',
+                desc: 'Arrastra los puntos A o C para girar las dos rectas secantes y comprueba que los ángulos opuestos por el vértice O mantienen medidas iguales.',
+                presetValue: 'opuestos_vertice',
+                comandos: [
+                    'SetCoordSystem(-6, 6, -4.5, 4.5)',
+                    'O = (0, 0)',
+                    'A = (4, 1.5)',
+                    'B = (-4, -1.5)',
+                    'C = (-2, 3.2)',
+                    'D = (2, -3.2)',
+                    'r1 = Line(O, A)',
+                    'r2 = Line(O, C)',
+                    'SetColor(r1, 18, 105, 168)',
+                    'SetColor(r2, 84, 136, 125)',
+                    'ang1 = Angle(A, O, C)',
+                    'ang2 = Angle(B, O, D)',
+                    'ang3 = Angle(C, O, B)',
+                    'SetColor(ang1, 166, 176, 70)',
+                    'SetColor(ang2, 166, 176, 70)',
+                    'SetColor(ang3, 136, 181, 199)',
+                    'Text("Opuestos por el vértice: α = β", (-2.5, 3.8))'
+                ]
+            },
+            bisectriz: {
+                titulo: '6. Bisectriz de un Ángulo (Divide en dos partes iguales)',
+                desc: 'El rayo bisectriz divide ∠AOB en dos ángulos congruentes. Arrastra el punto B para verificar que ambas mitades siguen siendo iguales.',
+                presetValue: 'bisectriz',
+                comandos: [
+                    'SetCoordSystem(-5, 7, -2.5, 5.5)',
+                    'O = (-1, -0.5)',
+                    'A = (5, -0.5)',
+                    'B = (2.2, 4.2)',
+                    'r1 = Ray(O, A)',
+                    'r2 = Ray(O, B)',
+                    'bis = AngleBisector(A, O, B)',
+                    'SetColor(r1, 18, 105, 168)',
+                    'SetColor(r2, 18, 105, 168)',
+                    'SetColor(bis, 180, 83, 9)',
+                    'SetLineStyle(bis, 1)',
+                    'M = Intersect(bis, Circle(O, 4))',
+                    'ang1 = Angle(A, O, M)',
+                    'ang2 = Angle(M, O, B)',
+                    'SetColor(ang1, 166, 176, 70)',
+                    'SetColor(ang2, 84, 136, 125)',
+                    'Text("Bisectriz: m∠AOM = m∠MOB", (-1, 4.8))'
+                ]
+            },
+            alrededor_punto: {
+                titulo: '7. Ángulos Consecutivos alrededor de un Punto (Suma = 360°)',
+                desc: 'Cuatro rayos parten de un mismo punto O completando un ángulo perigonal de 360°. Arrastra los puntos para variar cada sector.',
+                presetValue: 'alrededor_punto',
+                comandos: [
+                    'SetCoordSystem(-6, 6, -4.5, 4.5)',
+                    'O = (0, 0)',
+                    'A = (4, 0)',
+                    'B = (0, 4)',
+                    'C = (-3.5, 1.5)',
+                    'D = (-1.5, -3.5)',
+                    'rA = Ray(O, A)',
+                    'rB = Ray(O, B)',
+                    'rC = Ray(O, C)',
+                    'rD = Ray(O, D)',
+                    'a1 = Angle(A, O, B)',
+                    'a2 = Angle(B, O, C)',
+                    'a3 = Angle(C, O, D)',
+                    'a4 = Angle(D, O, A)',
+                    'SetColor(a1, 18, 105, 168)',
+                    'SetColor(a2, 84, 136, 125)',
+                    'SetColor(a3, 166, 176, 70)',
+                    'SetColor(a4, 180, 83, 9)',
+                    'Text("Giro Completo alrededor de O = 360°", (-3, 4))'
+                ]
+            },
+            bisectrices_par_lineal: {
+                titulo: '8. Teorema: Las Bisectrices de un Par Lineal son Perpendiculares (90°)',
+                desc: 'Arrastra el punto C sobre el rayo intermedio: sin importar el ángulo, el ángulo entre ambas bisectrices siempre mide 90°.',
+                presetValue: 'bisectrices_par_lineal',
+                comandos: [
+                    'SetCoordSystem(-6, 6, -2, 5.5)',
+                    'O = (0, 0)',
+                    'A = (5, 0)',
+                    'B = (-5, 0)',
+                    'C = (2.8, 3.2)',
+                    'recta = Line(B, A)',
+                    'rC = Ray(O, C)',
+                    'bis1 = AngleBisector(A, O, C)',
+                    'bis2 = AngleBisector(C, O, B)',
+                    'SetColor(bis1, 180, 83, 9)',
+                    'SetColor(bis2, 180, 83, 9)',
+                    'M = Intersect(bis1, Circle(O, 3.5))',
+                    'N = Intersect(bis2, Circle(O, 3.5))',
+                    'ang90 = Angle(M, O, N)',
+                    'SetColor(ang90, 18, 105, 168)',
+                    'Text("Ángulo entre bisectrices = 90° (Invariante)", (-3.5, 4.7))'
+                ]
+            },
+            /* Construcciones específicas para los ejemplos resueltos */
+            ej_b1: {
+                titulo: 'Ejemplo Básico 1: Adición de Segmentos (AB = 6, BC = 9, AC = 15)',
+                desc: 'Puntos colineales A, B y C con AB = 6 y BC = 9, sumando una longitud total AC = 15.',
+                presetValue: 'entes_basicos',
+                comandos: [
+                    'SetCoordSystem(-2, 18, -4, 5)',
+                    'A = (0, 0)',
+                    'B = (6, 0)',
+                    'C = (15, 0)',
+                    's1 = Segment(A, B)',
+                    's2 = Segment(B, C)',
+                    'SetColor(s1, 18, 105, 168)',
+                    'SetColor(s2, 84, 136, 125)',
+                    'Text("AB = 6", (2.5, 0.7))',
+                    'Text("BC = 9", (9.8, 0.7))',
+                    'Text("Total AC = 6 + 9 = 15", (5.5, -1.5))'
+                ]
+            },
+            ej_b2: {
+                titulo: 'Ejemplo Básico 2: Punto Medio M de PQ (PQ = 18, PM = MQ = 9)',
+                desc: 'El punto M divide exactamente a la mitad el segmento PQ de longitud 18.',
+                presetValue: 'entes_basicos',
+                comandos: [
+                    'SetCoordSystem(-2, 20, -4, 5)',
+                    'P = (0, 0)',
+                    'Q = (18, 0)',
+                    's = Segment(P, Q)',
+                    'M = Midpoint(P, Q)',
+                    'SetColor(s, 18, 105, 168)',
+                    'SetColor(M, 180, 83, 9)',
+                    'Text("PM = 9", (3.8, 0.7))',
+                    'Text("MQ = 9", (12.8, 0.7))',
+                    'Text("M es Punto Medio de PQ (PQ = 18)", (5.5, -1.5))'
+                ]
+            },
+            ej_b3: {
+                titulo: 'Ejemplo Básico 3: Complemento de 37° (53°) y Suplemento de 112° (68°)',
+                desc: 'Visualización del ángulo complementario de 37° (37° + 53° = 90°).',
+                presetValue: 'complementarios',
+                comandos: [
+                    'SetCoordSystem(-4, 7, -2.5, 5.5)',
+                    'O = (0, 0)',
+                    'A = (4.5, 0)',
+                    'B = (0, 4.5)',
+                    'C = Rotate(A, 37°, O)',
+                    'rA = Ray(O, A)',
+                    'rB = Ray(O, B)',
+                    'rC = Ray(O, C)',
+                    'a1 = Angle(A, O, C)',
+                    'a2 = Angle(C, O, B)',
+                    'SetColor(a1, 166, 176, 70)',
+                    'SetColor(a2, 84, 136, 125)',
+                    'Text("37° + 53° = 90° (Complementarios)", (0.5, 4.8))'
+                ]
+            },
+            ej_b4: {
+                titulo: 'Ejemplo Básico 4: Par Lineal (x + 48° = 180° → x = 132°)',
+                desc: 'Ángulos adyacentes sobre una recta con medidas 48° y 132°.',
+                presetValue: 'suplementarios',
+                comandos: [
+                    'SetCoordSystem(-6, 6, -2.5, 5.5)',
+                    'O = (0, 0)',
+                    'A = (4.5, 0)',
+                    'B = (-4.5, 0)',
+                    'C = Rotate(A, 48°, O)',
+                    'recta = Line(B, A)',
+                    'rC = Ray(O, C)',
+                    'a1 = Angle(A, O, C)',
+                    'a2 = Angle(C, O, B)',
+                    'SetColor(a1, 166, 176, 70)',
+                    'SetColor(a2, 84, 136, 125)',
+                    'Text("48° + 132° = 180°", (-2, 4.6))'
+                ]
+            },
+            ej_b5: {
+                titulo: 'Ejemplo Básico 5: Opuestos por el Vértice (65° y 115°)',
+                desc: 'Rectas secantes que forman pares opuestos de 65° y 115°.',
+                presetValue: 'opuestos_vertice',
+                comandos: [
+                    'SetCoordSystem(-6, 6, -4.5, 4.5)',
+                    'O = (0, 0)',
+                    'A = (4.5, 0)',
+                    'B = (-4.5, 0)',
+                    'C = Rotate(A, 65°, O)',
+                    'r1 = Line(B, A)',
+                    'r2 = Line(O, C)',
+                    'a1 = Angle(A, O, C)',
+                    'a2 = Angle(C, O, B)',
+                    'SetColor(a1, 166, 176, 70)',
+                    'SetColor(a2, 136, 181, 199)',
+                    'Text("Ángulos: 65°, 115°, 65°, 115°", (-2.5, 3.8))'
+                ]
+            },
+            ej_i1: {
+                titulo: 'Ejemplo Intermedio 1: AB = 2x + 3, BC = 3x - 1, AC = 22 (x = 4)',
+                desc: 'Para x = 4, se obtiene AB = 11 y BC = 11, sumando AC = 22.',
+                presetValue: 'entes_basicos',
+                comandos: [
+                    'SetCoordSystem(-2, 24, -4, 5)',
+                    'A = (0, 0)',
+                    'B = (11, 0)',
+                    'C = (22, 0)',
+                    's1 = Segment(A, B)',
+                    's2 = Segment(B, C)',
+                    'SetColor(s1, 18, 105, 168)',
+                    'SetColor(s2, 84, 136, 125)',
+                    'Text("AB = 2(4)+3 = 11", (3.5, 0.8))',
+                    'Text("BC = 3(4)-1 = 11", (14.5, 0.8))',
+                    'Text("Total AC = 22", (9.5, -1.5))'
+                ]
+            },
+            ej_i2: {
+                titulo: 'Ejemplo Intermedio 2: Bisectriz OM de ∠AOB = 76° (38° y 38°)',
+                desc: 'El rayo OM divide ∠AOB de 76° en dos ángulos iguales de 38°.',
+                presetValue: 'bisectriz',
+                comandos: [
+                    'SetCoordSystem(-4, 7, -2.5, 5.5)',
+                    'O = (-1, -0.5)',
+                    'A = (4.5, -0.5)',
+                    'B = Rotate(A, 76°, O)',
+                    'r1 = Ray(O, A)',
+                    'r2 = Ray(O, B)',
+                    'bis = AngleBisector(A, O, B)',
+                    'M = Intersect(bis, Circle(O, 4))',
+                    'a1 = Angle(A, O, M)',
+                    'a2 = Angle(M, O, B)',
+                    'SetColor(a1, 166, 176, 70)',
+                    'SetColor(a2, 84, 136, 125)',
+                    'Text("∠AOB = 76° ➔ 38° + 38°", (-1, 4.8))'
+                ]
+            },
+            ej_i3: {
+                titulo: 'Ejemplo Intermedio 3: Complementarios (44° y 46°)',
+                desc: 'Para x = 17, los ángulos miden (2x + 10)° = 44° y (3x - 5)° = 46°.',
+                presetValue: 'complementarios',
+                comandos: [
+                    'SetCoordSystem(-4, 7, -2.5, 5.5)',
+                    'O = (0, 0)',
+                    'A = (4.5, 0)',
+                    'B = (0, 4.5)',
+                    'C = Rotate(A, 44°, O)',
+                    'rA = Ray(O, A)',
+                    'rB = Ray(O, B)',
+                    'rC = Ray(O, C)',
+                    'a1 = Angle(A, O, C)',
+                    'a2 = Angle(C, O, B)',
+                    'SetColor(a1, 166, 176, 70)',
+                    'SetColor(a2, 84, 136, 125)',
+                    'Text("44° + 46° = 90°", (1, 4.8))'
+                ]
+            },
+            ej_i4: {
+                titulo: 'Ejemplo Intermedio 4: Suplementarios en Razón 2 : 7 (40° y 140°)',
+                desc: 'Con k = 20°, los ángulos suplementarios miden 2k = 40° y 7k = 140°.',
+                presetValue: 'suplementarios',
+                comandos: [
+                    'SetCoordSystem(-6, 6, -2.5, 5.5)',
+                    'O = (0, 0)',
+                    'A = (4.5, 0)',
+                    'B = (-4.5, 0)',
+                    'C = Rotate(A, 40°, O)',
+                    'recta = Line(B, A)',
+                    'rC = Ray(O, C)',
+                    'a1 = Angle(A, O, C)',
+                    'a2 = Angle(C, O, B)',
+                    'SetColor(a1, 166, 176, 70)',
+                    'SetColor(a2, 84, 136, 125)',
+                    'Text("Razón 2 : 7 ➔ 40° y 140°", (-2.2, 4.6))'
+                ]
+            },
+            ej_i5: {
+                titulo: 'Ejemplo Intermedio 5: Opuestos por el Vértice (85° y 95°)',
+                desc: 'Para x = 25, los ángulos opuestos miden 85° y sus adyacentes 95°.',
+                presetValue: 'opuestos_vertice',
+                comandos: [
+                    'SetCoordSystem(-6, 6, -4.5, 4.5)',
+                    'O = (0, 0)',
+                    'A = (4.5, 0)',
+                    'B = (-4.5, 0)',
+                    'C = Rotate(A, 85°, O)',
+                    'r1 = Line(B, A)',
+                    'r2 = Line(O, C)',
+                    'a1 = Angle(A, O, C)',
+                    'a2 = Angle(C, O, B)',
+                    'SetColor(a1, 166, 176, 70)',
+                    'SetColor(a2, 136, 181, 199)',
+                    'Text("85° y 95° (x = 25)", (-1.8, 3.8))'
+                ]
+            },
+            ej_a1: {
+                titulo: 'Ejemplo Avanzado 1: Sistema Sexagesimal (34° 25\' 40\'\' y 55° 34\' 20\'\')',
+                desc: 'Representación de ángulos complementarios medidos en grados, minutos y segundos.',
+                presetValue: 'complementarios',
+                comandos: [
+                    'SetCoordSystem(-4, 7, -2.5, 5.5)',
+                    'O = (0, 0)',
+                    'A = (4.5, 0)',
+                    'B = (0, 4.5)',
+                    'C = Rotate(A, 34.4278°, O)',
+                    'rA = Ray(O, A)',
+                    'rB = Ray(O, B)',
+                    'rC = Ray(O, C)',
+                    'a1 = Angle(A, O, C)',
+                    'a2 = Angle(C, O, B)',
+                    'SetColor(a1, 166, 176, 70)',
+                    'SetColor(a2, 84, 136, 125)',
+                    'Text("34° 25\' 40\'\' + 55° 34\' 20\'\' = 90°", (0.2, 4.8))'
+                ]
+            },
+            ej_a3: {
+                titulo: 'Ejemplo Avanzado 3: S(50°) = 3·C(50°) + 10° (x = 50°)',
+                desc: 'Ángulo de 50° junto a su complemento (40°) y suplemento (130°).',
+                presetValue: 'suplementarios',
+                comandos: [
+                    'SetCoordSystem(-6, 6, -2.5, 5.5)',
+                    'O = (0, 0)',
+                    'A = (4.5, 0)',
+                    'B = (-4.5, 0)',
+                    'C = Rotate(A, 50°, O)',
+                    'recta = Line(B, A)',
+                    'rC = Ray(O, C)',
+                    'a1 = Angle(A, O, C)',
+                    'a2 = Angle(C, O, B)',
+                    'SetColor(a1, 166, 176, 70)',
+                    'SetColor(a2, 84, 136, 125)',
+                    'Text("x = 50° | Suplemento = 130°", (-2.2, 4.6))'
+                ]
+            },
+            ej_a5: {
+                titulo: 'Ejemplo Avanzado 5: Rampa de Acceso (Inclinación 12°, Suplemento 168°)',
+                desc: 'Modelo geométrico de la rampa inclinada 12° respecto al suelo horizontal.',
+                presetValue: 'suplementarios',
+                comandos: [
+                    'SetCoordSystem(-6, 6, -2, 4.5)',
+                    'O = (-3, 0)',
+                    'A = (5, 0)',
+                    'B = (-5.5, 0)',
+                    'C = Rotate(A, 12°, O)',
+                    'suelo = Line(B, A)',
+                    'rampa = Ray(O, C)',
+                    'a1 = Angle(A, O, C)',
+                    'a2 = Angle(C, O, B)',
+                    'SetColor(a1, 166, 176, 70)',
+                    'SetColor(a2, 84, 136, 125)',
+                    'Text("Inclinación Rampa = 12° | Ángulo Superior = 168°", (-3.5, 3.2))'
+                ]
+            }
+        };
+
+        /**
+         * Inicializa el applet de GeoGebra la primera vez que se accede a la pestaña 6.
+         */
+        function inicializarGeoGebraSiNecesario() {
+            if (ggbIniciado) return;
+            ggbIniciado = true;
+
+            const wrapper = document.getElementById('ggb-wrapper');
+            const ancho = wrapper ? Math.max(wrapper.clientWidth - 6, 320) : 960;
+
+            const params = {
+                id: 'ggbApplet',
+                appName: 'geometry',
+                width: ancho,
+                height: 540,
+                showToolBar: true,
+                showAlgebraInput: true,
+                showMenuBar: false,
+                showResetIcon: false,
+                enableRightClick: true,
+                enableLabelDrags: true,
+                showZoomButtons: true,
+                language: 'es',
+                appletOnLoad: function(api) {
+                    window.ggbApplet = api;
+                    ggbListo = true;
+                    const badge = document.getElementById('ggb-status-badge');
+                    if (badge) {
+                        badge.textContent = '✔ GeoGebra Listo e Interactivo';
+                    }
+                    ejecutarComandosConstruccion(construccionPendiente);
+                }
+            };
+
+            if (typeof GGBApplet !== 'undefined') {
+                const applet = new GGBApplet(params, true);
+                applet.inject('ggb-element');
+            } else {
+                const badge = document.getElementById('ggb-status-badge');
+                if (badge) {
+                    badge.textContent = '⚠️ Verifica tu conexión para cargar GeoGebra';
+                }
+            }
+        }
+
+        function redimensionarGeoGebra() {
+            if (!ggbListo || !window.ggbApplet) return;
+            const wrapper = document.getElementById('ggb-wrapper');
+            if (wrapper && wrapper.clientWidth > 100) {
+                try {
+                    window.ggbApplet.setSize(wrapper.clientWidth - 6, 540);
+                } catch (e) {
+                    console.warn('No se pudo redimensionar GeoGebra:', e);
+                }
+            }
+        }
+
+        window.addEventListener('resize', () => {
+            if (!document.getElementById('sec-geogebra').classList.contains('hidden')) {
+                redimensionarGeoGebra();
+            }
+        });
+
+        /**
+         * Abre la pestaña de GeoGebra (si no estaba abierta) y ejecuta la construcción solicitada.
+         */
+        function construirEnGeoGebra(claveConstruccion) {
+            construccionPendiente = claveConstruccion || 'entes_basicos';
+
+            const btnTab6 = document.getElementById('tab-geogebra');
+            cambiarSeccion('geogebra', btnTab6);
+
+            if (ggbListo && window.ggbApplet) {
+                ejecutarComandosConstruccion(construccionPendiente);
+            }
+        }
+
+        function ejecutarComandosConstruccion(clave) {
+            const datos = CONSTRUCCIONES_GGB[clave] || CONSTRUCCIONES_GGB.entes_basicos;
+
+            const tituloEl = document.getElementById('ggb-titulo-construccion');
+            const descEl = document.getElementById('ggb-desc-construccion');
+            const selectEl = document.getElementById('ggb-preset-select');
+
+            if (tituloEl) tituloEl.textContent = datos.titulo;
+            if (descEl) descEl.textContent = datos.desc;
+            if (selectEl && datos.presetValue) selectEl.value = datos.presetValue;
+
+            if (!ggbListo || !window.ggbApplet) return;
+
+            try {
+                window.ggbApplet.reset();
+                window.ggbApplet.setGridVisible(cuadriculaVisible);
+                window.ggbApplet.setAxesVisible(ejesVisible, ejesVisible);
+
+                datos.comandos.forEach(cmd => {
+                    window.ggbApplet.evalCommand(cmd);
+                });
+            } catch (err) {
+                console.error('Error ejecutando construcción en GeoGebra:', err);
+            }
+        }
+
+        function limpiarGeoGebra() {
+            if (!ggbListo || !window.ggbApplet) return;
+            window.ggbApplet.reset();
+            window.ggbApplet.setGridVisible(cuadriculaVisible);
+            window.ggbApplet.setAxesVisible(ejesVisible, ejesVisible);
+            document.getElementById('ggb-titulo-construccion').textContent = 'Lienzo en Blanco (Construcción Libre)';
+            document.getElementById('ggb-desc-construccion').textContent = 'Utiliza las herramientas superiores de GeoGebra para trazar puntos, rectas, segmentos, ángulos y bisectrices libremente.';
+        }
+
+        function toggleCuadriculaGeoGebra() {
+            cuadriculaVisible = !cuadriculaVisible;
+            if (ggbListo && window.ggbApplet) {
+                window.ggbApplet.setGridVisible(cuadriculaVisible);
+            }
+        }
+
+        function toggleEjesGeoGebra() {
+            ejesVisible = !ejesVisible;
+            if (ggbListo && window.ggbApplet) {
+                window.ggbApplet.setAxesVisible(ejesVisible, ejesVisible);
+            }
+        }
+    </script>
+</body>
+</html>

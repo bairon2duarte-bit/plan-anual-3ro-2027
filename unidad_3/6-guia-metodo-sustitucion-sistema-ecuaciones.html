@@ -1,0 +1,1684 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pizarra Digital - Método de Sustitución | Colegio Montano</title>
+    <!-- Carga de Tailwind CSS para utilidades de diseño responsivo y layout -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Configuración de Variables Institucionales Colegio Montano */
+        :root {
+            --azul-principal: #1269A8;
+            --amarillo-brillante: #F7D615;
+            --verde-grisaceo: #54887D;
+            --azul-claro: #88B5C7;
+            --verde-oliva: #A6B046;
+            --blanco-suave: #F2F5E9;
+        }
+
+        /* Tipografía Institucional */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e2e8f0;
+            color: #1e293b;
+            margin: 0;
+            padding: 12px;
+        }
+
+        /* Marco Principal de Pizarra Digital */
+        #pizarra-container {
+            background-color: var(--blanco-suave);
+            border: 5px solid var(--amarillo-brillante);
+            border-radius: 12px;
+            box-shadow: 0 12px 30px rgba(18, 105, 168, 0.25);
+            max-width: 1200px;
+            margin: 0 auto;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 85vh;
+        }
+
+        /* Encabezado de la Pizarra */
+        .pizarra-header {
+            background: linear-gradient(135deg, var(--azul-principal) 0%, #0d4f80 100%);
+            color: white;
+            padding: 16px 24px;
+            border-bottom: 4px solid var(--amarillo-brillante);
+        }
+
+        /* Botón Fullscreen */
+        .btn-fullscreen {
+            background-color: var(--amarillo-brillante);
+            color: #0f172a;
+            font-weight: 700;
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: 2px solid #ffffff;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+        .btn-fullscreen:hover {
+            background-color: #ffe234;
+            transform: translateY(-1px);
+        }
+
+        /* Navegación de Pestañas */
+        .nav-tabs {
+            background-color: #ffffff;
+            border-bottom: 2px solid var(--azul-claro);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            padding: 10px 20px;
+        }
+
+        .tab-btn {
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.92rem;
+            color: var(--azul-principal);
+            background-color: transparent;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .tab-btn:hover {
+            background-color: rgba(136, 181, 199, 0.25);
+            border-color: var(--azul-claro);
+        }
+
+        .tab-btn.active {
+            background-color: var(--azul-principal);
+            color: #ffffff;
+            border-color: var(--amarillo-brillante);
+            box-shadow: 0 3px 8px rgba(18, 105, 168, 0.3);
+        }
+
+        /* Pestaña destacada para el Solucionador */
+        .tab-btn-solucionador {
+            background-color: rgba(247, 214, 21, 0.25);
+            border-color: var(--amarillo-brillante);
+        }
+        .tab-btn-solucionador.active {
+            background-color: var(--azul-principal);
+            color: #ffffff;
+            border-color: var(--amarillo-brillante);
+        }
+
+        /* Tarjetas de Contenido */
+        .card-montano {
+            background-color: #ffffff;
+            border: 2px solid var(--verde-grisaceo);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 18px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Etiquetas de Nivel */
+        .badge-nivel {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .badge-basico {
+            background-color: var(--verde-oliva);
+            color: #ffffff;
+        }
+        .badge-intermedio {
+            background-color: var(--verde-grisaceo);
+            color: #ffffff;
+        }
+        .badge-avanzado {
+            background-color: var(--azul-principal);
+            color: #ffffff;
+            border: 1px solid var(--amarillo-brillante);
+        }
+
+        /* Contenedor de Soluciones Ocultas */
+        .solucion-box {
+            background-color: rgba(136, 181, 199, 0.25);
+            border: 1.5px dashed var(--azul-principal);
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin-top: 12px;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .btn-solucion {
+            background-color: var(--azul-principal);
+            color: white;
+            font-weight: 600;
+            padding: 7px 14px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.2s;
+            margin-top: 10px;
+        }
+        .btn-solucion:hover {
+            background-color: var(--verde-grisaceo);
+        }
+
+        /* Botón Directo para Resolver en Pizarra */
+        .btn-resolver-directo {
+            background-color: var(--amarillo-brillante);
+            color: #0f172a;
+            font-weight: 700;
+            padding: 7px 14px;
+            border-radius: 6px;
+            font-size: 0.88rem;
+            cursor: pointer;
+            border: 1.5px solid #0f172a;
+            transition: all 0.2s ease;
+            margin-top: 10px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .btn-resolver-directo:hover {
+            background-color: #ffe234;
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Bloques Matemáticos Visuales */
+        .math-expr {
+            font-family: 'Cambria Math', 'Times New Roman', serif;
+            font-size: 1.08rem;
+            font-weight: bold;
+            color: var(--azul-principal);
+            background-color: #f8fafc;
+            padding: 2px 8px;
+            border-radius: 4px;
+            border: 1px solid #cbd5e1;
+            display: inline-block;
+        }
+
+        /* Fracción Visual en Línea */
+        .frac {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            vertical-align: middle;
+            margin: 0 4px;
+            font-size: 0.92em;
+            line-height: 1.1;
+        }
+        .frac-num {
+            border-bottom: 1.5px solid currentColor;
+            padding: 0 4px 2px 4px;
+        }
+        .frac-den {
+            padding: 2px 4px 0 4px;
+        }
+
+        /* Llave Visual para Sistemas */
+        .sistema-box {
+            display: inline-flex;
+            align-items: center;
+            background-color: #f8fafc;
+            border: 1.5px solid var(--azul-claro);
+            border-left: 5px solid var(--azul-principal);
+            border-radius: 8px;
+            padding: 6px 14px;
+            font-family: 'Cambria Math', 'Times New Roman', serif;
+            font-weight: bold;
+            color: var(--azul-principal);
+            margin: 4px 0;
+            line-height: 1.5;
+        }
+
+        /* Sub-pestañas de Nivel */
+        .subtab-btn {
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 0.88rem;
+            cursor: pointer;
+            border: 2px solid var(--verde-grisaceo);
+            background-color: #ffffff;
+            color: var(--verde-grisaceo);
+            transition: all 0.2s;
+        }
+        .subtab-btn.active {
+            background-color: var(--verde-grisaceo);
+            color: #ffffff;
+        }
+
+        /* Tarjetas de Paso en el Solucionador */
+        .paso-solver {
+            background-color: #ffffff;
+            border-left: 5px solid var(--azul-principal);
+            border-top: 1px solid #cbd5e1;
+            border-right: 1px solid #cbd5e1;
+            border-bottom: 1px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 14px 16px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Modo Fullscreen */
+        :fullscreen #pizarra-container {
+            max-width: 100%;
+            width: 100vw;
+            height: 100vh;
+            border-radius: 0;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Marco Principal de la Pizarra Digital -->
+    <div id="pizarra-container">
+        
+        <!-- Encabezado Institucional -->
+        <header class="pizarra-header flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-4">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyEop0yf6lZ7Jk9MILZxF1rBj4Oqs5esyhIQ&s" 
+                     alt="Logo Colegio Montano" 
+                     class="w-14 h-14 rounded-lg bg-white p-1 object-contain border-2 border-[#F7D615]"
+                     onerror="this.src='https://placehold.co/60x60/1269A8/F7D615?text=CM'">
+                <div>
+                    <span class="text-xs uppercase tracking-widest font-bold text-[#F7D615] block">Colegio Montano • Tercera Unidad • Matemática</span>
+                    <h1 class="text-xl sm:text-2xl font-bold leading-tight">Método de Sustitución de Sistemas de Ecuaciones</h1>
+                    <p class="text-sm text-[#88B5C7] font-semibold">Nivel: Tercero Básico • Guía Interactiva de Pizarra Digital</p>
+                </div>
+            </div>
+            <button id="fullscreen-btn" class="btn-fullscreen flex items-center gap-2" onclick="toggleFullscreen()">
+                <span>⛶ Pantalla completa</span>
+            </button>
+        </header>
+
+        <!-- Barra de Navegación Horizontal -->
+        <nav class="nav-tabs" role="tablist">
+            <button id="tab-teoria" class="tab-btn active" onclick="cambiarSeccion('teoria', this)">📘 1. Teoría</button>
+            <button id="tab-ejemplos" class="tab-btn" onclick="cambiarSeccion('ejemplos', this)">💡 2. Ejemplos Resueltos (15)</button>
+            <button id="tab-ejercicios" class="tab-btn" onclick="cambiarSeccion('ejercicios', this)">✍️ 3. Ejercicios Prácticos (15)</button>
+            <button id="tab-reflexion" class="tab-btn" onclick="cambiarSeccion('reflexion', this)">🧠 4. Reflexión Crítica</button>
+            <button id="tab-evaluacion" class="tab-btn" onclick="cambiarSeccion('evaluacion', this)">✅ 5. Evaluación Formativa</button>
+            <button id="tab-solucionador" class="tab-btn tab-btn-solucionador" onclick="cambiarSeccion('solucionador', this)">🔄 6. Solucionador Paso a Paso</button>
+        </nav>
+
+        <!-- Lienzo Principal de Contenido -->
+        <main class="p-4 sm:p-6 flex-1">
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 1: EXPLICACIÓN TEÓRICA             -->
+            <!-- ========================================== -->
+            <section id="sec-teoria" class="seccion-contenido">
+                <div class="card-montano">
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-3 border-b-2 border-[#F7D615] pb-2">
+                        <h2 class="text-2xl font-bold text-[#1269A8]">¿Qué es el Método de Sustitución y Cómo Funciona?</h2>
+                        <button class="btn-resolver-directo !mt-0" onclick="abrirEnSolucionador(-2, 1, 1, 3, 1, 11, 1, 'y', 'Ejemplo Teórico')">🔄 Probar en Solucionador</button>
+                    </div>
+                    <p class="text-base leading-relaxed mb-4">
+                        El <strong>Método de Sustitución</strong> es una técnica algebraica exacta para resolver sistemas de ecuaciones lineales <span class="math-expr">2 × 2</span>. Consiste en <strong>despejar una incógnita en una de las ecuaciones</strong> y luego <strong>sustituir la expresión obtenida en la otra ecuación</strong> (usando paréntesis), reduciendo así el sistema a una ecuación lineal con una sola variable.
+                    </p>
+                    <p class="text-base leading-relaxed mb-4">
+                        Este método resulta especialmente rápido y limpio cuando alguna de las dos ecuaciones ya tiene una incógnita despejada (<span class="math-expr">y = mx + b</span> o <span class="math-expr">x = ay + c</span>) o cuando alguna variable tiene <strong>coeficiente <span class="math-expr">1</span> o <span class="math-expr">-1</span></strong>, evitando así fracciones en el despeje inicial.
+                    </p>
+
+                    <!-- Algoritmo en 5 Pasos -->
+                    <div class="bg-[#F2F5E9] border-2 border-[#A6B046] rounded-xl p-4 my-4">
+                        <h3 class="font-bold text-[#54887D] mb-3">🧭 Procedimiento Sistemático en 5 Pasos (Método de Sustitución)</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 text-sm">
+                            <div class="bg-white p-3 rounded-lg border-t-4 border-[#1269A8] shadow-sm">
+                                <strong class="text-[#1269A8] block mb-1">Paso 1: Elegir Ecuación e Incógnita</strong>
+                                <p class="text-slate-700">Observa el sistema y elige la ecuación y la variable más fácil de despejar (preferiblemente con coeficiente <span class="math-expr text-xs">1</span> o <span class="math-expr text-xs">-1</span>).</p>
+                            </div>
+                            <div class="bg-white p-3 rounded-lg border-t-4 border-[#54887D] shadow-sm">
+                                <strong class="text-[#54887D] block mb-1">Paso 2: Despejar esa Incógnita</strong>
+                                <p class="text-slate-700">Aísla la incógnita elegida en términos de la otra variable en esa ecuación.</p>
+                            </div>
+                            <div class="bg-white p-3 rounded-lg border-t-4 border-[#A6B046] shadow-sm">
+                                <strong class="text-[#54887D] block mb-1">Paso 3: Sustituir y Resolver</strong>
+                                <p class="text-slate-700">Reemplaza la expresión despejada <strong>entre paréntesis</strong> dentro de la <strong>otra ecuación</strong>, aplica propiedad distributiva y resuelve.</p>
+                            </div>
+                            <div class="bg-white p-3 rounded-lg border-t-4 border-[#F7D615] shadow-sm">
+                                <strong class="text-[#1269A8] block mb-1">Paso 4: Sustitución Regresiva</strong>
+                                <p class="text-slate-700">Sustituye el valor numérico hallado dentro de la <strong>ecuación despejada del Paso 2</strong> para encontrar la segunda variable.</p>
+                            </div>
+                            <div class="bg-white p-3 rounded-lg border-t-4 border-[#1269A8] shadow-sm">
+                                <strong class="text-[#1269A8] block mb-1">Paso 5: Comprobar</strong>
+                                <p class="text-slate-700">Verifica que el par ordenado <span class="math-expr text-xs">(x, y)</span> haga verdaderas ambas ecuaciones originales.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Explorador Visual SVG de los 3 Casos Algebraicos al Sustituir -->
+                <div class="card-montano">
+                    <h3 class="text-xl font-bold text-[#1269A8] mb-2">📐 Interpretación Algebraica al Sustituir y Simplificar</h3>
+                    <p class="text-sm text-slate-600 mb-4">Al sustituir la expresión despejada en la segunda ecuación y reducir términos semejantes, siempre obtendrás uno de estos tres escenarios:</p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <!-- Caso 1: Solución Única -->
+                        <div class="p-4 bg-emerald-50 border-2 border-[#A6B046] rounded-xl text-center flex flex-col justify-between">
+                            <div>
+                                <span class="badge-nivel badge-basico mb-2">Compatible Determinado</span>
+                                <h4 class="font-bold text-[#1269A8]">Solución Única (x, y)</h4>
+                                <div class="my-2 flex justify-center">
+                                    <svg width="205" height="108" viewBox="0 0 205 108" class="bg-white rounded border border-slate-300">
+                                        <rect x="10" y="10" width="185" height="25" rx="5" fill="#e0f2fe" stroke="#1269A8" stroke-width="1.2"/>
+                                        <text x="102" y="26" text-anchor="middle" font-size="11" font-weight="bold" fill="#1269A8">3x + (2x + 1) = 11</text>
+                                        <line x1="102" y1="36" x2="102" y2="52" stroke="#54887D" stroke-width="2"/>
+                                        <polygon points="102,57 98,50 106,50" fill="#54887D"/>
+                                        <rect x="26" y="59" width="153" height="36" rx="6" fill="#fef9c3" stroke="#0f172a" stroke-width="1.5"/>
+                                        <text x="102" y="74" text-anchor="middle" font-size="11" font-weight="bold" fill="#0f172a">5x = 10 ➔ x = 2</text>
+                                        <text x="102" y="89" text-anchor="middle" font-size="10" font-weight="bold" fill="#54887D">Solución Única: (2, 5)</text>
+                                    </svg>
+                                </div>
+                                <p class="text-xs sm:text-sm text-slate-700">La ecuación lineal resultante tiene un coeficiente no nulo para la variable, dando un <strong>único par ordenado</strong>.</p>
+                            </div>
+                            <button class="btn-resolver-directo justify-center w-full" onclick="abrirEnSolucionador(-2, 1, 1, 3, 1, 11, 1, 'y', 'Caso 1: Solución Única')">🔄 Probar este caso</button>
+                        </div>
+
+                        <!-- Caso 2: Sin Solución -->
+                        <div class="p-4 bg-amber-50 border-2 border-[#F7D615] rounded-xl text-center flex flex-col justify-between">
+                            <div>
+                                <span class="badge-nivel badge-avanzado mb-2">Sistema Incompatible</span>
+                                <h4 class="font-bold text-[#1269A8]">Sin Solución (0 = 5)</h4>
+                                <div class="my-2 flex justify-center">
+                                    <svg width="205" height="108" viewBox="0 0 205 108" class="bg-white rounded border border-slate-300">
+                                        <rect x="10" y="10" width="185" height="25" rx="5" fill="#e0f2fe" stroke="#1269A8" stroke-width="1.2"/>
+                                        <text x="102" y="26" text-anchor="middle" font-size="11" font-weight="bold" fill="#1269A8">6x - 2(3x - 2) = 9</text>
+                                        <line x1="102" y1="36" x2="102" y2="52" stroke="#b45309" stroke-width="2"/>
+                                        <polygon points="102,57 98,50 106,50" fill="#b45309"/>
+                                        <rect x="20" y="59" width="165" height="36" rx="6" fill="#fee2e2" stroke="#b91c1c" stroke-width="1.5"/>
+                                        <text x="102" y="74" text-anchor="middle" font-size="11" font-weight="bold" fill="#b91c1c">4 = 9  (➔ 0 = 5)</text>
+                                        <text x="102" y="89" text-anchor="middle" font-size="10" font-weight="bold" fill="#7f1d1d">Falsedad: Sin solución</text>
+                                    </svg>
+                                </div>
+                                <p class="text-xs sm:text-sm text-slate-700">Al distribuir y reducir, la variable se cancela y queda una <strong>igualdad falsa</strong> (<span class="math-expr text-xs">0 = 5</span>). No hay solución.</p>
+                            </div>
+                            <button class="btn-resolver-directo justify-center w-full" onclick="abrirEnSolucionador(-3, 1, -2, 6, -2, 9, 1, 'y', 'Caso 2: Sin Solución')">🔄 Probar este caso</button>
+                        </div>
+
+                        <!-- Caso 3: Infinitas Soluciones -->
+                        <div class="p-4 bg-sky-50 border-2 border-[#88B5C7] rounded-xl text-center flex flex-col justify-between">
+                            <div>
+                                <span class="badge-nivel badge-intermedio mb-2">Compatible Indeterminado</span>
+                                <h4 class="font-bold text-[#1269A8]">Infinitas Soluciones (0 = 0)</h4>
+                                <div class="my-2 flex justify-center">
+                                    <svg width="205" height="108" viewBox="0 0 205 108" class="bg-white rounded border border-slate-300">
+                                        <rect x="10" y="10" width="185" height="25" rx="5" fill="#e0f2fe" stroke="#1269A8" stroke-width="1.2"/>
+                                        <text x="102" y="26" text-anchor="middle" font-size="11" font-weight="bold" fill="#1269A8">2(2y + 3) - 4y = 6</text>
+                                        <line x1="102" y1="36" x2="102" y2="52" stroke="#54887D" stroke-width="2"/>
+                                        <polygon points="102,57 98,50 106,50" fill="#54887D"/>
+                                        <rect x="20" y="59" width="165" height="36" rx="6" fill="#dcfce7" stroke="#15803d" stroke-width="1.5"/>
+                                        <text x="102" y="74" text-anchor="middle" font-size="11" font-weight="bold" fill="#15803d">6 = 6  (➔ 0 = 0)</text>
+                                        <text x="102" y="89" text-anchor="middle" font-size="10" font-weight="bold" fill="#166534">Identidad: Infinitas soluciones</text>
+                                    </svg>
+                                </div>
+                                <p class="text-xs sm:text-sm text-slate-700">Al sustituir, la variable desaparece y queda una <strong>identidad verdadera</strong> (<span class="math-expr text-xs">0 = 0</span>). Infinitas soluciones.</p>
+                            </div>
+                            <button class="btn-resolver-directo justify-center w-full" onclick="abrirEnSolucionador(1, -2, 3, 2, -4, 6, 1, 'x', 'Caso 3: Infinitas Soluciones')">🔄 Probar este caso</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 2: EJEMPLOS RESUELTOS (15)         -->
+            <!-- ========================================== -->
+            <section id="sec-ejemplos" class="seccion-contenido hidden">
+                <div class="flex flex-wrap items-center justify-between gap-3 mb-4 bg-white p-4 rounded-xl border-2 border-[#54887D]">
+                    <div>
+                        <h2 class="text-xl font-bold text-[#1269A8]">Ejemplos Resueltos Paso a Paso (Método de Sustitución)</h2>
+                        <p class="text-sm text-slate-600">Observa el despeje estratégico, la sustitución entre paréntesis, la propiedad distributiva y la comprobación.</p>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <button class="subtab-btn active" onclick="filtrarSubnivel('ejemplos', 'basico', this)">Nivel Básico (5)</button>
+                        <button class="subtab-btn" onclick="filtrarSubnivel('ejemplos', 'intermedio', this)">Nivel Intermedio (5)</button>
+                        <button class="subtab-btn" onclick="filtrarSubnivel('ejemplos', 'avanzado', this)">Nivel Avanzado (5)</button>
+                    </div>
+                </div>
+
+                <!-- EJEMPLOS BÁSICOS -->
+                <div id="ejemplos-basico" class="subcontenido-ejemplos space-y-4">
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-basico">Básico • Ejemplo 1 (Una ecuación ya despejada)</span>
+                            <button class="btn-resolver-directo !mt-0" onclick="abrirEnSolucionador(-2, 1, 1, 3, 1, 11, 1, 'y', 'Ejemplo Básico 1')">🔄 Resolver en Pizarra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Resolver por sustitución el sistema: 
+                            <span class="sistema-box text-sm ml-2"><span>y = 2x + 1 <br> 3x + y = 11</span></span>
+                        </p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 y 2 (Despeje):</strong> La variable <span class="math-expr">y</span> ya está despejada en la Ec. 1: <span class="math-expr">y = 2x + 1</span>.</p>
+                            <p><strong>Paso 3 (Sustituir en Ec. 2):</strong> Reemplazamos <span class="math-expr">y</span> entre paréntesis: <span class="math-expr">3x + (2x + 1) = 11 ➔ 5x + 1 = 11 ➔ 5x = 10 ➔ x = 2</span>.</p>
+                            <p><strong>Paso 4 (Sustitución regresiva):</strong> En la ecuación despejada: <span class="math-expr">y = 2(2) + 1 = 5</span>.</p>
+                            <p><strong>Paso 5 (Comprobación):</strong> <span class="math-expr">3(2) + 5 = 11</span> (Correcto).</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: Solución = (2, 5) (x = 2, y = 5).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-basico">Básico • Ejemplo 2 (Variable <span class="font-mono">x</span> con coeficiente 1)</span>
+                            <button class="btn-resolver-directo !mt-0" onclick="abrirEnSolucionador(1, 2, 8, 3, -1, 3, 1, 'x', 'Ejemplo Básico 2')">🔄 Resolver en Pizarra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Resolver por sustitución: 
+                            <span class="sistema-box text-sm ml-2"><span>x + 2y = 8 <br> 3x - y = 3</span></span>
+                        </p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 y 2 (Despejar <span class="math-expr">x</span> en Ec. 1):</strong> Como <span class="math-expr">x</span> tiene coeficiente <span class="math-expr">1</span>, despejamos: <span class="math-expr">x = 8 - 2y</span>.</p>
+                            <p><strong>Paso 3 (Sustituir en Ec. 2):</strong> <span class="math-expr">3(8 - 2y) - y = 3 ➔ 24 - 6y - y = 3 ➔ 24 - 7y = 3 ➔ -7y = -21 ➔ y = 3</span>.</p>
+                            <p><strong>Paso 4 (Sustituir en despeje):</strong> <span class="math-expr">x = 8 - 2(3) = 8 - 6 = 2</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: Solución = (2, 3) (x = 2, y = 3).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-basico">Básico • Ejemplo 3 (Despejando <span class="font-mono">y</span> con coeficiente 1)</span>
+                            <button class="btn-resolver-directo !mt-0" onclick="abrirEnSolucionador(2, 1, 7, 4, -3, -1, 1, 'y', 'Ejemplo Básico 3')">🔄 Resolver en Pizarra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Resolver por sustitución: 
+                            <span class="sistema-box text-sm ml-2"><span>2x + y = 7 <br> 4x - 3y = -1</span></span>
+                        </p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 y 2 (Despejar <span class="math-expr">y</span> en Ec. 1):</strong> <span class="math-expr">y = 7 - 2x</span>.</p>
+                            <p><strong>Paso 3 (Sustituir en Ec. 2):</strong> <span class="math-expr">4x - 3(7 - 2x) = -1 ➔ 4x - 21 + 6x = -1 ➔ 10x = 20 ➔ x = 2</span>.</p>
+                            <p><strong>Paso 4 (Hallar <span class="math-expr">y</span>):</strong> <span class="math-expr">y = 7 - 2(2) = 3</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: Solución = (2, 3) (x = 2, y = 3).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-basico">Básico • Ejemplo 4 (Variable con coeficiente -1)</span>
+                            <button class="btn-resolver-directo !mt-0" onclick="abrirEnSolucionador(3, -1, 5, 2, 3, 18, 1, 'y', 'Ejemplo Básico 4')">🔄 Resolver en Pizarra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Resolver despejando <span class="math-expr">y</span> en la primera ecuación: 
+                            <span class="sistema-box text-sm ml-2"><span>3x - y = 5 <br> 2x + 3y = 18</span></span>
+                        </p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 y 2 (Despejar <span class="math-expr">y</span> en Ec. 1):</strong> <span class="math-expr">3x - 5 = y ➔ y = 3x - 5</span>.</p>
+                            <p><strong>Paso 3 (Sustituir en Ec. 2):</strong> <span class="math-expr">2x + 3(3x - 5) = 18 ➔ 2x + 9x - 15 = 18 ➔ 11x = 33 ➔ x = 3</span>.</p>
+                            <p><strong>Paso 4 (Hallar <span class="math-expr">y</span>):</strong> <span class="math-expr">y = 3(3) - 5 = 4</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: Solución = (3, 4) (x = 3, y = 4).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-basico">Básico • Ejemplo 5 (Despeje sencillo en la segunda ecuación)</span>
+                            <button class="btn-resolver-directo !mt-0" onclick="abrirEnSolucionador(5, 2, 12, 1, -1, 1, 2, 'x', 'Ejemplo Básico 5')">🔄 Resolver en Pizarra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Resolver por sustitución: 
+                            <span class="sistema-box text-sm ml-2"><span>5x + 2y = 12 <br> x - y = 1</span></span>
+                        </p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 y 2 (Despejar <span class="math-expr">x</span> en Ec. 2):</strong> De <span class="math-expr">x - y = 1</span> obtenemos <span class="math-expr">x = y + 1</span>.</p>
+                            <p><strong>Paso 3 (Sustituir en Ec. 1):</strong> <span class="math-expr">5(y + 1) + 2y = 12 ➔ 5y + 5 + 2y = 12 ➔ 7y = 7 ➔ y = 1</span>.</p>
+                            <p><strong>Paso 4 (Hallar <span class="math-expr">x</span>):</strong> <span class="math-expr">x = 1 + 1 = 2</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: Solución = (2, 1) (x = 2, y = 1).</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EJEMPLOS INTERMEDIOS -->
+                <div id="ejemplos-intermedio" class="subcontenido-ejemplos hidden space-y-4">
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-intermedio">Intermedio • Ejemplo 1 (Ninguna variable tiene coeficiente 1)</span>
+                            <button class="btn-resolver-directo !mt-0" onclick="abrirEnSolucionador(2, 3, 12, 3, -2, 5, 1, 'x', 'Ejemplo Intermedio 1')">🔄 Resolver en Pizarra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Despejar con denominador y resolver por sustitución: 
+                            <span class="sistema-box text-sm ml-2"><span>2x + 3y = 12 <br> 3x - 2y = 5</span></span>
+                        </p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 y 2 (Despejar <span class="math-expr">x</span> en Ec. 1):</strong> <span class="math-expr">2x = 12 - 3y ➔ x = (12 - 3y) / 2</span>.</p>
+                            <p><strong>Paso 3 (Sustituir en Ec. 2 y multiplicar por 2):</strong> <span class="math-expr">3((12 - 3y) / 2) - 2y = 5 ➔ 3(12 - 3y) - 4y = 10 ➔ 36 - 9y - 4y = 10 ➔ -13y = -26 ➔ y = 2</span>.</p>
+                            <p><strong>Paso 4 (Hallar <span class="math-expr">x</span>):</strong> <span class="math-expr">x = (12 - 3(2)) / 2 = 6 / 2 = 3</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: Solución = (3, 2) (x = 3, y = 2).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-intermedio">Intermedio • Ejemplo 2 (Signo negativo delante del paréntesis sustituido)</span>
+                            <button class="btn-resolver-directo !mt-0" onclick="abrirEnSolucionador(5, -2, 11, 3, -1, 7, 2, 'y', 'Ejemplo Intermedio 2')">🔄 Resolver en Pizarra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Resolver por sustitución cuidando la ley de signos: 
+                            <span class="sistema-box text-sm ml-2"><span>5x - 2y = 11 <br> 3x - y = 7</span></span>
+                        </p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 y 2 (Despejar <span class="math-expr">y</span> en Ec. 2):</strong> <span class="math-expr">y = 3x - 7</span>.</p>
+                            <p><strong>Paso 3 (Sustituir en Ec. 1 con paréntesis):</strong> <span class="math-expr">5x - 2(3x - 7) = 11 ➔ 5x - 6x + 14 = 11 ➔ -x = -3 ➔ x = 3</span>.</p>
+                            <p><strong>Paso 4 (Hallar <span class="math-expr">y</span>):</strong> <span class="math-expr">y = 3(3) - 7 = 2</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: Solución = (3, 2) (x = 3, y = 2).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-intermedio">Intermedio • Ejemplo 3 (Sistema Incompatible por Sustitución)</span>
+                            <button class="btn-resolver-directo !mt-0" onclick="abrirEnSolucionador(-3, 1, -2, 6, -2, 10, 1, 'y', 'Ejemplo Intermedio 3 (Incompatible)')">🔄 Resolver en Pizarra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Aplicar el método de sustitución al sistema: 
+                            <span class="sistema-box text-sm ml-2"><span>y = 3x - 2 <br> 6x - 2y = 10</span></span>
+                        </p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 y 2 (Despeje):</strong> <span class="math-expr">y = 3x - 2</span> en Ec. 1.</p>
+                            <p><strong>Paso 3 (Sustituir en Ec. 2):</strong> <span class="math-expr">6x - 2(3x - 2) = 10 ➔ 6x - 6x + 4 = 10 ➔ 4 = 10</span> (o <span class="math-expr">0 = 6</span>).</p>
+                            <p><strong>Análisis:</strong> La variable <span class="math-expr">x</span> se cancela y queda una <strong>falsedad numérica</strong>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: Sistema incompatible; NO tiene solución.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-intermedio">Intermedio • Ejemplo 4 (Sistema Indeterminado por Sustitución)</span>
+                            <button class="btn-resolver-directo !mt-0" onclick="abrirEnSolucionador(1, -2, 3, 2, -4, 6, 1, 'x', 'Ejemplo Intermedio 4 (Indeterminado)')">🔄 Resolver en Pizarra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Resolver por sustitución: 
+                            <span class="sistema-box text-sm ml-2"><span>x = 2y + 3 <br> 2x - 4y = 6</span></span>
+                        </p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 y 2 (Despeje):</strong> <span class="math-expr">x = 2y + 3</span> en Ec. 1.</p>
+                            <p><strong>Paso 3 (Sustituir en Ec. 2):</strong> <span class="math-expr">2(2y + 3) - 4y = 6 ➔ 4y + 6 - 4y = 6 ➔ 6 = 6</span> (o <span class="math-expr">0 = 0</span>).</p>
+                            <p><strong>Análisis:</strong> Se obtiene una <strong>identidad algebraica</strong> verdadera para todo <span class="math-expr">y ∈ ℝ</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: Sistema compatible indeterminado; tiene infinitas soluciones.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-intermedio">Intermedio • Ejemplo 5 (Coordenadas Negativas y Signos Opuestos)</span>
+                            <button class="btn-resolver-directo !mt-0" onclick="abrirEnSolucionador(2, 1, -1, 3, -2, -12, 1, 'y', 'Ejemplo Intermedio 5')">🔄 Resolver en Pizarra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Resolver por sustitución: 
+                            <span class="sistema-box text-sm ml-2"><span>2x + y = -1 <br> 3x - 2y = -12</span></span>
+                        </p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 y 2 (Despejar <span class="math-expr">y</span> en Ec. 1):</strong> <span class="math-expr">y = -1 - 2x</span>.</p>
+                            <p><strong>Paso 3 (Sustituir en Ec. 2):</strong> <span class="math-expr">3x - 2(-1 - 2x) = -12 ➔ 3x + 2 + 4x = -12 ➔ 7x = -14 ➔ x = -2</span>.</p>
+                            <p><strong>Paso 4 (Hallar <span class="math-expr">y</span>):</strong> <span class="math-expr">y = -1 - 2(-2) = -1 + 4 = 3</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: Solución = (-2, 3) (x = -2, y = 3).</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EJEMPLOS AVANZADOS -->
+                <div id="ejemplos-avanzado" class="subcontenido-ejemplos hidden space-y-4">
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-avanzado">Avanzado • Ejemplo 1 (Ecuaciones con paréntesis y agrupación previa)</span>
+                            <button class="btn-resolver-directo !mt-0" onclick="abrirEnSolucionador(2, -1, 3, 3, 2, 15, 1, 'y', 'Ejemplo Avanzado 1')">🔄 Resolver en Pizarra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Simplificar paréntesis y resolver por sustitución: 
+                            <span class="sistema-box text-sm ml-2"><span>2(x + 1) - y = 5 <br> 3x + 2(y - 1) = 13</span></span>
+                        </p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 0 (Reducir paréntesis):</strong> Ec. 1: <span class="math-expr">2x + 2 - y = 5 ➔ 2x - y = 3</span>. Ec. 2: <span class="math-expr">3x + 2y - 2 = 13 ➔ 3x + 2y = 15</span>.</p>
+                            <p><strong>Paso 1 y 2 (Despejar <span class="math-expr">y</span> en Ec. 1):</strong> <span class="math-expr">y = 2x - 3</span>.</p>
+                            <p><strong>Paso 3 (Sustituir en Ec. 2):</strong> <span class="math-expr">3x + 2(2x - 3) = 15 ➔ 3x + 4x - 6 = 15 ➔ 7x = 21 ➔ x = 3</span>.</p>
+                            <p><strong>Paso 4 (Hallar <span class="math-expr">y</span>):</strong> <span class="math-expr">y = 2(3) - 3 = 3</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Solución = (3, 3) (x = 3, y = 3).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-avanzado">Avanzado • Ejemplo 2 (Ecuaciones con coeficientes fraccionarios)</span>
+                            <button class="btn-resolver-directo !mt-0" onclick="abrirEnSolucionador(3, 2, 24, 1, -1, 3, 2, 'x', 'Ejemplo Avanzado 2')">🔄 Resolver en Pizarra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Eliminar denominadores y resolver por sustitución: 
+                            <span class="sistema-box text-sm ml-2"><span>x/2 + y/3 = 4 <br> x - y = 3</span></span>
+                        </p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 0 (Multiplicar Ec. 1 por MCM = 6):</strong> <span class="math-expr">3x + 2y = 24</span>.</p>
+                            <p><strong>Paso 1 y 2 (Despejar <span class="math-expr">x</span> en Ec. 2):</strong> <span class="math-expr">x = y + 3</span>.</p>
+                            <p><strong>Paso 3 (Sustituir en Ec. 1):</strong> <span class="math-expr">3(y + 3) + 2y = 24 ➔ 3y + 9 + 2y = 24 ➔ 5y = 15 ➔ y = 3</span>.</p>
+                            <p><strong>Paso 4 (Hallar <span class="math-expr">x</span>):</strong> <span class="math-expr">x = 3 + 3 = 6</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Solución = (6, 3) (x = 6, y = 3).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-avanzado">Avanzado • Ejemplo 3 (Ecuaciones con decimales)</span>
+                            <button class="btn-resolver-directo !mt-0" onclick="abrirEnSolucionador(5, 10, 40, 2, -5, -2, 1, 'y', 'Ejemplo Avanzado 3')">🔄 Resolver en Pizarra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Resolver por sustitución: 
+                            <span class="sistema-box text-sm ml-2"><span>0.5x + y = 4 <br> 0.2x - 0.5y = -0.2</span></span>
+                        </p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 y 2 (Despejar <span class="math-expr">y</span> en Ec. 1):</strong> Como <span class="math-expr">y</span> tiene coeficiente <span class="math-expr">1</span>: <span class="math-expr">y = 4 - 0.5x</span>.</p>
+                            <p><strong>Paso 3 (Sustituir en Ec. 2):</strong> <span class="math-expr">0.2x - 0.5(4 - 0.5x) = -0.2 ➔ 0.2x - 2 + 0.25x = -0.2 ➔ 0.45x = 1.8 ➔ x = 4</span>.</p>
+                            <p><strong>Paso 4 (Hallar <span class="math-expr">y</span>):</strong> <span class="math-expr">y = 4 - 0.5(4) = 4 - 2 = 2</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Solución = (4, 2) (x = 4, y = 2).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-avanzado">Avanzado • Ejemplo 4 (Aplicación contextualizada en Quetzales)</span>
+                            <button class="btn-resolver-directo !mt-0" onclick="abrirEnSolucionador(1, 3, 21, 4, 2, 44, 1, 'x', 'Ejemplo Avanzado 4 (Librería Q)')">🔄 Resolver en Pizarra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">En una librería de Guatemala, <span class="math-expr">1</span> cuaderno y <span class="math-expr">3</span> lapiceros cuestan <span class="math-expr">Q21</span>, mientras que <span class="math-expr">4</span> cuadernos y <span class="math-expr">2</span> lapiceros cuestan <span class="math-expr">Q44</span>. Plantea el sistema y resuelve por sustitución.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Planteamiento (<span class="math-expr">x</span> = cuaderno, <span class="math-expr">y</span> = lapicero):</strong> <span class="math-expr">x + 3y = 21</span> y <span class="math-expr">4x + 2y = 44</span>.</p>
+                            <p><strong>Paso 1 y 2 (Despejar <span class="math-expr">x</span> en Ec. 1):</strong> <span class="math-expr">x = 21 - 3y</span>.</p>
+                            <p><strong>Paso 3 (Sustituir en Ec. 2):</strong> <span class="math-expr">4(21 - 3y) + 2y = 44 ➔ 84 - 12y + 2y = 44 ➔ -10y = -40 ➔ y = 4</span>.</p>
+                            <p><strong>Paso 4 (Hallar <span class="math-expr">x</span>):</strong> <span class="math-expr">x = 21 - 3(4) = 9</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Cada cuaderno cuesta Q9 y cada lapicero cuesta Q4 (9, 4).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-avanzado">Avanzado • Ejemplo 5 (Cálculo de parámetro <span class="font-mono">k</span> mediante sustitución)</span>
+                            <button class="btn-resolver-directo !mt-0" onclick="abrirEnSolucionador(1, 2, 5, 2, 4, 12, 1, 'x', 'Ejemplo Avanzado 5 (k = 4)')">🔄 Probar con k = 4</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Halla el valor de <span class="math-expr">k</span> para que el sistema 
+                            <span class="sistema-box text-sm mx-1"><span>x + 2y = 5 <br> 2x + ky = 12</span></span> 
+                            <strong>no tenga solución</strong> al aplicar sustitución.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 y 2 (Despejar <span class="math-expr">x</span> en Ec. 1):</strong> <span class="math-expr">x = 5 - 2y</span>.</p>
+                            <p><strong>Paso 3 (Sustituir en Ec. 2):</strong> <span class="math-expr">2(5 - 2y) + ky = 12 ➔ 10 - 4y + ky = 12 ➔ (k - 4)y = 2</span>.</p>
+                            <p><strong>Análisis:</strong> Para que no exista solución, el coeficiente de <span class="math-expr">y</span> debe anularse (<span class="math-expr">k - 4 = 0 ➔ k = 4</span>), dejando la contradicción <span class="math-expr">0 = 2</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: k = 4.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 3: EJERCICIOS PRÁCTICOS (15)       -->
+            <!-- ========================================== -->
+            <section id="sec-ejercicios" class="seccion-contenido hidden">
+                <div class="flex flex-wrap items-center justify-between gap-3 mb-4 bg-white p-4 rounded-xl border-2 border-[#54887D]">
+                    <div>
+                        <h2 class="text-xl font-bold text-[#1269A8]">Práctica Guiada en Pizarra (Método de Sustitución)</h2>
+                        <p class="text-sm text-slate-600">Despeja la variable más conveniente, sustituye entre paréntesis en la otra ecuación y comprueba.</p>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <button class="subtab-btn active" onclick="filtrarSubnivel('ejercicios', 'basico', this)">Básico (5)</button>
+                        <button class="subtab-btn" onclick="filtrarSubnivel('ejercicios', 'intermedio', this)">Intermedio (5)</button>
+                        <button class="subtab-btn" onclick="filtrarSubnivel('ejercicios', 'avanzado', this)">Avanzado (5)</button>
+                    </div>
+                </div>
+
+                <!-- EJERCICIOS BÁSICOS -->
+                <div id="ejercicios-basico" class="subcontenido-ejercicios space-y-4">
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 1</span>
+                        <p class="font-semibold text-base">Resuelve por sustitución: <span class="math-expr">{ y = 3x - 1 ; 2x + y = 9 }</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-eb1', this)">Mostrar solución</button>
+                            <button class="btn-resolver-directo" onclick="abrirEnSolucionador(-3, 1, -1, 2, 1, 9, 1, 'y', 'Ejercicio Básico 1')">🔄 Probar en Solucionador</button>
+                        </div>
+                        <div id="sol-eb1" class="solucion-box">
+                            <p><strong>Despeje Ec. 1:</strong> <span class="math-expr">y = 3x - 1</span>.<br>
+                            <strong>Sustituyendo en Ec. 2:</strong> <span class="math-expr">2x + (3x - 1) = 9 ➔ 5x = 10 ➔ x = 2</span>.<br>
+                            <strong>Hallando <span class="math-expr">y</span>:</strong> <span class="math-expr">y = 3(2) - 1 = 5</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Solución = (2, 5) (x = 2, y = 5).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 2</span>
+                        <p class="font-semibold text-base">Despeja <span class="math-expr">x</span> en la primera ecuación y resuelve por sustitución: <span class="math-expr">{ x + 3y = 10 ; 2x - y = 6 }</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-eb2', this)">Mostrar solución</button>
+                            <button class="btn-resolver-directo" onclick="abrirEnSolucionador(1, 3, 10, 2, -1, 6, 1, 'x', 'Ejercicio Básico 2')">🔄 Probar en Solucionador</button>
+                        </div>
+                        <div id="sol-eb2" class="solucion-box">
+                            <p><strong>Despeje Ec. 1:</strong> <span class="math-expr">x = 10 - 3y</span>.<br>
+                            <strong>Sustituyendo en Ec. 2:</strong> <span class="math-expr">2(10 - 3y) - y = 6 ➔ 20 - 7y = 6 ➔ -7y = -14 ➔ y = 2</span>.<br>
+                            <strong>Hallando <span class="math-expr">x</span>:</strong> <span class="math-expr">x = 10 - 3(2) = 4</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Solución = (4, 2) (x = 4, y = 2).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 3</span>
+                        <p class="font-semibold text-base">Resuelve por sustitución: <span class="math-expr">{ 3x + y = 11 ; 2x + 3y = 12 }</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-eb3', this)">Mostrar solución</button>
+                            <button class="btn-resolver-directo" onclick="abrirEnSolucionador(3, 1, 11, 2, 3, 12, 1, 'y', 'Ejercicio Básico 3')">🔄 Probar en Solucionador</button>
+                        </div>
+                        <div id="sol-eb3" class="solucion-box">
+                            <p><strong>Despeje Ec. 1:</strong> <span class="math-expr">y = 11 - 3x</span>.<br>
+                            <strong>Sustituyendo en Ec. 2:</strong> <span class="math-expr">2x + 3(11 - 3x) = 12 ➔ 2x + 33 - 9x = 12 ➔ -7x = -21 ➔ x = 3</span>.<br>
+                            <strong>Hallando <span class="math-expr">y</span>:</strong> <span class="math-expr">y = 11 - 3(3) = 2</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Solución = (3, 2) (x = 3, y = 2).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 4</span>
+                        <p class="font-semibold text-base">Despeja <span class="math-expr">y</span> en la primera ecuación y resuelve: <span class="math-expr">{ 4x - y = 7 ; x + 2y = 4 }</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-eb4', this)">Mostrar solución</button>
+                            <button class="btn-resolver-directo" onclick="abrirEnSolucionador(4, -1, 7, 1, 2, 4, 1, 'y', 'Ejercicio Básico 4')">🔄 Probar en Solucionador</button>
+                        </div>
+                        <div id="sol-eb4" class="solucion-box">
+                            <p><strong>Despeje Ec. 1:</strong> <span class="math-expr">y = 4x - 7</span>.<br>
+                            <strong>Sustituyendo en Ec. 2:</strong> <span class="math-expr">x + 2(4x - 7) = 4 ➔ x + 8x - 14 = 4 ➔ 9x = 18 ➔ x = 2</span>.<br>
+                            <strong>Hallando <span class="math-expr">y</span>:</strong> <span class="math-expr">y = 4(2) - 7 = 1</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Solución = (2, 1) (x = 2, y = 1).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 5</span>
+                        <p class="font-semibold text-base">Resuelve por sustitución: <span class="math-expr">{ x - 2y = 1 ; 3x + y = 10 }</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-eb5', this)">Mostrar solución</button>
+                            <button class="btn-resolver-directo" onclick="abrirEnSolucionador(1, -2, 1, 3, 1, 10, 1, 'x', 'Ejercicio Básico 5')">🔄 Probar en Solucionador</button>
+                        </div>
+                        <div id="sol-eb5" class="solucion-box">
+                            <p><strong>Despeje Ec. 1:</strong> <span class="math-expr">x = 1 + 2y</span>.<br>
+                            <strong>Sustituyendo en Ec. 2:</strong> <span class="math-expr">3(1 + 2y) + y = 10 ➔ 3 + 6y + y = 10 ➔ 7y = 7 ➔ y = 1</span>.<br>
+                            <strong>Hallando <span class="math-expr">x</span>:</strong> <span class="math-expr">x = 1 + 2(1) = 3</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Solución = (3, 1) (x = 3, y = 1).</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EJERCICIOS INTERMEDIOS -->
+                <div id="ejercicios-intermedio" class="subcontenido-ejercicios hidden space-y-4">
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 1</span>
+                        <p class="font-semibold text-base">Resuelve por sustitución (con despeje fraccionario): <span class="math-expr">{ 3x + 2y = 16 ; 2x + 5y = 18 }</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ei1', this)">Mostrar solución</button>
+                            <button class="btn-resolver-directo" onclick="abrirEnSolucionador(3, 2, 16, 2, 5, 18, 1, 'y', 'Ejercicio Intermedio 1')">🔄 Probar en Solucionador</button>
+                        </div>
+                        <div id="sol-ei1" class="solucion-box">
+                            <p><strong>Despeje Ec. 1:</strong> <span class="math-expr">y = (16 - 3x) / 2</span>.<br>
+                            <strong>Sustituyendo en Ec. 2 (×2):</strong> <span class="math-expr">2x + 5((16 - 3x)/2) = 18 ➔ 4x + 80 - 15x = 36 ➔ -11x = -44 ➔ x = 4</span>.<br>
+                            <strong>Hallando <span class="math-expr">y</span>:</strong> <span class="math-expr">y = (16 - 3(4)) / 2 = 2</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Solución = (4, 2) (x = 4, y = 2).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 2</span>
+                        <p class="font-semibold text-base">Cuida el signo negativo al sustituir: <span class="math-expr">{ 5x - y = 9 ; 3x - 2y = 4 }</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ei2', this)">Mostrar solución</button>
+                            <button class="btn-resolver-directo" onclick="abrirEnSolucionador(5, -1, 9, 3, -2, 4, 1, 'y', 'Ejercicio Intermedio 2')">🔄 Probar en Solucionador</button>
+                        </div>
+                        <div id="sol-ei2" class="solucion-box">
+                            <p><strong>Despeje Ec. 1:</strong> <span class="math-expr">y = 5x - 9</span>.<br>
+                            <strong>Sustituyendo en Ec. 2:</strong> <span class="math-expr">3x - 2(5x - 9) = 4 ➔ 3x - 10x + 18 = 4 ➔ -7x = -14 ➔ x = 2</span>.<br>
+                            <strong>Hallando <span class="math-expr">y</span>:</strong> <span class="math-expr">y = 5(2) - 9 = 1</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Solución = (2, 1) (x = 2, y = 1).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 3</span>
+                        <p class="font-semibold text-base">Clasifica el sistema aplicando sustitución: <span class="math-expr">{ x = 4y - 1 ; 2x - 8y = 5 }</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ei3', this)">Mostrar solución</button>
+                            <button class="btn-resolver-directo" onclick="abrirEnSolucionador(1, -4, -1, 2, -8, 5, 1, 'x', 'Ejercicio Intermedio 3')">🔄 Probar en Solucionador</button>
+                        </div>
+                        <div id="sol-ei3" class="solucion-box">
+                            <p><strong>Sustituyendo <span class="math-expr">x = 4y - 1</span> en Ec. 2:</strong> <span class="math-expr">2(4y - 1) - 8y = 5 ➔ 8y - 2 - 8y = 5 ➔ -2 = 5</span> (Falsedad).</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Sistema incompatible; NO tiene solución.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 4</span>
+                        <p class="font-semibold text-base">Clasifica el sistema aplicando sustitución: <span class="math-expr">{ y = 2x - 5 ; 4x - 2y = 10 }</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ei4', this)">Mostrar solución</button>
+                            <button class="btn-resolver-directo" onclick="abrirEnSolucionador(-2, 1, -5, 4, -2, 10, 1, 'y', 'Ejercicio Intermedio 4')">🔄 Probar en Solucionador</button>
+                        </div>
+                        <div id="sol-ei4" class="solucion-box">
+                            <p><strong>Sustituyendo <span class="math-expr">y = 2x - 5</span> en Ec. 2:</strong> <span class="math-expr">4x - 2(2x - 5) = 10 ➔ 4x - 4x + 10 = 10 ➔ 10 = 10</span> (Identidad).</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Sistema compatible indeterminado; tiene infinitas soluciones.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 5</span>
+                        <p class="font-semibold text-base">Resuelve por sustitución (con coordenada negativa): <span class="math-expr">{ 3x + y = 1 ; 2x - 3y = 8 }</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ei5', this)">Mostrar solución</button>
+                            <button class="btn-resolver-directo" onclick="abrirEnSolucionador(3, 1, 1, 2, -3, 8, 1, 'y', 'Ejercicio Intermedio 5')">🔄 Probar en Solucionador</button>
+                        </div>
+                        <div id="sol-ei5" class="solucion-box">
+                            <p><strong>Despeje Ec. 1:</strong> <span class="math-expr">y = 1 - 3x</span>.<br>
+                            <strong>Sustituyendo en Ec. 2:</strong> <span class="math-expr">2x - 3(1 - 3x) = 8 ➔ 2x - 3 + 9x = 8 ➔ 11x = 11 ➔ x = 1</span>.<br>
+                            <strong>Hallando <span class="math-expr">y</span>:</strong> <span class="math-expr">y = 1 - 3(1) = -2</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Solución = (1, -2) (x = 1, y = -2).</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EJERCICIOS AVANZADOS -->
+                <div id="ejercicios-avanzado" class="subcontenido-ejercicios hidden space-y-4">
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 1</span>
+                        <p class="font-semibold text-base">Reduce paréntesis y resuelve por sustitución: <span class="math-expr">{ 3(x - 1) + y = 8 ; 2x - (y + 2) = 1 }</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ea1', this)">Mostrar solución</button>
+                            <button class="btn-resolver-directo" onclick="abrirEnSolucionador(3, 1, 11, 2, -1, 3, 1, 'y', 'Ejercicio Avanzado 1')">🔄 Probar en Solucionador</button>
+                        </div>
+                        <div id="sol-ea1" class="solucion-box">
+                            <p><strong>Ordenando:</strong> Ec. 1: <span class="math-expr">3x + y = 11 ➔ y = 11 - 3x</span>; Ec. 2: <span class="math-expr">2x - y = 3</span>.<br>
+                            <strong>Sustituyendo en Ec. 2:</strong> <span class="math-expr">2x - (11 - 3x) = 3 ➔ 5x - 11 = 3 ➔ 5x = 14 ➔ x = 2.8</span> (o <span class="math-expr">14/5</span>).<br>
+                            <strong>Hallando <span class="math-expr">y</span>:</strong> <span class="math-expr">y = 11 - 3(2.8) = 2.6</span> (o <span class="math-expr">13/5</span>).</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Solución = (2.8, 2.6) o (14/5, 13/5).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 2</span>
+                        <p class="font-semibold text-base">Elimina denominadores y resuelve por sustitución: <span class="math-expr">{ x/3 + y/2 = 4 ; x - y = 2 }</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ea2', this)">Mostrar solución</button>
+                            <button class="btn-resolver-directo" onclick="abrirEnSolucionador(2, 3, 24, 1, -1, 2, 2, 'x', 'Ejercicio Avanzado 2')">🔄 Probar en Solucionador</button>
+                        </div>
+                        <div id="sol-ea2" class="solucion-box">
+                            <p><strong>Ec. 1 por 6:</strong> <span class="math-expr">2x + 3y = 24</span>. <strong>Ec. 2 despejada:</strong> <span class="math-expr">x = y + 2</span>.<br>
+                            <strong>Sustituyendo en Ec. 1:</strong> <span class="math-expr">2(y + 2) + 3y = 24 ➔ 5y + 4 = 24 ➔ 5y = 20 ➔ y = 4</span>.<br>
+                            <strong>Hallando <span class="math-expr">x</span>:</strong> <span class="math-expr">x = 4 + 2 = 6</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Solución = (6, 4) (x = 6, y = 4).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 3</span>
+                        <p class="font-semibold text-base">Resuelve por sustitución con decimales: <span class="math-expr">{ 0.4x + y = 5 ; 0.5x - 0.2y = 1.9 }</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ea3', this)">Mostrar solución</button>
+                            <button class="btn-resolver-directo" onclick="abrirEnSolucionador(4, 10, 50, 5, -2, 19, 1, 'y', 'Ejercicio Avanzado 3')">🔄 Probar en Solucionador</button>
+                        </div>
+                        <div id="sol-ea3" class="solucion-box">
+                            <p><strong>Despeje Ec. 1:</strong> <span class="math-expr">y = 5 - 0.4x</span>.<br>
+                            <strong>Sustituyendo en Ec. 2:</strong> <span class="math-expr">0.5x - 0.2(5 - 0.4x) = 1.9 ➔ 0.5x - 1 + 0.08x = 1.9 ➔ 0.58x = 2.9 ➔ x = 5</span>.<br>
+                            <strong>Hallando <span class="math-expr">y</span>:</strong> <span class="math-expr">y = 5 - 0.4(5) = 3</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Solución = (5, 3) (x = 5, y = 3).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 4</span>
+                        <p class="font-semibold text-base">La suma de dos números es <span class="math-expr">25</span> y el doble del mayor excede al triple del menor en <span class="math-expr">10</span> (<span class="math-expr">{ x + y = 25 ; 2x - 3y = 10 }</span>). Halla ambos números por sustitución.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ea4', this)">Mostrar solución</button>
+                            <button class="btn-resolver-directo" onclick="abrirEnSolucionador(1, 1, 25, 2, -3, 10, 1, 'x', 'Ejercicio Avanzado 4 (Números)')">🔄 Probar en Solucionador</button>
+                        </div>
+                        <div id="sol-ea4" class="solucion-box">
+                            <p><strong>Despeje Ec. 1:</strong> <span class="math-expr">x = 25 - y</span>.<br>
+                            <strong>Sustituyendo en Ec. 2:</strong> <span class="math-expr">2(25 - y) - 3y = 10 ➔ 50 - 5y = 10 ➔ -5y = -40 ➔ y = 8</span>.<br>
+                            <strong>Hallando <span class="math-expr">x</span>:</strong> <span class="math-expr">x = 25 - 8 = 17</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Los números son 17 y 8 (17, 8).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 5</span>
+                        <p class="font-semibold text-base">Halla el valor de <span class="math-expr">m</span> para que el sistema <span class="math-expr">{ y = 3x + 1 ; mx - 2y = 7 }</span> sea incompatible al aplicar sustitución.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ea5', this)">Mostrar solución</button>
+                            <button class="btn-resolver-directo" onclick="abrirEnSolucionador(-3, 1, 1, 6, -2, 7, 1, 'y', 'Ejercicio Avanzado 5 (m = 6)')">🔄 Probar con m = 6</button>
+                        </div>
+                        <div id="sol-ea5" class="solucion-box">
+                            <p><strong>Sustituyendo <span class="math-expr">y = 3x + 1</span> en Ec. 2:</strong> <span class="math-expr">mx - 2(3x + 1) = 7 ➔ (m - 6)x - 2 = 7 ➔ (m - 6)x = 9</span>.<br>
+                            <strong>Condición de incompatibilidad:</strong> <span class="math-expr">m - 6 = 0 ➔ m = 6</span> (quedando la falsedad <span class="math-expr">0 = 9</span>).</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: m = 6.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 4: PREGUNTAS DE REFLEXIÓN CRÍTICA  -->
+            <!-- ========================================== -->
+            <section id="sec-reflexion" class="seccion-contenido hidden">
+                <div class="card-montano">
+                    <h2 class="text-2xl font-bold text-[#1269A8] mb-2">🧠 Análisis Conceptual y Pensamiento Crítico (Método de Sustitución)</h2>
+                    <p class="text-sm text-slate-600 mb-4">Reflexiona sobre la estrategia algebraica y las precauciones clave al aplicar el método de sustitución.</p>
+
+                    <div class="space-y-4">
+                        <div class="p-4 bg-[#F2F5E9] rounded-xl border-2 border-[#54887D]">
+                            <h3 class="font-bold text-lg text-[#1269A8]">1. ¿Cuándo conviene más usar Sustitución frente a Igualación o el Método Gráfico?</h3>
+                            <p class="mt-1">Si tienes frente a ti un sistema <span class="math-expr">2 × 2</span>, ¿qué pista visual en las ecuaciones te indica que el <strong>método de sustitución</strong> es la opción más rápida y directa?</p>
+                            <button class="btn-solucion" onclick="toggleSolucion('ref-1', this)">Ver análisis conceptual</button>
+                            <div id="ref-1" class="solucion-box">
+                                <p><strong>Análisis:</strong> Sustitución es ideal cuando <strong>una ecuación ya viene despejada</strong> (por ejemplo <span class="math-expr">y = 3x - 2</span>) o cuando <strong>una sola variable tiene coeficiente <span class="math-expr">1</span> o <span class="math-expr">-1</span></strong> en una de las ecuaciones, ya que basta un único despeje sin denominadores para reemplazar directamente en la otra.</p>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-[#F2F5E9] rounded-xl border-2 border-[#54887D]">
+                            <h3 class="font-bold text-lg text-[#1269A8]">2. ¿Por qué es obligatorio usar paréntesis al sustituir una expresión de dos términos?</h3>
+                            <p class="mt-1">Supón que despejas <span class="math-expr">y = 2x - 3</span> y debes sustituirlo en <span class="math-expr">5x - 2y = 12</span>. ¿Qué error grave se comete si escribes <span class="math-expr">5x - 2 · 2x - 3 = 12</span> sin paréntesis?</p>
+                            <button class="btn-solucion" onclick="toggleSolucion('ref-2', this)">Ver análisis conceptual</button>
+                            <div id="ref-2" class="solucion-box">
+                                <p><strong>Análisis:</strong> Sin paréntesis, el factor <span class="math-expr">-2</span> multiplicaría únicamente al primer término (<span class="math-expr">2x</span>) y dejaría intacto al <span class="math-expr">-3</span>. Al escribir correctamente <span class="math-expr">5x - 2(2x - 3) = 12</span>, la propiedad distributiva aplica el signo negativo a ambos términos: <span class="math-expr">5x - 4x + 6 = 12</span>.</p>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-[#F2F5E9] rounded-xl border-2 border-[#54887D]">
+                            <h3 class="font-bold text-lg text-[#1269A8]">3. ¿Qué ocurre si despejas una variable en una ecuación y la sustituyes en la MISMA ecuación?</h3>
+                            <p class="mt-1">Un error frecuente al aprender sustitución es despejar <span class="math-expr">y</span> en la Ecuación 1 y volver a reemplazarla dentro de la misma Ecuación 1. ¿Qué resultado obtendrás siempre y por qué?</p>
+                            <button class="btn-solucion" onclick="toggleSolucion('ref-3', this)">Ver análisis conceptual</button>
+                            <div id="ref-3" class="solucion-box">
+                                <p><strong>Análisis:</strong> Siempre obtendrás una identidad trivial como <span class="math-expr">0 = 0</span> o <span class="math-expr">7 = 7</span> sin hallar el valor de ninguna incógnita, porque la segunda ecuación nunca participó en el proceso. Para combinar la información de ambas condiciones, siempre debes sustituir en la <strong>otra ecuación</strong>.</p>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-[#F2F5E9] rounded-xl border-2 border-[#54887D]">
+                            <h3 class="font-bold text-lg text-[#1269A8]">4. ¿Cómo interpretar identidades (<span class="math-expr">0 = 0</span>) o contradicciones (<span class="math-expr">0 = 5</span>) al simplificar?</h3>
+                            <p class="mt-1">Cuando en el Paso 3 todas las letras se cancelan al reducir términos semejantes, ¿cómo distingues si el sistema tiene infinitas soluciones o si no tiene solución?</p>
+                            <button class="btn-solucion" onclick="toggleSolucion('ref-4', this)">Ver análisis conceptual</button>
+                            <div id="ref-4" class="solucion-box">
+                                <p><strong>Análisis:</strong> Si la igualdad numérica restante es <strong>verdadera</strong> (como <span class="math-expr">6 = 6</span> o <span class="math-expr">0 = 0</span>), ambas ecuaciones son equivalentes y el sistema tiene <strong>infinitas soluciones</strong>. Si la igualdad numérica es <strong>falsa</strong> (como <span class="math-expr">4 = 10</span> o <span class="math-expr">0 = 5</span>), las ecuaciones se contradicen y el sistema <strong>no tiene solución</strong>.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 5: EVALUACIÓN FORMATIVA            -->
+            <!-- ========================================== -->
+            <section id="sec-evaluacion" class="seccion-contenido hidden">
+                <div class="card-montano">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b-2 border-[#F7D615] pb-3 mb-4">
+                        <div>
+                            <h2 class="text-2xl font-bold text-[#1269A8]">✅ Evaluación Formativa de Comprobación (Método de Sustitución)</h2>
+                            <p class="text-sm text-slate-600">Resuelve cada reactivo aplicando los 5 pasos del método de sustitución y comprueba tu respuesta.</p>
+                        </div>
+                        <span class="badge-nivel badge-avanzado mt-2 sm:mt-0">5 Reactivos de Comprobación</span>
+                    </div>
+
+                    <div class="space-y-4">
+                        <!-- Pregunta 1 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 1 • Sustitución Directa</span>
+                            <p class="font-bold text-base mt-1">Al sustituir <span class="math-expr">y = 2x - 3</span> en la segunda ecuación del sistema <span class="math-expr">{ y = 2x - 3 ; 4x + y = 9 }</span>, ¿qué valor se obtiene para <span class="math-expr">(x, y)</span>?</p>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="btn-solucion" onclick="toggleSolucion('eval-1', this)">Mostrar solución</button>
+                                <button class="btn-resolver-directo" onclick="abrirEnSolucionador(-2, 1, -3, 4, 1, 9, 1, 'y', 'Evaluación • Reactivo 1')">🔄 Comprobar en Solucionador</button>
+                            </div>
+                            <div id="eval-1" class="solucion-box">
+                                <p><strong>Sustituyendo en Ec. 2:</strong> <span class="math-expr">4x + (2x - 3) = 9 ➔ 6x - 3 = 9 ➔ 6x = 12 ➔ x = 2</span>.<br>
+                                <strong>Hallando <span class="math-expr">y</span>:</strong> <span class="math-expr">y = 2(2) - 3 = 1</span>.</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: Solución = (2, 1) (x = 2, y = 1).</p>
+                            </div>
+                        </div>
+
+                        <!-- Pregunta 2 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 2 • Despeje de Incógnita con Coeficiente 1</span>
+                            <p class="font-bold text-base mt-1">Despeja <span class="math-expr">x</span> en la primera ecuación y resuelve por sustitución: <span class="math-expr">{ x + 2y = 9 ; 3x - 4y = 7 }</span>.</p>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="btn-solucion" onclick="toggleSolucion('eval-2', this)">Mostrar solución</button>
+                                <button class="btn-resolver-directo" onclick="abrirEnSolucionador(1, 2, 9, 3, -4, 7, 1, 'x', 'Evaluación • Reactivo 2')">🔄 Comprobar en Solucionador</button>
+                            </div>
+                            <div id="eval-2" class="solucion-box">
+                                <p><strong>Despeje Ec. 1:</strong> <span class="math-expr">x = 9 - 2y</span>.<br>
+                                <strong>Sustituyendo en Ec. 2:</strong> <span class="math-expr">3(9 - 2y) - 4y = 7 ➔ 27 - 6y - 4y = 7 ➔ -10y = -20 ➔ y = 2</span>.<br>
+                                <strong>Hallando <span class="math-expr">x</span>:</strong> <span class="math-expr">x = 9 - 2(2) = 5</span>.</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: Solución = (5, 2) (x = 5, y = 2).</p>
+                            </div>
+                        </div>
+
+                        <!-- Pregunta 3 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 3 • Cuidado de Signos en Sustitución</span>
+                            <p class="font-bold text-base mt-1">Resuelve por sustitución: <span class="math-expr">{ 2x - y = 5 ; 3x - 2y = 7 }</span>.</p>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="btn-solucion" onclick="toggleSolucion('eval-3', this)">Mostrar solución</button>
+                                <button class="btn-resolver-directo" onclick="abrirEnSolucionador(2, -1, 5, 3, -2, 7, 1, 'y', 'Evaluación • Reactivo 3')">🔄 Comprobar en Solucionador</button>
+                            </div>
+                            <div id="eval-3" class="solucion-box">
+                                <p><strong>Despeje Ec. 1:</strong> <span class="math-expr">y = 2x - 5</span>.<br>
+                                <strong>Sustituyendo en Ec. 2:</strong> <span class="math-expr">3x - 2(2x - 5) = 7 ➔ 3x - 4x + 10 = 7 ➔ -x = -3 ➔ x = 3</span>.<br>
+                                <strong>Hallando <span class="math-expr">y</span>:</strong> <span class="math-expr">y = 2(3) - 5 = 1</span>.</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: Solución = (3, 1) (x = 3, y = 1).</p>
+                            </div>
+                        </div>
+
+                        <!-- Pregunta 4 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 4 • Detección de Sistema Incompatible</span>
+                            <p class="font-bold text-base mt-1">Al sustituir <span class="math-expr">x = 3y + 2</span> en <span class="math-expr">2x - 6y = 9</span>, ¿qué expresión numérica queda y qué significa?</p>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="btn-solucion" onclick="toggleSolucion('eval-4', this)">Mostrar solución</button>
+                                <button class="btn-resolver-directo" onclick="abrirEnSolucionador(1, -3, 2, 2, -6, 9, 1, 'x', 'Evaluación • Reactivo 4')">🔄 Comprobar en Solucionador</button>
+                            </div>
+                            <div id="eval-4" class="solucion-box">
+                                <p><strong>Sustituyendo:</strong> <span class="math-expr">2(3y + 2) - 6y = 9 ➔ 6y + 4 - 6y = 9 ➔ 4 = 9</span> (Falsedad).</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: Queda 4 = 9 (falsedad); el sistema es incompatible (no tiene solución).</p>
+                            </div>
+                        </div>
+
+                        <!-- Pregunta 5 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 5 • Problema de Aplicación (Contexto Guatemala)</span>
+                            <p class="font-bold text-base mt-1">En una cafetería escolar, <span class="math-expr">1</span> refacción y <span class="math-expr">2</span> jugos cuestan <span class="math-expr">Q22</span>, mientras que <span class="math-expr">3</span> refacciones y <span class="math-expr">1</span> jugo cuestan <span class="math-expr">Q41</span>. Halla el precio de cada producto por sustitución.</p>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="btn-solucion" onclick="toggleSolucion('eval-5', this)">Mostrar solución</button>
+                                <button class="btn-resolver-directo" onclick="abrirEnSolucionador(1, 2, 22, 3, 1, 41, 1, 'x', 'Evaluación • Reactivo 5')">🔄 Comprobar en Solucionador</button>
+                            </div>
+                            <div id="eval-5" class="solucion-box">
+                                <p><strong>Sistema:</strong> <span class="math-expr">x + 2y = 22</span> y <span class="math-expr">3x + y = 41</span>.<br>
+                                <strong>Despejando <span class="math-expr">x</span> en Ec. 1:</strong> <span class="math-expr">x = 22 - 2y</span>.<br>
+                                <strong>Sustituyendo en Ec. 2:</strong> <span class="math-expr">3(22 - 2y) + y = 41 ➔ 66 - 5y = 41 ➔ -5y = -25 ➔ y = 5</span>; <span class="math-expr">x = 22 - 2(5) = 12</span>.</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: La refacción cuesta Q12 y el jugo cuesta Q5 (12, 5).</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 6: SOLUCIONADOR PASO A PASO        -->
+            <!-- ========================================== -->
+            <section id="sec-solucionador" class="seccion-contenido hidden">
+                <div class="card-montano">
+                    <!-- Encabezado y Botones Rápidos de Prueba -->
+                    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b-2 border-[#F7D615] pb-4 mb-5">
+                        <div>
+                            <div class="flex flex-wrap items-center gap-2">
+                                <span class="badge-nivel badge-avanzado">Herramienta de Pizarra Digital</span>
+                                <span id="solver-preset-badge" class="text-xs font-bold text-[#54887D] bg-[#F2F5E9] px-2.5 py-1 rounded-full border border-[#54887D]">Sistema Personalizado</span>
+                            </div>
+                            <h2 class="text-2xl font-bold text-[#1269A8] mt-1">🔄 Solucionador Algebraico Paso a Paso (Método de Sustitución)</h2>
+                            <p class="text-sm text-slate-600">Ingresa los coeficientes <span class="font-mono font-bold text-[#1269A8]">a₁x + b₁y = c₁</span> y <span class="font-mono font-bold text-[#1269A8]">a₂x + b₂y = c₂</span>, elige qué ecuación e incógnita despejar, o usa la elección óptima automática.</p>
+                        </div>
+
+                        <!-- Botones Rápidos de Sistemas de Prueba -->
+                        <div class="flex flex-wrap gap-1.5">
+                            <button onclick="abrirEnSolucionador(1, 2, 8, 3, -1, 3, 1, 'x', 'Prueba: Solución Única')" class="text-xs font-bold px-2.5 py-1.5 rounded-lg bg-emerald-100 text-emerald-900 border border-emerald-500 hover:bg-emerald-200 cursor-pointer">✔ Solución única</button>
+                            <button onclick="abrirEnSolucionador(-3, 1, -2, 6, -2, 10, 1, 'y', 'Prueba: Sin Solución')" class="text-xs font-bold px-2.5 py-1.5 rounded-lg bg-amber-100 text-amber-900 border border-amber-500 hover:bg-amber-200 cursor-pointer">✖ Sin solución</button>
+                            <button onclick="abrirEnSolucionador(1, -2, 3, 2, -4, 6, 1, 'x', 'Prueba: Infinitas Soluciones')" class="text-xs font-bold px-2.5 py-1.5 rounded-lg bg-sky-100 text-sky-900 border border-sky-500 hover:bg-sky-200 cursor-pointer">∞ Infinitas</button>
+                            <button onclick="abrirEnSolucionador(2, 3, 12, 3, -2, 5, 1, 'x', 'Prueba: Con Fracciones')" class="text-xs font-bold px-2.5 py-1.5 rounded-lg bg-purple-100 text-purple-900 border border-purple-500 hover:bg-purple-200 cursor-pointer">½ Fracciones</button>
+                        </div>
+                    </div>
+
+                    <!-- Grid Principal: Configuración Izquierda + Desarrollo Paso a Paso Derecha -->
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                        
+                        <!-- Panel Izquierdo: Entrada de Coeficientes y Vista Previa con Llave -->
+                        <div class="lg:col-span-5 space-y-4">
+                            
+                            <!-- Vista Previa en Vivo con Llave del Sistema -->
+                            <div class="p-3.5 rounded-xl bg-white border-2 border-[#1269A8] flex items-center justify-between">
+                                <div>
+                                    <span class="text-xs font-bold uppercase text-[#54887D] block">Sistema Actual:</span>
+                                    <div class="sistema-box text-base mt-1">
+                                        <span id="solver-preview-sistema">x + 2y = 8 <br> 3x - y = 3</span>
+                                    </div>
+                                </div>
+                                <button onclick="elegirOptimoAutomatico()" class="bg-[#F7D615] hover:bg-[#ffe234] text-[#0f172a] font-bold text-xs py-2 px-3 rounded-lg border border-[#0f172a] shadow-sm cursor-pointer">
+                                    ✨ Elección Óptima<br>Automática
+                                </button>
+                            </div>
+
+                            <!-- Ecuación 1 -->
+                            <div class="p-3.5 rounded-xl bg-sky-50 border-2 border-[#1269A8]">
+                                <span class="font-bold text-sm text-[#1269A8] block mb-2">Ecuación 1: <span class="font-mono">a₁x + b₁y = c₁</span></span>
+                                <div class="flex items-center gap-1.5 font-mono font-bold text-base">
+                                    <input id="coef-a1" type="number" step="any" value="1" class="w-16 p-2 text-center rounded-lg border-2 border-[#88B5C7] bg-white text-[#0f172a]" oninput="ejecutarSolucionador()">
+                                    <span class="text-[#1269A8]">x +</span>
+                                    <input id="coef-b1" type="number" step="any" value="2" class="w-16 p-2 text-center rounded-lg border-2 border-[#88B5C7] bg-white text-[#0f172a]" oninput="ejecutarSolucionador()">
+                                    <span class="text-[#1269A8]">y =</span>
+                                    <input id="coef-c1" type="number" step="any" value="8" class="w-20 p-2 text-center rounded-lg border-2 border-[#88B5C7] bg-white text-[#0f172a]" oninput="ejecutarSolucionador()">
+                                </div>
+                            </div>
+
+                            <!-- Ecuación 2 -->
+                            <div class="p-3.5 rounded-xl bg-emerald-50 border-2 border-[#54887D]">
+                                <span class="font-bold text-sm text-[#54887D] block mb-2">Ecuación 2: <span class="font-mono">a₂x + b₂y = c₂</span></span>
+                                <div class="flex items-center gap-1.5 font-mono font-bold text-base">
+                                    <input id="coef-a2" type="number" step="any" value="3" class="w-16 p-2 text-center rounded-lg border-2 border-[#A6B046] bg-white text-[#0f172a]" oninput="ejecutarSolucionador()">
+                                    <span class="text-[#54887D]">x +</span>
+                                    <input id="coef-b2" type="number" step="any" value="-1" class="w-16 p-2 text-center rounded-lg border-2 border-[#A6B046] bg-white text-[#0f172a]" oninput="ejecutarSolucionador()">
+                                    <span class="text-[#54887D]">y =</span>
+                                    <input id="coef-c2" type="number" step="any" value="3" class="w-20 p-2 text-center rounded-lg border-2 border-[#A6B046] bg-white text-[#0f172a]" oninput="ejecutarSolucionador()">
+                                </div>
+                            </div>
+
+                            <!-- Selectores de Ecuación Origen y Variable a Despejar -->
+                            <div class="p-3.5 rounded-xl bg-[#F2F5E9] border-2 border-[#A6B046] space-y-2.5">
+                                <div>
+                                    <label class="block text-xs font-bold uppercase text-[#54887D] mb-1">1️⃣ Elige de qué ecuación despejar:</label>
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <button id="btn-ec-1" onclick="cambiarEcuacionOrigen(1)" class="py-2 px-3 rounded-lg font-bold text-xs sm:text-sm bg-[#1269A8] text-white border-2 border-[#F7D615] shadow cursor-pointer">
+                                            Ecuación 1
+                                        </button>
+                                        <button id="btn-ec-2" onclick="cambiarEcuacionOrigen(2)" class="py-2 px-3 rounded-lg font-bold text-xs sm:text-sm bg-white text-[#1269A8] border-2 border-[#1269A8] cursor-pointer">
+                                            Ecuación 2
+                                        </button>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold uppercase text-[#54887D] mb-1">2️⃣ Elige qué incógnita despejar:</label>
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <button id="btn-var-x" onclick="cambiarVariableDespeje('x')" class="py-2 px-3 rounded-lg font-bold text-xs sm:text-sm bg-[#1269A8] text-white border-2 border-[#F7D615] shadow cursor-pointer">
+                                            Despejar "x"
+                                        </button>
+                                        <button id="btn-var-y" onclick="cambiarVariableDespeje('y')" class="py-2 px-3 rounded-lg font-bold text-xs sm:text-sm bg-white text-[#1269A8] border-2 border-[#1269A8] cursor-pointer">
+                                            Despejar "y"
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Tarjeta de Resultado Final -->
+                            <div id="solver-resumen-box" class="p-4 rounded-xl bg-gradient-to-br from-[#1269A8] to-[#0d4f80] text-white border-2 border-[#F7D615] shadow-md">
+                                <span class="text-xs uppercase tracking-wider font-bold text-[#F7D615] block">Resultado del Sistema</span>
+                                <h3 id="solver-titulo-final" class="text-xl font-bold mt-0.5">Solución Única: (2, 3)</h3>
+                                <p id="solver-detalle-final" class="text-xs sm:text-sm text-[#F2F5E9] mt-1">x = 2   |   y = 3</p>
+                            </div>
+                        </div>
+
+                        <!-- Panel Derecho: Pasos Detallados del Método de Sustitución -->
+                        <div class="lg:col-span-7 space-y-3" id="solver-pasos-contenedor">
+                            <!-- Generado dinámicamente por JS -->
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Pie de Pizarra -->
+        <footer class="bg-[#1269A8] text-white text-center py-3 px-4 text-xs sm:text-sm border-t-2 border-[#F7D615]">
+            <strong>Colegio Montano</strong> • Departamento de Matemática • Tercera Unidad • Pizarra Digital Interactiva
+        </footer>
+    </div>
+
+    <!-- Scripts de Interactividad y Motor Paso a Paso del Método de Sustitución -->
+    <script>
+        /* =========================================================================
+           1. NAVEGACIÓN DE PESTAÑAS Y PANTALLA COMPLETA
+           ========================================================================= */
+
+        function cambiarSeccion(seccionId, botonActivo) {
+            const secciones = document.querySelectorAll('.seccion-contenido');
+            secciones.forEach(sec => sec.classList.add('hidden'));
+
+            const target = document.getElementById('sec-' + seccionId);
+            if (target) {
+                target.classList.remove('hidden');
+            }
+
+            const botones = document.querySelectorAll('.tab-btn');
+            botones.forEach(btn => btn.classList.remove('active'));
+            if (botonActivo) {
+                botonActivo.classList.add('active');
+            }
+
+            if (seccionId === 'solucionador') {
+                ejecutarSolucionador();
+            }
+        }
+
+        function filtrarSubnivel(grupo, nivel, botonActivo) {
+            const contenedores = document.querySelectorAll('.subcontenido-' + grupo);
+            contenedores.forEach(cont => cont.classList.add('hidden'));
+
+            const target = document.getElementById(grupo + '-' + nivel);
+            if (target) {
+                target.classList.remove('hidden');
+            }
+
+            const parent = botonActivo.parentElement;
+            const subBotones = parent.querySelectorAll('.subtab-btn');
+            subBotones.forEach(btn => btn.classList.remove('active'));
+            botonActivo.classList.add('active');
+        }
+
+        function toggleSolucion(solucionId, boton) {
+            const box = document.getElementById(solucionId);
+            if (!box) return;
+
+            if (box.style.display === 'block') {
+                box.style.display = 'none';
+                boton.textContent = boton.textContent.replace('Ocultar', 'Mostrar').replace('Ocultar análisis conceptual', 'Ver análisis conceptual');
+            } else {
+                box.style.display = 'block';
+                if (boton.textContent.includes('Ver análisis')) {
+                    boton.textContent = 'Ocultar análisis conceptual';
+                } else {
+                    boton.textContent = 'Ocultar solución';
+                }
+            }
+        }
+
+        function toggleFullscreen() {
+            const btn = document.getElementById('fullscreen-btn');
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().then(() => {
+                    btn.innerHTML = '<span>✖ Salir de pantalla completa</span>';
+                }).catch(err => {
+                    console.warn('Error al intentar activar pantalla completa:', err);
+                });
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen().then(() => {
+                        btn.innerHTML = '<span>⛶ Pantalla completa</span>';
+                    });
+                }
+            }
+        }
+
+        document.addEventListener('fullscreenchange', () => {
+            const btn = document.getElementById('fullscreen-btn');
+            if (!document.fullscreenElement && btn) {
+                btn.innerHTML = '<span>⛶ Pantalla completa</span>';
+            }
+        });
+
+        /* =========================================================================
+           2. UTILIDADES MATEMÁTICAS DE FORMATO Y FRACCIONES EXACTAS
+           ========================================================================= */
+
+        let ecuacionOrigenActual = 1; // 1 o 2
+        let variableDespejeActual = 'x'; // 'x' o 'y'
+
+        function fmt(n) {
+            if (Math.abs(n) < 1e-9) return '0';
+            const r = Math.round(n * 10000) / 10000;
+            return Number.isInteger(r) ? r.toString() : r.toFixed(2).replace(/\.?0+$/, '');
+        }
+
+        function gcd(a, b) {
+            a = Math.abs(Math.round(a));
+            b = Math.abs(Math.round(b));
+            while (b !== 0) {
+                const t = b;
+                b = a % b;
+                a = t;
+            }
+            return a || 1;
+        }
+
+        function formatearRacional(num, den) {
+            if (Math.abs(den) < 1e-9) return 'Indefinido';
+            if (Math.abs(num) < 1e-9) return '0';
+
+            const val = num / den;
+            if (Math.abs(val - Math.round(val)) < 1e-7) {
+                return Math.round(val).toString();
+            }
+
+            if (Number.isInteger(num) && Number.isInteger(den)) {
+                const signo = (num * den < 0) ? -1 : 1;
+                const g = gcd(num, den);
+                const nSimp = signo * (Math.abs(num) / g);
+                const dSimp = Math.abs(den) / g;
+                return `${nSimp}/${dSimp} (≈ ${fmt(val)})`;
+            }
+
+            return fmt(val);
+        }
+
+        function formatearEcuacionOriginal(a, b, c) {
+            const partes = [];
+            if (Math.abs(a) > 1e-9) {
+                partes.push(Math.abs(a - 1) < 1e-9 ? 'x' : (Math.abs(a + 1) < 1e-9 ? '-x' : `${fmt(a)}x`));
+            }
+            if (Math.abs(b) > 1e-9) {
+                const absB = Math.abs(b);
+                const termB = Math.abs(absB - 1) < 1e-9 ? 'y' : `${fmt(absB)}y`;
+                if (partes.length === 0) {
+                    partes.push(b < 0 ? `-${termB}` : termB);
+                } else {
+                    partes.push(b < 0 ? `- ${termB}` : `+ ${termB}`);
+                }
+            }
+            if (partes.length === 0) partes.push('0');
+            return `${partes.join(' ')} = ${fmt(c)}`;
+        }
+
+        function formatearBinomioLineal(constante, coefOtraVar, nombreOtraVar) {
+            const EPS = 1e-9;
+            if (Math.abs(coefOtraVar) < EPS) return fmt(constante);
+
+            const absC = Math.abs(coefOtraVar);
+            const termVar = Math.abs(absC - 1) < EPS ? nombreOtraVar : `${fmt(absC)}${nombreOtraVar}`;
+
+            if (Math.abs(constante) < EPS) {
+                return coefOtraVar < 0 ? `-${termVar}` : termVar;
+            }
+            return coefOtraVar < 0
+                ? `${fmt(constante)} - ${termVar}`
+                : `${fmt(constante)} + ${termVar}`;
+        }
+
+        function htmlExpresionDespejada(constante, coefOtraVar, nombreOtraVar, denominador) {
+            if (denominador < 0) {
+                constante = -constante;
+                coefOtraVar = -coefOtraVar;
+                denominador = -denominador;
+            }
+            const numStr = formatearBinomioLineal(constante, coefOtraVar, nombreOtraVar);
+            if (Math.abs(denominador - 1) < 1e-9) {
+                return `<span class="math-expr">${numStr}</span>`;
+            }
+            if (Number.isInteger(constante) && Number.isInteger(coefOtraVar) && Number.isInteger(denominador) &&
+                constante % denominador === 0 && coefOtraVar % denominador === 0) {
+                const simpStr = formatearBinomioLineal(constante / denominador, coefOtraVar / denominador, nombreOtraVar);
+                return `<span class="math-expr"><span class="frac"><span class="frac-num">${numStr}</span><span class="frac-den">${fmt(denominador)}</span></span> = ${simpStr}</span>`;
+            }
+            return `<span class="math-expr"><span class="frac"><span class="frac-num">${numStr}</span><span class="frac-den">${fmt(denominador)}</span></span></span>`;
+        }
+
+        /* =========================================================================
+           3. CONTROL DEL SOLUCIONADOR PASO A PASO (MÉTODO DE SUSTITUCIÓN)
+           ========================================================================= */
+
+        function abrirEnSolucionador(a1, b1, c1, a2, b2, c2, ecOrigen, varDespeje, etiqueta) {
+            document.getElementById('coef-a1').value = a1;
+            document.getElementById('coef-b1').value = b1;
+            document.getElementById('coef-c1').value = c1;
+            document.getElementById('coef-a2').value = a2;
+            document.getElementById('coef-b2').value = b2;
+            document.getElementById('coef-c2').value = c2;
+            document.getElementById('solver-preset-badge').textContent = etiqueta || 'Sistema Cargado';
+
+            cambiarEcuacionOrigen(ecOrigen || 1, false);
+            cambiarVariableDespeje(varDespeje || 'x', false);
+
+            const btnTab6 = document.getElementById('tab-solucionador');
+            cambiarSeccion('solucionador', btnTab6);
+        }
+
+        function cambiarEcuacionOrigen(numEc, recalcular = true) {
+            ecuacionOrigenActual = numEc;
+            const btn1 = document.getElementById('btn-ec-1');
+            const btn2 = document.getElementById('btn-ec-2');
+            if (numEc === 1) {
+                btn1.className = 'py-2 px-3 rounded-lg font-bold text-xs sm:text-sm bg-[#1269A8] text-white border-2 border-[#F7D615] shadow cursor-pointer';
+                btn2.className = 'py-2 px-3 rounded-lg font-bold text-xs sm:text-sm bg-white text-[#1269A8] border-2 border-[#1269A8] cursor-pointer';
+            } else {
+                btn2.className = 'py-2 px-3 rounded-lg font-bold text-xs sm:text-sm bg-[#1269A8] text-white border-2 border-[#F7D615] shadow cursor-pointer';
+                btn1.className = 'py-2 px-3 rounded-lg font-bold text-xs sm:text-sm bg-white text-[#1269A8] border-2 border-[#1269A8] cursor-pointer';
+            }
+            if (recalcular) ejecutarSolucionador();
+        }
+
+        function cambiarVariableDespeje(variable, recalcular = true) {
+            variableDespejeActual = variable;
+            const btnX = document.getElementById('btn-var-x');
+            const btnY = document.getElementById('btn-var-y');
+            if (variable === 'x') {
+                btnX.className = 'py-2 px-3 rounded-lg font-bold text-xs sm:text-sm bg-[#1269A8] text-white border-2 border-[#F7D615] shadow cursor-pointer';
+                btnY.className = 'py-2 px-3 rounded-lg font-bold text-xs sm:text-sm bg-white text-[#1269A8] border-2 border-[#1269A8] cursor-pointer';
+            } else {
+                btnY.className = 'py-2 px-3 rounded-lg font-bold text-xs sm:text-sm bg-[#1269A8] text-white border-2 border-[#F7D615] shadow cursor-pointer';
+                btnX.className = 'py-2 px-3 rounded-lg font-bold text-xs sm:text-sm bg-white text-[#1269A8] border-2 border-[#1269A8] cursor-pointer';
+            }
+            if (recalcular) ejecutarSolucionador();
+        }
+
+        /**
+         * Detecta automáticamente qué ecuación y qué variable tienen coeficiente 1 o -1 (o el divisor más limpio).
+         */
+        function elegirOptimoAutomatico() {
+            const a1 = parseFloat(document.getElementById('coef-a1').value);
+            const b1 = parseFloat(document.getElementById('coef-b1').value);
+            const c1 = parseFloat(document.getElementById('coef-c1').value);
+            const a2 = parseFloat(document.getElementById('coef-a2').value);
+            const b2 = parseFloat(document.getElementById('coef-b2').value);
+            const c2 = parseFloat(document.getElementById('coef-c2').value);
+
+            const candidatos = [
+                { ec: 1, v: 'x', coef: a1, otro: b1, c: c1 },
+                { ec: 1, v: 'y', coef: b1, otro: a1, c: c1 },
+                { ec: 2, v: 'x', coef: a2, otro: b2, c: c2 },
+                { ec: 2, v: 'y', coef: b2, otro: a2, c: c2 }
+            ].filter(item => Math.abs(item.coef) > 1e-9);
+
+            if (candidatos.length === 0) return;
+
+            // Prioridad 1: coeficiente = 1; Prioridad 2: coeficiente = -1; Prioridad 3: división exacta; Prioridad 4: menor |coef|
+            candidatos.sort((p, q) => {
+                const score = (item) => {
+                    if (Math.abs(item.coef - 1) < 1e-9) return 1;
+                    if (Math.abs(item.coef + 1) < 1e-9) return 2;
+                    if (Number.isInteger(item.coef) && Number.isInteger(item.otro) && Number.isInteger(item.c) &&
+                        item.otro % item.coef === 0 && item.c % item.coef === 0) return 3;
+                    return 4 + Math.abs(item.coef);
+                };
+                return score(p) - score(q);
+            });
+
+            const mejor = candidatos[0];
+            cambiarEcuacionOrigen(mejor.ec, false);
+            cambiarVariableDespeje(mejor.v, false);
+            ejecutarSolucionador();
+        }
+
+        /**
+         * Genera y renderiza los 5 pasos detallados del Método de Sustitución.
+         */
+        function ejecutarSolucionador() {
+            const a1 = parseFloat(document.getElementById('coef-a1').value);
+            const b1 = parseFloat(document.getElementById('coef-b1').value);
+            const c1 = parseFloat(document.getElementById('coef-c1').value);
+            const a2 = parseFloat(document.getElementById('coef-a2').value);
+            const b2 = parseFloat(document.getElementById('coef-b2').value);
+            const c2 = parseFloat(document.getElementById('coef-c2').value);
+
+            const contenedor = document.getElementById('solver-pasos-contenedor');
+            const resumenBox = document.getElementById('solver-resumen-box');
+            const tituloFinal = document.getElementById('solver-titulo-final');
+            const detalleFinal = document.getElementById('solver-detalle-final');
+            const previewSistema = document.getElementById('solver-preview-sistema');
+
+            if ([a1, b1, c1, a2, b2, c2].some(v => isNaN(v))) {
+                contenedor.innerHTML = `<div class="paso-solver border-red-600 text-red-700 font-bold">⚠️ Por favor, completa todos los coeficientes numéricos del sistema.</div>`;
+                return;
+            }
+
+            const eq1Str = formatearEcuacionOriginal(a1, b1, c1);
+            const eq2Str = formatearEcuacionOriginal(a2, b2, c2);
+            previewSistema.innerHTML = `${eq1Str} <br> ${eq2Str}`;
+
+            const EPS = 1e-9;
+            const ecOrigen = ecuacionOrigenActual;
+            const ecDestino = ecOrigen === 1 ? 2 : 1;
+            const vDesp = variableDespejeActual;
+            const vOtra = vDesp === 'x' ? 'y' : 'x';
+
+            // Coeficientes de la ecuación donde se despeja (A_o * vDesp + B_o * vOtra = C_o)
+            const A_o = ecOrigen === 1 ? (vDesp === 'x' ? a1 : b1) : (vDesp === 'x' ? a2 : b2);
+            const B_o = ecOrigen === 1 ? (vDesp === 'x' ? b1 : a1) : (vDesp === 'x' ? b2 : a2);
+            const C_o = ecOrigen === 1 ? c1 : c2;
+
+            // Coeficientes de la ecuación destino donde se sustituye (A_d * vDesp + B_d * vOtra = C_d)
+            const A_d = ecDestino === 1 ? (vDesp === 'x' ? a1 : b1) : (vDesp === 'x' ? a2 : b2);
+            const B_d = ecDestino === 1 ? (vDesp === 'x' ? b1 : a1) : (vDesp === 'x' ? b2 : a2);
+            const C_d = ecDestino === 1 ? c1 : c2;
+
+            if (Math.abs(A_o) < EPS) {
+                contenedor.innerHTML = `
+                    <div class="paso-solver border-amber-500">
+                        <strong class="text-amber-800 block mb-1">💡 Selección no despejable</strong>
+                        <p class="text-sm text-slate-700">En la <strong>Ecuación ${ecOrigen}</strong>, el coeficiente de <strong>${vDesp}</strong> es <strong>0</strong>, por lo que no se puede despejar esa incógnita allí. Haz clic en <strong>"✨ Elección Óptima Automática"</strong> para seleccionar una variable válida.</p>
+                    </div>`;
+                tituloFinal.textContent = 'Cambia la ecuación o variable a despejar';
+                detalleFinal.textContent = `El coeficiente de "${vDesp}" en la Ecuación ${ecOrigen} es 0.`;
+                resumenBox.style.background = 'linear-gradient(135deg, #b45309 0%, #78350f 100%)';
+                return;
+            }
+
+            // Normalizar denominador positivo del despeje: vDesp = (numC + numB * vOtra) / den
+            let numC = C_o;
+            let numB = -B_o;
+            let den = A_o;
+            if (den < 0) {
+                numC = -numC;
+                numB = -numB;
+                den = -den;
+            }
+
+            const exprDespejadaHTML = htmlExpresionDespejada(numC, numB, vOtra, den);
+            const binomioNumStr = formatearBinomioLineal(numC, numB, vOtra);
+            const ecOrigenStr = ecOrigen === 1 ? eq1Str : eq2Str;
+            const ecDestinoStr = ecDestino === 1 ? eq1Str : eq2Str;
+
+            // Construcción visual de la sustitución entre paréntesis en la ecuación destino:
+            // A_d * (expr) + B_d * vOtra = C_d
+            const exprDentroParentesis = Math.abs(den - 1) < EPS ? binomioNumStr : `(${binomioNumStr})/${fmt(den)}`;
+            const parteAd = Math.abs(A_d) < EPS ? '' : (Math.abs(A_d - 1) < EPS ? `(${exprDentroParentesis})` : (Math.abs(A_d + 1) < EPS ? `-(${exprDentroParentesis})` : `${fmt(A_d)}(${exprDentroParentesis})`));
+            const absBd = Math.abs(B_d);
+            const termBd = Math.abs(absBd - 1) < EPS ? vOtra : `${fmt(absBd)}${vOtra}`;
+            const parteBd = Math.abs(B_d) < EPS ? '' : (parteAd ? (B_d < 0 ? ` - ${termBd}` : ` + ${termBd}`) : (B_d < 0 ? `-${termBd}` : termBd));
+            const ecuacionSustituidaStr = `${parteAd || '0'}${parteBd} = ${fmt(C_d)}`;
+
+            // Multiplicar toda la ecuación sustituida por `den` para eliminar el denominador:
+            // A_d * (numC + numB * vOtra) + (den * B_d) * vOtra = den * C_d
+            const distConst = A_d * numC;
+            const distVar = A_d * numB;
+            const otroTermVar = den * B_d;
+            const ladoDer = den * C_d;
+
+            // Reducción de términos semejantes:
+            // (distVar + otroTermVar) * vOtra = ladoDer - distConst
+            const coefFinalVar = distVar + otroTermVar;
+            const constFinalDer = ladoDer - distConst;
+
+            const lineaEliminacionDen = Math.abs(den - 1) > EPS
+                ? `<p>• Multiplicando toda la ecuación por <span class="font-mono font-bold">${fmt(den)}</span> para eliminar el denominador: <span class="math-expr">${fmt(A_d)}(${binomioNumStr}) ${otroTermVar >= 0 ? '+' : '-'} ${fmt(Math.abs(otroTermVar))}${vOtra} = ${fmt(ladoDer)}</span></p>`
+                : '';
+
+            const lineaDistributiva = `<p>• Aplicando propiedad distributiva: <span class="math-expr">${formatearBinomioLineal(distConst, distVar, vOtra)} ${Math.abs(otroTermVar) > EPS ? (otroTermVar >= 0 ? `+ ${fmt(otroTermVar)}${vOtra}` : `- ${fmt(Math.abs(otroTermVar))}${vOtra}`) : ''} = ${fmt(ladoDer)}</span></p>`;
+
+            let htmlPasos = `
+                <!-- PASO 1 -->
+                <div class="paso-solver">
+                    <span class="text-xs font-extrabold uppercase tracking-wider text-[#1269A8] block mb-1">Paso 1 • Selección Estratégica</span>
+                    <p class="text-sm text-slate-700">Elegimos despejar la incógnita <strong>"${vDesp}"</strong> en la <strong>Ecuación ${ecOrigen}</strong> (<span class="font-mono font-bold">${ecOrigenStr}</span>) y sustituirla en la <strong>Ecuación ${ecDestino}</strong> (<span class="font-mono font-bold">${ecDestinoStr}</span>).</p>
+                </div>
+
+                <!-- PASO 2 -->
+                <div class="paso-solver" style="border-left-color: #54887D;">
+                    <span class="text-xs font-extrabold uppercase tracking-wider text-[#54887D] block mb-1">Paso 2 • Despejar "${vDesp}" en la Ecuación ${ecOrigen}</span>
+                    <div class="text-sm sm:text-base mt-1">
+                        <p>De <span class="font-mono font-bold">${ecOrigenStr}</span> aislamos <span class="font-mono font-bold">${vDesp}</span>: &nbsp; <span class="math-expr">${vDesp} =</span> ${exprDespejadaHTML}</p>
+                    </div>
+                </div>
+            `;
+
+            // Evaluar resultado del Paso 3
+            if (Math.abs(coefFinalVar) < EPS) {
+                if (Math.abs(constFinalDer) < EPS) {
+                    htmlPasos += `
+                        <div class="paso-solver" style="border-left-color: #A6B046;">
+                            <span class="text-xs font-extrabold uppercase tracking-wider text-[#54887D] block mb-1">Paso 3 • Sustituir en la Ecuación ${ecDestino} y Simplificar</span>
+                            <div class="text-sm sm:text-base space-y-1.5 mt-1">
+                                <p>• Sustituyendo entre paréntesis en Ec. ${ecDestino}: <span class="math-expr">${ecuacionSustituidaStr}</span></p>
+                                ${lineaEliminacionDen}
+                                ${lineaDistributiva}
+                                <p>• Reduciendo términos semejantes: <span class="math-expr">0 = 0</span> (<strong>Identidad verdadera</strong>).</p>
+                                <p class="font-bold text-[#54887D]">Conclusión: La variable se cancela y queda una identidad. El sistema tiene INFINITAS SOLUCIONES.</p>
+                            </div>
+                        </div>`;
+                    tituloFinal.textContent = 'Infinitas Soluciones (0 = 0)';
+                    detalleFinal.textContent = 'Sistema Compatible Indeterminado: ambas ecuaciones son equivalentes.';
+                    resumenBox.style.background = 'linear-gradient(135deg, #54887D 0%, #375c54 100%)';
+                } else {
+                    htmlPasos += `
+                        <div class="paso-solver" style="border-left-color: #b45309;">
+                            <span class="text-xs font-extrabold uppercase tracking-wider text-amber-800 block mb-1">Paso 3 • Sustituir en la Ecuación ${ecDestino} y Simplificar</span>
+                            <div class="text-sm sm:text-base space-y-1.5 mt-1">
+                                <p>• Sustituyendo entre paréntesis en Ec. ${ecDestino}: <span class="math-expr">${ecuacionSustituidaStr}</span></p>
+                                ${lineaEliminacionDen}
+                                ${lineaDistributiva}
+                                <p>• Reduciendo términos semejantes: <span class="math-expr">0 = ${fmt(constFinalDer)}</span> (<strong>Falsedad numérica</strong>).</p>
+                                <p class="font-bold text-amber-800">Conclusión: La variable desaparece y queda una contradicción. El sistema NO TIENE SOLUCIÓN.</p>
+                            </div>
+                        </div>`;
+                    tituloFinal.textContent = `Sin Solución (0 = ${fmt(constFinalDer)})`;
+                    detalleFinal.textContent = 'Sistema Incompatible: no existe ningún par (x, y) que cumpla ambas ecuaciones.';
+                    resumenBox.style.background = 'linear-gradient(135deg, #b45309 0%, #78350f 100%)';
+                }
+            } else {
+                // Solución única
+                const valOtra = constFinalDer / coefFinalVar;
+                const valOtraStr = formatearRacional(constFinalDer, coefFinalVar);
+
+                // Paso 4: Sustitución regresiva en el despeje del Paso 2
+                const numDespVal = numC + numB * valOtra;
+                const valDesp = numDespVal / den;
+                const valDespStr = formatearRacional(Math.round(numDespVal * 1e6) / 1e6, den);
+
+                const solX = vDesp === 'x' ? valDesp : valOtra;
+                const solY = vDesp === 'y' ? valDesp : valOtra;
+                const solXStr = vDesp === 'x' ? valDespStr : valOtraStr;
+                const solYStr = vDesp === 'y' ? valDespStr : valOtraStr;
+
+                // Paso 5: Verificación
+                const check1 = a1 * solX + b1 * solY;
+                const check2 = a2 * solX + b2 * solY;
+
+                htmlPasos += `
+                    <div class="paso-solver" style="border-left-color: #A6B046;">
+                        <span class="text-xs font-extrabold uppercase tracking-wider text-[#54887D] block mb-1">Paso 3 • Sustituir en la Ecuación ${ecDestino} y Resolver para "${vOtra}"</span>
+                        <div class="text-sm sm:text-base space-y-1.5 mt-1">
+                            <p>• Sustituyendo entre paréntesis en Ec. ${ecDestino}: <span class="math-expr">${ecuacionSustituidaStr}</span></p>
+                            ${lineaEliminacionDen}
+                            ${lineaDistributiva}
+                            <p>• Reduciendo términos semejantes: <span class="math-expr">${fmt(coefFinalVar)}${vOtra} = ${fmt(constFinalDer)}</span></p>
+                            <p>• Despejando <span class="font-mono font-bold">${vOtra}</span>: <span class="math-expr">${vOtra} = ${valOtraStr}</span></p>
+                        </div>
+                    </div>
+
+                    <div class="paso-solver" style="border-left-color: #F7D615;">
+                        <span class="text-xs font-extrabold uppercase tracking-wider text-[#1269A8] block mb-1">Paso 4 • Sustitución Regresiva en el Despeje del Paso 2</span>
+                        <div class="text-sm sm:text-base space-y-1.5 mt-1">
+                            <p>• Reemplazando <span class="font-mono font-bold">${vOtra} = ${fmt(valOtra)}</span> en <span class="font-mono font-bold">${vDesp} = ${Math.abs(den - 1) < EPS ? binomioNumStr : `(${binomioNumStr})/${fmt(den)}`}</span>:</p>
+                            <p>• <span class="math-expr">${vDesp} = ${Math.abs(den - 1) < EPS ? `${fmt(numC)} ${numB >= 0 ? '+' : '-'} ${fmt(Math.abs(numB))}(${fmt(valOtra)})` : `(${fmt(numC)} ${numB >= 0 ? '+' : '-'} ${fmt(Math.abs(numB))}(${fmt(valOtra)})) / ${fmt(den)}`} = ${valDespStr}</span></p>
+                        </div>
+                    </div>
+
+                    <div class="paso-solver">
+                        <span class="text-xs font-extrabold uppercase tracking-wider text-[#54887D] block mb-1">Paso 5 • Comprobación en Ambas Ecuaciones Originales</span>
+                        <div class="text-xs sm:text-sm space-y-1 mt-1 text-slate-700">
+                            <p>✔ Ec. 1: <span class="font-mono font-bold">${fmt(a1)}(${fmt(solX)}) + ${fmt(b1)}(${fmt(solY)}) = ${fmt(check1)}</span> (coincide con <span class="font-mono font-bold">${fmt(c1)}</span>)</p>
+                            <p>✔ Ec. 2: <span class="font-mono font-bold">${fmt(a2)}(${fmt(solX)}) + ${fmt(b2)}(${fmt(solY)}) = ${fmt(check2)}</span> (coincide con <span class="font-mono font-bold">${fmt(c2)}</span>)</p>
+                        </div>
+                    </div>
+                `;
+
+                tituloFinal.textContent = `Solución Única: (${fmt(solX)}, ${fmt(solY)})`;
+                detalleFinal.textContent = `x = ${solXStr}   |   y = ${solYStr}`;
+                resumenBox.style.background = 'linear-gradient(135deg, #1269A8 0%, #0d4f80 100%)';
+            }
+
+            contenedor.innerHTML = htmlPasos;
+        }
+
+        // Inicializar solucionador al cargar la ventana
+        window.onload = function () {
+            ejecutarSolucionador();
+        };
+    </script>
+</body>
+</html>

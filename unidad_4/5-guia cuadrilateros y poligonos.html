@@ -1,0 +1,1686 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía 5: Cuadriláteros y Polígonos | Colegio Montano</title>
+    <!-- Carga de Tailwind CSS para utilidades de diseño responsivo y layout -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Carga oficial de GeoGebra Classic / Geometry API -->
+    <script src="https://www.geogebra.org/apps/deployggb.js"></script>
+    <style>
+        /* Configuración de Variables Institucionales Colegio Montano */
+        :root {
+            --azul-principal: #1269A8;
+            --amarillo-brillante: #F7D615;
+            --verde-grisaceo: #54887D;
+            --azul-claro: #88B5C7;
+            --verde-oliva: #A6B046;
+            --blanco-suave: #F2F5E9;
+        }
+
+        /* Tipografía Institucional */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e2e8f0;
+            color: #1e293b;
+            margin: 0;
+            padding: 12px;
+        }
+
+        /* Marco Principal de Pizarra Digital */
+        #pizarra-container {
+            background-color: var(--blanco-suave);
+            border: 5px solid var(--amarillo-brillante);
+            border-radius: 12px;
+            box-shadow: 0 12px 30px rgba(18, 105, 168, 0.25);
+            max-width: 1240px;
+            margin: 0 auto;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 86vh;
+        }
+
+        /* Encabezado de la Pizarra */
+        .pizarra-header {
+            background: linear-gradient(135deg, var(--azul-principal) 0%, #0d4f80 100%);
+            color: white;
+            padding: 16px 24px;
+            border-bottom: 4px solid var(--amarillo-brillante);
+        }
+
+        /* Botón Fullscreen */
+        .btn-fullscreen {
+            background-color: var(--amarillo-brillante);
+            color: #0f172a;
+            font-weight: 700;
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: 2px solid #ffffff;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+        .btn-fullscreen:hover {
+            background-color: #ffe234;
+            transform: translateY(-1px);
+        }
+
+        /* Navegación de Pestañas */
+        .nav-tabs {
+            background-color: #ffffff;
+            border-bottom: 2px solid var(--azul-claro);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            padding: 10px 20px;
+        }
+
+        .tab-btn {
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.92rem;
+            color: var(--azul-principal);
+            background-color: transparent;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .tab-btn:hover {
+            background-color: rgba(136, 181, 199, 0.25);
+            border-color: var(--azul-claro);
+        }
+
+        .tab-btn.active {
+            background-color: var(--azul-principal);
+            color: #ffffff;
+            border-color: var(--amarillo-brillante);
+            box-shadow: 0 3px 8px rgba(18, 105, 168, 0.3);
+        }
+
+        /* Pestaña destacada para GeoGebra */
+        .tab-btn-ggb {
+            background-color: rgba(247, 214, 21, 0.28);
+            border-color: var(--amarillo-brillante);
+        }
+        .tab-btn-ggb.active {
+            background-color: var(--azul-principal);
+            color: #ffffff;
+            border-color: var(--amarillo-brillante);
+        }
+
+        /* Tarjetas de Contenido */
+        .card-montano {
+            background-color: #ffffff;
+            border: 2px solid var(--verde-grisaceo);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 18px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Tarjetas Visuales de Fórmulas */
+        .card-formula {
+            background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+            border: 2px solid var(--azul-principal);
+            border-top: 5px solid var(--amarillo-brillante);
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 4px 10px rgba(18, 105, 168, 0.08);
+            transition: transform 0.2s ease;
+        }
+        .card-formula:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Etiquetas de Nivel */
+        .badge-nivel {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .badge-basico {
+            background-color: var(--verde-oliva);
+            color: #ffffff;
+        }
+        .badge-intermedio {
+            background-color: var(--verde-grisaceo);
+            color: #ffffff;
+        }
+        .badge-avanzado {
+            background-color: var(--azul-principal);
+            color: #ffffff;
+            border: 1px solid var(--amarillo-brillante);
+        }
+
+        /* Contenedor de Soluciones Ocultas */
+        .solucion-box {
+            background-color: rgba(136, 181, 199, 0.25);
+            border: 1.5px dashed var(--azul-principal);
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin-top: 12px;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .btn-solucion {
+            background-color: var(--azul-principal);
+            color: white;
+            font-weight: 600;
+            padding: 7px 14px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.2s;
+            margin-top: 10px;
+        }
+        .btn-solucion:hover {
+            background-color: var(--verde-grisaceo);
+        }
+
+        /* Botón Directo para Construir en GeoGebra */
+        .btn-geogebra {
+            background-color: var(--amarillo-brillante);
+            color: #0f172a;
+            font-weight: 700;
+            padding: 7px 14px;
+            border-radius: 6px;
+            font-size: 0.88rem;
+            cursor: pointer;
+            border: 1.5px solid #0f172a;
+            transition: all 0.2s ease;
+            margin-top: 10px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .btn-geogebra:hover {
+            background-color: #ffe234;
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Bloques Matemáticos Visuales */
+        .math-expr {
+            font-family: 'Cambria Math', 'Times New Roman', serif;
+            font-size: 1.05rem;
+            font-weight: bold;
+            color: var(--azul-principal);
+            background-color: #f8fafc;
+            padding: 2px 8px;
+            border-radius: 4px;
+            border: 1px solid #cbd5e1;
+            display: inline-block;
+        }
+
+        /* Sub-pestañas de Nivel */
+        .subtab-btn {
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 0.88rem;
+            cursor: pointer;
+            border: 2px solid var(--verde-grisaceo);
+            background-color: #ffffff;
+            color: var(--verde-grisaceo);
+            transition: all 0.2s;
+        }
+        .subtab-btn.active {
+            background-color: var(--verde-grisaceo);
+            color: #ffffff;
+        }
+
+        /* Contenedor del Applet de GeoGebra */
+        #ggb-wrapper {
+            width: 100%;
+            min-height: 550px;
+            border: 3px solid var(--azul-principal);
+            border-radius: 10px;
+            overflow: hidden;
+            background-color: #ffffff;
+            position: relative;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Modo Fullscreen */
+        :fullscreen #pizarra-container {
+            max-width: 100%;
+            width: 100vw;
+            height: 100vh;
+            border-radius: 0;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Marco Principal de la Pizarra Digital -->
+    <div id="pizarra-container">
+        
+        <!-- Encabezado Institucional -->
+        <header class="pizarra-header flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-4">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyEop0yf6lZ7Jk9MILZxF1rBj4Oqs5esyhIQ&s" 
+                     alt="Logo Colegio Montano" 
+                     class="w-14 h-14 rounded-lg bg-white p-1 object-contain border-2 border-[#F7D615]"
+                     onerror="this.src='https://placehold.co/60x60/1269A8/F7D615?text=CM'">
+                <div>
+                    <span class="text-xs uppercase tracking-widest font-bold text-[#F7D615] block">Colegio Montano • Cuarta Unidad • Matemática</span>
+                    <h1 class="text-xl sm:text-2xl font-bold leading-tight">Guía 5: Cuadriláteros y Polígonos</h1>
+                    <p class="text-sm text-[#88B5C7] font-semibold">Nivel: Tercero Básico • Pizarra Digital Interactiva con GeoGebra</p>
+                </div>
+            </div>
+            <button id="fullscreen-btn" class="btn-fullscreen flex items-center gap-2" onclick="toggleFullscreen()">
+                <span>⛶ Pantalla completa</span>
+            </button>
+        </header>
+
+        <!-- Barra de Navegación Horizontal de 6 Pestañas -->
+        <nav class="nav-tabs" role="tablist">
+            <button id="tab-teoria" class="tab-btn active" onclick="cambiarSeccion('teoria', this)">📘 1. Teoría</button>
+            <button id="tab-ejemplos" class="tab-btn" onclick="cambiarSeccion('ejemplos', this)">💡 2. Ejemplos Resueltos (15)</button>
+            <button id="tab-ejercicios" class="tab-btn" onclick="cambiarSeccion('ejercicios', this)">✍️ 3. Ejercicios Prácticos (15)</button>
+            <button id="tab-reflexion" class="tab-btn" onclick="cambiarSeccion('reflexion', this)">🧠 4. Reflexión Crítica</button>
+            <button id="tab-evaluacion" class="tab-btn" onclick="cambiarSeccion('evaluacion', this)">✅ 5. Evaluación Formativa</button>
+            <button id="tab-geogebra" class="tab-btn tab-btn-ggb" onclick="cambiarSeccion('geogebra', this)">📐 6. Laboratorio GeoGebra</button>
+        </nav>
+
+        <!-- Lienzo Principal de Contenido -->
+        <main class="p-4 sm:p-6 flex-1">
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 1: EXPLICACIÓN TEÓRICA             -->
+            <!-- ========================================== -->
+            <section id="sec-teoria" class="seccion-contenido">
+                
+                <!-- 1.1 Definición y Clasificación de Polígonos -->
+                <div class="card-montano">
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-3 border-b-2 border-[#F7D615] pb-2">
+                        <h2 class="text-2xl font-bold text-[#1269A8]">1. Definición y Clasificación de Polígonos</h2>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-geogebra !mt-0" onclick="lanzarPlantilla('hexagono_regular')">📐 Hexágono Regular en GeoGebra</button>
+                            <button class="btn-geogebra !mt-0" onclick="lanzarPlantilla('concavo_convexo')">📐 Convexo vs. Cóncavo</button>
+                        </div>
+                    </div>
+                    <p class="text-base leading-relaxed mb-4">
+                        Un <strong>polígono</strong> es una figura plana cerrada limitada por tres o más segmentos rectilíneos consecutivos llamados <strong>lados</strong>, que se intersecan únicamente en sus extremos llamados <strong>vértices</strong>. En todo polígono de <span class="math-expr text-xs">n</span> lados se cumple que el número de lados, vértices, ángulos interiores y ángulos exteriores es siempre igual a <span class="math-expr text-xs">n</span>.
+                    </p>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                        <!-- Criterio A: Según número de lados -->
+                        <div class="p-4 bg-sky-50 border-2 border-[#1269A8] rounded-xl">
+                            <span class="badge-nivel badge-avanzado mb-2">A. Según su Número de Lados (n)</span>
+                            <div class="grid grid-cols-2 gap-x-3 gap-y-1 text-xs sm:text-sm text-slate-800 mt-1">
+                                <div>• <strong>n = 3:</strong> Triángulo</div>
+                                <div>• <strong>n = 8:</strong> Octágono</div>
+                                <div>• <strong>n = 4:</strong> Cuadrilátero</div>
+                                <div>• <strong>n = 9:</strong> Eneágono / Nonágono</div>
+                                <div>• <strong>n = 5:</strong> Pentágono</div>
+                                <div>• <strong>n = 10:</strong> Decágono</div>
+                                <div>• <strong>n = 6:</strong> Hexágono</div>
+                                <div>• <strong>n = 11:</strong> Endecágono</div>
+                                <div>• <strong>n = 7:</strong> Heptágono</div>
+                                <div>• <strong>n = 12:</strong> Dodecágono / <em>n</em>-ágono</div>
+                            </div>
+                        </div>
+
+                        <!-- Criterio B: Según regularidad -->
+                        <div class="p-4 bg-[#F2F5E9] border-2 border-[#54887D] rounded-xl">
+                            <span class="badge-nivel badge-intermedio mb-2">B. Según su Regularidad</span>
+                            <ul class="text-xs sm:text-sm text-slate-800 space-y-1.5 mt-1">
+                                <li>• <strong>Equilátero:</strong> Todos sus lados tienen exactamente la misma longitud (ej. rombo).</li>
+                                <li>• <strong>Equiángulo:</strong> Todos sus ángulos interiores tienen igual medida (ej. rectángulo).</li>
+                                <li>• <strong>Polígono Regular:</strong> Es <em>equilátero y equiángulo a la vez</em>; puede inscribirse en una circunferencia (ej. cuadrado, hexágono regular).</li>
+                                <li>• <strong>Polígono Irregular:</strong> No todos sus lados ni todos sus ángulos son congruentes.</li>
+                            </ul>
+                        </div>
+
+                        <!-- Criterio C: Según convexidad -->
+                        <div class="p-4 bg-amber-50 border-2 border-[#F7D615] rounded-xl flex flex-col justify-between">
+                            <div>
+                                <span class="badge-nivel badge-basico mb-2">C. Según su Convexidad</span>
+                                <ul class="text-xs sm:text-sm text-slate-800 space-y-1.5 mt-1">
+                                    <li>• <strong>Polígono Convexo:</strong> Todos sus ángulos interiores miden <strong>menos de 180°</strong> y todas sus diagonales quedan en su interior.</li>
+                                    <li>• <strong>Polígono Cóncavo (no convexo):</strong> Posee al menos un ángulo interior entrante <strong>mayor de 180°</strong> y al menos una diagonal cae en el exterior.</li>
+                                </ul>
+                            </div>
+                            <button class="btn-geogebra justify-center w-full" onclick="lanzarPlantilla('concavo_convexo')">📐 Comparar en GeoGebra</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 1.2 Fórmulas Fundamentales de Polígonos de n Lados -->
+                <div class="card-montano">
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-3 border-b-2 border-[#F7D615] pb-2">
+                        <h2 class="text-2xl font-bold text-[#1269A8]">2. Fórmulas Fundamentales en Polígonos de <span class="font-mono">n</span> Lados</h2>
+                        <button class="btn-geogebra !mt-0" onclick="lanzarPlantilla('pentagono_diagonales')">📐 Triangulación y Diagonales en GeoGebra</button>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <!-- Fórmula 1 -->
+                        <div class="card-formula">
+                            <div>
+                                <span class="badge-nivel badge-avanzado mb-1">1. Suma de Ángulos Interiores</span>
+                                <p class="text-xs text-slate-600 mt-1">Al trazar diagonales desde un vértice se forman <span class="font-mono">n - 2</span> triángulos de <span class="font-mono">180°</span> cada uno:</p>
+                            </div>
+                            <div class="my-3 text-center">
+                                <span class="math-expr text-base">Sᵢ = 180°(n - 2)</span>
+                            </div>
+                            <span class="text-xs text-slate-500 font-semibold">Válida para todo polígono simple (convexo o cóncavo).</span>
+                        </div>
+
+                        <!-- Fórmula 2 -->
+                        <div class="card-formula">
+                            <div>
+                                <span class="badge-nivel badge-intermedio mb-1">2. Ángulo Interior (Polígono Regular)</span>
+                                <p class="text-xs text-slate-600 mt-1">Como los <span class="font-mono">n</span> ángulos interiores de un polígono regular son congruentes:</p>
+                            </div>
+                            <div class="my-3 text-center">
+                                <span class="math-expr text-base">i = 180°(n - 2) / n</span>
+                            </div>
+                            <span class="text-xs text-slate-500 font-semibold">También cumple: <span class="font-mono">i = 180° - e</span>.</span>
+                        </div>
+
+                        <!-- Fórmula 3 -->
+                        <div class="card-formula">
+                            <div>
+                                <span class="badge-nivel badge-basico mb-1">3. Suma de Ángulos Exteriores</span>
+                                <p class="text-xs text-slate-600 mt-1">En <strong>todo polígono convexo</strong>, la suma de un ángulo exterior por vértice es invariante:</p>
+                            </div>
+                            <div class="my-3 text-center">
+                                <span class="math-expr text-base">Sₑ = 360°</span>
+                            </div>
+                            <span class="text-xs text-slate-500 font-semibold">No depende del número de lados <span class="font-mono">n</span>.</span>
+                        </div>
+
+                        <!-- Fórmula 4 -->
+                        <div class="card-formula">
+                            <div>
+                                <span class="badge-nivel badge-intermedio mb-1">4. Ángulo Exterior y Central Regular</span>
+                                <p class="text-xs text-slate-600 mt-1">En un polígono regular, cada ángulo exterior (<span class="font-mono">e</span>) mide lo mismo que su ángulo central (<span class="font-mono">c</span>):</p>
+                            </div>
+                            <div class="my-3 text-center">
+                                <span class="math-expr text-base">e = c = 360° / n</span>
+                            </div>
+                            <span class="text-xs text-slate-500 font-semibold">Muy útil para despejar <span class="font-mono">n = 360° / e</span>.</span>
+                        </div>
+
+                        <!-- Fórmula 5 -->
+                        <div class="card-formula">
+                            <div>
+                                <span class="badge-nivel badge-basico mb-1">5. Diagonales desde un Vértice</span>
+                                <p class="text-xs text-slate-600 mt-1">Un vértice no puede unirse consigo mismo ni con sus 2 vértices adyacentes:</p>
+                            </div>
+                            <div class="my-3 text-center">
+                                <span class="math-expr text-base">d = n - 3</span>
+                            </div>
+                            <span class="text-xs text-slate-500 font-semibold">En un triángulo (<span class="font-mono">n = 3</span>), <span class="font-mono">d = 0</span>.</span>
+                        </div>
+
+                        <!-- Fórmula 6 -->
+                        <div class="card-formula">
+                            <div>
+                                <span class="badge-nivel badge-avanzado mb-1">6. Total de Diagonales del Polígono</span>
+                                <p class="text-xs text-slate-600 mt-1">Cada diagonal une 2 vértices, por lo que se divide entre 2 para no contarlas dos veces:</p>
+                            </div>
+                            <div class="my-3 text-center">
+                                <span class="math-expr text-base">D = n(n - 3) / 2</span>
+                            </div>
+                            <span class="text-xs text-slate-500 font-semibold">Permite hallar <span class="font-mono">n</span> mediante ecuación cuadrática.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 1.3 Clasificación Completa de Cuadriláteros Convexos -->
+                <div class="card-montano">
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-3 border-b-2 border-[#F7D615] pb-2">
+                        <h2 class="text-2xl font-bold text-[#1269A8]">3. Clasificación de Cuadriláteros Convexos (<span class="font-mono">Sᵢ = 360°</span>)</h2>
+                        <span class="badge-nivel badge-avanzado">Por Paralelismo de sus Lados Opuestos</span>
+                    </div>
+
+                    <!-- Grupo 1: Paralelogramos -->
+                    <div class="mb-6">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <h3 class="text-lg font-bold text-[#1269A8]">A) Paralelogramos (2 pares de lados opuestos paralelos)</h3>
+                            <button class="btn-geogebra !mt-0" onclick="lanzarPlantilla('romboide_bisectrices')">📐 Romboide en GeoGebra</button>
+                        </div>
+                        <p class="text-xs sm:text-sm text-slate-700 mb-3">
+                            <strong>Propiedades generales de todo paralelogramo:</strong> (1) Lados opuestos paralelos y congruentes; (2) Ángulos opuestos congruentes; (3) Ángulos consecutivos suplementarios (<span class="math-expr text-xs">α + β = 180°</span>); (4) Sus dos diagonales se bisecan mutuamente (se cortan en su punto medio).
+                        </p>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                            <!-- Cuadrado -->
+                            <div class="p-3 bg-white border-2 border-[#1269A8] rounded-xl text-center flex flex-col justify-between">
+                                <div>
+                                    <h4 class="font-bold text-[#1269A8]">1. Cuadrado</h4>
+                                    <svg width="160" height="100" viewBox="0 0 160 100" class="mx-auto my-2 bg-slate-50 rounded border border-slate-200">
+                                        <rect x="48" y="18" width="64" height="64" fill="rgba(18,105,168,0.14)" stroke="#1269A8" stroke-width="2.2"/>
+                                        <line x1="48" y1="18" x2="112" y2="82" stroke="#b45309" stroke-width="1.4" stroke-dasharray="3,2"/>
+                                        <line x1="112" y1="18" x2="48" y2="82" stroke="#b45309" stroke-width="1.4" stroke-dasharray="3,2"/>
+                                        <rect x="48" y="72" width="10" height="10" fill="none" stroke="#1269A8" stroke-width="1.2"/>
+                                    </svg>
+                                    <p class="text-xs text-slate-700"><strong>4 lados iguales y 4 ángulos de 90°.</strong> Diagonales iguales, perpendiculares y bisectrices de los ángulos.</p>
+                                </div>
+                                <button class="btn-geogebra justify-center w-full text-xs" onclick="ejecutarEnGeoGebra('Cuadrado y sus Diagonales', 'Polígono regular de 4 lados: sus diagonales son congruentes, perpendiculares (90°) y bisectrices.', ['SetCoordSystem(-2, 8, -2, 7)', 'A = (1, 1)', 'B = (5, 1)', 'cuad = Polygon(A, B, 4)', 'SetColor(cuad, 18, 105, 168)', 'C = Vertex(cuad, 3)', 'D = Vertex(cuad, 4)', 'd1 = Segment(A, C)', 'd2 = Segment(B, D)', 'SetColor(d1, 180, 83, 9)', 'SetColor(d2, 180, 83, 9)', 'O = Intersect(d1, d2)', 'ang = Angle(B, O, C)', 'Text(\"Cuadrado: Lados iguales, 4 ángulos de 90° y diagonales perpendiculares\", (0.2, 6))'])">📐 Ver en GeoGebra</button>
+                            </div>
+
+                            <!-- Rectángulo -->
+                            <div class="p-3 bg-white border-2 border-[#54887D] rounded-xl text-center flex flex-col justify-between">
+                                <div>
+                                    <h4 class="font-bold text-[#1269A8]">2. Rectángulo</h4>
+                                    <svg width="160" height="100" viewBox="0 0 160 100" class="mx-auto my-2 bg-slate-50 rounded border border-slate-200">
+                                        <rect x="28" y="24" width="104" height="52" fill="rgba(84,136,125,0.15)" stroke="#54887D" stroke-width="2.2"/>
+                                        <line x1="28" y1="24" x2="132" y2="76" stroke="#b45309" stroke-width="1.4" stroke-dasharray="3,2"/>
+                                        <line x1="132" y1="24" x2="28" y2="76" stroke="#b45309" stroke-width="1.4" stroke-dasharray="3,2"/>
+                                        <rect x="28" y="66" width="10" height="10" fill="none" stroke="#54887D" stroke-width="1.2"/>
+                                    </svg>
+                                    <p class="text-xs text-slate-700"><strong>4 ángulos rectos (90°)</strong> y lados opuestos iguales. Diagonales iguales y oblicuas (no perpendiculares).</p>
+                                </div>
+                                <button class="btn-geogebra justify-center w-full text-xs" onclick="ejecutarEnGeoGebra('Rectángulo y sus Diagonales', 'Paralelogramo equiángulo con 4 ángulos de 90° y diagonales congruentes que se bisecan.', ['SetCoordSystem(-2, 10, -2, 7)', 'A = (1, 1)', 'B = (8, 1)', 'C = (8, 5)', 'D = (1, 5)', 'rec = Polygon(A, B, C, D)', 'SetColor(rec, 84, 136, 125)', 'd1 = Segment(A, C)', 'd2 = Segment(B, D)', 'SetColor(d1, 180, 83, 9)', 'SetColor(d2, 180, 83, 9)', 'Text(\"Rectángulo: d1 = \" + d1 + \"  y  d2 = \" + d2, (1.5, 5.8))'])">📐 Ver en GeoGebra</button>
+                            </div>
+
+                            <!-- Rombo -->
+                            <div class="p-3 bg-white border-2 border-[#A6B046] rounded-xl text-center flex flex-col justify-between">
+                                <div>
+                                    <h4 class="font-bold text-[#1269A8]">3. Rombo</h4>
+                                    <svg width="160" height="100" viewBox="0 0 160 100" class="mx-auto my-2 bg-slate-50 rounded border border-slate-200">
+                                        <polygon points="80,14 134,50 80,86 26,50" fill="rgba(166,176,70,0.18)" stroke="#A6B046" stroke-width="2.2"/>
+                                        <line x1="80" y1="14" x2="80" y2="86" stroke="#b45309" stroke-width="1.4" stroke-dasharray="3,2"/>
+                                        <line x1="26" y1="50" x2="134" y2="50" stroke="#b45309" stroke-width="1.4" stroke-dasharray="3,2"/>
+                                        <rect x="80" y="42" width="8" height="8" fill="none" stroke="#b45309" stroke-width="1.2"/>
+                                    </svg>
+                                    <p class="text-xs text-slate-700"><strong>4 lados iguales</strong> y ángulos opuestos iguales. Diagonales <strong>perpendiculares (90°)</strong>, desiguales y bisectrices.</p>
+                                </div>
+                                <button class="btn-geogebra justify-center w-full text-xs" onclick="lanzarPlantilla('rombo_diagonales')">📐 Ver en GeoGebra</button>
+                            </div>
+
+                            <!-- Romboide -->
+                            <div class="p-3 bg-white border-2 border-[#88B5C7] rounded-xl text-center flex flex-col justify-between">
+                                <div>
+                                    <h4 class="font-bold text-[#1269A8]">4. Romboide</h4>
+                                    <svg width="160" height="100" viewBox="0 0 160 100" class="mx-auto my-2 bg-slate-50 rounded border border-slate-200">
+                                        <polygon points="44,24 140,24 116,76 20,76" fill="rgba(136,181,199,0.25)" stroke="#1269A8" stroke-width="2.2"/>
+                                        <line x1="44" y1="24" x2="116" y2="76" stroke="#b45309" stroke-width="1.4" stroke-dasharray="3,2"/>
+                                        <line x1="140" y1="24" x2="20" y2="76" stroke="#b45309" stroke-width="1.4" stroke-dasharray="3,2"/>
+                                    </svg>
+                                    <p class="text-xs text-slate-700">Lados y ángulos opuestos iguales (sin ángulos rectos ni los 4 lados iguales). Diagonales desiguales y oblicuas.</p>
+                                </div>
+                                <button class="btn-geogebra justify-center w-full text-xs" onclick="lanzarPlantilla('romboide_bisectrices')">📐 Ver en GeoGebra</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Grupo 2: Trapecios -->
+                    <div class="mb-6">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <h3 class="text-lg font-bold text-[#54887D]">B) Trapecios (Exactamente 1 par de lados opuestos paralelos llamados Bases)</h3>
+                            <button class="btn-geogebra !mt-0" onclick="lanzarPlantilla('trapecio_base_media')">📐 Trapecio y Base Media en GeoGebra</button>
+                        </div>
+
+                        <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center bg-[#F2F5E9] p-4 rounded-xl border-2 border-[#54887D]">
+                            <!-- Diagrama SVG del Trapecio y Base Media -->
+                            <div class="lg:col-span-5 flex justify-center bg-white p-2 rounded-lg border border-slate-200">
+                                <svg width="250" height="145" viewBox="0 0 250 145">
+                                    <polygon points="65,24 185,24 222,115 28,115" fill="rgba(84,136,125,0.14)" stroke="#1269A8" stroke-width="2.2"/>
+                                    <!-- Diagonales -->
+                                    <line x1="65" y1="24" x2="222" y2="115" stroke="#94a3b8" stroke-width="1.3" stroke-dasharray="3,2"/>
+                                    <line x1="185" y1="24" x2="28" y2="115" stroke="#94a3b8" stroke-width="1.3" stroke-dasharray="3,2"/>
+                                    <!-- Base Media m -->
+                                    <line x1="46.5" y1="69.5" x2="203.5" y2="69.5" stroke="#b45309" stroke-width="2.2"/>
+                                    <!-- Segmento s entre puntos medios de diagonales -->
+                                    <line x1="106.5" y1="69.5" x2="143.5" y2="69.5" stroke="#15803d" stroke-width="3.5"/>
+                                    <circle cx="46.5" cy="69.5" r="3" fill="#b45309"/>
+                                    <circle cx="203.5" cy="69.5" r="3" fill="#b45309"/>
+                                    <circle cx="106.5" cy="69.5" r="3" fill="#15803d"/>
+                                    <circle cx="143.5" cy="69.5" r="3" fill="#15803d"/>
+                                    <text x="125" y="17" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#1269A8">Base menor (b)</text>
+                                    <text x="125" y="132" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#1269A8">Base mayor (B)</text>
+                                    <text x="76" y="63" font-size="10" font-weight="bold" fill="#b45309">m</text>
+                                    <text x="125" y="63" text-anchor="middle" font-size="10" font-weight="bold" fill="#15803d">s</text>
+                                </svg>
+                            </div>
+
+                            <!-- Propiedades y Tipos de Trapecio -->
+                            <div class="lg:col-span-7 space-y-2 text-xs sm:text-sm">
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                    <div class="p-2.5 bg-white rounded-lg border border-[#1269A8]">
+                                        <strong class="text-[#1269A8] block">Mediana o Base Media (<span class="font-mono">m</span>):</strong>
+                                        <span>Une los puntos medios de los lados no paralelos y es paralela a las bases:</span>
+                                        <div class="mt-1"><span class="math-expr text-xs">m = (B + b) / 2</span></div>
+                                    </div>
+                                    <div class="p-2.5 bg-white rounded-lg border border-[#A6B046]">
+                                        <strong class="text-[#1269A8] block">Segmento entre Diagonales (<span class="font-mono">s</span>):</strong>
+                                        <span>Une los puntos medios de las dos diagonales del trapecio:</span>
+                                        <div class="mt-1"><span class="math-expr text-xs">s = (B - b) / 2</span></div>
+                                    </div>
+                                </div>
+                                <div class="p-2.5 bg-white rounded-lg border border-slate-300 space-y-1">
+                                    <p>• <strong>Trapecio Isósceles:</strong> Lados no paralelos congruentes; ángulos de cada base iguales (<span class="font-mono">α = β</span>) y diagonales iguales.</p>
+                                    <p>• <strong>Trapecio Rectángulo:</strong> Uno de sus lados no paralelos es perpendicular a las bases (tiene dos ángulos de <span class="font-mono">90°</span>).</p>
+                                    <p>• <strong>Trapecio Escaleno:</strong> Sus cuatro lados tienen distinta longitud y sus cuatro ángulos son diferentes.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Grupo 3: Trapezoides -->
+                    <div>
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <h3 class="text-lg font-bold text-[#1269A8]">C) Trapezoides (Ningún par de lados opuestos paralelos)</h3>
+                            <button class="btn-geogebra !mt-0" onclick="lanzarPlantilla('deltoide')">📐 Deltoide en GeoGebra</button>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="p-3.5 bg-sky-50 border-2 border-[#1269A8] rounded-xl flex items-center gap-3">
+                                <svg width="105" height="95" viewBox="0 0 105 95" class="shrink-0 bg-white rounded border border-slate-200">
+                                    <polygon points="52,10 86,38 52,86 18,38" fill="rgba(18,105,168,0.15)" stroke="#1269A8" stroke-width="2"/>
+                                    <line x1="52" y1="10" x2="52" y2="86" stroke="#b45309" stroke-width="1.4" stroke-dasharray="3,2"/>
+                                    <line x1="18" y1="38" x2="86" y2="38" stroke="#b45309" stroke-width="1.4" stroke-dasharray="3,2"/>
+                                </svg>
+                                <div class="text-xs sm:text-sm">
+                                    <h4 class="font-bold text-[#1269A8]">Trapezoide Simétrico o Deltoide (Cometa)</h4>
+                                    <p class="text-slate-700 mt-1">Tiene dos pares de lados consecutivos congruentes. Sus diagonales se cortan <strong>perpendicularmente (<span class="font-mono">90°</span>)</strong> y la diagonal mayor biseca a la menor.</p>
+                                </div>
+                            </div>
+
+                            <div class="p-3.5 bg-slate-50 border-2 border-slate-400 rounded-xl flex items-center gap-3">
+                                <svg width="105" height="95" viewBox="0 0 105 95" class="shrink-0 bg-white rounded border border-slate-200">
+                                    <polygon points="24,18 84,26 92,78 16,66" fill="rgba(100,116,139,0.15)" stroke="#475569" stroke-width="2"/>
+                                </svg>
+                                <div class="text-xs sm:text-sm">
+                                    <h4 class="font-bold text-[#1269A8]">Trapezoide Asimétrico</h4>
+                                    <p class="text-slate-700 mt-1">No posee lados paralelos ni ejes de simetría; la única propiedad invariante es que la suma de sus cuatro ángulos interiores equivale a <span class="math-expr text-xs">360°</span>.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 2: EJEMPLOS RESUELTOS (15)         -->
+            <!-- ========================================== -->
+            <section id="sec-ejemplos" class="seccion-contenido hidden">
+                <div class="flex flex-wrap items-center justify-between gap-3 mb-4 bg-white p-4 rounded-xl border-2 border-[#54887D]">
+                    <div>
+                        <h2 class="text-xl font-bold text-[#1269A8]">Ejemplos Resueltos Paso a Paso (15 Problemas)</h2>
+                        <p class="text-sm text-slate-600">Analiza cada desarrollo y pulsa <strong>"📐 Construir en GeoGebra"</strong> para visualizar la figura interactiva.</p>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <button class="subtab-btn active" onclick="filtrarSubnivel('ejemplos', 'basico', this)">Nivel Básico (5)</button>
+                        <button class="subtab-btn" onclick="filtrarSubnivel('ejemplos', 'intermedio', this)">Nivel Intermedio (5)</button>
+                        <button class="subtab-btn" onclick="filtrarSubnivel('ejemplos', 'avanzado', this)">Nivel Avanzado (5)</button>
+                    </div>
+                </div>
+
+                <!-- EJEMPLOS BÁSICOS (5) -->
+                <div id="ejemplos-basico" class="subcontenido-ejemplos space-y-4">
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-basico">Básico • Ejemplo 1 (Suma de ángulos interiores de un octágono)</span>
+                            <button class="btn-geogebra !mt-0" onclick="ejecutarEnGeoGebra('Octágono Regular (n = 8)', 'Polígono regular de 8 lados cuya suma de ángulos interiores es 180°(8 - 2) = 1080° (135° cada ángulo).', ['SetCoordSystem(-5, 5, -4, 4.5)', 'A = (-1.2, -2.8)', 'B = (1.2, -2.8)', 'oct = Polygon(A, B, 8)', 'SetColor(oct, 18, 105, 168)', 'ang = Angle(B, A, Vertex(oct, 8))', 'Text(\"Octágono (n = 8): S_i = 180°(8 - 2) = 1080° | Cada ángulo = 135°\", (-3.8, 3.8))'])">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Calcula la suma de los ángulos interiores (<span class="math-expr">Sᵢ</span>) de un octágono (<span class="math-expr">n = 8</span> lados).</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Fórmula de suma interior):</strong> <span class="math-expr">Sᵢ = 180°(n - 2)</span>.</p>
+                            <p><strong>Paso 2 (Sustitución para n = 8):</strong> <span class="math-expr">Sᵢ = 180°(8 - 2) = 180° · 6 = 1080°</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: La suma de los ángulos interiores de un octágono es 1080°.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-basico">Básico • Ejemplo 2 (Ángulo interior y exterior de un hexágono regular)</span>
+                            <button class="btn-geogebra !mt-0" onclick="lanzarPlantilla('hexagono_regular')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Determina la medida de cada ángulo interior (<span class="math-expr">i</span>) y cada ángulo exterior (<span class="math-expr">e</span>) de un hexágono regular (<span class="math-expr">n = 6</span>).</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Ángulo exterior):</strong> <span class="math-expr">e = 360° / 6 = 60°</span>.</p>
+                            <p><strong>Paso 2 (Ángulo interior):</strong> <span class="math-expr">i = 180°(6 - 2) / 6 = 720° / 6 = 120°</span> (comprobación: <span class="math-expr">120° + 60° = 180°</span>).</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: Cada ángulo interior mide 120° y cada ángulo exterior mide 60°.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-basico">Básico • Ejemplo 3 (Total de diagonales de un decágono)</span>
+                            <button class="btn-geogebra !mt-0" onclick="ejecutarEnGeoGebra('Decágono Regular (n = 10)', 'Un decágono tiene d = 10 - 3 = 7 diagonales por vértice y D = 10(7)/2 = 35 diagonales en total.', ['SetCoordSystem(-5, 5, -4, 4.5)', 'A = (-0.9, -2.9)', 'B = (0.9, -2.9)', 'dec = Polygon(A, B, 10)', 'SetColor(dec, 84, 136, 125)', 'Text(\"Decágono (n = 10): D = 10(10 - 3) / 2 = 35 diagonales\", (-3.6, 3.8))'])">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">¿Cuántas diagonales desde un vértice (<span class="math-expr">d</span>) y cuántas diagonales en total (<span class="math-expr">D</span>) pueden trazarse en un decágono (<span class="math-expr">n = 10</span>)?</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Diagonales desde un vértice):</strong> <span class="math-expr">d = n - 3 = 10 - 3 = 7</span> diagonales.</p>
+                            <p><strong>Paso 2 (Total de diagonales):</strong> <span class="math-expr">D = n(n - 3) / 2 = 10(7) / 2 = 70 / 2 = 35</span> diagonales.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: 7 diagonales desde un vértice y 35 diagonales en total.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-basico">Básico • Ejemplo 4 (Cuarto ángulo de un cuadrilátero)</span>
+                            <button class="btn-geogebra !mt-0" onclick="lanzarPlantilla('poligono_dinamico')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Tres ángulos interiores de un cuadrilátero convexo miden <span class="math-expr">95°</span>, <span class="math-expr">110°</span> y <span class="math-expr">85°</span>. Halla la medida del cuarto ángulo <span class="math-expr">x</span>.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Suma interior en cuadriláteros = 360°):</strong> <span class="math-expr">95° + 110° + 85° + x = 360°</span>.</p>
+                            <p><strong>Paso 2 (Despeje):</strong> <span class="math-expr">290° + x = 360° ➔ x = 360° - 290° = 70°</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: El cuarto ángulo mide 70°.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-basico">Básico • Ejemplo 5 (Ángulos de un romboide)</span>
+                            <button class="btn-geogebra !mt-0" onclick="lanzarPlantilla('romboide_bisectrices')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">En un romboide, uno de sus ángulos agudos mide <span class="math-expr">65°</span>. Determina las medidas de los otros tres ángulos interiores.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Ángulo opuesto congruente):</strong> El ángulo opuesto al de <span class="math-expr">65°</span> también mide <span class="math-expr">65°</span>.</p>
+                            <p><strong>Paso 2 (Ángulos consecutivos suplementarios):</strong> Cada ángulo obtuso consecutivo mide <span class="math-expr">180° - 65° = 115°</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: Los otros tres ángulos miden 115°, 65° y 115°.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EJEMPLOS INTERMEDIOS (5) -->
+                <div id="ejemplos-intermedio" class="subcontenido-ejemplos hidden space-y-4">
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-intermedio">Intermedio • Ejemplo 1 (Identificar polígono regular dado su ángulo interior)</span>
+                            <button class="btn-geogebra !mt-0" onclick="ejecutarEnGeoGebra('Dodecágono Regular (n = 12)', 'Cuando el ángulo interior mide 150°, el ángulo exterior vale 180° - 150° = 30°, dando n = 360° / 30° = 12 lados.', ['SetCoordSystem(-5, 5, -4, 4.5)', 'A = (-0.75, -2.9)', 'B = (0.75, -2.9)', 'dod = Polygon(A, B, 12)', 'SetColor(dod, 18, 105, 168)', 'Text(\"Dodecágono Regular (n = 12): i = 150°, e = 30°\", (-3.2, 3.8))'])">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Cada ángulo interior de un polígono regular mide <span class="math-expr">150°</span>. ¿Cuántos lados tiene el polígono y cómo se llama?</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Método rápido por ángulo exterior):</strong> <span class="math-expr">e = 180° - 150° = 30°</span>.</p>
+                            <p><strong>Paso 2 (Cálculo de n):</strong> <span class="math-expr">n = 360° / 30° = 12</span> lados (también: <span class="math-expr">180(n - 2) = 150n ➔ 30n = 360 ➔ n = 12</span>).</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: Tiene 12 lados; se llama dodecágono regular.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-intermedio">Intermedio • Ejemplo 2 (Número de lados dado el total de diagonales)</span>
+                            <button class="btn-geogebra !mt-0" onclick="lanzarPlantilla('pentagono_diagonales')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Un polígono convexo tiene exactamente <span class="math-expr">D = 35</span> diagonales en total. Halla su número de lados <span class="math-expr">n</span>.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Planteamiento cuadrático):</strong> <span class="math-expr">n(n - 3) / 2 = 35 ➔ n(n - 3) = 70 ➔ n² - 3n - 70 = 0</span>.</p>
+                            <p><strong>Paso 2 (Factorización):</strong> <span class="math-expr">(n - 10)(n + 7) = 0</span>. Como <span class="math-expr">n &gt; 3</span>, descartamos <span class="math-expr">-7</span> y tomamos <span class="math-expr">n = 10</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: n = 10 lados (decágono).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-intermedio">Intermedio • Ejemplo 3 (Base media y segmento entre diagonales de un trapecio)</span>
+                            <button class="btn-geogebra !mt-0" onclick="lanzarPlantilla('trapecio_base_media')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Las bases de un trapecio miden <span class="math-expr">B = 18 cm</span> y <span class="math-expr">b = 10 cm</span>. Calcula la longitud de su base media (<span class="math-expr">m</span>) y del segmento (<span class="math-expr">s</span>) que une los puntos medios de sus diagonales.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Base media m):</strong> <span class="math-expr">m = (B + b) / 2 = (18 + 10) / 2 = 28 / 2 = 14 cm</span>.</p>
+                            <p><strong>Paso 2 (Segmento entre diagonales s):</strong> <span class="math-expr">s = (B - b) / 2 = (18 - 10) / 2 = 8 / 2 = 4 cm</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: Base media m = 14 cm y segmento entre diagonales s = 4 cm.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-intermedio">Intermedio • Ejemplo 4 (Diagonales y área de un rombo)</span>
+                            <button class="btn-geogebra !mt-0" onclick="lanzarPlantilla('rombo_diagonales')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">El lado de un rombo mide <span class="math-expr">L = 13 cm</span> y su diagonal mayor mide <span class="math-expr">D = 24 cm</span>. Calcula la longitud de su diagonal menor (<span class="math-expr">d</span>) y su área.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Triángulo rectángulo interno):</strong> Como las diagonales se bisecan a <span class="math-expr">90°</span>, la semidiagonal mayor mide <span class="math-expr">24 / 2 = 12 cm</span>. Por Pitágoras: <span class="math-expr">(d/2) = √(13² - 12²) = √25 = 5 cm</span>.</p>
+                            <p><strong>Paso 2 (Diagonal menor y área):</strong> <span class="math-expr">d = 2 · 5 = 10 cm</span>. Área = <span class="math-expr">(D · d) / 2 = (24 · 10) / 2 = 120 cm²</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: Diagonal menor d = 10 cm y Área = 120 cm².</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-intermedio">Intermedio • Ejemplo 5 (Ecuación con ángulos consecutivos de un paralelogramo)</span>
+                            <button class="btn-geogebra !mt-0" onclick="lanzarPlantilla('romboide_bisectrices')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Dos ángulos consecutivos de un paralelogramo miden <span class="math-expr">(3x + 15)°</span> y <span class="math-expr">(2x - 10)°</span>. Halla <span class="math-expr">x</span> y las medidas de los cuatro ángulos del paralelogramo.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Ángulos consecutivos suplementarios):</strong> <span class="math-expr">(3x + 15) + (2x - 10) = 180 ➔ 5x + 5 = 180</span>.</p>
+                            <p><strong>Paso 2 (Despeje):</strong> <span class="math-expr">5x = 175 ➔ x = 35</span>. Sustituyendo: <span class="math-expr">3(35) + 15 = 120°</span> y <span class="math-expr">2(35) - 10 = 60°</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: x = 35; los ángulos del paralelogramo miden 120°, 60°, 120° y 60°.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EJEMPLOS AVANZADOS (5) -->
+                <div id="ejemplos-avanzado" class="subcontenido-ejemplos hidden space-y-4">
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-avanzado">Avanzado • Ejemplo 1 (Relación entre suma interior y suma exterior)</span>
+                            <button class="btn-geogebra !mt-0" onclick="ejecutarEnGeoGebra('Decágono: S_i = 4 · S_e', 'Cuando S_i = 4(360°) = 1440°, se obtiene 180°(n - 2) = 1440° ➔ n = 10 lados.', ['SetCoordSystem(-5, 5, -4, 4.5)', 'A = (-0.9, -2.9)', 'B = (0.9, -2.9)', 'dec = Polygon(A, B, 10)', 'SetColor(dec, 18, 105, 168)', 'Text(\"S_i = 4 · S_e = 1440°  ➔  n = 10 lados (Decágono)\", (-3.5, 3.8))'])">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">¿En qué polígono convexo la suma de sus ángulos interiores equivale exactamente a <span class="math-expr">4</span> veces la suma de sus ángulos exteriores?</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Planteamiento):</strong> <span class="math-expr">Sᵢ = 4 · Sₑ ➔ 180°(n - 2) = 4 · 360°</span>.</p>
+                            <p><strong>Paso 2 (Simplificación):</strong> Dividiendo ambos lados entre <span class="math-expr">180°</span>: <span class="math-expr">n - 2 = 4 · 2 = 8 ➔ n = 10</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: En un decágono (n = 10 lados).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-avanzado">Avanzado • Ejemplo 2 (Ángulo entre bisectrices de dos ángulos consecutivos)</span>
+                            <button class="btn-geogebra !mt-0" onclick="lanzarPlantilla('romboide_bisectrices')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">En un cuadrilátero convexo <span class="math-expr">ABCD</span>, los ángulos interiores <span class="math-expr">∠C = 112°</span> y <span class="math-expr">∠D = 84°</span>. Se trazan las bisectrices interiores de los otros dos ángulos consecutivos <span class="math-expr">∠A</span> y <span class="math-expr">∠B</span>, cortándose en <span class="math-expr">P</span>. Calcula la medida del ángulo <span class="math-expr">∠APB</span>.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Suma de A y B):</strong> <span class="math-expr">∠A + ∠B = 360° - (112° + 84°) = 360° - 196° = 164°</span>.</p>
+                            <p><strong>Paso 2 (En el triángulo △APB):</strong> <span class="math-expr">∠APB = 180° - (∠A/2 + ∠B/2) = 180° - 164°/2 = 180° - 82° = 98°</span> (propiedad general: <span class="math-expr">∠APB = (∠C + ∠D) / 2 = (112° + 84°) / 2 = 98°</span>).</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: m∠APB = 98°.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-avanzado">Avanzado • Ejemplo 3 (Altura, área y diagonal de un trapecio isósceles)</span>
+                            <button class="btn-geogebra !mt-0" onclick="lanzarPlantilla('trapecio_base_media')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Un trapecio isósceles tiene bases de <span class="math-expr">B = 22 cm</span> y <span class="math-expr">b = 10 cm</span>, y lados no paralelos de <span class="math-expr">10 cm</span>. Calcula su altura <span class="math-expr">h</span>, su área y la longitud de su diagonal <span class="math-expr">d</span>.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Proyección lateral y altura):</strong> <span class="math-expr">x = (22 - 10) / 2 = 6 cm</span>. Por Pitágoras: <span class="math-expr">h = √(10² - 6²) = 8 cm</span>.</p>
+                            <p><strong>Paso 2 (Área y diagonal):</strong> <span class="math-expr">Área = ((22 + 10) / 2) · 8 = 16 · 8 = 128 cm²</span>. La diagonal forma un triángulo rectángulo de catetos <span class="math-expr">8 cm</span> y <span class="math-expr">22 - 6 = 16 cm</span>: <span class="math-expr">d = √(8² + 16²) = √320 = 8√5 ≈ 17.89 cm</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: h = 8 cm, Área = 128 cm² y diagonal d = 8√5 cm.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-avanzado">Avanzado • Ejemplo 4 (Variación del número de lados y diagonales)</span>
+                            <button class="btn-geogebra !mt-0" onclick="ejecutarEnGeoGebra('Heptágono Regular (n = 7)', 'Un heptágono tiene 14 diagonales; al aumentar 3 lados pasa a decágono (35 diagonales), aumentando en 21 diagonales.', ['SetCoordSystem(-5, 5, -4, 4.5)', 'A = (-1.3, -2.7)', 'B = (1.3, -2.7)', 'hep = Polygon(A, B, 7)', 'SetColor(hep, 84, 136, 125)', 'Text(\"Heptágono (n = 7): D = 7(4)/2 = 14 diagonales\", (-3.3, 3.8))'])">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Si el número de lados de un polígono convexo aumenta en <span class="math-expr">3</span>, su número total de diagonales aumenta en <span class="math-expr">24</span>. ¿De qué polígono original se trata?</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Planteamiento):</strong> <span class="math-expr">(n + 3)(n + 3 - 3) / 2 - n(n - 3) / 2 = 24</span>.</p>
+                            <p><strong>Paso 2 (Multiplicando por 2):</strong> <span class="math-expr">n(n + 3) - n(n - 3) = 48 ➔ n² + 3n - n² + 3n = 48 ➔ 6n = 48 ➔ n = 8</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: El polígono original tiene n = 8 lados (octágono; pasa de 20 a 44 diagonales).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-avanzado">Avanzado • Ejemplo 5 (Estrella pentagonal: prolongación de lados no consecutivos)</span>
+                            <button class="btn-geogebra !mt-0" onclick="ejecutarEnGeoGebra('Estrella Pentagonal Regular (36°)', 'Al prolongar dos lados no consecutivos de un pentágono regular se forma un triángulo isósceles con ángulos basales iguales al ángulo exterior (72°) y ángulo en la punta de 36°.', ['SetCoordSystem(-5, 5, -3.5, 5.5)', 'A = (-1.5, -2.2)', 'B = (1.5, -2.2)', 'pent = Polygon(A, B, 5)', 'SetColor(pent, 18, 105, 168)', 'C = Vertex(pent, 3)', 'D = Vertex(pent, 4)', 'E = Vertex(pent, 5)', 'r1 = Line(E, D)', 'r2 = Line(B, C)', 'P = Intersect(r1, r2)', 'SetColor(r1, 180, 83, 9)', 'SetColor(r2, 180, 83, 9)', 'angP = Angle(D, P, C)', 'Text(\"Punta de estrella pentagonal = 180° - 2(72°) = 36°\", (-3.6, 4.8))'])">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">En un pentágono regular (<span class="math-expr">n = 5</span>), se prolongan dos lados no consecutivos hasta cortarse en un punto exterior <span class="math-expr">P</span> (formando la punta de una estrella pentagonal). Calcula la medida del ángulo agudo en <span class="math-expr">P</span>.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Ángulo exterior del pentágono regular):</strong> <span class="math-expr">e = 360° / 5 = 72°</span>.</p>
+                            <p><strong>Paso 2 (Triángulo exterior formado):</strong> Los ángulos basales del triángulo exterior son ángulos exteriores del pentágono (<span class="math-expr">72°</span> cada uno). Por tanto: <span class="math-expr">∠P = 180° - (72° + 72°) = 36°</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Cada punta de la estrella pentagonal mide 36°.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 3: EJERCICIOS PRÁCTICOS (15)       -->
+            <!-- ========================================== -->
+            <section id="sec-ejercicios" class="seccion-contenido hidden">
+                <div class="flex flex-wrap items-center justify-between gap-3 mb-4 bg-white p-4 rounded-xl border-2 border-[#54887D]">
+                    <div>
+                        <h2 class="text-xl font-bold text-[#1269A8]">Práctica Guiada en Pizarra (15 Ejercicios)</h2>
+                        <p class="text-sm text-slate-600">Resuelve cada ejercicio en tu cuaderno, despliega la solución y verifica la construcción en GeoGebra.</p>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <button class="subtab-btn active" onclick="filtrarSubnivel('ejercicios', 'basico', this)">Básico (5)</button>
+                        <button class="subtab-btn" onclick="filtrarSubnivel('ejercicios', 'intermedio', this)">Intermedio (5)</button>
+                        <button class="subtab-btn" onclick="filtrarSubnivel('ejercicios', 'avanzado', this)">Avanzado (5)</button>
+                    </div>
+                </div>
+
+                <!-- EJERCICIOS BÁSICOS (5) -->
+                <div id="ejercicios-basico" class="subcontenido-ejercicios space-y-4">
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 1</span>
+                        <p class="font-semibold text-base">Halla la suma de los ángulos interiores (<span class="math-expr">Sᵢ</span>) de un eneágono (<span class="math-expr">n = 9</span> lados).</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-eb1', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="lanzarPlantilla('hexagono_regular')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-eb1" class="solucion-box">
+                            <p><strong>Operación:</strong> <span class="math-expr">Sᵢ = 180°(9 - 2) = 180° · 7 = 1260°</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: 1260°.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 2</span>
+                        <p class="font-semibold text-base">Calcula la medida de cada ángulo exterior y de cada ángulo interior de un octágono regular (<span class="math-expr">n = 8</span>).</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-eb2', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="lanzarPlantilla('hexagono_regular')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-eb2" class="solucion-box">
+                            <p><strong>Operación:</strong> <span class="math-expr">e = 360° / 8 = 45°</span>; <span class="math-expr">i = 180° - 45° = 135°</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Ángulo exterior = 45° y ángulo interior = 135°.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 3</span>
+                        <p class="font-semibold text-base">Calcula el número total de diagonales (<span class="math-expr">D</span>) de un heptágono (<span class="math-expr">n = 7</span>).</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-eb3', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="lanzarPlantilla('pentagono_diagonales')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-eb3" class="solucion-box">
+                            <p><strong>Operación:</strong> <span class="math-expr">D = 7(7 - 3) / 2 = 28 / 2 = 14</span> diagonales.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: 14 diagonales.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 4</span>
+                        <p class="font-semibold text-base">Los ángulos interiores de un cuadrilátero miden <span class="math-expr">x</span>, <span class="math-expr">2x</span>, <span class="math-expr">3x</span> y <span class="math-expr">4x</span>. Halla <span class="math-expr">x</span> y la medida del ángulo mayor.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-eb4', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="lanzarPlantilla('poligono_dinamico')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-eb4" class="solucion-box">
+                            <p><strong>Ecuación:</strong> <span class="math-expr">10x = 360° ➔ x = 36°</span>. Ángulo mayor = <span class="math-expr">4(36°) = 144°</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: x = 36° y el ángulo mayor mide 144°.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 5</span>
+                        <p class="font-semibold text-base">En un trapecio isósceles, cada uno de los ángulos iguales de la base mayor mide <span class="math-expr">58°</span>. ¿Cuánto mide cada ángulo de la base menor?</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-eb5', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="lanzarPlantilla('trapecio_base_media')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-eb5" class="solucion-box">
+                            <p><strong>Operación:</strong> Los ángulos adyacentes a un lado no paralelo son suplementarios: <span class="math-expr">180° - 58° = 122°</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: 122° cada uno.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EJERCICIOS INTERMEDIOS (5) -->
+                <div id="ejercicios-intermedio" class="subcontenido-ejercicios hidden space-y-4">
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 1</span>
+                        <p class="font-semibold text-base">El ángulo exterior de un polígono regular mide <span class="math-expr">24°</span>. Determina el número de lados del polígono y su suma de ángulos interiores.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ei1', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="lanzarPlantilla('hexagono_regular')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-ei1" class="solucion-box">
+                            <p><strong>Resolución:</strong> <span class="math-expr">n = 360° / 24° = 15</span> lados (pentadecágono). <span class="math-expr">Sᵢ = 180°(15 - 2) = 2340°</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: n = 15 lados y Sᵢ = 2340°.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 2</span>
+                        <p class="font-semibold text-base">Un polígono convexo posee <span class="math-expr">D = 54</span> diagonales totales. Calcula su número de lados <span class="math-expr">n</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ei2', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="lanzarPlantilla('pentagono_diagonales')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-ei2" class="solucion-box">
+                            <p><strong>Ecuación:</strong> <span class="math-expr">n(n - 3) / 2 = 54 ➔ n² - 3n - 108 = 0 ➔ (n - 12)(n + 9) = 0 ➔ n = 12</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: n = 12 lados (dodecágono).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 3</span>
+                        <p class="font-semibold text-base">La base media de un trapecio mide <span class="math-expr">m = 16 cm</span> y su base menor mide <span class="math-expr">b = 11 cm</span>. Halla la longitud de la base mayor <span class="math-expr">B</span> y el segmento entre puntos medios de diagonales <span class="math-expr">s</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ei3', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="lanzarPlantilla('trapecio_base_media')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-ei3" class="solucion-box">
+                            <p><strong>Resolución:</strong> <span class="math-expr">(B + 11) / 2 = 16 ➔ B + 11 = 32 ➔ B = 21 cm</span>. Luego <span class="math-expr">s = (21 - 11) / 2 = 5 cm</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Base mayor B = 21 cm y segmento s = 5 cm.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 4</span>
+                        <p class="font-semibold text-base">Las diagonales de un rombo miden <span class="math-expr">D = 30 cm</span> y <span class="math-expr">d = 16 cm</span>. Calcula su perímetro y su área.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ei4', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="lanzarPlantilla('rombo_diagonales')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-ei4" class="solucion-box">
+                            <p><strong>Resolución:</strong> Semidiagonales: <span class="math-expr">15 cm</span> y <span class="math-expr">8 cm</span>. Lado <span class="math-expr">L = √(15² + 8²) = 17 cm</span>. Perímetro = <span class="math-expr">4 · 17 = 68 cm</span>; Área = <span class="math-expr">(30 · 16) / 2 = 240 cm²</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Perímetro = 68 cm y Área = 240 cm².</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 5</span>
+                        <p class="font-semibold text-base">En un deltoide (trapezoide simétrico), los ángulos distintos miden <span class="math-expr">110°</span> y <span class="math-expr">50°</span>. ¿Cuánto mide cada uno de los otros dos ángulos congruentes?</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ei5', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="lanzarPlantilla('deltoide')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-ei5" class="solucion-box">
+                            <p><strong>Operación:</strong> <span class="math-expr">2x + 110° + 50° = 360° ➔ 2x = 200° ➔ x = 100°</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Cada uno mide 100°.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EJERCICIOS AVANZADOS (5) -->
+                <div id="ejercicios-avanzado" class="subcontenido-ejercicios hidden space-y-4">
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 1</span>
+                        <p class="font-semibold text-base">En un polígono regular, la medida de cada ángulo interior es igual al triple de la medida de su ángulo exterior (<span class="math-expr">i = 3e</span>). ¿Cuántos lados tiene el polígono?</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ea1', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="lanzarPlantilla('hexagono_regular')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-ea1" class="solucion-box">
+                            <p><strong>Resolución:</strong> Como <span class="math-expr">i + e = 180°</span> y <span class="math-expr">i = 3e</span>, se obtiene <span class="math-expr">4e = 180° ➔ e = 45°</span>. Luego <span class="math-expr">n = 360° / 45° = 8</span> lados.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: n = 8 lados (octágono regular).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 2</span>
+                        <p class="font-semibold text-base">En un cuadrilátero convexo <span class="math-expr">ABCD</span>, las bisectrices de dos ángulos consecutivos forman un ángulo de <span class="math-expr">105°</span>. Si uno de los otros dos ángulos mide <span class="math-expr">120°</span>, calcula el cuarto ángulo.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ea2', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="lanzarPlantilla('romboide_bisectrices')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-ea2" class="solucion-box">
+                            <p><strong>Propiedad:</strong> <span class="math-expr">105° = (120° + x) / 2 ➔ 210° = 120° + x ➔ x = 90°</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: El cuarto ángulo mide 90°.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 3</span>
+                        <p class="font-semibold text-base">Un trapecio rectángulo tiene bases de <span class="math-expr">B = 17 cm</span> y <span class="math-expr">b = 9 cm</span>, y su altura mide <span class="math-expr">h = 6 cm</span>. Calcula su perímetro y la longitud de su diagonal mayor.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ea3', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="lanzarPlantilla('trapecio_base_media')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-ea3" class="solucion-box">
+                            <p><strong>Resolución:</strong> Lado oblicuo: <span class="math-expr">L = √(6² + (17 - 9)²) = √(36 + 64) = 10 cm</span>. Perímetro = <span class="math-expr">17 + 9 + 6 + 10 = 42 cm</span>. Diagonal mayor = <span class="math-expr">√(17² + 6²) = √325 = 5√13 ≈ 18.03 cm</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Perímetro = 42 cm y diagonal mayor = 5√13 cm.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 4</span>
+                        <p class="font-semibold text-base">¿En qué polígono convexo el número total de diagonales es igual al cuádruple del número de sus lados (<span class="math-expr">D = 4n</span>)?</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ea4', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="lanzarPlantilla('pentagono_diagonales')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-ea4" class="solucion-box">
+                            <p><strong>Ecuación:</strong> <span class="math-expr">n(n - 3) / 2 = 4n ➔ n - 3 = 8 ➔ n = 11</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: n = 11 lados (endecágono, con 44 diagonales).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 5</span>
+                        <p class="font-semibold text-base">El perímetro de un rectángulo es <span class="math-expr">46 cm</span> y su diagonal mide <span class="math-expr">17 cm</span>. Calcula el área del rectángulo.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ea5', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="lanzarPlantilla('poligono_dinamico')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-ea5" class="solucion-box">
+                            <p><strong>Identidad algebraica:</strong> <span class="math-expr">b + h = 46 / 2 = 23</span> y <span class="math-expr">b² + h² = 17² = 289</span>. Como <span class="math-expr">(b + h)² = b² + h² + 2bh ➔ 529 = 289 + 2·Área ➔ 2·Área = 240</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Área = 120 cm² (lados de 15 cm y 8 cm).</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 4: PREGUNTAS DE REFLEXIÓN CRÍTICA  -->
+            <!-- ========================================== -->
+            <section id="sec-reflexion" class="seccion-contenido hidden">
+                <div class="card-montano">
+                    <h2 class="text-2xl font-bold text-[#1269A8] mb-2">🧠 Análisis Conceptual y Pensamiento Crítico</h2>
+                    <p class="text-sm text-slate-600 mb-4">Reflexiona sobre las invariantes topológicas, la inclusión de conjuntos y el significado de las fórmulas poligonales.</p>
+
+                    <div class="space-y-4">
+                        <div class="p-4 bg-[#F2F5E9] rounded-xl border-2 border-[#54887D]">
+                            <h3 class="font-bold text-lg text-[#1269A8]">1. ¿Por qué la suma de los ángulos exteriores de cualquier polígono convexo siempre es <span class="math-expr">360°</span> sin importar cuántos lados tenga?</h3>
+                            <p class="mt-1">Imagina que caminas alrededor del perímetro de un polígono convexo girando en cada vértice el ángulo exterior correspondiente.</p>
+                            <button class="btn-solucion" onclick="toggleSolucion('ref-1', this)">Ver análisis conceptual</button>
+                            <div id="ref-1" class="solucion-box">
+                                <p><strong>Análisis:</strong> Al recorrer todo el contorno cerrado de un polígono convexo y regresar al punto de partida mirando en la dirección inicial, la suma de todos los giros realizados (los ángulos exteriores) completa exactamente <strong>una vuelta completa de 360°</strong>. Algebraicamente también se demuestra: <span class="math-expr">Sₑ = n·180° - 180°(n - 2) = 180°n - 180°n + 360° = 360°</span>.</p>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-[#F2F5E9] rounded-xl border-2 border-[#54887D]">
+                            <h3 class="font-bold text-lg text-[#1269A8]">2. Diferencia lógica entre <em>"Todo cuadrado es un rombo y un rectángulo"</em> frente a <em>"Todo rombo es un cuadrado"</em></h3>
+                            <p class="mt-1">Explica la jerarquía de inclusión de conjuntos entre paralelogramos, rectángulos, rombos y cuadrados.</p>
+                            <button class="btn-solucion" onclick="toggleSolucion('ref-2', this)">Ver análisis conceptual</button>
+                            <div id="ref-2" class="solucion-box">
+                                <p><strong>Análisis:</strong> El <strong>cuadrado</strong> es la intersección exacta entre el conjunto de los <strong>rectángulos</strong> (4 ángulos de 90°) y el conjunto de los <strong>rombos</strong> (4 lados iguales). Por tanto, todo cuadrado cumple todas las propiedades del rombo y del rectángulo (verdadero). En cambio, un rombo con ángulos de 60° y 120° tiene 4 lados iguales pero no ángulos rectos, por lo que <strong>no todo rombo es un cuadrado</strong> (falso).</p>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-[#F2F5E9] rounded-xl border-2 border-[#54887D]">
+                            <h3 class="font-bold text-lg text-[#1269A8]">3. ¿Por qué el triángulo es la única figura poligonal rígida y por qué triangulamos los polígonos en <span class="math-expr">n - 2</span> triángulos?</h3>
+                            <p class="mt-1">Relaciona la rigidez estructural en puentes y grúas con la triangulación desde un vértice.</p>
+                            <button class="btn-solucion" onclick="toggleSolucion('ref-3', this)">Ver análisis conceptual</button>
+                            <div id="ref-3" class="solucion-box">
+                                <p><strong>Análisis:</strong> Un cuadrilátero articulado en sus vértices puede deformarse (un cuadrado puede aplastarse hasta convertirse en un rombo sin cambiar la longitud de sus 4 varillas), mientras que un triángulo queda fijado de manera única por sus 3 lados. Al trazar las <span class="math-expr">n - 3</span> diagonales desde un vértice, cualquier polígono se descompone en <span class="math-expr">n - 2</span> triángulos rígidos, lo que explica tanto su estabilidad estructural como la fórmula <span class="math-expr">Sᵢ = 180°(n - 2)</span>.</p>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-[#F2F5E9] rounded-xl border-2 border-[#54887D]">
+                            <h3 class="font-bold text-lg text-[#1269A8]">4. ¿Qué ocurre con la fórmula de diagonales <span class="math-expr">D = n(n - 3)/2</span> cuando <span class="math-expr">n = 3</span> y por qué tiene sentido geométrico?</h3>
+                            <p class="mt-1">Evalúa la expresión para un triángulo y explica el significado del factor <span class="math-expr">n - 3</span>.</p>
+                            <button class="btn-solucion" onclick="toggleSolucion('ref-4', this)">Ver análisis conceptual</button>
+                            <div id="ref-4" class="solucion-box">
+                                <p><strong>Análisis:</strong> Al sustituir <span class="math-expr">n = 3</span> obtenemos <span class="math-expr">D = 3(3 - 3) / 2 = 0</span>. Geométricamente tiene pleno sentido: una diagonal une dos vértices <strong>no consecutivos</strong>, pero en un triángulo cada vértice ya está conectado por lados con los otros dos vértices restantes, por lo que no existen vértices no adyacentes ni diagonales posibles.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 5: EVALUACIÓN FORMATIVA            -->
+            <!-- ========================================== -->
+            <section id="sec-evaluacion" class="seccion-contenido hidden">
+                <div class="card-montano">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b-2 border-[#F7D615] pb-3 mb-4">
+                        <div>
+                            <h2 class="text-2xl font-bold text-[#1269A8]">✅ Evaluación Formativa de Comprobación</h2>
+                            <p class="text-sm text-slate-600">Resuelve cada reactivo, verifica tu procedimiento y explora la construcción en GeoGebra.</p>
+                        </div>
+                        <span class="badge-nivel badge-avanzado mt-2 sm:mt-0">5 Reactivos de Comprobación</span>
+                    </div>
+
+                    <div class="space-y-4">
+                        <!-- Reactivo 1 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 1 • Polígonos Regulares</span>
+                            <p class="font-bold text-base mt-1">¿Cuánto mide cada ángulo interior de un decágono regular (<span class="math-expr">n = 10</span>)?</p>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="btn-solucion" onclick="toggleSolucion('eval-1', this)">Mostrar solución</button>
+                                <button class="btn-geogebra" onclick="lanzarPlantilla('hexagono_regular')">📐 Construir en GeoGebra</button>
+                            </div>
+                            <div id="eval-1" class="solucion-box">
+                                <p><strong>Resolución:</strong> <span class="math-expr">e = 360° / 10 = 36° ➔ i = 180° - 36° = 144°</span>.</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: 144°.</p>
+                            </div>
+                        </div>
+
+                        <!-- Reactivo 2 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 2 • Diagonales de un Polígono</span>
+                            <p class="font-bold text-base mt-1">¿Cuántas diagonales en total tiene un polígono convexo cuya suma de ángulos interiores es <span class="math-expr">1080°</span>?</p>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="btn-solucion" onclick="toggleSolucion('eval-2', this)">Mostrar solución</button>
+                                <button class="btn-geogebra" onclick="lanzarPlantilla('pentagono_diagonales')">📐 Construir en GeoGebra</button>
+                            </div>
+                            <div id="eval-2" class="solucion-box">
+                                <p><strong>Resolución:</strong> <span class="math-expr">180°(n - 2) = 1080° ➔ n - 2 = 6 ➔ n = 8</span>. Total de diagonales: <span class="math-expr">D = 8(5) / 2 = 20</span>.</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: 20 diagonales.</p>
+                            </div>
+                        </div>
+
+                        <!-- Reactivo 3 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 3 • Propiedades de Trapecios</span>
+                            <p class="font-bold text-base mt-1">En un trapecio, la base mayor mide <span class="math-expr">B = 26 cm</span> y la base menor mide <span class="math-expr">b = 14 cm</span>. Halla la base media (<span class="math-expr">m</span>) y el segmento entre diagonales (<span class="math-expr">s</span>).</p>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="btn-solucion" onclick="toggleSolucion('eval-3', this)">Mostrar solución</button>
+                                <button class="btn-geogebra" onclick="lanzarPlantilla('trapecio_base_media')">📐 Construir en GeoGebra</button>
+                            </div>
+                            <div id="eval-3" class="solucion-box">
+                                <p><strong>Resolución:</strong> <span class="math-expr">m = (26 + 14) / 2 = 20 cm</span>; <span class="math-expr">s = (26 - 14) / 2 = 6 cm</span>.</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: m = 20 cm y s = 6 cm.</p>
+                            </div>
+                        </div>
+
+                        <!-- Reactivo 4 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 4 • Rombo y Pitágoras</span>
+                            <p class="font-bold text-base mt-1">El perímetro de un rombo es <span class="math-expr">60 cm</span> y su diagonal menor mide <span class="math-expr">18 cm</span>. Calcula la longitud de su diagonal mayor.</p>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="btn-solucion" onclick="toggleSolucion('eval-4', this)">Mostrar solución</button>
+                                <button class="btn-geogebra" onclick="lanzarPlantilla('rombo_diagonales')">📐 Construir en GeoGebra</button>
+                            </div>
+                            <div id="eval-4" class="solucion-box">
+                                <p><strong>Resolución:</strong> Lado <span class="math-expr">L = 60 / 4 = 15 cm</span>; semidiagonal menor = <span class="math-expr">9 cm</span>. Semidiagonal mayor = <span class="math-expr">√(15² - 9²) = 12 cm ➔ D = 24 cm</span>.</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: D = 24 cm.</p>
+                            </div>
+                        </div>
+
+                        <!-- Reactivo 5 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 5 • Bisectrices en Cuadriláteros</span>
+                            <p class="font-bold text-base mt-1">En un cuadrilátero convexo <span class="math-expr">ABCD</span>, <span class="math-expr">∠C = 130°</span> y <span class="math-expr">∠D = 70°</span>. Calcula el ángulo formado por las bisectrices interiores de <span class="math-expr">∠A</span> y <span class="math-expr">∠B</span>.</p>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="btn-solucion" onclick="toggleSolucion('eval-5', this)">Mostrar solución</button>
+                                <button class="btn-geogebra" onclick="lanzarPlantilla('romboide_bisectrices')">📐 Construir en GeoGebra</button>
+                            </div>
+                            <div id="eval-5" class="solucion-box">
+                                <p><strong>Resolución:</strong> <span class="math-expr">∠APB = (∠C + ∠D) / 2 = (130° + 70°) / 2 = 200° / 2 = 100°</span>.</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: 100°.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 6: LABORATORIO INTERACTIVO GEOGEBRA -->
+            <!-- ========================================== -->
+            <section id="sec-geogebra" class="seccion-contenido hidden">
+                <div class="card-montano">
+                    <!-- Encabezado y Selector de Plantillas -->
+                    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 border-b-2 border-[#F7D615] pb-3 mb-4">
+                        <div>
+                            <div class="flex flex-wrap items-center gap-2">
+                                <span class="badge-nivel badge-avanzado">GeoGebra Geometry Interactivo</span>
+                                <span id="ggb-status-badge" class="text-xs font-bold text-[#54887D] bg-[#F2F5E9] px-2.5 py-1 rounded-full border border-[#54887D]">Cargando applet de GeoGebra...</span>
+                            </div>
+                            <h2 class="text-2xl font-bold text-[#1269A8] mt-1">📐 Laboratorio de Cuadriláteros y Polígonos</h2>
+                            <p class="text-sm text-slate-600">Arrastra los vértices en el lienzo o selecciona una de las 8 plantillas preprogramadas.</p>
+                        </div>
+
+                        <!-- Selector Rápido de Plantillas -->
+                        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+                            <select id="ggb-preset-select" onchange="lanzarPlantilla(this.value)" class="p-2 rounded-lg border-2 border-[#1269A8] bg-white font-bold text-xs sm:text-sm text-[#1269A8] cursor-pointer">
+                                <option value="hexagono_regular">1. Hexágono Regular y Ángulos (i = 120°, e = 60°)</option>
+                                <option value="pentagono_diagonales">2. Pentágono y Diagonales desde un Vértice (n - 2 triángulos)</option>
+                                <option value="romboide_bisectrices">3. Romboide y Bisectrices de Ángulos Consecutivos</option>
+                                <option value="trapecio_base_media">4. Trapecio Isósceles y Base Media m = (B + b)/2</option>
+                                <option value="rombo_diagonales">5. Rombo y Diagonales Perpendiculares (90°)</option>
+                                <option value="deltoide">6. Deltoide (Trapezoide Simétrico)</option>
+                                <option value="concavo_convexo">7. Cuadrilátero Convexo vs. Cóncavo</option>
+                                <option value="poligono_dinamico">8. Polígono Dinámico (Suma de Ángulos = 360°)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Botones de Plantillas Rápidas -->
+                    <div class="flex flex-wrap gap-1.5 mb-3">
+                        <button onclick="lanzarPlantilla('hexagono_regular')" class="text-xs font-bold px-2.5 py-1.5 rounded-lg bg-sky-100 text-sky-950 border border-sky-500 hover:bg-sky-200 cursor-pointer">⬡ Hexágono Regular</button>
+                        <button onclick="lanzarPlantilla('pentagono_diagonales')" class="text-xs font-bold px-2.5 py-1.5 rounded-lg bg-indigo-100 text-indigo-950 border border-indigo-500 hover:bg-indigo-200 cursor-pointer">⬠ Pentágono y Diagonales</button>
+                        <button onclick="lanzarPlantilla('romboide_bisectrices')" class="text-xs font-bold px-2.5 py-1.5 rounded-lg bg-emerald-100 text-emerald-950 border border-emerald-500 hover:bg-emerald-200 cursor-pointer">▱ Romboide y Bisectrices</button>
+                        <button onclick="lanzarPlantilla('trapecio_base_media')" class="text-xs font-bold px-2.5 py-1.5 rounded-lg bg-amber-100 text-amber-950 border border-amber-500 hover:bg-amber-200 cursor-pointer">⏢ Trapecio y Base Media</button>
+                        <button onclick="lanzarPlantilla('rombo_diagonales')" class="text-xs font-bold px-2.5 py-1.5 rounded-lg bg-lime-100 text-lime-950 border border-lime-500 hover:bg-lime-200 cursor-pointer">◊ Rombo y Diagonales</button>
+                        <button onclick="lanzarPlantilla('deltoide')" class="text-xs font-bold px-2.5 py-1.5 rounded-lg bg-teal-100 text-teal-950 border border-teal-500 hover:bg-teal-200 cursor-pointer">🪁 Deltoide</button>
+                        <button onclick="lanzarPlantilla('concavo_convexo')" class="text-xs font-bold px-2.5 py-1.5 rounded-lg bg-rose-100 text-rose-950 border border-rose-500 hover:bg-rose-200 cursor-pointer">📐 Cóncavo vs Convexo</button>
+                        <button onclick="lanzarPlantilla('poligono_dinamico')" class="text-xs font-bold px-2.5 py-1.5 rounded-lg bg-yellow-100 text-yellow-950 border border-yellow-600 hover:bg-yellow-200 cursor-pointer">🔄 Polígono Dinámico</button>
+                    </div>
+
+                    <!-- Barra de Herramientas Rápidas de Control -->
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-3 p-2.5 bg-[#F2F5E9] rounded-xl border border-[#A6B046]">
+                        <div class="flex flex-wrap gap-2">
+                            <button onclick="limpiarGeoGebra()" class="px-3 py-1.5 rounded-lg bg-white hover:bg-red-50 text-red-700 font-bold text-xs border border-red-400 cursor-pointer">🗑️ Limpiar lienzo</button>
+                            <button onclick="alternarCuadriculaYEjes()" class="px-3 py-1.5 rounded-lg bg-white hover:bg-sky-50 text-[#1269A8] font-bold text-xs border border-[#1269A8] cursor-pointer">⊞ Alternar cuadrícula/ejes</button>
+                            <button onclick="reiniciarPlantillaActual()" class="px-3 py-1.5 rounded-lg bg-white hover:bg-emerald-50 text-[#54887D] font-bold text-xs border border-[#54887D] cursor-pointer">↺ Reiniciar plantilla</button>
+                        </div>
+                        <span class="text-xs font-semibold text-[#54887D]">💡 Consejo: Arrastra los vértices azules en GeoGebra para comprobar cómo cambian los ángulos y diagonales.</span>
+                    </div>
+
+                    <!-- Banner Descriptivo de la Construcción Activa -->
+                    <div id="ggb-info-construccion" class="mb-3 p-3 bg-gradient-to-r from-[#1269A8] to-[#0d4f80] text-white rounded-xl border-2 border-[#F7D615]">
+                        <h3 id="ggb-titulo-construccion" class="font-bold text-base text-[#F7D615]">1. Hexágono Regular y Ángulos (i = 120°, e = 60°)</h3>
+                        <p id="ggb-desc-construccion" class="text-xs sm:text-sm text-[#F2F5E9] mt-0.5">Observa el hexágono regular (n = 6): cada ángulo interior mide 120° y cada ángulo exterior mide 60° (suplementarios).</p>
+                    </div>
+
+                    <!-- Lienzo Embebido de GeoGebra -->
+                    <div id="ggb-wrapper">
+                        <div id="ggb-element"></div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Pie de Pizarra -->
+        <footer class="bg-[#1269A8] text-white text-center py-3 px-4 text-xs sm:text-sm border-t-2 border-[#F7D615]">
+            <strong>Colegio Montano</strong> • Departamento de Matemática • Cuarta Unidad • Pizarra Digital Interactiva
+        </footer>
+    </div>
+
+    <!-- Scripts de Interactividad y Motor de Construcciones GeoGebra -->
+    <script>
+        /* =========================================================================
+           1. NAVEGACIÓN DE PESTAÑAS Y PANTALLA COMPLETA
+           ========================================================================= */
+
+        function cambiarSeccion(seccionId, botonActivo) {
+            const secciones = document.querySelectorAll('.seccion-contenido');
+            secciones.forEach(sec => sec.classList.add('hidden'));
+
+            const target = document.getElementById('sec-' + seccionId);
+            if (target) {
+                target.classList.remove('hidden');
+            }
+
+            const botones = document.querySelectorAll('.tab-btn');
+            botones.forEach(btn => btn.classList.remove('active'));
+            if (botonActivo) {
+                botonActivo.classList.add('active');
+            }
+
+            if (seccionId === 'geogebra') {
+                inicializarGeoGebraSiNecesario();
+                setTimeout(() => {
+                    redimensionarGeoGebra();
+                }, 120);
+            }
+        }
+
+        function filtrarSubnivel(grupo, nivel, botonActivo) {
+            const contenedores = document.querySelectorAll('.subcontenido-' + grupo);
+            contenedores.forEach(cont => cont.classList.add('hidden'));
+
+            const target = document.getElementById(grupo + '-' + nivel);
+            if (target) {
+                target.classList.remove('hidden');
+            }
+
+            const parent = botonActivo.parentElement;
+            const subBotones = parent.querySelectorAll('.subtab-btn');
+            subBotones.forEach(btn => btn.classList.remove('active'));
+            botonActivo.classList.add('active');
+        }
+
+        function toggleSolucion(solucionId, boton) {
+            const box = document.getElementById(solucionId);
+            if (!box) return;
+
+            if (box.style.display === 'block') {
+                box.style.display = 'none';
+                boton.textContent = boton.textContent.replace('Ocultar', 'Mostrar').replace('Ocultar análisis conceptual', 'Ver análisis conceptual');
+            } else {
+                box.style.display = 'block';
+                if (boton.textContent.includes('Ver análisis')) {
+                    boton.textContent = 'Ocultar análisis conceptual';
+                } else {
+                    boton.textContent = 'Ocultar solución';
+                }
+            }
+        }
+
+        function toggleFullscreen() {
+            const btn = document.getElementById('fullscreen-btn');
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().then(() => {
+                    btn.innerHTML = '<span>✖ Salir de pantalla completa</span>';
+                    setTimeout(redimensionarGeoGebra, 200);
+                }).catch(err => {
+                    console.warn('Error al intentar activar pantalla completa:', err);
+                });
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen().then(() => {
+                        btn.innerHTML = '<span>⛶ Pantalla completa</span>';
+                        setTimeout(redimensionarGeoGebra, 200);
+                    });
+                }
+            }
+        }
+
+        document.addEventListener('fullscreenchange', () => {
+            const btn = document.getElementById('fullscreen-btn');
+            if (!document.fullscreenElement && btn) {
+                btn.innerHTML = '<span>⛶ Pantalla completa</span>';
+                setTimeout(redimensionarGeoGebra, 200);
+            }
+        });
+
+        /* =========================================================================
+           2. MOTOR DE CONSTRUCCIONES GEOGEBRA Y COLA DE COMANDOS PENDIENTES
+           ========================================================================= */
+
+        let ggbIniciado = false;
+        let ggbListo = false;
+        let cuadriculaYEjesVisibles = true;
+
+        const PLANTILLAS_GGB = {
+            hexagono_regular: {
+                titulo: '1. Hexágono Regular y Ángulos (i = 120°, e = 60°)',
+                desc: 'Observa el hexágono regular (n = 6): cada ángulo interior mide 120° y cada ángulo exterior al prolongar un lado mide 60° (i + e = 180°).',
+                comandos: [
+                    'SetCoordSystem(-5, 6, -4, 4.5)',
+                    'A = (-1.4, -2.4)',
+                    'B = (1.4, -2.4)',
+                    'hex = Polygon(A, B, 6)',
+                    'SetColor(hex, 18, 105, 168)',
+                    'C = Vertex(hex, 3)',
+                    'F = Vertex(hex, 6)',
+                    'prol = Ray(A, B)',
+                    'P = (3.5, -2.4)',
+                    'SetLineStyle(prol, 1)',
+                    'angInt = Angle(B, A, F)',
+                    'angExt = Angle(P, B, C)',
+                    'SetColor(angInt, 166, 176, 70)',
+                    'SetColor(angExt, 180, 83, 9)',
+                    'Text("Hexágono Regular (n = 6): i = 120°  |  e = 60°", (-3.5, 3.8))'
+                ]
+            },
+            pentagono_diagonales: {
+                titulo: '2. Pentágono y Diagonales desde un Vértice (n - 2 = 3 triángulos)',
+                desc: 'Desde el vértice A de un pentágono (n = 5) se trazan d = 5 - 3 = 2 diagonales, dividiendo la figura en 3 triángulos (S_i = 3 · 180° = 540°).',
+                comandos: [
+                    'SetCoordSystem(-5, 5, -3.5, 4.5)',
+                    'A = (-1.6, -2.2)',
+                    'B = (1.6, -2.2)',
+                    'pent = Polygon(A, B, 5)',
+                    'SetColor(pent, 84, 136, 125)',
+                    'C = Vertex(pent, 3)',
+                    'D = Vertex(pent, 4)',
+                    'E = Vertex(pent, 5)',
+                    'd1 = Segment(A, C)',
+                    'd2 = Segment(A, D)',
+                    'SetLineStyle(d1, 1)',
+                    'SetLineStyle(d2, 1)',
+                    'SetColor(d1, 180, 83, 9)',
+                    'SetColor(d2, 180, 83, 9)',
+                    'Text("Pentágono (n = 5): d = 2 diagonales ➔ 3 triángulos (540°)", (-4, 3.8))'
+                ]
+            },
+            romboide_bisectrices: {
+                titulo: '3. Romboide y Bisectrices de Ángulos Consecutivos (90°)',
+                desc: 'En todo paralelogramo los ángulos consecutivos suman 180°, por lo que las bisectrices de dos ángulos consecutivos siempre se cortan formando 90°.',
+                comandos: [
+                    'SetCoordSystem(-3, 9, -2, 6)',
+                    'A = (-1, 0)',
+                    'B = (6, 0)',
+                    'D = (1, 4)',
+                    'C = D + (B - A)',
+                    'romb = Polygon(A, B, C, D)',
+                    'SetColor(romb, 18, 105, 168)',
+                    'bisA = AngleBisector(B, A, D)',
+                    'bisB = AngleBisector(C, B, A)',
+                    'P = Intersect(bisA, bisB)',
+                    'sAP = Segment(A, P)',
+                    'sBP = Segment(B, P)',
+                    'SetColor(sAP, 180, 83, 9)',
+                    'SetColor(sBP, 180, 83, 9)',
+                    'angP = Angle(B, P, A)',
+                    'Text("Bisectrices de ángulos consecutivos en paralelogramo = 90°", (-1.5, 5))'
+                ]
+            },
+            trapecio_base_media: {
+                titulo: '4. Trapecio Isósceles y Base Media m = (B + b) / 2',
+                desc: 'La base media MN une los puntos medios de los lados no paralelos y mide la semisuma de las bases; el segmento PQ entre diagonales mide (B - b)/2.',
+                comandos: [
+                    'SetCoordSystem(-2, 12, -2, 7)',
+                    'A = (0, 0)',
+                    'B = (10, 0)',
+                    'C = (8, 4.5)',
+                    'D = (2, 4.5)',
+                    'trap = Polygon(A, B, C, D)',
+                    'SetColor(trap, 84, 136, 125)',
+                    'M = Midpoint(A, D)',
+                    'N = Midpoint(B, C)',
+                    'med = Segment(M, N)',
+                    'SetColor(med, 180, 83, 9)',
+                    'd1 = Segment(A, C)',
+                    'd2 = Segment(B, D)',
+                    'SetLineStyle(d1, 1)',
+                    'SetLineStyle(d2, 1)',
+                    'P = Midpoint(A, C)',
+                    'Q = Midpoint(B, D)',
+                    'segDiag = Segment(P, Q)',
+                    'SetColor(segDiag, 166, 176, 70)',
+                    'Text("Base mayor B = 10 | Base menor b = 6 ➔ Base media m = " + med + " | s = " + segDiag, (0, 5.6))'
+                ]
+            },
+            rombo_diagonales: {
+                titulo: '5. Rombo y Diagonales Perpendiculares (90°)',
+                desc: 'Un rombo tiene sus 4 lados congruentes y sus dos diagonales se cortan perpendicularmente en su punto medio formando 4 triángulos rectángulos.',
+                comandos: [
+                    'SetCoordSystem(-6, 6, -4.5, 4.5)',
+                    'A = (0, 3.2)',
+                    'B = (4.5, 0)',
+                    'C = (0, -3.2)',
+                    'D = (-4.5, 0)',
+                    'rombo = Polygon(A, B, C, D)',
+                    'SetColor(rombo, 166, 176, 70)',
+                    'dMayor = Segment(D, B)',
+                    'dMenor = Segment(A, C)',
+                    'SetColor(dMayor, 180, 83, 9)',
+                    'SetColor(dMenor, 18, 105, 168)',
+                    'O = Intersect(dMayor, dMenor)',
+                    'angO = Angle(B, O, A)',
+                    'Text("Rombo: 4 lados iguales y diagonales perpendiculares (90°)", (-4.4, 3.8))'
+                ]
+            },
+            deltoide: {
+                titulo: '6. Deltoide (Trapezoide Simétrico)',
+                desc: 'El deltoide tiene dos pares de lados consecutivos iguales, ningún par de lados paralelos, y sus diagonales se cortan perpendicularmente.',
+                comandos: [
+                    'SetCoordSystem(-5, 5, -5, 4.5)',
+                    'A = (0, 3)',
+                    'B = (3, 0.5)',
+                    'C = (0, -4)',
+                    'D = (-3, 0.5)',
+                    'delt = Polygon(A, B, C, D)',
+                    'SetColor(delt, 18, 105, 168)',
+                    'd1 = Segment(A, C)',
+                    'd2 = Segment(D, B)',
+                    'SetLineStyle(d1, 1)',
+                    'SetLineStyle(d2, 1)',
+                    'SetColor(d1, 180, 83, 9)',
+                    'SetColor(d2, 180, 83, 9)',
+                    'O = Intersect(d1, d2)',
+                    'angO = Angle(B, O, A)',
+                    'Text("Deltoide: Lados consecutivos iguales y diagonales a 90°", (-4.2, 3.7))'
+                ]
+            },
+            concavo_convexo: {
+                titulo: '7. Cuadrilátero Convexo vs. Cóncavo (No Convexo)',
+                desc: 'A la izquierda un cuadrilátero convexo (todos los ángulos < 180° y diagonales internas). A la derecha un cuadrilátero cóncavo con un ángulo > 180° y una diagonal externa.',
+                comandos: [
+                    'SetCoordSystem(-7, 7, -3.5, 4.5)',
+                    'A1 = (-6, -1.5)',
+                    'B1 = (-2, -1.5)',
+                    'C1 = (-2.5, 2.5)',
+                    'D1 = (-5.5, 2)',
+                    'conv = Polygon(A1, B1, C1, D1)',
+                    'SetColor(conv, 18, 105, 168)',
+                    'dConv1 = Segment(A1, C1)',
+                    'dConv2 = Segment(B1, D1)',
+                    'SetLineStyle(dConv1, 1)',
+                    'SetLineStyle(dConv2, 1)',
+                    'A2 = (1.5, -1.5)',
+                    'B2 = (6, -1.5)',
+                    'C2 = (3.8, 0.4)',
+                    'D2 = (3.8, 3)',
+                    'conc = Polygon(A2, B2, C2, D2)',
+                    'SetColor(conc, 180, 83, 9)',
+                    'dExt = Segment(A2, B2)',
+                    'SetLineStyle(dExt, 1)',
+                    'SetColor(dExt, 180, 83, 9)',
+                    'Text("Convexo (diagonales internas)", (-6.2, -2.5))',
+                    'Text("Cóncavo (ángulo > 180°)", (1.8, -2.5))'
+                ]
+            },
+            poligono_dinamico: {
+                titulo: '8. Polígono Dinámico (Cuadrilátero: Suma de Ángulos = 360°)',
+                desc: 'Arrastra cualquiera de los cuatro vértices A, B, C o D en el lienzo y comprueba que la suma de sus cuatro ángulos interiores siempre es 360°.',
+                comandos: [
+                    'SetCoordSystem(-5, 6, -3.5, 4.5)',
+                    'A = (-3, -1.5)',
+                    'B = (3.5, -1.8)',
+                    'C = (2.8, 2.4)',
+                    'D = (-2.2, 2.1)',
+                    'cuad = Polygon(A, B, C, D)',
+                    'SetColor(cuad, 18, 105, 168)',
+                    'a1 = Angle(B, A, D)',
+                    'a2 = Angle(C, B, A)',
+                    'a3 = Angle(D, C, B)',
+                    'a4 = Angle(A, D, C)',
+                    'suma = a1 + a2 + a3 + a4',
+                    'Text("Suma de los 4 ángulos interiores = " + suma, (-3, 3.6))'
+                ]
+            }
+        };
+
+        let pendingCommands = {
+            titulo: PLANTILLAS_GGB.hexagono_regular.titulo,
+            descripcion: PLANTILLAS_GGB.hexagono_regular.desc,
+            comandos: PLANTILLAS_GGB.hexagono_regular.comandos,
+            presetKey: 'hexagono_regular'
+        };
+
+        /**
+         * Inicializa el applet de GeoGebra la primera vez que se accede a la pestaña 6.
+         */
+        function inicializarGeoGebraSiNecesario() {
+            if (ggbIniciado) return;
+            ggbIniciado = true;
+
+            const wrapper = document.getElementById('ggb-wrapper');
+            const ancho = wrapper ? Math.max(wrapper.clientWidth - 6, 320) : 960;
+
+            const params = {
+                id: 'ggbApplet',
+                appName: 'geometry',
+                width: ancho,
+                height: 550,
+                showToolBar: true,
+                showAlgebraInput: true,
+                showMenuBar: false,
+                showResetIcon: false,
+                enableRightClick: true,
+                enableLabelDrags: true,
+                showZoomButtons: true,
+                language: 'es',
+                appletOnLoad: function(api) {
+                    window.ggbApplet = api;
+                    ggbListo = true;
+                    const badge = document.getElementById('ggb-status-badge');
+                    if (badge) {
+                        badge.textContent = '✔ GeoGebra Listo e Interactivo';
+                    }
+                    aplicarComandosEnApplet(pendingCommands.titulo, pendingCommands.descripcion, pendingCommands.comandos);
+                }
+            };
+
+            if (typeof GGBApplet !== 'undefined') {
+                const applet = new GGBApplet(params, true);
+                applet.inject('ggb-element');
+            } else {
+                const badge = document.getElementById('ggb-status-badge');
+                if (badge) {
+                    badge.textContent = '⚠️ Verifica tu conexión para cargar GeoGebra';
+                }
+            }
+        }
+
+        function redimensionarGeoGebra() {
+            if (!ggbListo || !window.ggbApplet) return;
+            const wrapper = document.getElementById('ggb-wrapper');
+            if (wrapper && wrapper.clientWidth > 100) {
+                try {
+                    window.ggbApplet.setSize(wrapper.clientWidth - 6, 550);
+                } catch (e) {
+                    console.warn('No se pudo redimensionar GeoGebra:', e);
+                }
+            }
+        }
+
+        window.addEventListener('resize', () => {
+            if (!document.getElementById('sec-geogebra').classList.contains('hidden')) {
+                redimensionarGeoGebra();
+            }
+        });
+
+        /**
+         * Función central para ejecutar cualquier construcción en GeoGebra desde cualquier pestaña.
+         */
+        function ejecutarEnGeoGebra(titulo, descripcion, comandos, presetKey) {
+            pendingCommands = {
+                titulo: titulo,
+                descripcion: descripcion,
+                comandos: comandos,
+                presetKey: presetKey || pendingCommands.presetKey
+            };
+
+            const selectEl = document.getElementById('ggb-preset-select');
+            if (selectEl && presetKey && PLANTILLAS_GGB[presetKey]) {
+                selectEl.value = presetKey;
+            }
+
+            const btnTab6 = document.getElementById('tab-geogebra');
+            cambiarSeccion('geogebra', btnTab6);
+
+            if (ggbListo && window.ggbApplet) {
+                aplicarComandosEnApplet(titulo, descripcion, comandos);
+            }
+        }
+
+        function lanzarPlantilla(clavePlantilla) {
+            const plantilla = PLANTILLAS_GGB[clavePlantilla] || PLANTILLAS_GGB.hexagono_regular;
+            ejecutarEnGeoGebra(plantilla.titulo, plantilla.desc, plantilla.comandos, clavePlantilla);
+        }
+
+        function reiniciarPlantillaActual() {
+            aplicarComandosEnApplet(pendingCommands.titulo, pendingCommands.descripcion, pendingCommands.comandos);
+        }
+
+        function aplicarComandosEnApplet(titulo, descripcion, comandos) {
+            const tituloEl = document.getElementById('ggb-titulo-construccion');
+            const descEl = document.getElementById('ggb-desc-construccion');
+            if (tituloEl) tituloEl.textContent = titulo;
+            if (descEl) descEl.textContent = descripcion;
+
+            if (!ggbListo || !window.ggbApplet) return;
+
+            try {
+                window.ggbApplet.reset();
+                window.ggbApplet.setGridVisible(cuadriculaYEjesVisibles);
+                window.ggbApplet.setAxesVisible(cuadriculaYEjesVisibles, cuadriculaYEjesVisibles);
+
+                comandos.forEach(cmd => {
+                    window.ggbApplet.evalCommand(cmd);
+                });
+            } catch (err) {
+                console.error('Error ejecutando comandos en GeoGebra:', err);
+            }
+        }
+
+        function limpiarGeoGebra() {
+            if (!ggbListo || !window.ggbApplet) return;
+            window.ggbApplet.reset();
+            window.ggbApplet.setGridVisible(cuadriculaYEjesVisibles);
+            window.ggbApplet.setAxesVisible(cuadriculaYEjesVisibles, cuadriculaYEjesVisibles);
+            document.getElementById('ggb-titulo-construccion').textContent = 'Lienzo en Blanco (Construcción Libre)';
+            document.getElementById('ggb-desc-construccion').textContent = 'Utiliza las herramientas superiores de GeoGebra para construir polígonos regulares, cuadriláteros y sus diagonales.';
+        }
+
+        function alternarCuadriculaYEjes() {
+            cuadriculaYEjesVisibles = !cuadriculaYEjesVisibles;
+            if (ggbListo && window.ggbApplet) {
+                window.ggbApplet.setGridVisible(cuadriculaYEjesVisibles);
+                window.ggbApplet.setAxesVisible(cuadriculaYEjesVisibles, cuadriculaYEjesVisibles);
+            }
+        }
+    </script>
+</body>
+</html>

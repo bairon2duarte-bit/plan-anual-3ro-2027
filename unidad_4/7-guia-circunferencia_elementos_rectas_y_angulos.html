@@ -1,0 +1,1612 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía 7: Circunferencia: Elementos, Rectas y Ángulos | Colegio Montano</title>
+    <!-- Carga de Tailwind CSS para utilidades de diseño responsivo y layout -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Carga oficial de GeoGebra Classic / Geometry API -->
+    <script src="https://www.geogebra.org/apps/deployggb.js"></script>
+    <style>
+        /* Configuración de Variables Institucionales Colegio Montano */
+        :root {
+            --azul-principal: #1269A8;
+            --amarillo-brillante: #F7D615;
+            --verde-grisaceo: #54887D;
+            --azul-claro: #88B5C7;
+            --verde-oliva: #A6B046;
+            --blanco-suave: #F2F5E9;
+        }
+
+        /* Tipografía Institucional */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e2e8f0;
+            color: #1e293b;
+            margin: 0;
+            padding: 12px;
+        }
+
+        /* Marco Principal de Pizarra Digital */
+        #pizarra-container {
+            background-color: var(--blanco-suave);
+            border: 5px solid var(--amarillo-brillante);
+            border-radius: 12px;
+            box-shadow: 0 12px 30px rgba(18, 105, 168, 0.25);
+            max-width: 1240px;
+            margin: 0 auto;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 86vh;
+        }
+
+        /* Encabezado de la Pizarra */
+        .pizarra-header {
+            background: linear-gradient(135deg, var(--azul-principal) 0%, #0d4f80 100%);
+            color: white;
+            padding: 16px 24px;
+            border-bottom: 4px solid var(--amarillo-brillante);
+        }
+
+        /* Botón Fullscreen */
+        .btn-fullscreen {
+            background-color: var(--amarillo-brillante);
+            color: #0f172a;
+            font-weight: 700;
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: 2px solid #ffffff;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+        .btn-fullscreen:hover {
+            background-color: #ffe234;
+            transform: translateY(-1px);
+        }
+
+        /* Navegación de Pestañas */
+        .nav-tabs {
+            background-color: #ffffff;
+            border-bottom: 2px solid var(--azul-claro);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            padding: 10px 20px;
+        }
+
+        .tab-btn {
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.92rem;
+            color: var(--azul-principal);
+            background-color: transparent;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .tab-btn:hover {
+            background-color: rgba(136, 181, 199, 0.25);
+            border-color: var(--azul-claro);
+        }
+
+        .tab-btn.active {
+            background-color: var(--azul-principal);
+            color: #ffffff;
+            border-color: var(--amarillo-brillante);
+            box-shadow: 0 3px 8px rgba(18, 105, 168, 0.3);
+        }
+
+        /* Pestaña destacada para GeoGebra */
+        .tab-btn-ggb {
+            background-color: rgba(247, 214, 21, 0.28);
+            border-color: var(--amarillo-brillante);
+        }
+        .tab-btn-ggb.active {
+            background-color: var(--azul-principal);
+            color: #ffffff;
+            border-color: var(--amarillo-brillante);
+        }
+
+        /* Tarjetas de Contenido */
+        .card-montano {
+            background-color: #ffffff;
+            border: 2px solid var(--verde-grisaceo);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 18px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Tarjetas Visuales de Fórmulas */
+        .card-formula {
+            background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+            border: 2px solid var(--azul-principal);
+            border-top: 5px solid var(--amarillo-brillante);
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 4px 10px rgba(18, 105, 168, 0.08);
+            transition: transform 0.2s ease;
+        }
+        .card-formula:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Etiquetas de Nivel */
+        .badge-nivel {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .badge-basico {
+            background-color: var(--verde-oliva);
+            color: #ffffff;
+        }
+        .badge-intermedio {
+            background-color: var(--verde-grisaceo);
+            color: #ffffff;
+        }
+        .badge-avanzado {
+            background-color: var(--azul-principal);
+            color: #ffffff;
+            border: 1px solid var(--amarillo-brillante);
+        }
+
+        /* Contenedor de Soluciones Ocultas */
+        .solucion-box {
+            background-color: rgba(136, 181, 199, 0.25);
+            border: 1.5px dashed var(--azul-principal);
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin-top: 12px;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .btn-solucion {
+            background-color: var(--azul-principal);
+            color: white;
+            font-weight: 600;
+            padding: 7px 14px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.2s;
+            margin-top: 10px;
+        }
+        .btn-solucion:hover {
+            background-color: var(--verde-grisaceo);
+        }
+
+        /* Botón Directo para Construir en GeoGebra */
+        .btn-geogebra {
+            background-color: var(--amarillo-brillante);
+            color: #0f172a;
+            font-weight: 700;
+            padding: 7px 14px;
+            border-radius: 6px;
+            font-size: 0.88rem;
+            cursor: pointer;
+            border: 1.5px solid #0f172a;
+            transition: all 0.2s ease;
+            margin-top: 10px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .btn-geogebra:hover {
+            background-color: #ffe234;
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Bloques Matemáticos Visuales */
+        .math-expr {
+            font-family: 'Cambria Math', 'Times New Roman', serif;
+            font-size: 1.05rem;
+            font-weight: bold;
+            color: var(--azul-principal);
+            background-color: #f8fafc;
+            padding: 2px 8px;
+            border-radius: 4px;
+            border: 1px solid #cbd5e1;
+            display: inline-block;
+        }
+
+        /* Sub-pestañas de Nivel */
+        .subtab-btn {
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 0.88rem;
+            cursor: pointer;
+            border: 2px solid var(--verde-grisaceo);
+            background-color: #ffffff;
+            color: var(--verde-grisaceo);
+            transition: all 0.2s;
+        }
+        .subtab-btn.active {
+            background-color: var(--verde-grisaceo);
+            color: #ffffff;
+        }
+
+        /* Contenedor del Applet de GeoGebra */
+        #ggb-wrapper {
+            width: 100%;
+            min-height: 550px;
+            border: 3px solid var(--azul-principal);
+            border-radius: 10px;
+            overflow: hidden;
+            background-color: #ffffff;
+            position: relative;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Modo Fullscreen */
+        :fullscreen #pizarra-container {
+            max-width: 100%;
+            width: 100vw;
+            height: 100vh;
+            border-radius: 0;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Marco Principal de la Pizarra Digital -->
+    <div id="pizarra-container">
+        
+        <!-- Encabezado Institucional -->
+        <header class="pizarra-header flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-4">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyEop0yf6lZ7Jk9MILZxF1rBj4Oqs5esyhIQ&s" 
+                     alt="Logo Colegio Montano" 
+                     class="w-14 h-14 rounded-lg bg-white p-1 object-contain border-2 border-[#F7D615]"
+                     onerror="this.src='https://placehold.co/60x60/1269A8/F7D615?text=CM'">
+                <div>
+                    <span class="text-xs uppercase tracking-widest font-bold text-[#F7D615] block">Colegio Montano • Tercero Básico • Cuarta Unidad • Matemática</span>
+                    <h1 class="text-xl sm:text-2xl font-bold leading-tight">Circunferencia: Elementos, Rectas y Ángulos</h1>
+                    <p class="text-sm text-[#88B5C7] font-semibold">Guía 7 • Pizarra Digital Interactiva con GeoGebra</p>
+                </div>
+            </div>
+            <button id="fullscreen-btn" class="btn-fullscreen flex items-center gap-2" onclick="toggleFullscreen()">
+                <span>⛶ Pantalla completa</span>
+            </button>
+        </header>
+
+        <!-- Barra de Navegación Horizontal de 6 Pestañas -->
+        <nav class="nav-tabs" role="tablist">
+            <button id="tab-teoria" class="tab-btn active" onclick="cambiarSeccion('teoria', this)">📘 1. Teoría</button>
+            <button id="tab-ejemplos" class="tab-btn" onclick="cambiarSeccion('ejemplos', this)">💡 2. Ejemplos Resueltos (15)</button>
+            <button id="tab-ejercicios" class="tab-btn" onclick="cambiarSeccion('ejercicios', this)">✍️ 3. Ejercicios Prácticos (15)</button>
+            <button id="tab-reflexion" class="tab-btn" onclick="cambiarSeccion('reflexion', this)">🧠 4. Reflexión Crítica</button>
+            <button id="tab-evaluacion" class="tab-btn" onclick="cambiarSeccion('evaluacion', this)">✅ 5. Evaluación Formativa</button>
+            <button id="tab-geogebra" class="tab-btn tab-btn-ggb" onclick="cambiarSeccion('geogebra', this)">📐 6. Laboratorio GeoGebra</button>
+        </nav>
+
+        <!-- Lienzo Principal de Contenido -->
+        <main class="p-4 sm:p-6 flex-1">
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 1: EXPLICACIÓN TEÓRICA             -->
+            <!-- ========================================== -->
+            <section id="sec-teoria" class="seccion-contenido">
+                
+                <!-- 1.1 Circunferencia, Círculo y Elementos Fundamentales -->
+                <div class="card-montano">
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-3 border-b-2 border-[#F7D615] pb-2">
+                        <h2 class="text-2xl font-bold text-[#1269A8]">1. Circunferencia, Círculo y Elementos Fundamentales</h2>
+                        <button class="btn-geogebra !mt-0" onclick="lanzarConstruccion('central_inscrito')">📐 Construir en GeoGebra</button>
+                    </div>
+                    <p class="text-base leading-relaxed mb-4">
+                        La <strong>circunferencia</strong> es el lugar geométrico de todos los puntos <span class="math-expr text-xs">P</span> del plano que equidistan (están a la misma distancia <span class="math-expr text-xs">r</span>) de un punto fijo llamado <strong>centro (<span class="math-expr text-xs">O</span>)</strong>. El <strong>círculo</strong> es la superficie plana formada por la circunferencia y todos sus puntos interiores.
+                    </p>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center">
+                        <!-- Esquema SVG de Elementos de la Circunferencia -->
+                        <div class="lg:col-span-5 flex justify-center bg-slate-50 p-3 rounded-xl border border-slate-200">
+                            <svg width="265" height="200" viewBox="0 0 265 200">
+                                <!-- Círculo base -->
+                                <circle cx="132" cy="100" r="74" fill="rgba(18,105,168,0.10)" stroke="#1269A8" stroke-width="2.5"/>
+                                <!-- Semicírculo sombreado suavemente -->
+                                <path d="M 58 100 A 74 74 0 0 1 206 100 Z" fill="rgba(136,181,199,0.22)"/>
+                                <!-- Diámetro horizontal AB -->
+                                <line x1="58" y1="100" x2="206" y2="100" stroke="#1269A8" stroke-width="2"/>
+                                <circle cx="58" cy="100" r="3" fill="#1269A8"/>
+                                <circle cx="206" cy="100" r="3" fill="#1269A8"/>
+                                <text x="48" y="104" font-size="10.5" font-weight="bold" fill="#1269A8">A</text>
+                                <text x="212" y="104" font-size="10.5" font-weight="bold" fill="#1269A8">B</text>
+                                <!-- Centro O y Radio r -->
+                                <circle cx="132" cy="100" r="3.5" fill="#0f172a"/>
+                                <text x="126" y="114" font-size="11" font-weight="bold" fill="#0f172a">O</text>
+                                <line x1="132" y1="100" x2="184" y2="48" stroke="#15803d" stroke-width="2"/>
+                                <text x="163" y="69" font-size="10.5" font-weight="bold" fill="#15803d">r</text>
+                                <!-- Cuerda CD y Flecha o Sagita -->
+                                <line x1="78" y1="149" x2="186" y2="149" stroke="#b45309" stroke-width="2.2"/>
+                                <circle cx="78" cy="149" r="3" fill="#b45309"/>
+                                <circle cx="186" cy="149" r="3" fill="#b45309"/>
+                                <text x="68" y="153" font-size="10.5" font-weight="bold" fill="#b45309">C</text>
+                                <text x="192" y="153" font-size="10.5" font-weight="bold" fill="#b45309">D</text>
+                                <!-- Sagita / flecha desde punto medio de CD hasta arco -->
+                                <line x1="132" y1="149" x2="132" y2="174" stroke="#dc2626" stroke-width="2" stroke-dasharray="2,2"/>
+                                <text x="137" y="165" font-size="9.5" font-weight="bold" fill="#dc2626">flecha</text>
+                                <!-- Etiquetas descriptivas -->
+                                <text x="132" y="18" text-anchor="middle" font-size="10" font-weight="bold" fill="#1269A8">Arco mayor / menor • Semicírculo</text>
+                                <text x="132" y="191" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#54887D">Cuerda CD • Diámetro AB = 2r</text>
+                            </svg>
+                        </div>
+
+                        <!-- Glosario de Elementos -->
+                        <div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs sm:text-sm">
+                            <div class="p-2.5 bg-sky-50 border border-[#1269A8] rounded-lg">
+                                <strong class="text-[#1269A8]">Centro (<span class="font-mono">O</span>) y Radio (<span class="font-mono">r</span>):</strong> Punto interior equidistante y segmento desde <span class="font-mono">O</span> a cualquier punto de la circunferencia.
+                            </div>
+                            <div class="p-2.5 bg-sky-50 border border-[#1269A8] rounded-lg">
+                                <strong class="text-[#1269A8]">Diámetro (<span class="font-mono">d = 2r</span>):</strong> Cuerda máxima que pasa por el centro <span class="font-mono">O</span>; divide a la circunferencia en dos semicircunferencias y al círculo en dos <strong>semicírculos</strong>.
+                            </div>
+                            <div class="p-2.5 bg-[#F2F5E9] border border-[#54887D] rounded-lg">
+                                <strong class="text-[#1269A8]">Cuerda y Arcos:</strong> Segmento que une dos puntos de la circunferencia. Determina un <strong>arco menor</strong> (<span class="font-mono">&lt; 180°</span>) y un <strong>arco mayor</strong> (<span class="font-mono">&gt; 180°</span>).
+                            </div>
+                            <div class="p-2.5 bg-amber-50 border border-[#F7D615] rounded-lg">
+                                <strong class="text-[#1269A8]">Flecha o Sagita:</strong> Porción del radio perpendicular a una cuerda comprendida entre el punto medio de la cuerda y el arco correspondiente.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 1.2 Posiciones Relativas: Recta-Circunferencia y Dos Circunferencias -->
+                <div class="card-montano">
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-3 border-b-2 border-[#F7D615] pb-2">
+                        <h2 class="text-2xl font-bold text-[#1269A8]">2. Posiciones Relativas de Rectas y Circunferencias</h2>
+                        <button class="btn-geogebra !mt-0" onclick="lanzarConstruccion('tangente_radio')">📐 Construir en GeoGebra</button>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                        <!-- Recta y Circunferencia -->
+                        <div class="p-4 bg-white border-2 border-[#54887D] rounded-xl flex flex-col justify-between">
+                            <div>
+                                <span class="badge-nivel badge-intermedio mb-2">A. Recta y Circunferencia (distancia <span class="font-mono">d</span> de <span class="font-mono">O</span> a la recta)</span>
+                                <svg width="260" height="90" viewBox="0 0 260 90" class="w-full bg-slate-50 rounded border border-slate-200 my-2">
+                                    <!-- 1. Exterior -->
+                                    <circle cx="44" cy="36" r="22" fill="none" stroke="#1269A8" stroke-width="2"/>
+                                    <line x1="12" y1="74" x2="76" y2="74" stroke="#64748b" stroke-width="2"/>
+                                    <text x="44" y="86" text-anchor="middle" font-size="9" font-weight="bold" fill="#475569">Exterior (d &gt; r)</text>
+                                    <!-- 2. Tangente -->
+                                    <circle cx="130" cy="36" r="22" fill="none" stroke="#1269A8" stroke-width="2"/>
+                                    <line x1="98" y1="58" x2="162" y2="58" stroke="#b45309" stroke-width="2.2"/>
+                                    <line x1="130" y1="36" x2="130" y2="58" stroke="#15803d" stroke-width="1.6" stroke-dasharray="2,2"/>
+                                    <circle cx="130" cy="58" r="2.8" fill="#b45309"/>
+                                    <text x="130" y="86" text-anchor="middle" font-size="9" font-weight="bold" fill="#b45309">Tangente (d = r, ⊥)</text>
+                                    <!-- 3. Secante -->
+                                    <circle cx="216" cy="45" r="22" fill="none" stroke="#1269A8" stroke-width="2"/>
+                                    <line x1="184" y1="45" x2="248" y2="45" stroke="#15803d" stroke-width="2.2"/>
+                                    <text x="216" y="86" text-anchor="middle" font-size="9" font-weight="bold" fill="#15803d">Secante (d &lt; r)</text>
+                                </svg>
+                                <ul class="text-xs sm:text-sm text-slate-700 space-y-1">
+                                    <li>• <strong>Exterior:</strong> Sin puntos en común (<span class="math-expr text-xs">d &gt; r</span>).</li>
+                                    <li>• <strong>Tangente:</strong> Un único punto en común (<em>punto de tangencia</em>); el radio trazado a ese punto es <strong>perpendicular (<span class="font-mono">90°</span>)</strong> a la recta tangente (<span class="math-expr text-xs">d = r</span>).</li>
+                                    <li>• <strong>Secante:</strong> Dos puntos en común (<span class="math-expr text-xs">d &lt; r</span>).</li>
+                                </ul>
+                            </div>
+                            <button class="btn-geogebra justify-center w-full text-xs" onclick="lanzarConstruccion('tangente_radio')">📐 Tangente y Radio en GeoGebra</button>
+                        </div>
+
+                        <!-- Dos Circunferencias -->
+                        <div class="p-4 bg-white border-2 border-[#1269A8] rounded-xl flex flex-col justify-between">
+                            <div>
+                                <span class="badge-nivel badge-avanzado mb-2">B. Dos Circunferencias (distancia <span class="font-mono">D</span> entre centros y radios <span class="font-mono">R ≥ r</span>)</span>
+                                <svg width="260" height="90" viewBox="0 0 260 90" class="w-full bg-slate-50 rounded border border-slate-200 my-2">
+                                    <!-- Exteriores -->
+                                    <circle cx="22" cy="44" r="12" fill="none" stroke="#1269A8" stroke-width="1.8"/>
+                                    <circle cx="52" cy="44" r="10" fill="none" stroke="#54887D" stroke-width="1.8"/>
+                                    <text x="38" y="76" text-anchor="middle" font-size="8" font-weight="bold">Exteriores</text>
+                                    <!-- Tangentes exteriores -->
+                                    <circle cx="88" cy="44" r="13" fill="none" stroke="#1269A8" stroke-width="1.8"/>
+                                    <circle cx="111" cy="44" r="10" fill="none" stroke="#b45309" stroke-width="1.8"/>
+                                    <text x="100" y="76" text-anchor="middle" font-size="8" font-weight="bold">Tang. Ext.</text>
+                                    <!-- Secantes -->
+                                    <circle cx="150" cy="44" r="14" fill="none" stroke="#1269A8" stroke-width="1.8"/>
+                                    <circle cx="168" cy="44" r="14" fill="none" stroke="#15803d" stroke-width="1.8"/>
+                                    <text x="159" y="76" text-anchor="middle" font-size="8" font-weight="bold">Secantes</text>
+                                    <!-- Tangentes interiores, interiores y concéntricas -->
+                                    <circle cx="215" cy="44" r="18" fill="none" stroke="#1269A8" stroke-width="1.8"/>
+                                    <circle cx="223" cy="44" r="10" fill="none" stroke="#b45309" stroke-width="1.8"/>
+                                    <text x="215" y="76" text-anchor="middle" font-size="8" font-weight="bold">Tang. Int. / Conc.</text>
+                                </svg>
+                                <ul class="text-xs sm:text-sm text-slate-700 space-y-1">
+                                    <li>• <strong>Exteriores:</strong> <span class="math-expr text-xs">D &gt; R + r</span> (0 puntos comunes).</li>
+                                    <li>• <strong>Tangentes exteriores:</strong> <span class="math-expr text-xs">D = R + r</span> (1 punto común).</li>
+                                    <li>• <strong>Secantes:</strong> <span class="math-expr text-xs">R - r &lt; D &lt; R + r</span> (2 puntos comunes).</li>
+                                    <li>• <strong>Tangentes interiores:</strong> <span class="math-expr text-xs">D = R - r</span>; <strong>Interiores:</strong> <span class="math-expr text-xs">0 &lt; D &lt; R - r</span>; <strong>Concéntricas:</strong> <span class="math-expr text-xs">D = 0</span>.</li>
+                                </ul>
+                            </div>
+                            <button class="btn-geogebra justify-center w-full text-xs" onclick="lanzarConstruccion('tangentes_punto_exterior')">📐 Tangentes en GeoGebra</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 1.3 Teoremas de Ángulos en la Circunferencia y Figuras Asociadas -->
+                <div class="card-montano">
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-3 border-b-2 border-[#F7D615] pb-2">
+                        <h2 class="text-2xl font-bold text-[#1269A8]">3. Teoremas de Ángulos, Semicircunferencia, Cuadrilátero Cíclico y Tangentes</h2>
+                        <span class="badge-nivel badge-avanzado">Medidas Angulares y Propiedades Clave</span>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <!-- Ángulo Central -->
+                        <div class="card-formula">
+                            <div>
+                                <span class="badge-nivel badge-basico mb-1">Ángulo Central (θ)</span>
+                                <p class="text-xs text-slate-700 mt-1">Vértice en el centro <span class="font-mono">O</span> y lados formados por dos radios. Su medida es igual a la del arco subtendido:</p>
+                                <div class="my-2 text-center">
+                                    <span class="math-expr text-sm">θ = m(arco AB)</span>
+                                </div>
+                            </div>
+                            <button class="btn-geogebra justify-center w-full text-xs" onclick="lanzarConstruccion('central_inscrito')">📐 Construir en GeoGebra</button>
+                        </div>
+
+                        <!-- Ángulo Inscrito -->
+                        <div class="card-formula">
+                            <div>
+                                <span class="badge-nivel badge-intermedio mb-1">Ángulo Inscrito (β)</span>
+                                <p class="text-xs text-slate-700 mt-1">Vértice sobre la circunferencia y lados secantes/cuerdas. Vale la mitad del arco subtendido y la mitad del central sobre el mismo arco:</p>
+                                <div class="my-2 text-center">
+                                    <span class="math-expr text-xs">β = ½ · m(arco AB)</span><br>
+                                    <span class="math-expr text-xs mt-1">θ = 2β</span>
+                                </div>
+                            </div>
+                            <button class="btn-geogebra justify-center w-full text-xs" onclick="lanzarConstruccion('central_inscrito')">📐 Construir en GeoGebra</button>
+                        </div>
+
+                        <!-- Ángulo Semiinscrito -->
+                        <div class="card-formula">
+                            <div>
+                                <span class="badge-nivel badge-intermedio mb-1">Ángulo Semiinscrito (α)</span>
+                                <p class="text-xs text-slate-700 mt-1">Vértice en la circunferencia, formado por una recta tangente y una cuerda. Su medida es la mitad del arco abarcado:</p>
+                                <div class="my-2 text-center">
+                                    <span class="math-expr text-sm">α = ½ · m(arco AB)</span>
+                                </div>
+                            </div>
+                            <button class="btn-geogebra justify-center w-full text-xs" onclick="lanzarConstruccion('semiinscrito')">📐 Construir en GeoGebra</button>
+                        </div>
+
+                        <!-- Ángulo Interior -->
+                        <div class="card-formula">
+                            <div>
+                                <span class="badge-nivel badge-avanzado mb-1">Ángulo Interior (ω)</span>
+                                <p class="text-xs text-slate-700 mt-1">Formado por dos cuerdas que se cortan en un punto interior. Equivale a la semisuma de los arcos opuestos:</p>
+                                <div class="my-2 text-center">
+                                    <span class="math-expr text-sm">ω = [m(arco AB) + m(arco CD)] / 2</span>
+                                </div>
+                            </div>
+                            <button class="btn-geogebra justify-center w-full text-xs" onclick="lanzarConstruccion('angulo_interior')">📐 Construir en GeoGebra</button>
+                        </div>
+
+                        <!-- Ángulo Exterior -->
+                        <div class="card-formula">
+                            <div>
+                                <span class="badge-nivel badge-avanzado mb-1">Ángulo Exterior (δ)</span>
+                                <p class="text-xs text-slate-700 mt-1">Vértice exterior con lados secantes o tangentes. Equivale a la semidiferencia positiva de los arcos interceptados:</p>
+                                <div class="my-2 text-center">
+                                    <span class="math-expr text-sm">δ = |m(arco AB) - m(arco CD)| / 2</span>
+                                </div>
+                            </div>
+                            <button class="btn-geogebra justify-center w-full text-xs" onclick="lanzarConstruccion('angulo_exterior')">📐 Construir en GeoGebra</button>
+                        </div>
+
+                        <!-- Semicircunferencia, Cuadrilátero Cíclico y Tangentes Exteriores -->
+                        <div class="card-formula">
+                            <div>
+                                <span class="badge-nivel badge-basico mb-1">Propiedades Especiales</span>
+                                <ul class="text-xs text-slate-700 space-y-1 mt-1">
+                                    <li>• <strong>Semicircunferencia:</strong> Todo ángulo inscrito que abarca un diámetro mide <span class="math-expr text-xs">90°</span>.</li>
+                                    <li>• <strong>Cuadrilátero cíclico:</strong> Sus cuatro vértices están en la circunferencia; sus ángulos opuestos suman <span class="math-expr text-xs">180°</span>.</li>
+                                    <li>• <strong>Tangentes desde punto exterior:</strong> Dos segmentos tangentes desde un mismo punto exterior tienen <strong>igual longitud</strong>.</li>
+                                </ul>
+                            </div>
+                            <div class="flex gap-1.5 mt-2">
+                                <button class="btn-geogebra justify-center flex-1 text-xs" onclick="lanzarConstruccion('semicircunferencia_90')">📐 90°</button>
+                                <button class="btn-geogebra justify-center flex-1 text-xs" onclick="lanzarConstruccion('cuadrilatero_inscrito')">📐 Cíclico</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 2: EJEMPLOS RESUELTOS (15)         -->
+            <!-- ========================================== -->
+            <section id="sec-ejemplos" class="seccion-contenido hidden">
+                <div class="flex flex-wrap items-center justify-between gap-3 mb-4 bg-white p-4 rounded-xl border-2 border-[#54887D]">
+                    <div>
+                        <h2 class="text-xl font-bold text-[#1269A8]">Ejemplos Resueltos Paso a Paso (15 Problemas)</h2>
+                        <p class="text-sm text-slate-600">Revisa cada resolución guiada y pulsa <strong>"📐 Construir en GeoGebra"</strong> para explorar el teorema interactivo.</p>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <button class="subtab-btn active" onclick="filtrarSubnivel('ejemplos', 'basico', this)">Nivel Básico (5)</button>
+                        <button class="subtab-btn" onclick="filtrarSubnivel('ejemplos', 'intermedio', this)">Nivel Intermedio (5)</button>
+                        <button class="subtab-btn" onclick="filtrarSubnivel('ejemplos', 'avanzado', this)">Nivel Avanzado (5)</button>
+                    </div>
+                </div>
+
+                <!-- EJEMPLOS BÁSICOS (5) -->
+                <div id="ejemplos-basico" class="subcontenido-ejemplos space-y-4">
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-basico">Básico • Ejemplo 1 (Ángulo central e inscrito sobre el mismo arco)</span>
+                            <button class="btn-geogebra !mt-0" onclick="lanzarConstruccion('central_inscrito')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">En una circunferencia de centro <span class="math-expr">O</span>, el ángulo central <span class="math-expr">∠AOB</span> mide <span class="math-expr">84°</span>. Calcula la medida del ángulo inscrito <span class="math-expr">∠ACB</span> que subtiende el mismo arco <span class="math-expr">AB</span>.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Relación central e inscrito):</strong> <span class="math-expr">β = θ / 2</span>.</p>
+                            <p><strong>Paso 2 (Sustitución):</strong> <span class="math-expr">∠ACB = 84° / 2 = 42°</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: El ángulo inscrito ∠ACB mide 42°.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-basico">Básico • Ejemplo 2 (Ángulo inscrito en una semicircunferencia)</span>
+                            <button class="btn-geogebra !mt-0" onclick="lanzarConstruccion('semicircunferencia_90')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]"><span class="math-expr">AB</span> es diámetro de una circunferencia y <span class="math-expr">C</span> es un punto sobre ella. Si <span class="math-expr">∠BAC = 35°</span>, determina la medida de <span class="math-expr">∠ACB</span> y de <span class="math-expr">∠ABC</span>.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Ángulo en semicircunferencia):</strong> Todo ángulo inscrito sobre un diámetro mide <span class="math-expr">∠ACB = 90°</span>.</p>
+                            <p><strong>Paso 2 (Suma interior en △ABC):</strong> <span class="math-expr">∠ABC = 180° - (90° + 35°) = 55°</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: ∠ACB = 90° y ∠ABC = 55°.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-basico">Básico • Ejemplo 3 (Recta tangente y radio perpendicular)</span>
+                            <button class="btn-geogebra !mt-0" onclick="lanzarConstruccion('tangente_radio')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Una recta es tangente a una circunferencia de centro <span class="math-expr">O</span> en el punto <span class="math-expr">T</span>. Si el radio mide <span class="math-expr">OT = 6 cm</span> y un punto <span class="math-expr">P</span> sobre la tangente dista <span class="math-expr">TP = 8 cm</span> del punto de tangencia, calcula la distancia <span class="math-expr">OP</span>.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Perpendicularidad en T):</strong> <span class="math-expr">OT ⊥ TP</span>, por lo que <span class="math-expr">∠OTP = 90°</span>.</p>
+                            <p><strong>Paso 2 (Teorema de Pitágoras):</strong> <span class="math-expr">OP = √(6² + 8²) = √(36 + 64) = √100 = 10 cm</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: La distancia OP es 10 cm.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-basico">Básico • Ejemplo 4 (Tangentes desde un punto exterior)</span>
+                            <button class="btn-geogebra !mt-0" onclick="lanzarConstruccion('tangentes_punto_exterior')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Desde un punto exterior <span class="math-expr">P</span> se trazan dos segmentos tangentes <span class="math-expr">PA</span> y <span class="math-expr">PB</span> a una circunferencia. Si <span class="math-expr">PA = 3x + 4</span> y <span class="math-expr">PB = 5x - 6</span>, halla el valor de <span class="math-expr">x</span> y la longitud de cada tangente.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Igualdad de segmentos tangentes):</strong> <span class="math-expr">3x + 4 = 5x - 6</span>.</p>
+                            <p><strong>Paso 2 (Despeje):</strong> <span class="math-expr">10 = 2x ➔ x = 5</span>. Longitud: <span class="math-expr">PA = 3(5) + 4 = 19</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: x = 5 y cada tangente mide 19 unidades.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-basico">Básico • Ejemplo 5 (Ángulo semiinscrito y arco subtendido)</span>
+                            <button class="btn-geogebra !mt-0" onclick="lanzarConstruccion('semiinscrito')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">El arco menor <span class="math-expr">AB</span> de una circunferencia mide <span class="math-expr">116°</span>. ¿Cuánto mide el ángulo semiinscrito formado por la tangente en <span class="math-expr">A</span> y la cuerda <span class="math-expr">AB</span>?</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Teorema del ángulo semiinscrito):</strong> <span class="math-expr">α = ½ · m(arco AB)</span>.</p>
+                            <p><strong>Paso 2 (Cálculo):</strong> <span class="math-expr">α = 116° / 2 = 58°</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: El ángulo semiinscrito mide 58°.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EJEMPLOS INTERMEDIOS (5) -->
+                <div id="ejemplos-intermedio" class="subcontenido-ejemplos hidden space-y-4">
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-intermedio">Intermedio • Ejemplo 1 (Ángulo interior formado por dos cuerdas)</span>
+                            <button class="btn-geogebra !mt-0" onclick="lanzarConstruccion('angulo_interior')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Dos cuerdas <span class="math-expr">AB</span> y <span class="math-expr">CD</span> de una circunferencia se cortan en un punto interior <span class="math-expr">I</span>. Si los arcos opuestos miden <span class="math-expr">m(arco AC) = 78°</span> y <span class="math-expr">m(arco BD) = 52°</span>, calcula la medida del ángulo interior <span class="math-expr">∠AIC</span>.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Teorema del ángulo interior):</strong> <span class="math-expr">ω = [m(arco AC) + m(arco BD)] / 2</span>.</p>
+                            <p><strong>Paso 2 (Sustitución):</strong> <span class="math-expr">∠AIC = (78° + 52°) / 2 = 130° / 2 = 65°</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: El ángulo interior ∠AIC mide 65°.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-intermedio">Intermedio • Ejemplo 2 (Ángulo exterior con dos secantes)</span>
+                            <button class="btn-geogebra !mt-0" onclick="lanzarConstruccion('angulo_exterior')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Desde un punto exterior <span class="math-expr">P</span> se trazan dos rectas secantes que interceptan en una circunferencia arcos de <span class="math-expr">104°</span> (mayor) y <span class="math-expr">36°</span> (menor). Halla la medida del ángulo exterior <span class="math-expr">∠P</span>.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Teorema del ángulo exterior):</strong> <span class="math-expr">δ = (104° - 36°) / 2</span>.</p>
+                            <p><strong>Paso 2 (Cálculo):</strong> <span class="math-expr">∠P = 68° / 2 = 34°</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: El ángulo exterior ∠P mide 34°.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-intermedio">Intermedio • Ejemplo 3 (Cuadrilátero cíclico inscrito en una circunferencia)</span>
+                            <button class="btn-geogebra !mt-0" onclick="lanzarConstruccion('cuadrilatero_inscrito')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">En un cuadrilátero <span class="math-expr">ABCD</span> inscrito en una circunferencia, <span class="math-expr">∠A = 2x + 10°</span> y su ángulo opuesto <span class="math-expr">∠C = 3x - 15°</span>. Calcula el valor de <span class="math-expr">x</span> y las medidas de <span class="math-expr">∠A</span> y <span class="math-expr">∠C</span>.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Ángulos opuestos suplementarios):</strong> <span class="math-expr">(2x + 10°) + (3x - 15°) = 180° ➔ 5x - 5° = 180°</span>.</p>
+                            <p><strong>Paso 2 (Despeje):</strong> <span class="math-expr">5x = 185° ➔ x = 37°</span>. Entonces <span class="math-expr">∠A = 2(37°) + 10° = 84°</span> y <span class="math-expr">∠C = 3(37°) - 15° = 96°</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: x = 37°; ∠A = 84° y ∠C = 96°.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-intermedio">Intermedio • Ejemplo 4 (Reloj analógico en Guatemala: ángulo entre manecillas)</span>
+                            <button class="btn-geogebra !mt-0" onclick="lanzarConstruccion('central_inscrito')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Un reloj de torre en la Ciudad de Guatemala marca las <span class="math-expr">4:00 en punto</span>. Calcula la medida del ángulo central menor formado por el minutero (en el 12) y el horario (en el 4).</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (División de la circunferencia en 12 horas):</strong> Cada hora equivale a <span class="math-expr">360° / 12 = 30°</span>.</p>
+                            <p><strong>Paso 2 (4 intervalos horarios):</strong> <span class="math-expr">θ = 4 · 30° = 120°</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: El ángulo central menor mide 120°.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-intermedio">Intermedio • Ejemplo 5 (Ángulo interior y arco desconocido)</span>
+                            <button class="btn-geogebra !mt-0" onclick="lanzarConstruccion('angulo_interior')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Dos cuerdas se cortan en el interior de una circunferencia formando un ángulo de <span class="math-expr">72°</span>. Si uno de los arcos interceptados mide <span class="math-expr">94°</span>, determina la medida del otro arco interceptado.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Ecuación del ángulo interior):</strong> <span class="math-expr">(94° + arco₂) / 2 = 72°</span>.</p>
+                            <p><strong>Paso 2 (Despeje):</strong> <span class="math-expr">94° + arco₂ = 144° ➔ arco₂ = 50°</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: El otro arco mide 50°.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EJEMPLOS AVANZADOS (5) -->
+                <div id="ejemplos-avanzado" class="subcontenido-ejemplos hidden space-y-4">
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-avanzado">Avanzado • Ejemplo 1 (Rotonda vial en Guatemala y visuales tangentes)</span>
+                            <button class="btn-geogebra !mt-0" onclick="lanzarConstruccion('tangentes_punto_exterior')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Desde un mirador <span class="math-expr">P</span> situado a <span class="math-expr">26 m</span> del centro <span class="math-expr">O</span> de una rotonda circular de radio <span class="math-expr">r = 10 m</span> en zona 10 de Guatemala, se trazan dos visuales tangentes <span class="math-expr">PA</span> y <span class="math-expr">PB</span>. Calcula la longitud de cada visual tangente y la medida del ángulo <span class="math-expr">∠APB</span>.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Triángulo rectángulo POA):</strong> Como <span class="math-expr">OA ⊥ PA</span>, <span class="math-expr">PA = √(26² - 10²) = √(676 - 100) = √576 = 24 m</span> (también <span class="math-expr">PB = 24 m</span>).</p>
+                            <p><strong>Paso 2 (Ángulo ∠APB):</strong> En el triángulo rectángulo <span class="math-expr">△POA</span>, <span class="math-expr">sen(∠APO) = 10 / 26 = 5 / 13 ≈ 0.3846 ➔ ∠APO ≈ 22.62°</span>. Como <span class="math-expr">PO</span> biseca <span class="math-expr">∠APB</span>, <span class="math-expr">∠APB = 2 · 22.62° ≈ 45.24°</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Cada visual tangente mide 24 m y ∠APB ≈ 45.24°.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-avanzado">Avanzado • Ejemplo 2 (Ángulo exterior con dos tangentes y arco mayor)</span>
+                            <button class="btn-geogebra !mt-0" onclick="lanzarConstruccion('angulo_exterior')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Desde un punto exterior <span class="math-expr">P</span> se trazan dos rectas tangentes a una circunferencia que forman un ángulo exterior de <span class="math-expr">52°</span>. Calcula la medida del arco menor <span class="math-expr">x</span> y del arco mayor <span class="math-expr">y</span> comprendidos entre los puntos de tangencia.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Suma de arcos = 360°):</strong> <span class="math-expr">x + y = 360° ➔ y = 360° - x</span>.</p>
+                            <p><strong>Paso 2 (Fórmula de ángulo exterior):</strong> <span class="math-expr">((360° - x) - x) / 2 = 52° ➔ 360° - 2x = 104° ➔ 2x = 256° ➔ x = 128°</span>. Luego <span class="math-expr">y = 360° - 128° = 232°</span> (propiedad directa: <span class="math-expr">x = 180° - 52° = 128°</span>).</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Arco menor = 128° y arco mayor = 232°.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-avanzado">Avanzado • Ejemplo 3 (Ecuación lineal con ángulos inscritos y centrales)</span>
+                            <button class="btn-geogebra !mt-0" onclick="lanzarConstruccion('central_inscrito')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">En una circunferencia, el ángulo central <span class="math-expr">∠AOB</span> mide <span class="math-expr">(4x + 20)°</span> y el ángulo inscrito <span class="math-expr">∠ACB</span> que subtiende el mismo arco mide <span class="math-expr">(x + 25)°</span>. Halla el valor de <span class="math-expr">x</span> y la medida del arco <span class="math-expr">AB</span>.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Relación θ = 2β):</strong> <span class="math-expr">4x + 20 = 2(x + 25) ➔ 4x + 20 = 2x + 50</span>.</p>
+                            <p><strong>Paso 2 (Despeje y arco):</strong> <span class="math-expr">2x = 30 ➔ x = 15</span>. Arco <span class="math-expr">AB = θ = 4(15) + 20 = 80°</span> (comprobación: inscrito = <span class="math-expr">15 + 25 = 40° = 80°/2</span>).</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: x = 15 y m(arco AB) = 80°.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-avanzado">Avanzado • Ejemplo 4 (Cuadrilátero cíclico con diagonales y ángulos inscritos)</span>
+                            <button class="btn-geogebra !mt-0" onclick="lanzarConstruccion('cuadrilatero_inscrito')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">En un cuadrilátero <span class="math-expr">ABCD</span> inscrito en una circunferencia, <span class="math-expr">∠BAD = 78°</span> y <span class="math-expr">∠ABD = 44°</span>. Calcula la medida de <span class="math-expr">∠BCD</span> y de <span class="math-expr">∠ACD</span>.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Ángulo opuesto ∠BCD):</strong> En todo cuadrilátero cíclico, <span class="math-expr">∠BCD = 180° - ∠BAD = 180° - 78° = 102°</span>.</p>
+                            <p><strong>Paso 2 (Ángulos inscritos sobre el mismo arco AD):</strong> En <span class="math-expr">△ABD</span>, <span class="math-expr">∠ADB = 180° - (78° + 44°) = 58°</span>. Como <span class="math-expr">∠ACD</span> y <span class="math-expr">∠ABD</span>? No: <span class="math-expr">∠ACD</span> y <span class="math-expr">∠ABD</span> subtienden el arco <span class="math-expr">AD</span>, por lo que <span class="math-expr">∠ACD = ∠ABD = 44°</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: ∠BCD = 102° y ∠ACD = 44°.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-avanzado">Avanzado • Ejemplo 5 (Antena de telecomunicaciones y cobertura angular en Guatemala)</span>
+                            <button class="btn-geogebra !mt-0" onclick="lanzarConstruccion('angulo_exterior')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Una estación repetidora en la sierra de Guatemala envía dos haces tangentes a una zona circular de monitoreo que abarcan un arco visible mayor de <span class="math-expr">210°</span> y un arco menor de <span class="math-expr">150°</span>. Calcula el ángulo de apertura de los haces en la estación repetidora.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Fórmula del ángulo exterior):</strong> <span class="math-expr">δ = (m(arco mayor) - m(arco menor)) / 2</span>.</p>
+                            <p><strong>Paso 2 (Sustitución):</strong> <span class="math-expr">δ = (210° - 150°) / 2 = 60° / 2 = 30°</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: El ángulo de apertura en la estación es de 30°.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 3: EJERCICIOS PRÁCTICOS (15)       -->
+            <!-- ========================================== -->
+            <section id="sec-ejercicios" class="seccion-contenido hidden">
+                <div class="flex flex-wrap items-center justify-between gap-3 mb-4 bg-white p-4 rounded-xl border-2 border-[#54887D]">
+                    <div>
+                        <h2 class="text-xl font-bold text-[#1269A8]">Práctica Guiada en Pizarra (15 Ejercicios)</h2>
+                        <p class="text-sm text-slate-600">Resuelve cada ejercicio en tu cuaderno, despliega la solución y verifica la construcción en GeoGebra.</p>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <button class="subtab-btn active" onclick="filtrarSubnivel('ejercicios', 'basico', this)">Básico (5)</button>
+                        <button class="subtab-btn" onclick="filtrarSubnivel('ejercicios', 'intermedio', this)">Intermedio (5)</button>
+                        <button class="subtab-btn" onclick="filtrarSubnivel('ejercicios', 'avanzado', this)">Avanzado (5)</button>
+                    </div>
+                </div>
+
+                <!-- EJERCICIOS BÁSICOS (5) -->
+                <div id="ejercicios-basico" class="subcontenido-ejercicios space-y-4">
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 1</span>
+                        <p class="font-semibold text-base">Un ángulo inscrito <span class="math-expr">∠ACB</span> subtiende un arco <span class="math-expr">AB</span> de <span class="math-expr">96°</span>. Halla la medida del ángulo inscrito y del ángulo central <span class="math-expr">∠AOB</span> correspondiente.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-eb1', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="lanzarConstruccion('central_inscrito')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-eb1" class="solucion-box">
+                            <p><strong>Operación:</strong> Ángulo inscrito = <span class="math-expr">96° / 2 = 48°</span>; Ángulo central = <span class="math-expr">96°</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Inscrito = 48° y Central = 96°.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 2</span>
+                        <p class="font-semibold text-base">En una semicircunferencia de diámetro <span class="math-expr">AB</span>, un punto <span class="math-expr">C</span> forma un triángulo rectángulo <span class="math-expr">△ABC</span>. Si <span class="math-expr">∠ABC = 42°</span>, calcula <span class="math-expr">∠BAC</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-eb2', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="lanzarConstruccion('semicircunferencia_90')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-eb2" class="solucion-box">
+                            <p><strong>Operación:</strong> <span class="math-expr">∠ACB = 90°</span>, por lo que <span class="math-expr">∠BAC = 90° - 42° = 48°</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: ∠BAC = 48°.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 3</span>
+                        <p class="font-semibold text-base">Una recta es tangente a una circunferencia de radio <span class="math-expr">r = 5 cm</span> en el punto <span class="math-expr">T</span>. Si la distancia desde el centro <span class="math-expr">O</span> a un punto <span class="math-expr">P</span> de la tangente es <span class="math-expr">OP = 13 cm</span>, calcula la longitud de <span class="math-expr">PT</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-eb3', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="lanzarConstruccion('tangente_radio')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-eb3" class="solucion-box">
+                            <p><strong>Pitágoras:</strong> <span class="math-expr">PT = √(13² - 5²) = √(169 - 25) = √144 = 12 cm</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: PT = 12 cm.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 4</span>
+                        <p class="font-semibold text-base">Desde un punto exterior <span class="math-expr">P</span> se trazan dos tangentes <span class="math-expr">PA</span> y <span class="math-expr">PB</span> a una circunferencia. Si <span class="math-expr">PA = 17 cm</span> y <span class="math-expr">PB = 2x + 3</span>, calcula el valor de <span class="math-expr">x</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-eb4', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="lanzarConstruccion('tangentes_punto_exterior')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-eb4" class="solucion-box">
+                            <p><strong>Operación:</strong> <span class="math-expr">2x + 3 = 17 ➔ 2x = 14 ➔ x = 7 cm</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: x = 7 cm.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 5</span>
+                        <p class="font-semibold text-base">Un ángulo semiinscrito mide <span class="math-expr">37°</span>. Determina la medida del arco subtendido por sus lados.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-eb5', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="lanzarConstruccion('semiinscrito')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-eb5" class="solucion-box">
+                            <p><strong>Operación:</strong> <span class="math-expr">m(arco) = 2 · 37° = 74°</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: El arco mide 74°.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EJERCICIOS INTERMEDIOS (5) -->
+                <div id="ejercicios-intermedio" class="subcontenido-ejercicios hidden space-y-4">
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 1</span>
+                        <p class="font-semibold text-base">Dos cuerdas se cortan en el interior de una circunferencia determinando arcos opuestos de <span class="math-expr">86°</span> y <span class="math-expr">48°</span>. Calcula la medida del ángulo interior formado.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ei1', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="lanzarConstruccion('angulo_interior')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-ei1" class="solucion-box">
+                            <p><strong>Resolución:</strong> <span class="math-expr">ω = (86° + 48°) / 2 = 134° / 2 = 67°</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: 67°.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 2</span>
+                        <p class="font-semibold text-base">Desde un punto exterior se trazan dos secantes que interceptan en la circunferencia arcos de <span class="math-expr">118°</span> y <span class="math-expr">42°</span>. Halla la medida del ángulo exterior.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ei2', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="lanzarConstruccion('angulo_exterior')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-ei2" class="solucion-box">
+                            <p><strong>Resolución:</strong> <span class="math-expr">δ = (118° - 42°) / 2 = 76° / 2 = 38°</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: 38°.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 3</span>
+                        <p class="font-semibold text-base">En un cuadrilátero <span class="math-expr">ABCD</span> inscrito en una circunferencia, dos ángulos opuestos miden <span class="math-expr">(4x - 10)°</span> y <span class="math-expr">(2x + 22)°</span>. Calcula el valor de <span class="math-expr">x</span> y la medida de ambos ángulos.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ei3', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="lanzarConstruccion('cuadrilatero_inscrito')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-ei3" class="solucion-box">
+                            <p><strong>Resolución:</strong> <span class="math-expr">(4x - 10) + (2x + 22) = 180 ➔ 6x + 12 = 180 ➔ 6x = 168 ➔ x = 28°</span>. Ángulos: <span class="math-expr">102°</span> y <span class="math-expr">78°</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: x = 28°; los ángulos miden 102° y 78°.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 4</span>
+                        <p class="font-semibold text-base">Un reloj de pared marca las <span class="math-expr">3:00 en punto</span>. Calcula la medida del ángulo central menor y la del ángulo inscrito que abarca el mismo arco horario.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ei4', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="lanzarConstruccion('central_inscrito')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-ei4" class="solucion-box">
+                            <p><strong>Resolución:</strong> Ángulo central = <span class="math-expr">3 · 30° = 90°</span>. Ángulo inscrito = <span class="math-expr">90° / 2 = 45°</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Central = 90° e Inscrito = 45°.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 5</span>
+                        <p class="font-semibold text-base">Una recta tangente y una cuerda forman en el punto de contacto un ángulo semiinscrito de <span class="math-expr">64°</span>. Calcula el ángulo central que subtiende el mismo arco.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ei5', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="lanzarConstruccion('semiinscrito')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-ei5" class="solucion-box">
+                            <p><strong>Resolución:</strong> El arco mide <span class="math-expr">2 · 64° = 128°</span>, y el ángulo central es igual al arco: <span class="math-expr">128°</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: 128°.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EJERCICIOS AVANZADOS (5) -->
+                <div id="ejercicios-avanzado" class="subcontenido-ejercicios hidden space-y-4">
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 1</span>
+                        <p class="font-semibold text-base">En una circunferencia, el ángulo central mide <span class="math-expr">(5x - 10)°</span> y el ángulo inscrito sobre el mismo arco mide <span class="math-expr">(2x + 7)°</span>. Halla el valor de <span class="math-expr">x</span> y la medida del ángulo central.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ea1', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="lanzarConstruccion('central_inscrito')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-ea1" class="solucion-box">
+                            <p><strong>Resolución:</strong> <span class="math-expr">5x - 10 = 2(2x + 7) ➔ 5x - 10 = 4x + 14 ➔ x = 24</span>. Central = <span class="math-expr">5(24) - 10 = 110°</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: x = 24 y ángulo central = 110°.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 2</span>
+                        <p class="font-semibold text-base">Desde un punto exterior <span class="math-expr">P</span> se trazan dos tangentes a una circunferencia determinando un ángulo exterior de <span class="math-expr">68°</span>. Calcula las medidas de los arcos menor y mayor comprendidos entre los puntos de tangencia.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ea2', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="lanzarConstruccion('angulo_exterior')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-ea2" class="solucion-box">
+                            <p><strong>Resolución:</strong> Arco menor = <span class="math-expr">180° - 68° = 112°</span>; Arco mayor = <span class="math-expr">360° - 112° = 248°</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Arco menor = 112° y arco mayor = 248°.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 3</span>
+                        <p class="font-semibold text-base">Una rotonda circular tiene radio <span class="math-expr">r = 12 m</span>. Un observador ubicado a <span class="math-expr">20 m</span> del centro de la rotonda traza una línea visual tangente al borde. Calcula la distancia desde el observador hasta el punto de tangencia y el seno del ángulo entre la visual y la recta que une al observador con el centro.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ea3', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="lanzarConstruccion('tangentes_punto_exterior')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-ea3" class="solucion-box">
+                            <p><strong>Resolución:</strong> Distancia tangente = <span class="math-expr">√(20² - 12²) = √(400 - 144) = √256 = 16 m</span>. <span class="math-expr">sen(α) = 12 / 20 = 0.6</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Distancia tangente = 16 m y sen(α) = 0.6.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 4</span>
+                        <p class="font-semibold text-base">Dos cuerdas <span class="math-expr">AB</span> y <span class="math-expr">CD</span> se cortan en el interior de una circunferencia formando un ángulo de <span class="math-expr">64°</span>. Si los arcos opuestos miden <span class="math-expr">(3x + 12)°</span> y <span class="math-expr">(2x + 8)°</span>, halla el valor de <span class="math-expr">x</span> y la medida de cada arco.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ea4', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="lanzarConstruccion('angulo_interior')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-ea4" class="solucion-box">
+                            <p><strong>Resolución:</strong> <span class="math-expr">[(3x + 12) + (2x + 8)] / 2 = 64 ➔ 5x + 20 = 128 ➔ 5x = 108 ➔ x = 21.6</span>. Arcos: <span class="math-expr">76.8°</span> y <span class="math-expr">51.2°</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: x = 21.6; los arcos miden 76.8° y 51.2°.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 5</span>
+                        <p class="font-semibold text-base">En un cuadrilátero cíclico <span class="math-expr">ABCD</span>, <span class="math-expr">∠B = 108°</span>. Si el ángulo <span class="math-expr">∠ACD = 38°</span>, calcula <span class="math-expr">∠D</span> y <span class="math-expr">∠ABD</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ea5', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="lanzarConstruccion('cuadrilatero_inscrito')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-ea5" class="solucion-box">
+                            <p><strong>Resolución:</strong> <span class="math-expr">∠D = 180° - 108° = 72°</span>. Los ángulos <span class="math-expr">∠ABD</span> y <span class="math-expr">∠ACD</span> subtienden el mismo arco <span class="math-expr">AD</span>, por lo que <span class="math-expr">∠ABD = 38°</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: ∠D = 72° y ∠ABD = 38°.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 4: PREGUNTAS DE REFLEXIÓN CRÍTICA  -->
+            <!-- ========================================== -->
+            <section id="sec-reflexion" class="seccion-contenido hidden">
+                <div class="card-montano">
+                    <h2 class="text-2xl font-bold text-[#1269A8] mb-2">🧠 Análisis Conceptual y Pensamiento Crítico</h2>
+                    <p class="text-sm text-slate-600 mb-4">Reflexiona sobre la justificación geométrica de los teoremas de la circunferencia y conéctalos con el laboratorio de GeoGebra.</p>
+
+                    <div class="space-y-4">
+                        <div class="p-4 bg-[#F2F5E9] rounded-xl border-2 border-[#54887D]">
+                            <h3 class="font-bold text-lg text-[#1269A8]">1. ¿Por qué un ángulo inscrito vale exactamente la mitad del ángulo central que subtiende el mismo arco?</h3>
+                            <p class="mt-1">Analiza el caso en que uno de los lados del ángulo inscrito pasa por el centro <span class="math-expr">O</span> formando un triángulo isósceles de radios iguales.</p>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="btn-solucion" onclick="toggleSolucion('ref-1', this)">Ver análisis conceptual</button>
+                                <button class="btn-geogebra" onclick="lanzarConstruccion('central_inscrito')">📐 Construir en GeoGebra</button>
+                            </div>
+                            <div id="ref-1" class="solucion-box">
+                                <p><strong>Análisis:</strong> Cuando un lado del ángulo inscrito <span class="math-expr">∠ACB</span> es un diámetro que pasa por <span class="math-expr">O</span>, el triángulo <span class="math-expr">△AOC</span> es isósceles porque <span class="math-expr">OA = OC = r</span>, de modo que <span class="math-expr">∠OAC = ∠OCA = β</span>. El ángulo central <span class="math-expr">∠AOB</span> es un ángulo exterior a <span class="math-expr">△AOC</span>, por lo que equivale a la suma de los dos interiores no adyacentes: <span class="math-expr">θ = β + β = 2β</span>. Cualquier otro ángulo inscrito se descompone en suma o resta de casos como este.</p>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-[#F2F5E9] rounded-xl border-2 border-[#54887D]">
+                            <h3 class="font-bold text-lg text-[#1269A8]">2. ¿Por qué el radio trazado al punto de tangencia forma siempre un ángulo de <span class="math-expr">90°</span> con la recta tangente?</h3>
+                            <p class="mt-1">Considera la distancia mínima desde el centro <span class="math-expr">O</span> hasta cualquier punto de la recta tangente.</p>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="btn-solucion" onclick="toggleSolucion('ref-2', this)">Ver análisis conceptual</button>
+                                <button class="btn-geogebra" onclick="lanzarConstruccion('tangente_radio')">📐 Construir en GeoGebra</button>
+                            </div>
+                            <div id="ref-2" class="solucion-box">
+                                <p><strong>Análisis:</strong> Una recta tangente toca la circunferencia en un único punto <span class="math-expr">T</span> y deja a todos los demás puntos de la recta en el exterior de la circunferencia. Por tanto, cualquier otro punto <span class="math-expr">Q</span> de la recta cumple <span class="math-expr">OQ &gt; r = OT</span>. El segmento más corto desde un punto exterior a una recta es siempre el segmento perpendicular, lo que prueba que <span class="math-expr">OT ⊥ t</span> (<span class="math-expr">90°</span>).</p>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-[#F2F5E9] rounded-xl border-2 border-[#54887D]">
+                            <h3 class="font-bold text-lg text-[#1269A8]">3. ¿Qué ocurre con la medida de un ángulo inscrito cuando su arco subtendido es una semicircunferencia (<span class="math-expr">180°</span>)?</h3>
+                            <p class="mt-1">Relaciona la medida del ángulo central llano (<span class="math-expr">180°</span>) con el teorema del ángulo inscrito.</p>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="btn-solucion" onclick="toggleSolucion('ref-3', this)">Ver análisis conceptual</button>
+                                <button class="btn-geogebra" onclick="lanzarConstruccion('semicircunferencia_90')">📐 Construir en GeoGebra</button>
+                            </div>
+                            <div id="ref-3" class="solucion-box">
+                                <p><strong>Análisis:</strong> Cuando un ángulo inscrito abarca un diámetro, el arco subtendido mide <span class="math-expr">180°</span> (una semicircunferencia), lo que corresponde a un ángulo central llano de <span class="math-expr">180°</span>. Aplicando <span class="math-expr">β = ½ · 180° = 90°</span>, el ángulo inscrito siempre es recto, sin importar en qué punto de la semicircunferencia se ubique su vértice.</p>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-[#F2F5E9] rounded-xl border-2 border-[#54887D]">
+                            <h3 class="font-bold text-lg text-[#1269A8]">4. ¿Por qué dos segmentos tangentes trazados desde un mismo punto exterior <span class="math-expr">P</span> tienen exactamente igual longitud?</h3>
+                            <p class="mt-1">Demuéstralo mediante la congruencia de los dos triángulos rectángulos <span class="math-expr">△POA</span> y <span class="math-expr">△POB</span>.</p>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="btn-solucion" onclick="toggleSolucion('ref-4', this)">Ver análisis conceptual</button>
+                                <button class="btn-geogebra" onclick="lanzarConstruccion('tangentes_punto_exterior')">📐 Construir en GeoGebra</button>
+                            </div>
+                            <div id="ref-4" class="solucion-box">
+                                <p><strong>Análisis:</strong> Al trazar los radios <span class="math-expr">OA</span> y <span class="math-expr">OB</span> a los puntos de tangencia y unir <span class="math-expr">P</span> con el centro <span class="math-expr">O</span>, se forman dos triángulos rectángulos (<span class="math-expr">∠OAP = ∠OBP = 90°</span>) que comparten la hipotenusa común <span class="math-expr">PO</span> y tienen catetos iguales <span class="math-expr">OA = OB = r</span>. Por criterio de congruencia <strong>Hipotenusa-Cateto (HC)</strong>, <span class="math-expr">△POA ≅ △POB</span>, de donde se sigue que <span class="math-expr">PA = PB</span>.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 5: EVALUACIÓN FORMATIVA            -->
+            <!-- ========================================== -->
+            <section id="sec-evaluacion" class="seccion-contenido hidden">
+                <div class="card-montano">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b-2 border-[#F7D615] pb-3 mb-4">
+                        <div>
+                            <h2 class="text-2xl font-bold text-[#1269A8]">✅ Evaluación Formativa de Comprobación</h2>
+                            <p class="text-sm text-slate-600">Resuelve cada reactivo, verifica tu procedimiento y explora la construcción en GeoGebra.</p>
+                        </div>
+                        <span class="badge-nivel badge-avanzado mt-2 sm:mt-0">5 Reactivos de Comprobación</span>
+                    </div>
+
+                    <div class="space-y-4">
+                        <!-- Reactivo 1 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 1 • Ángulo Central vs. Inscrito</span>
+                            <p class="font-bold text-base mt-1">Un ángulo inscrito en una circunferencia mide <span class="math-expr">39°</span>. Calcula la medida del ángulo central que subtiende el mismo arco y la medida de dicho arco.</p>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="btn-solucion" onclick="toggleSolucion('eval-1', this)">Mostrar solución</button>
+                                <button class="btn-geogebra" onclick="lanzarConstruccion('central_inscrito')">📐 Construir en GeoGebra</button>
+                            </div>
+                            <div id="eval-1" class="solucion-box">
+                                <p><strong>Resolución:</strong> <span class="math-expr">θ = 2β = 2(39°) = 78°</span>, y el arco subtendido también mide <span class="math-expr">78°</span>.</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: Ángulo central = 78° y Arco = 78°.</p>
+                            </div>
+                        </div>
+
+                        <!-- Reactivo 2 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 2 • Recta Tangente y Radio</span>
+                            <p class="font-bold text-base mt-1">Una recta es tangente a una circunferencia de centro <span class="math-expr">O</span> en <span class="math-expr">T</span>. Si el radio mide <span class="math-expr">8 cm</span> y el segmento tangente <span class="math-expr">TP</span> mide <span class="math-expr">15 cm</span>, calcula la distancia <span class="math-expr">OP</span>.</p>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="btn-solucion" onclick="toggleSolucion('eval-2', this)">Mostrar solución</button>
+                                <button class="btn-geogebra" onclick="lanzarConstruccion('tangente_radio')">📐 Construir en GeoGebra</button>
+                            </div>
+                            <div id="eval-2" class="solucion-box">
+                                <p><strong>Resolución:</strong> Como <span class="math-expr">OT ⊥ TP</span>, <span class="math-expr">OP = √(8² + 15²) = √(64 + 225) = √289 = 17 cm</span>.</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: OP = 17 cm.</p>
+                            </div>
+                        </div>
+
+                        <!-- Reactivo 3 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 3 • Ángulo Interior y Exterior</span>
+                            <p class="font-bold text-base mt-1">Dos secantes trazadas desde un punto exterior determinan arcos de <span class="math-expr">110°</span> y <span class="math-expr">40°</span>. Calcula la medida del ángulo exterior formado.</p>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="btn-solucion" onclick="toggleSolucion('eval-3', this)">Mostrar solución</button>
+                                <button class="btn-geogebra" onclick="lanzarConstruccion('angulo_exterior')">📐 Construir en GeoGebra</button>
+                            </div>
+                            <div id="eval-3" class="solucion-box">
+                                <p><strong>Resolución:</strong> <span class="math-expr">δ = (110° - 40°) / 2 = 70° / 2 = 35°</span>.</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: 35°.</p>
+                            </div>
+                        </div>
+
+                        <!-- Reactivo 4 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 4 • Tangentes desde Punto Exterior</span>
+                            <p class="font-bold text-base mt-1">Desde un punto exterior <span class="math-expr">P</span> se trazan dos segmentos tangentes <span class="math-expr">PA</span> y <span class="math-expr">PB</span> a una circunferencia. Si <span class="math-expr">PA = 4x - 5</span> y <span class="math-expr">PB = 2x + 13</span>, halla <span class="math-expr">x</span> y la longitud de cada tangente.</p>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="btn-solucion" onclick="toggleSolucion('eval-4', this)">Mostrar solución</button>
+                                <button class="btn-geogebra" onclick="lanzarConstruccion('tangentes_punto_exterior')">📐 Construir en GeoGebra</button>
+                            </div>
+                            <div id="eval-4" class="solucion-box">
+                                <p><strong>Resolución:</strong> <span class="math-expr">4x - 5 = 2x + 13 ➔ 2x = 18 ➔ x = 9</span>. Tangente: <span class="math-expr">4(9) - 5 = 31</span>.</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: x = 9 y cada tangente mide 31 unidades.</p>
+                            </div>
+                        </div>
+
+                        <!-- Reactivo 5 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 5 • Cuadrilátero Inscrito y Semicircunferencia</span>
+                            <p class="font-bold text-base mt-1">En un cuadrilátero <span class="math-expr">ABCD</span> inscrito en una circunferencia, <span class="math-expr">∠A = 76°</span>. Calcula la medida de su ángulo opuesto <span class="math-expr">∠C</span>.</p>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="btn-solucion" onclick="toggleSolucion('eval-5', this)">Mostrar solución</button>
+                                <button class="btn-geogebra" onclick="lanzarConstruccion('cuadrilatero_inscrito')">📐 Construir en GeoGebra</button>
+                            </div>
+                            <div id="eval-5" class="solucion-box">
+                                <p><strong>Resolución:</strong> En todo cuadrilátero cíclico los ángulos opuestos son suplementarios: <span class="math-expr">∠C = 180° - 76° = 104°</span>.</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: ∠C = 104°.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 6: LABORATORIO INTERACTIVO GEOGEBRA -->
+            <!-- ========================================== -->
+            <section id="sec-geogebra" class="seccion-contenido hidden">
+                <div class="card-montano">
+                    <!-- Encabezado y Selector de 8 Construcciones -->
+                    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 border-b-2 border-[#F7D615] pb-3 mb-4">
+                        <div>
+                            <div class="flex flex-wrap items-center gap-2">
+                                <span class="badge-nivel badge-avanzado">GeoGebra Geometry Interactivo</span>
+                                <span id="ggb-status-badge" class="text-xs font-bold text-[#54887D] bg-[#F2F5E9] px-2.5 py-1 rounded-full border border-[#54887D]">Cargando applet de GeoGebra...</span>
+                            </div>
+                            <h2 class="text-2xl font-bold text-[#1269A8] mt-1">📐 Laboratorio de Circunferencia: Rectas y Ángulos</h2>
+                            <p class="text-sm text-slate-600">Manipula los puntos sobre la circunferencia o selecciona una de las 8 construcciones preprogramadas.</p>
+                        </div>
+
+                        <!-- Selector Rápido de 8 Construcciones -->
+                        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+                            <select id="ggb-preset-select" onchange="lanzarConstruccion(this.value)" class="p-2 rounded-lg border-2 border-[#1269A8] bg-white font-bold text-xs sm:text-sm text-[#1269A8] cursor-pointer">
+                                <option value="central_inscrito">1. Ángulo Central e Inscrito (θ = 2β)</option>
+                                <option value="semicircunferencia_90">2. Ángulo en Semicircunferencia (90°)</option>
+                                <option value="tangente_radio">3. Tangente y Radio Perpendicular (90°)</option>
+                                <option value="tangentes_punto_exterior">4. Tangentes desde Punto Exterior (PA = PB)</option>
+                                <option value="semiinscrito">5. Ángulo Semiinscrito (α = ½ arco)</option>
+                                <option value="angulo_interior">6. Ángulo Interior (ω = (arco₁ + arco₂)/2)</option>
+                                <option value="angulo_exterior">7. Ángulo Exterior (δ = |arco₁ - arco₂|/2)</option>
+                                <option value="cuadrilatero_inscrito">8. Cuadrilátero Inscrito (Opuestos = 180°)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Botones Rápidos de las 8 Construcciones -->
+                    <div class="flex flex-wrap gap-1.5 mb-3">
+                        <button onclick="lanzarConstruccion('central_inscrito')" class="text-xs font-bold px-2.5 py-1.5 rounded-lg bg-sky-100 text-sky-950 border border-sky-500 hover:bg-sky-200 cursor-pointer">📐 Ángulo Central e Inscrito</button>
+                        <button onclick="lanzarConstruccion('semicircunferencia_90')" class="text-xs font-bold px-2.5 py-1.5 rounded-lg bg-emerald-100 text-emerald-950 border border-emerald-500 hover:bg-emerald-200 cursor-pointer">📏 Semicircunferencia (90°)</button>
+                        <button onclick="lanzarConstruccion('tangente_radio')" class="text-xs font-bold px-2.5 py-1.5 rounded-lg bg-amber-100 text-amber-950 border border-amber-500 hover:bg-amber-200 cursor-pointer">⊥ Tangente y Radio</button>
+                        <button onclick="lanzarConstruccion('tangentes_punto_exterior')" class="text-xs font-bold px-2.5 py-1.5 rounded-lg bg-indigo-100 text-indigo-950 border border-indigo-500 hover:bg-indigo-200 cursor-pointer">✂ Tangentes desde Punto Exterior</button>
+                        <button onclick="lanzarConstruccion('semiinscrito')" class="text-xs font-bold px-2.5 py-1.5 rounded-lg bg-teal-100 text-teal-950 border border-teal-500 hover:bg-teal-200 cursor-pointer">◐ Ángulo Semiinscrito</button>
+                        <button onclick="lanzarConstruccion('angulo_interior')" class="text-xs font-bold px-2.5 py-1.5 rounded-lg bg-lime-100 text-lime-950 border border-lime-500 hover:bg-lime-200 cursor-pointer">✕ Ángulo Interior</button>
+                        <button onclick="lanzarConstruccion('angulo_exterior')" class="text-xs font-bold px-2.5 py-1.5 rounded-lg bg-rose-100 text-rose-950 border border-rose-500 hover:bg-rose-200 cursor-pointer">↗ Ángulo Exterior</button>
+                        <button onclick="lanzarConstruccion('cuadrilatero_inscrito')" class="text-xs font-bold px-2.5 py-1.5 rounded-lg bg-yellow-100 text-yellow-950 border border-yellow-600 hover:bg-yellow-200 cursor-pointer">⬠ Cuadrilátero Inscrito</button>
+                    </div>
+
+                    <!-- Barra de Herramientas Rápidas de Control -->
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-3 p-2.5 bg-[#F2F5E9] rounded-xl border border-[#A6B046]">
+                        <div class="flex flex-wrap gap-2">
+                            <button onclick="limpiarLienzoGeoGebra()" class="px-3 py-1.5 rounded-lg bg-white hover:bg-red-50 text-red-700 font-bold text-xs border border-red-400 cursor-pointer">🗑️ Limpiar lienzo</button>
+                            <button onclick="alternarCuadriculaYEjes()" class="px-3 py-1.5 rounded-lg bg-white hover:bg-sky-50 text-[#1269A8] font-bold text-xs border border-[#1269A8] cursor-pointer">⊞ Alternar cuadrícula y ejes</button>
+                            <button onclick="reiniciarConstruccionActual()" class="px-3 py-1.5 rounded-lg bg-white hover:bg-emerald-50 text-[#54887D] font-bold text-xs border border-[#54887D] cursor-pointer">↺ Reiniciar construcción</button>
+                        </div>
+                        <span class="text-xs font-semibold text-[#54887D]">💡 Consejo: Arrastra los puntos A, B, C o P en el lienzo para verificar cómo se conservan los ángulos y longitudes.</span>
+                    </div>
+
+                    <!-- Banner Descriptivo de la Construcción Activa -->
+                    <div id="ggb-info-construccion" class="mb-3 p-3 bg-gradient-to-r from-[#1269A8] to-[#0d4f80] text-white rounded-xl border-2 border-[#F7D615]">
+                        <h3 id="ggb-titulo-construccion" class="font-bold text-base text-[#F7D615]">1. Ángulo Central e Inscrito (θ = 2β)</h3>
+                        <p id="ggb-desc-construccion" class="text-xs sm:text-sm text-[#F2F5E9] mt-0.5">Arrastra los puntos A, B o C sobre la circunferencia: el ángulo central ∠AOB siempre mide el doble del ángulo inscrito ∠ACB sobre el mismo arco.</p>
+                    </div>
+
+                    <!-- Lienzo Embebido de GeoGebra -->
+                    <div id="ggb-wrapper">
+                        <div id="ggb-element"></div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Pie de Pizarra -->
+        <footer class="bg-[#1269A8] text-white text-center py-3 px-4 text-xs sm:text-sm border-t-2 border-[#F7D615]">
+            <strong>Colegio Montano</strong> • Tercero Básico • Cuarta Unidad • Matemática • Pizarra Digital Interactiva
+        </footer>
+    </div>
+
+    <!-- Scripts de Interactividad y Motor de Construcciones GeoGebra -->
+    <script>
+        /* =========================================================================
+           1. NAVEGACIÓN DE PESTAÑAS Y PANTALLA COMPLETA
+           ========================================================================= */
+
+        function cambiarSeccion(seccionId, botonActivo) {
+            const secciones = document.querySelectorAll('.seccion-contenido');
+            secciones.forEach(sec => sec.classList.add('hidden'));
+
+            const target = document.getElementById('sec-' + seccionId);
+            if (target) {
+                target.classList.remove('hidden');
+            }
+
+            const botones = document.querySelectorAll('.tab-btn');
+            botones.forEach(btn => btn.classList.remove('active'));
+            if (botonActivo) {
+                botonActivo.classList.add('active');
+            }
+
+            if (seccionId === 'geogebra') {
+                inicializarGeoGebraSiNecesario();
+                setTimeout(() => {
+                    redimensionarGeoGebra();
+                }, 120);
+            }
+        }
+
+        function filtrarSubnivel(grupo, nivel, botonActivo) {
+            const contenedores = document.querySelectorAll('.subcontenido-' + grupo);
+            contenedores.forEach(cont => cont.classList.add('hidden'));
+
+            const target = document.getElementById(grupo + '-' + nivel);
+            if (target) {
+                target.classList.remove('hidden');
+            }
+
+            const parent = botonActivo.parentElement;
+            const subBotones = parent.querySelectorAll('.subtab-btn');
+            subBotones.forEach(btn => btn.classList.remove('active'));
+            botonActivo.classList.add('active');
+        }
+
+        function toggleSolucion(solucionId, boton) {
+            const box = document.getElementById(solucionId);
+            if (!box) return;
+
+            if (box.style.display === 'block') {
+                box.style.display = 'none';
+                boton.textContent = boton.textContent.replace('Ocultar', 'Mostrar').replace('Ocultar análisis conceptual', 'Ver análisis conceptual');
+            } else {
+                box.style.display = 'block';
+                if (boton.textContent.includes('Ver análisis')) {
+                    boton.textContent = 'Ocultar análisis conceptual';
+                } else {
+                    boton.textContent = 'Ocultar solución';
+                }
+            }
+        }
+
+        function toggleFullscreen() {
+            const btn = document.getElementById('fullscreen-btn');
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().then(() => {
+                    btn.innerHTML = '<span>✖ Salir de pantalla completa</span>';
+                    setTimeout(redimensionarGeoGebra, 200);
+                }).catch(err => {
+                    console.warn('Error al intentar activar pantalla completa:', err);
+                });
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen().then(() => {
+                        btn.innerHTML = '<span>⛶ Pantalla completa</span>';
+                        setTimeout(redimensionarGeoGebra, 200);
+                    });
+                }
+            }
+        }
+
+        document.addEventListener('fullscreenchange', () => {
+            const btn = document.getElementById('fullscreen-btn');
+            if (!document.fullscreenElement && btn) {
+                btn.innerHTML = '<span>⛶ Pantalla completa</span>';
+                setTimeout(redimensionarGeoGebra, 200);
+            }
+        });
+
+        /* =========================================================================
+           2. MOTOR DE CONSTRUCCIONES GEOGEBRA Y COLA DE COMANDOS PENDIENTES
+           ========================================================================= */
+
+        let ggbIniciado = false;
+        let ggbListo = false;
+        let cuadriculaYEjesVisibles = true;
+
+        const CONSTRUCCIONES_CIRCUNFERENCIA = {
+            central_inscrito: {
+                titulo: '1. Ángulo Central e Inscrito (θ = 2β)',
+                desc: 'Arrastra los puntos A, B o C sobre la circunferencia: el ángulo central ∠AOB siempre mide el doble del ángulo inscrito ∠ACB sobre el mismo arco.',
+                comandos: [
+                    'SetCoordSystem(-6.5, 6.5, -5.5, 5.5)',
+                    'O = (0, 0)',
+                    'P_r = (4, 0)',
+                    'circ = Circle(O, P_r)',
+                    'SetColor(circ, 18, 105, 168)',
+                    'A = Point(circ)',
+                    'B = Point(circ)',
+                    'C = Point(circ)',
+                    'SetCoords(A, -3.2, -2.4)',
+                    'SetCoords(B, 3.2, -2.4)',
+                    'SetCoords(C, 0, 4)',
+                    'rOA = Segment(O, A)',
+                    'rOB = Segment(O, B)',
+                    'cCA = Segment(C, A)',
+                    'cCB = Segment(C, B)',
+                    'SetColor(rOA, 18, 105, 168)',
+                    'SetColor(rOB, 18, 105, 168)',
+                    'SetColor(cCA, 180, 83, 9)',
+                    'SetColor(cCB, 180, 83, 9)',
+                    'angCentral = Angle(A, O, B)',
+                    'angInscrito = Angle(A, C, B)',
+                    'Text("Central ∠AOB = " + angCentral + "   |   Inscrito ∠ACB = " + angInscrito + "  (θ = 2β)", (-5.5, 4.7))'
+                ]
+            },
+            semicircunferencia_90: {
+                titulo: '2. Ángulo en Semicircunferencia (90°)',
+                desc: 'AB es diámetro de la circunferencia y C es un punto móvil sobre ella: el ángulo inscrito ∠ACB siempre mide 90°.',
+                comandos: [
+                    'SetCoordSystem(-6.5, 6.5, -5.5, 5.5)',
+                    'O = (0, 0)',
+                    'A = (-4, 0)',
+                    'B = (4, 0)',
+                    'diam = Segment(A, B)',
+                    'circ = Circle(O, B)',
+                    'SetColor(circ, 18, 105, 168)',
+                    'SetColor(diam, 180, 83, 9)',
+                    'C = Point(circ)',
+                    'SetCoords(C, 2.4, 3.2)',
+                    'tri = Polygon(A, B, C)',
+                    'SetColor(tri, 84, 136, 125)',
+                    'ang90 = Angle(A, C, B)',
+                    'Text("Ángulo inscrito sobre diámetro AB = " + ang90 + " (siempre 90°)", (-5, 4.7))'
+                ]
+            },
+            tangente_radio: {
+                titulo: '3. Tangente y Radio Perpendicular (90°)',
+                desc: 'La recta tangente en T es perpendicular (90°) al radio OT. Arrastra el punto T sobre la circunferencia para comprobarlo.',
+                comandos: [
+                    'SetCoordSystem(-6.5, 6.5, -5.5, 5.5)',
+                    'O = (0, 0)',
+                    'P_r = (3.5, 0)',
+                    'circ = Circle(O, P_r)',
+                    'SetColor(circ, 18, 105, 168)',
+                    'T = Point(circ)',
+                    'SetCoords(T, 2.47, 2.47)',
+                    'rad = Segment(O, T)',
+                    'SetColor(rad, 166, 176, 70)',
+                    'tang = Tangent(T, circ)',
+                    'SetColor(tang, 180, 83, 9)',
+                    'angRecto = Angle(O, T, tang)',
+                    'Text("Radio OT ⊥ Tangente en T  ➔  Ángulo = " + angRecto, (-5.2, 4.7))'
+                ]
+            },
+            tangentes_punto_exterior: {
+                titulo: '4. Tangentes desde Punto Exterior (PA = PB)',
+                desc: 'Desde un punto exterior P se trazan dos tangentes PA y PB a la circunferencia: ambas tienen exactamente igual longitud.',
+                comandos: [
+                    'SetCoordSystem(-5, 9, -5.5, 5.5)',
+                    'O = (0, 0)',
+                    'P_r = (3, 0)',
+                    'circ = Circle(O, P_r)',
+                    'SetColor(circ, 18, 105, 168)',
+                    'P = (6, 0)',
+                    'tangA = Tangent(P, circ)',
+                    'A = Intersect(tangA, circ)',
+                    'B = Reflect(A, Line(O, P))',
+                    'segPA = Segment(P, A)',
+                    'segPB = Segment(P, B)',
+                    'segPO = Segment(P, O)',
+                    'SetLineStyle(segPO, 1)',
+                    'SetColor(segPA, 180, 83, 9)',
+                    'SetColor(segPB, 180, 83, 9)',
+                    'Text("Longitud PA = " + segPA + "   =   Longitud PB = " + segPB, (-4.2, 4.7))'
+                ]
+            },
+            semiinscrito: {
+                titulo: '5. Ángulo Semiinscrito (α = ½ arco)',
+                desc: 'Ángulo formado por una recta tangente en A y una cuerda AB: mide la mitad del arco AB subtendido.',
+                comandos: [
+                    'SetCoordSystem(-6.5, 6.5, -5.5, 5.5)',
+                    'O = (0, 0)',
+                    'P_r = (3.8, 0)',
+                    'circ = Circle(O, P_r)',
+                    'SetColor(circ, 18, 105, 168)',
+                    'A = (-2.68, -2.68)',
+                    'B = (3.8, 0)',
+                    'tangA = Tangent(A, circ)',
+                    'cuerdaAB = Segment(A, B)',
+                    'SetColor(cuerdaAB, 180, 83, 9)',
+                    'Q = Point(tangA)',
+                    'SetCoords(Q, 1.5, -6.86)',
+                    'angSemi = Angle(B, A, Q)',
+                    'angCentral = Angle(A, O, B)',
+                    'Text("Semiinscrito ∠BAQ = " + angSemi + "  |  Central ∠AOB = " + angCentral, (-5.5, 4.7))'
+                ]
+            },
+            angulo_interior: {
+                titulo: '6. Ángulo Interior (ω = (arco₁ + arco₂)/2)',
+                desc: 'Dos cuerdas AB y CD se cortan en un punto interior I: el ángulo interior es la semisuma de los arcos opuestos AC y BD.',
+                comandos: [
+                    'SetCoordSystem(-6.5, 6.5, -5.5, 5.5)',
+                    'O = (0, 0)',
+                    'P_r = (4, 0)',
+                    'circ = Circle(O, P_r)',
+                    'SetColor(circ, 18, 105, 168)',
+                    'A = (-3.2, 2.4)',
+                    'B = (3.2, -2.4)',
+                    'C = (2.8, 2.86)',
+                    'D = (-2.8, -2.86)',
+                    'cuerdaAB = Segment(A, B)',
+                    'cuerdaCD = Segment(C, D)',
+                    'SetColor(cuerdaAB, 18, 105, 168)',
+                    'SetColor(cuerdaCD, 180, 83, 9)',
+                    'I = Intersect(cuerdaAB, cuerdaCD)',
+                    'angInt = Angle(A, I, C)',
+                    'Text("Ángulo interior ∠AIC = " + angInt + " = [m(arco AC) + m(arco BD)] / 2", (-5.8, 4.7))'
+                ]
+            },
+            angulo_exterior: {
+                titulo: '7. Ángulo Exterior (δ = |arco₁ - arco₂|/2)',
+                desc: 'Desde un punto exterior P se trazan dos secantes PAB y PCD: el ángulo exterior ∠P equivale a la semidiferencia de los arcos interceptados.',
+                comandos: [
+                    'SetCoordSystem(-6, 8, -5.5, 5.5)',
+                    'O = (0, 0)',
+                    'P_r = (3.5, 0)',
+                    'circ = Circle(O, P_r)',
+                    'SetColor(circ, 18, 105, 168)',
+                    'P = (6.8, 0)',
+                    'A = (-2.8, 2.1)',
+                    'B = (2.5, 2.45)',
+                    'C = (-2.8, -2.1)',
+                    'D = (2.5, -2.45)',
+                    'sec1 = Line(P, B)',
+                    'sec2 = Line(P, D)',
+                    'SetColor(sec1, 180, 83, 9)',
+                    'SetColor(sec2, 180, 83, 9)',
+                    'angExt = Angle(B, P, D)',
+                    'Text("Ángulo exterior ∠BPD = " + angExt + " = [m(arco BD) - m(arco AC)] / 2", (-5.2, 4.7))'
+                ]
+            },
+            cuadrilatero_inscrito: {
+                titulo: '8. Cuadrilátero Inscrito (Opuestos = 180°)',
+                desc: 'En todo cuadrilátero ABCD inscrito en una circunferencia, los ángulos opuestos son suplementarios: ∠A + ∠C = 180° y ∠B + ∠D = 180°.',
+                comandos: [
+                    'SetCoordSystem(-6.5, 6.5, -5.5, 5.5)',
+                    'O = (0, 0)',
+                    'P_r = (4, 0)',
+                    'circ = Circle(O, P_r)',
+                    'SetColor(circ, 18, 105, 168)',
+                    'A = (-3.2, 2.4)',
+                    'B = (2.8, 2.86)',
+                    'C = (3.2, -2.4)',
+                    'D = (-2.8, -2.86)',
+                    'cuad = Polygon(A, B, C, D)',
+                    'SetColor(cuad, 84, 136, 125)',
+                    'angA = Angle(D, A, B)',
+                    'angC = Angle(B, C, D)',
+                    'sumaOp = angA + angC',
+                    'Text("∠A = " + angA + "  |  ∠C = " + angC + "  ➔  ∠A + ∠C = " + sumaOp, (-5.5, 4.7))'
+                ]
+            }
+        };
+
+        let pendingCommands = {
+            titulo: CONSTRUCCIONES_CIRCUNFERENCIA.central_inscrito.titulo,
+            descripcion: CONSTRUCCIONES_CIRCUNFERENCIA.central_inscrito.desc,
+            comandos: CONSTRUCCIONES_CIRCUNFERENCIA.central_inscrito.comandos,
+            presetKey: 'central_inscrito'
+        };
+
+        /**
+         * Inicializa el applet oficial de GeoGebra en modo geometry al abrir la pestaña 6.
+         */
+        function inicializarGeoGebraSiNecesario() {
+            if (ggbIniciado) return;
+            ggbIniciado = true;
+
+            const wrapper = document.getElementById('ggb-wrapper');
+            const ancho = wrapper ? Math.max(wrapper.clientWidth - 6, 320) : 960;
+
+            const params = {
+                id: 'ggbApplet',
+                appName: 'geometry',
+                width: ancho,
+                height: 550,
+                showToolBar: true,
+                showAlgebraInput: true,
+                showMenuBar: false,
+                showResetIcon: false,
+                enableRightClick: true,
+                enableLabelDrags: true,
+                showZoomButtons: true,
+                language: 'es',
+                appletOnLoad: function(api) {
+                    window.ggbApplet = api;
+                    ggbListo = true;
+                    const badge = document.getElementById('ggb-status-badge');
+                    if (badge) {
+                        badge.textContent = '✔ GeoGebra Listo e Interactivo';
+                    }
+                    aplicarComandosEnApplet(pendingCommands.titulo, pendingCommands.descripcion, pendingCommands.comandos);
+                }
+            };
+
+            if (typeof GGBApplet !== 'undefined') {
+                const applet = new GGBApplet(params, true);
+                applet.inject('ggb-element');
+            } else {
+                const badge = document.getElementById('ggb-status-badge');
+                if (badge) {
+                    badge.textContent = '⚠️ Verifica tu conexión para cargar GeoGebra';
+                }
+            }
+        }
+
+        function redimensionarGeoGebra() {
+            if (!ggbListo || !window.ggbApplet) return;
+            const wrapper = document.getElementById('ggb-wrapper');
+            if (wrapper && wrapper.clientWidth > 100) {
+                try {
+                    window.ggbApplet.setSize(wrapper.clientWidth - 6, 550);
+                } catch (e) {
+                    console.warn('No se pudo redimensionar GeoGebra:', e);
+                }
+            }
+        }
+
+        window.addEventListener('resize', () => {
+            if (!document.getElementById('sec-geogebra').classList.contains('hidden')) {
+                redimensionarGeoGebra();
+            }
+        });
+
+        /**
+         * Cambia a la pestaña 6 y ejecuta (o encola en pendingCommands) la construcción solicitada.
+         */
+        function ejecutarConstruccionPersonalizada(titulo, descripcion, comandos, presetKey) {
+            pendingCommands = {
+                titulo: titulo,
+                descripcion: descripcion,
+                comandos: comandos,
+                presetKey: presetKey || pendingCommands.presetKey
+            };
+
+            const selectEl = document.getElementById('ggb-preset-select');
+            if (selectEl && presetKey && CONSTRUCCIONES_CIRCUNFERENCIA[presetKey]) {
+                selectEl.value = presetKey;
+            }
+
+            const btnTab6 = document.getElementById('tab-geogebra');
+            cambiarSeccion('geogebra', btnTab6);
+
+            if (ggbListo && window.ggbApplet) {
+                aplicarComandosEnApplet(titulo, descripcion, comandos);
+            }
+        }
+
+        function lanzarConstruccion(claveConstruccion) {
+            const item = CONSTRUCCIONES_CIRCUNFERENCIA[claveConstruccion] || CONSTRUCCIONES_CIRCUNFERENCIA.central_inscrito;
+            ejecutarConstruccionPersonalizada(item.titulo, item.desc, item.comandos, claveConstruccion);
+        }
+
+        function reiniciarConstruccionActual() {
+            aplicarComandosEnApplet(pendingCommands.titulo, pendingCommands.descripcion, pendingCommands.comandos);
+        }
+
+        function aplicarComandosEnApplet(titulo, descripcion, comandos) {
+            const tituloEl = document.getElementById('ggb-titulo-construccion');
+            const descEl = document.getElementById('ggb-desc-construccion');
+            if (tituloEl) tituloEl.textContent = titulo;
+            if (descEl) descEl.textContent = descripcion;
+
+            if (!ggbListo || !window.ggbApplet) return;
+
+            try {
+                window.ggbApplet.reset();
+                window.ggbApplet.setGridVisible(cuadriculaYEjesVisibles);
+                window.ggbApplet.setAxesVisible(cuadriculaYEjesVisibles, cuadriculaYEjesVisibles);
+
+                comandos.forEach(cmd => {
+                    window.ggbApplet.evalCommand(cmd);
+                });
+            } catch (err) {
+                console.error('Error ejecutando comandos en GeoGebra:', err);
+            }
+        }
+
+        function limpiarLienzoGeoGebra() {
+            if (!ggbListo || !window.ggbApplet) return;
+            window.ggbApplet.reset();
+            window.ggbApplet.setGridVisible(cuadriculaYEjesVisibles);
+            window.ggbApplet.setAxesVisible(cuadriculaYEjesVisibles, cuadriculaYEjesVisibles);
+            document.getElementById('ggb-titulo-construccion').textContent = 'Lienzo en Blanco (Construcción Libre)';
+            document.getElementById('ggb-desc-construccion').textContent = 'Utiliza las herramientas superiores de GeoGebra para trazar circunferencias, rectas tangentes o secantes y medir ángulos.';
+        }
+
+        function alternarCuadriculaYEjes() {
+            cuadriculaYEjesVisibles = !cuadriculaYEjesVisibles;
+            if (ggbListo && window.ggbApplet) {
+                window.ggbApplet.setGridVisible(cuadriculaYEjesVisibles);
+                window.ggbApplet.setAxesVisible(cuadriculaYEjesVisibles, cuadriculaYEjesVisibles);
+            }
+        }
+    </script>
+</body>
+</html>

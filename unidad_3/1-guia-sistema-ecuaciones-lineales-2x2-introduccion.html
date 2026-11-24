@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pizarra Digital - Sistemas de Ecuaciones Lineales (Introducción) | Colegio Montano</title>
+    <!-- Carga de Tailwind CSS para utilidades de diseño responsivo y layout -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Configuración de Variables Institucionales Colegio Montano */
+        :root {
+            --azul-principal: #1269A8;
+            --amarillo-brillante: #F7D615;
+            --verde-grisaceo: #54887D;
+            --azul-claro: #88B5C7;
+            --verde-oliva: #A6B046;
+            --blanco-suave: #F2F5E9;
+        }
+
+        /* Tipografía Institucional */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e2e8f0;
+            color: #1e293b;
+            margin: 0;
+            padding: 12px;
+        }
+
+        /* Marco Principal de Pizarra Digital */
+        #pizarra-container {
+            background-color: var(--blanco-suave);
+            border: 5px solid var(--amarillo-brillante);
+            border-radius: 12px;
+            box-shadow: 0 12px 30px rgba(18, 105, 168, 0.25);
+            max-width: 1200px;
+            margin: 0 auto;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 85vh;
+        }
+
+        /* Encabezado de la Pizarra */
+        .pizarra-header {
+            background: linear-gradient(135deg, var(--azul-principal) 0%, #0d4f80 100%);
+            color: white;
+            padding: 16px 24px;
+            border-bottom: 4px solid var(--amarillo-brillante);
+        }
+
+        /* Botón Fullscreen */
+        .btn-fullscreen {
+            background-color: var(--amarillo-brillante);
+            color: #0f172a;
+            font-weight: 700;
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: 2px solid #ffffff;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+        .btn-fullscreen:hover {
+            background-color: #ffe234;
+            transform: translateY(-1px);
+        }
+
+        /* Navegación de Pestañas */
+        .nav-tabs {
+            background-color: #ffffff;
+            border-bottom: 2px solid var(--azul-claro);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            padding: 10px 20px;
+        }
+
+        .tab-btn {
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: var(--azul-principal);
+            background-color: transparent;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .tab-btn:hover {
+            background-color: rgba(136, 181, 199, 0.25);
+            border-color: var(--azul-claro);
+        }
+
+        .tab-btn.active {
+            background-color: var(--azul-principal);
+            color: #ffffff;
+            border-color: var(--amarillo-brillante);
+            box-shadow: 0 3px 8px rgba(18, 105, 168, 0.3);
+        }
+
+        /* Tarjetas de Contenido */
+        .card-montano {
+            background-color: #ffffff;
+            border: 2px solid var(--verde-grisaceo);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 18px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .card-formula {
+            background: linear-gradient(135deg, rgba(136, 181, 199, 0.25) 0%, rgba(242, 245, 233, 0.8) 100%);
+            border-left: 6px solid var(--azul-principal);
+            border-radius: 8px;
+            padding: 16px;
+            margin: 12px 0;
+        }
+
+        /* Etiquetas de Nivel */
+        .badge-nivel {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .badge-basico {
+            background-color: var(--verde-oliva);
+            color: #ffffff;
+        }
+        .badge-intermedio {
+            background-color: var(--verde-grisaceo);
+            color: #ffffff;
+        }
+        .badge-avanzado {
+            background-color: var(--azul-principal);
+            color: #ffffff;
+            border: 1px solid var(--amarillo-brillante);
+        }
+
+        /* Contenedor de Soluciones Ocultas */
+        .solucion-box {
+            background-color: rgba(136, 181, 199, 0.25);
+            border: 1.5px dashed var(--azul-principal);
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin-top: 12px;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .btn-solucion {
+            background-color: var(--azul-principal);
+            color: white;
+            font-weight: 600;
+            padding: 7px 14px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.2s;
+            margin-top: 10px;
+        }
+        .btn-solucion:hover {
+            background-color: var(--verde-grisaceo);
+        }
+
+        /* Bloques Matemáticos Visuales */
+        .math-expr {
+            font-family: 'Cambria Math', 'Times New Roman', serif;
+            font-size: 1.12rem;
+            font-weight: bold;
+            color: var(--azul-principal);
+            background-color: #f8fafc;
+            padding: 2px 8px;
+            border-radius: 4px;
+            border: 1px solid #cbd5e1;
+            display: inline-block;
+        }
+
+        /* Llave Visual para Sistemas 2x2 */
+        .sistema-box {
+            display: inline-flex;
+            align-items: center;
+            background-color: #f8fafc;
+            border: 1.5px solid var(--azul-claro);
+            border-left: 5px solid var(--azul-principal);
+            border-radius: 8px;
+            padding: 6px 14px;
+            font-family: 'Cambria Math', 'Times New Roman', serif;
+            font-weight: bold;
+            color: var(--azul-principal);
+            margin: 4px 0;
+        }
+
+        /* Sub-pestañas de Nivel */
+        .subtab-btn {
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 0.88rem;
+            cursor: pointer;
+            border: 2px solid var(--verde-grisaceo);
+            background-color: #ffffff;
+            color: var(--verde-grisaceo);
+            transition: all 0.2s;
+        }
+        .subtab-btn.active {
+            background-color: var(--verde-grisaceo);
+            color: #ffffff;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Modo Fullscreen */
+        :fullscreen #pizarra-container {
+            max-width: 100%;
+            width: 100vw;
+            height: 100vh;
+            border-radius: 0;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Marco Principal de la Pizarra Digital -->
+    <div id="pizarra-container">
+        
+        <!-- Encabezado Institucional -->
+        <header class="pizarra-header flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-4">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyEop0yf6lZ7Jk9MILZxF1rBj4Oqs5esyhIQ&s" 
+                     alt="Logo Colegio Montano" 
+                     class="w-14 h-14 rounded-lg bg-white p-1 object-contain border-2 border-[#F7D615]"
+                     onerror="this.src='https://placehold.co/60x60/1269A8/F7D615?text=CM'">
+                <div>
+                    <span class="text-xs uppercase tracking-widest font-bold text-[#F7D615] block">Colegio Montano • Tercera Unidad • Matemática</span>
+                    <h1 class="text-xl sm:text-2xl font-bold leading-tight">Sistemas de Ecuaciones Lineales: Introducción</h1>
+                    <p class="text-sm text-[#88B5C7] font-semibold">Nivel: Tercero Básico • Guía Interactiva de Pizarra Digital</p>
+                </div>
+            </div>
+            <button id="fullscreen-btn" class="btn-fullscreen flex items-center gap-2" onclick="toggleFullscreen()">
+                <span>⛶ Pantalla completa</span>
+            </button>
+        </header>
+
+        <!-- Barra de Navegación Horizontal -->
+        <nav class="nav-tabs" role="tablist">
+            <button class="tab-btn active" onclick="cambiarSeccion('teoria', this)">📘 1. Teoría</button>
+            <button class="tab-btn" onclick="cambiarSeccion('ejemplos', this)">💡 2. Ejemplos Resueltos (15)</button>
+            <button class="tab-btn" onclick="cambiarSeccion('ejercicios', this)">✍️ 3. Ejercicios Prácticos (15)</button>
+            <button class="tab-btn" onclick="cambiarSeccion('reflexion', this)">🧠 4. Reflexión Crítica</button>
+            <button class="tab-btn" onclick="cambiarSeccion('evaluacion', this)">✅ 5. Evaluación Formativa</button>
+        </nav>
+
+        <!-- Lienzo Principal de Contenido -->
+        <main class="p-4 sm:p-6 flex-1">
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 1: EXPLICACIÓN TEÓRICA             -->
+            <!-- ========================================== -->
+            <section id="sec-teoria" class="seccion-contenido">
+                <div class="card-montano">
+                    <h2 class="text-2xl font-bold text-[#1269A8] mb-3 border-b-2 border-[#F7D615] pb-2">¿Qué es un Sistema de Ecuaciones Lineales 2×2?</h2>
+                    <p class="text-base leading-relaxed mb-4">
+                        Una <strong>ecuación lineal con dos incógnitas</strong> es una igualdad algebraica de la forma <span class="math-expr">ax + by = c</span> (donde <span class="math-expr">a</span> y <span class="math-expr">b</span> no son ambos cero). Geométricamente, cada ecuación lineal representa una <strong>línea recta</strong> en el plano cartesiano y posee infinitas parejas de solución <span class="math-expr">(x, y)</span>.
+                    </p>
+                    <p class="text-base leading-relaxed mb-4">
+                        Un <strong>Sistema de Ecuaciones Lineales 2×2</strong> es un conjunto formado por <strong>dos ecuaciones lineales con las mismas dos incógnitas</strong> que deben cumplirse de manera simultánea. Resolver el sistema significa encontrar el par ordenado <span class="math-expr">(x, y)</span> que satisface <strong>ambas ecuaciones al mismo tiempo</strong>.
+                    </p>
+
+                    <!-- Representación Visual Rápida -->
+                    <div class="bg-[#F2F5E9] border-2 border-[#A6B046] rounded-xl p-4 my-4 flex flex-col md:flex-row items-center justify-around gap-4">
+                        <div class="text-center">
+                            <span class="text-xs font-bold uppercase text-[#54887D] block mb-1">Forma Canónica del Sistema 2×2</span>
+                            <div class="sistema-box text-lg">
+                                <div>
+                                    <div>a₁x + b₁y = c₁ &nbsp;← (Ecuación 1)</div>
+                                    <div>a₂x + b₂y = c₂ &nbsp;← (Ecuación 2)</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-sm sm:text-base max-w-md space-y-1">
+                            <p><strong class="text-[#1269A8]">• Incógnitas:</strong> <span class="math-expr text-sm">x</span> e <span class="math-expr text-sm">y</span> (variables de primer grado).</p>
+                            <p><strong class="text-[#1269A8]">• Coeficientes:</strong> <span class="math-expr text-sm">a₁, b₁, a₂, b₂</span> (números reales conocidos).</p>
+                            <p><strong class="text-[#1269A8]">• Términos independientes:</strong> <span class="math-expr text-sm">c₁, c₂</span>.</p>
+                            <p><strong class="text-[#1269A8]">• Solución:</strong> Par ordenado <span class="math-expr text-sm">(x₀, y₀)</span>.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Clasificación de los Sistemas según sus Soluciones (Interpretación Gráfica y Algebraica) -->
+                <div class="card-montano">
+                    <h3 class="text-xl font-bold text-[#1269A8] mb-3">📊 Clasificación de los Sistemas Lineales 2×2 (Interpretación Geométrica y Algebraica)</h3>
+                    <p class="text-sm text-slate-600 mb-4">Al representar ambas rectas en el plano cartesiano, existen exactamente tres posiciones posibles entre ellas:</p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <!-- Caso 1: Compatible Determinado -->
+                        <div class="p-4 bg-emerald-50 border-2 border-[#A6B046] rounded-xl flex flex-col justify-between">
+                            <div>
+                                <span class="badge-nivel badge-basico mb-2">1. Compatible Determinado</span>
+                                <h4 class="font-bold text-lg text-[#1269A8]">Solución Única: (x, y)</h4>
+                                <!-- SVG Ilustrativo Rectas Secantes -->
+                                <div class="my-3 flex justify-center">
+                                    <svg width="140" height="100" viewBox="0 0 140 100" class="bg-white rounded border border-slate-300">
+                                        <line x1="70" y1="5" x2="70" y2="95" stroke="#cbd5e1" stroke-width="1"/>
+                                        <line x1="5" y1="50" x2="135" y2="50" stroke="#cbd5e1" stroke-width="1"/>
+                                        <line x1="20" y1="85" x2="120" y2="15" stroke="#1269A8" stroke-width="2.5"/>
+                                        <line x1="20" y1="20" x2="120" y2="80" stroke="#54887D" stroke-width="2.5"/>
+                                        <circle cx="70" cy="50" r="4.5" fill="#F7D615" stroke="#0f172a" stroke-width="1.5"/>
+                                    </svg>
+                                </div>
+                                <p class="text-sm text-slate-700">Las dos rectas son <strong>secantes</strong> (se cortan en un único punto).</p>
+                            </div>
+                            <div class="mt-3 pt-2 border-t border-emerald-200 text-xs font-bold text-[#54887D]">
+                                Criterio: Pendientes distintas <br><span class="math-expr text-xs mt-1">a₁ / a₂ ≠ b₁ / b₂</span>
+                            </div>
+                        </div>
+
+                        <!-- Caso 2: Compatible Indeterminado -->
+                        <div class="p-4 bg-sky-50 border-2 border-[#88B5C7] rounded-xl flex flex-col justify-between">
+                            <div>
+                                <span class="badge-nivel badge-intermedio mb-2">2. Compatible Indeterminado</span>
+                                <h4 class="font-bold text-lg text-[#1269A8]">Infinitas Soluciones</h4>
+                                <!-- SVG Ilustrativo Rectas Coincidentes -->
+                                <div class="my-3 flex justify-center">
+                                    <svg width="140" height="100" viewBox="0 0 140 100" class="bg-white rounded border border-slate-300">
+                                        <line x1="70" y1="5" x2="70" y2="95" stroke="#cbd5e1" stroke-width="1"/>
+                                        <line x1="5" y1="50" x2="135" y2="50" stroke="#cbd5e1" stroke-width="1"/>
+                                        <line x1="20" y1="80" x2="120" y2="20" stroke="#1269A8" stroke-width="4"/>
+                                        <line x1="20" y1="80" x2="120" y2="20" stroke="#F7D615" stroke-width="1.8" stroke-dasharray="5,4"/>
+                                    </svg>
+                                </div>
+                                <p class="text-sm text-slate-700">Las dos rectas son <strong>coincidentes</strong> (una está exactamente encima de la otra).</p>
+                            </div>
+                            <div class="mt-3 pt-2 border-t border-sky-200 text-xs font-bold text-[#54887D]">
+                                Criterio: Ecuaciones proporcionales <br><span class="math-expr text-xs mt-1">a₁ / a₂ = b₁ / b₂ = c₁ / c₂</span>
+                            </div>
+                        </div>
+
+                        <!-- Caso 3: Incompatible -->
+                        <div class="p-4 bg-amber-50 border-2 border-[#F7D615] rounded-xl flex flex-col justify-between">
+                            <div>
+                                <span class="badge-nivel badge-avanzado mb-2">3. Sistema Incompatible</span>
+                                <h4 class="font-bold text-lg text-[#1269A8]">Sin Solución (∅)</h4>
+                                <!-- SVG Ilustrativo Rectas Paralelas -->
+                                <div class="my-3 flex justify-center">
+                                    <svg width="140" height="100" viewBox="0 0 140 100" class="bg-white rounded border border-slate-300">
+                                        <line x1="70" y1="5" x2="70" y2="95" stroke="#cbd5e1" stroke-width="1"/>
+                                        <line x1="5" y1="50" x2="135" y2="50" stroke="#cbd5e1" stroke-width="1"/>
+                                        <line x1="15" y1="70" x2="115" y2="15" stroke="#1269A8" stroke-width="2.5"/>
+                                        <line x1="25" y1="90" x2="125" y2="35" stroke="#54887D" stroke-width="2.5"/>
+                                    </svg>
+                                </div>
+                                <p class="text-sm text-slate-700">Las dos rectas son <strong>paralelas</strong> (tienen la misma inclinación y nunca se intersecan).</p>
+                            </div>
+                            <div class="mt-3 pt-2 border-t border-amber-200 text-xs font-bold text-[#54887D]">
+                                Criterio: Misma pendiente, distinto corte <br><span class="math-expr text-xs mt-1">a₁ / a₂ = b₁ / b₂ ≠ c₁ / c₂</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Herramientas Introductorias -->
+                <div class="card-montano">
+                    <h3 class="text-xl font-bold text-[#1269A8] mb-3">🛠️ Herramientas Fundamentales de esta Guía Introductoria</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="card-formula">
+                            <h4 class="font-bold text-[#54887D] mb-1">1. Verificación de Soluciones</h4>
+                            <p class="text-xs sm:text-sm text-slate-700">Para probar si un punto <span class="math-expr text-xs">(x₀, y₀)</span> es solución del sistema, se sustituyen ambos valores en las <strong>dos ecuaciones</strong>. Ambas igualdades deben resultar verdaderas.</p>
+                        </div>
+                        <div class="card-formula">
+                            <h4 class="font-bold text-[#54887D] mb-1">2. Forma Pendiente-Ordenada</h4>
+                            <p class="text-xs sm:text-sm text-slate-700">Despejando <span class="math-expr text-xs">y</span> obtenemos <span class="math-expr text-xs">y = mx + b</span>, donde <span class="math-expr text-xs">m</span> es la <strong>pendiente</strong> y <span class="math-expr text-xs">b</span> el <strong>intercepto en Y</strong>. Facilita tabulación y gráfica.</p>
+                        </div>
+                        <div class="card-formula">
+                            <h4 class="font-bold text-[#54887D] mb-1">3. Traducción al Lenguaje Algebraico</h4>
+                            <p class="text-xs sm:text-sm text-slate-700">Cada condición independiente de un problema verbal genera una ecuación lineal con dos variables (<span class="math-expr text-xs">x</span> e <span class="math-expr text-xs">y</span>).</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 2: EJEMPLOS RESUELTOS (15)         -->
+            <!-- ========================================== -->
+            <section id="sec-ejemplos" class="seccion-contenido hidden">
+                <div class="flex flex-wrap items-center justify-between gap-3 mb-4 bg-white p-4 rounded-xl border-2 border-[#54887D]">
+                    <div>
+                        <h2 class="text-xl font-bold text-[#1269A8]">Ejemplos Resueltos Paso a Paso</h2>
+                        <p class="text-sm text-slate-600">Domina la verificación, el análisis gráfico, la clasificación de sistemas y el planteamiento de problemas.</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button class="subtab-btn active" onclick="filtrarSubnivel('ejemplos', 'basico', this)">Nivel Básico (5)</button>
+                        <button class="subtab-btn" onclick="filtrarSubnivel('ejemplos', 'intermedio', this)">Nivel Intermedio (5)</button>
+                        <button class="subtab-btn" onclick="filtrarSubnivel('ejemplos', 'avanzado', this)">Nivel Avanzado (5)</button>
+                    </div>
+                </div>
+
+                <!-- EJEMPLOS BÁSICOS -->
+                <div id="ejemplos-basico" class="subcontenido-ejemplos space-y-4">
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Básico • Ejemplo 1 (Verificación de Solución Válida)</span>
+                        <p class="font-bold text-lg text-[#1269A8]">Comprobar si el par ordenado <span class="math-expr">(4, 2)</span> es solución del sistema: 
+                            <span class="sistema-box text-sm ml-2"><span>3x - 2y = 8 <br> x + 5y = 14</span></span>
+                        </p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Sustituir <span class="math-expr">x = 4, y = 2</span> en Ec. 1):</strong> <span class="math-expr">3(4) - 2(2) = 12 - 4 = 8</span> (Verdadero: <span class="math-expr">8 = 8</span>).</p>
+                            <p><strong>Paso 2 (Sustituir <span class="math-expr">x = 4, y = 2</span> en Ec. 2):</strong> <span class="math-expr">(4) + 5(2) = 4 + 10 = 14</span> (Verdadero: <span class="math-expr">14 = 14</span>).</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: Sí, (4, 2) es solución del sistema porque satisface ambas ecuaciones.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Básico • Ejemplo 2 (Verificación de Punto No Válido)</span>
+                        <p class="font-bold text-lg text-[#1269A8]">Determinar si el punto <span class="math-expr">(5, -1)</span> es solución del sistema: 
+                            <span class="sistema-box text-sm ml-2"><span>2x + y = 9 <br> 4x - 3y = 17</span></span>
+                        </p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Evaluar Ec. 1):</strong> <span class="math-expr">2(5) + (-1) = 10 - 1 = 9</span> (Cumple la primera ecuación).</p>
+                            <p><strong>Paso 2 (Evaluar Ec. 2):</strong> <span class="math-expr">4(5) - 3(-1) = 20 + 3 = 23 ≠ 17</span> (No cumple la segunda ecuación).</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: No es solución del sistema (pertenece solo a la primera recta, no al punto de intersección).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Básico • Ejemplo 3 (Despeje a Forma Pendiente-Ordenada)</span>
+                        <p class="font-bold text-lg text-[#1269A8]">Expresar cada ecuación del sistema en la forma <span class="math-expr">y = mx + b</span> e identificar su pendiente (<span class="math-expr">m</span>) e intercepto (<span class="math-expr">b</span>): 
+                            <span class="sistema-box text-sm ml-2"><span>4x + 2y = 10 <br> -6x + 3y = 12</span></span>
+                        </p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>Ecuación 1:</strong> <span class="math-expr">2y = -4x + 10 ➔ y = -2x + 5</span>. Pendiente <span class="math-expr">m₁ = -2</span>, intercepto <span class="math-expr">b₁ = 5</span>.</p>
+                            <p><strong>Ecuación 2:</strong> <span class="math-expr">3y = 6x + 12 ➔ y = 2x + 4</span>. Pendiente <span class="math-expr">m₂ = 2</span>, intercepto <span class="math-expr">b₂ = 4</span>.</p>
+                            <p class="font-bold text-[#54887D]">Conclusión: Como m₁ ≠ m₂ (-2 ≠ 2), las rectas se cortan en un único punto (Compatible Determinado).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Básico • Ejemplo 4 (Completar Coordenadas en una Ecuación Lineal)</span>
+                        <p class="font-bold text-lg text-[#1269A8]">Dada la ecuación lineal <span class="math-expr">3x - y = 7</span>, hallar los valores faltantes en los pares ordenados <span class="math-expr">(2, y)</span> y <span class="math-expr">(x, 5)</span>.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>Para <span class="math-expr">x = 2</span>:</strong> <span class="math-expr">3(2) - y = 7 ➔ 6 - y = 7 ➔ y = -1</span>. Punto: <span class="math-expr">(2, -1)</span>.</p>
+                            <p><strong>Para <span class="math-expr">y = 5</span>:</strong> <span class="math-expr">3x - 5 = 7 ➔ 3x = 12 ➔ x = 4</span>. Punto: <span class="math-expr">(4, 5)</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: Los pares ordenados son (2, -1) y (4, 5).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Básico • Ejemplo 5 (Planteamiento Verbal Introductorio)</span>
+                        <p class="font-bold text-lg text-[#1269A8]">Traducir a un sistema de ecuaciones 2×2: <em>"La suma de dos números es 28 y el doble del mayor menos el menor es 17"</em>.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>Definición de variables:</strong> Sea <span class="math-expr">x</span> el número mayor e <span class="math-expr">y</span> el número menor.</p>
+                            <p><strong>Condición 1 ("La suma es 28"):</strong> <span class="math-expr">x + y = 28</span>.</p>
+                            <p><strong>Condición 2 ("El doble del mayor menos el menor es 17"):</strong> <span class="math-expr">2x - y = 17</span>.</p>
+                            <p class="font-bold text-[#54887D]">Sistema planteado: { x + y = 28 ; 2x - y = 17 }.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EJEMPLOS INTERMEDIOS -->
+                <div id="ejemplos-intermedio" class="subcontenido-ejemplos hidden space-y-4">
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Intermedio • Ejemplo 1 (Clasificación por Razón de Coeficientes)</span>
+                        <p class="font-bold text-lg text-[#1269A8]">Sin graficar, clasifica el siguiente sistema en Compatible Determinado, Indeterminado o Incompatible: 
+                            <span class="sistema-box text-sm ml-2"><span>3x - 6y = 12 <br> -2x + 4y = 5</span></span>
+                        </p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Comparar razones de coeficientes):</strong> <span class="math-expr">a₁/a₂ = 3 / (-2) = -1.5</span>; &nbsp; <span class="math-expr">b₁/b₂ = -6 / 4 = -1.5</span>.</p>
+                            <p><strong>Paso 2 (Comparar términos independientes):</strong> <span class="math-expr">c₁/c₂ = 12 / 5 = 2.4</span>.</p>
+                            <p><strong>Paso 3 (Criterio):</strong> Como <span class="math-expr">a₁/a₂ = b₁/b₂ ≠ c₁/c₂</span> (<span class="math-expr">-1.5 = -1.5 ≠ 2.4</span>), las rectas son paralelas.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: Es un Sistema Incompatible (No tiene solución).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Intermedio • Ejemplo 2 (Detección de Rectas Coincidentes)</span>
+                        <p class="font-bold text-lg text-[#1269A8]">Analiza el número de soluciones del sistema: 
+                            <span class="sistema-box text-sm ml-2"><span>4x + 10y = 18 <br> 6x + 15y = 27</span></span>
+                        </p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Simplificación de razones:</strong> <span class="math-expr">4/6 = 2/3</span>; &nbsp; <span class="math-expr">10/15 = 2/3</span>; &nbsp; <span class="math-expr">18/27 = 2/3</span>.</p>
+                            <p><strong>Análisis:</strong> Las tres razones son idénticas (<span class="math-expr">2/3</span>). Si multiplicamos la Ec. 1 por <span class="math-expr">1.5</span> obtenemos exactamente la Ec. 2.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: Es un Sistema Compatible Indeterminado (tiene infinitas soluciones; las rectas son coincidentes).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Intermedio • Ejemplo 3 (Resolución por Tabulación y Punto Común)</span>
+                        <p class="font-bold text-lg text-[#1269A8]">Encuentra la solución del sistema mediante tabulación para <span class="math-expr">x ∈ {0, 1, 2, 3}</span>: 
+                            <span class="sistema-box text-sm ml-2"><span>y = 2x + 1 <br> x + y = 7</span></span>
+                        </p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Despejamos Ec. 2:</strong> <span class="math-expr">y = 7 - x</span>.</p>
+                            <p><strong>Tabla Recta 1 (<span class="math-expr">y = 2x + 1</span>):</strong> <span class="math-expr">(0, 1), (1, 3), <strong>(2, 5)</strong>, (3, 7)</span>.</p>
+                            <p><strong>Tabla Recta 2 (<span class="math-expr">y = 7 - x</span>):</strong> <span class="math-expr">(0, 7), (1, 6), <strong>(2, 5)</strong>, (3, 4)</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: El par ordenado que coincide en ambas tablas es (2, 5), por lo tanto x = 2, y = 5.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Intermedio • Ejemplo 4 (Verificación con Coordenadas Fraccionarias)</span>
+                        <p class="font-bold text-lg text-[#1269A8]">Verificar si el punto <span class="math-expr">(3/2, -1/3)</span> es la intersección de las rectas: 
+                            <span class="sistema-box text-sm ml-2"><span>4x + 6y = 4 <br> 2x - 9y = 6</span></span>
+                        </p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Sustitución en Ec. 1:</strong> <span class="math-expr">4(3/2) + 6(-1/3) = 6 - 2 = 4</span> (Verdadero).</p>
+                            <p><strong>Sustitución en Ec. 2:</strong> <span class="math-expr">2(3/2) - 9(-1/3) = 3 + 3 = 6</span> (Verdadero).</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: Sí, (3/2, -1/3) es la solución exacta del sistema.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Intermedio • Ejemplo 5 (Modelado de Boletos / Recaudación)</span>
+                        <p class="font-bold text-lg text-[#1269A8]">Plantear el sistema 2×2: <em>"En la kermés del Colegio Montano se vendieron 180 entradas entre adultos (Q25) y estudiantes (Q15), recaudando un total de Q3,300"</em>.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Variables:</strong> <span class="math-expr">x</span> = entradas de adultos; <span class="math-expr">y</span> = entradas de estudiantes.</p>
+                            <p><strong>Ecuación de cantidad:</strong> <span class="math-expr">x + y = 180</span>.</p>
+                            <p><strong>Ecuación de dinero recaudado:</strong> <span class="math-expr">25x + 15y = 3300</span>.</p>
+                            <p class="font-bold text-[#54887D]">Sistema planteado: { x + y = 180 ; 25x + 15y = 3300 }.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EJEMPLOS AVANZADOS -->
+                <div id="ejemplos-avanzado" class="subcontenido-ejemplos hidden space-y-4">
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Avanzado • Ejemplo 1 (Hallar Coeficientes a partir de la Solución)</span>
+                        <p class="font-bold text-lg text-[#1269A8]">Si el par ordenado <span class="math-expr">(3, -2)</span> es la solución del sistema, hallar los valores de <span class="math-expr">a</span> y <span class="math-expr">b</span>: 
+                            <span class="sistema-box text-sm ml-2"><span>ax + 4y = 7 <br> 5x - by = 21</span></span>
+                        </p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Concepto clave:</strong> Como <span class="math-expr">(3, -2)</span> es solución, al sustituir <span class="math-expr">x = 3</span> e <span class="math-expr">y = -2</span> ambas igualdades deben cumplirse.</p>
+                            <p><strong>En Ec. 1:</strong> <span class="math-expr">a(3) + 4(-2) = 7 ➔ 3a - 8 = 7 ➔ 3a = 15 ➔ a = 5</span>.</p>
+                            <p><strong>En Ec. 2:</strong> <span class="math-expr">5(3) - b(-2) = 21 ➔ 15 + 2b = 21 ➔ 2b = 6 ➔ b = 3</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: a = 5 y b = 3.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Avanzado • Ejemplo 2 (Parámetro para Sistema Incompatible / Paralelas)</span>
+                        <p class="font-bold text-lg text-[#1269A8]">Determinar el valor del parámetro <span class="math-expr">k</span> para que el sistema NO tenga solución (rectas paralelas): 
+                            <span class="sistema-box text-sm ml-2"><span>kx + 6y = 14 <br> 4x + 3y = 5</span></span>
+                        </p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Condición de paralelismo:</strong> <span class="math-expr">a₁/a₂ = b₁/b₂ ≠ c₁/c₂</span>.</p>
+                            <p><strong>Planteamiento:</strong> <span class="math-expr">k / 4 = 6 / 3 ➔ k / 4 = 2 ➔ k = 8</span>.</p>
+                            <p><strong>Verificación del corte:</strong> <span class="math-expr">c₁/c₂ = 14 / 5 = 2.8 ≠ 2</span> (Se confirma que no son coincidentes).</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: k = 8.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Avanzado • Ejemplo 3 (Parámetros para Infinitas Soluciones)</span>
+                        <p class="font-bold text-lg text-[#1269A8]">Hallar <span class="math-expr">m</span> y <span class="math-expr">n</span> para que el siguiente sistema sea Compatible Indeterminado: 
+                            <span class="sistema-box text-sm ml-2"><span>6x - 9y = 15 <br> mx + 6y = n</span></span>
+                        </p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Condición de coincidencia:</strong> <span class="math-expr">6 / m = -9 / 6 = 15 / n</span>.</p>
+                            <p><strong>Razón constante:</strong> <span class="math-expr">-9 / 6 = -3 / 2</span>.</p>
+                            <p><strong>Despeje de <span class="math-expr">m</span>:</strong> <span class="math-expr">6 / m = -3 / 2 ➔ -3m = 12 ➔ m = -4</span>.</p>
+                            <p><strong>Despeje de <span class="math-expr">n</span>:</strong> <span class="math-expr">15 / n = -3 / 2 ➔ -3n = 30 ➔ n = -10</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: m = -4 y n = -10.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Avanzado • Ejemplo 4 (Ecuación de la Recta por Dos Puntos como Sistema)</span>
+                        <p class="font-bold text-lg text-[#1269A8]">Una recta de forma <span class="math-expr">y = mx + b</span> pasa por los puntos <span class="math-expr">(2, 7)</span> y <span class="math-expr">(5, 16)</span>. Plantear el sistema en <span class="math-expr">m</span> y <span class="math-expr">b</span> y verificar que <span class="math-expr">m = 3, b = 1</span> es su solución.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Planteamiento sustituyendo <span class="math-expr">(x, y)</span>:</strong><br>
+                            Punto 1 <span class="math-expr">(2, 7)</span>: <span class="math-expr">2m + b = 7</span><br>
+                            Punto 2 <span class="math-expr">(5, 16)</span>: <span class="math-expr">5m + b = 16</span></p>
+                            <p><strong>Verificación de <span class="math-expr">(3, 1)</span>:</strong> <span class="math-expr">2(3) + 1 = 7</span> (Cumple) y <span class="math-expr">5(3) + 1 = 16</span> (Cumple).</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Sistema { 2m + b = 7 ; 5m + b = 16 }; la recta es y = 3x + 1.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Avanzado • Ejemplo 5 (Modelado de Edades y Proporciones)</span>
+                        <p class="font-bold text-lg text-[#1269A8]">Plantear el sistema lineal correspondiente: <em>"Hace 4 años la edad de un padre era el triple de la edad de su hijo, y dentro de 6 años será el doble"</em>.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Variables actuales:</strong> <span class="math-expr">x</span> = edad actual del padre; <span class="math-expr">y</span> = edad actual del hijo.</p>
+                            <p><strong>Condición 1 (Hace 4 años):</strong> <span class="math-expr">x - 4 = 3(y - 4) ➔ x - 4 = 3y - 12 ➔ x - 3y = -8</span>.</p>
+                            <p><strong>Condición 2 (Dentro de 6 años):</strong> <span class="math-expr">x + 6 = 2(y + 6) ➔ x + 6 = 2y + 12 ➔ x - 2y = 6</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Sistema canónico: { x - 3y = -8 ; x - 2y = 6 }.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 3: EJERCICIOS PRÁCTICOS (15)       -->
+            <!-- ========================================== -->
+            <section id="sec-ejercicios" class="seccion-contenido hidden">
+                <div class="flex flex-wrap items-center justify-between gap-3 mb-4 bg-white p-4 rounded-xl border-2 border-[#54887D]">
+                    <div>
+                        <h2 class="text-xl font-bold text-[#1269A8]">Práctica Guiada en Pizarra</h2>
+                        <p class="text-sm text-slate-600">Resuelve los ejercicios en tu cuaderno y valida tus respuestas paso a paso.</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button class="subtab-btn active" onclick="filtrarSubnivel('ejercicios', 'basico', this)">Básico (5)</button>
+                        <button class="subtab-btn" onclick="filtrarSubnivel('ejercicios', 'intermedio', this)">Intermedio (5)</button>
+                        <button class="subtab-btn" onclick="filtrarSubnivel('ejercicios', 'avanzado', this)">Avanzado (5)</button>
+                    </div>
+                </div>
+
+                <!-- EJERCICIOS BÁSICOS -->
+                <div id="ejercicios-basico" class="subcontenido-ejercicios space-y-4">
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 1</span>
+                        <p class="font-semibold text-base">Comprueba si el punto <span class="math-expr">(2, -3)</span> es solución del sistema: <span class="math-expr">{ 5x + 2y = 4 ; 3x - y = 9 }</span>.</p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-eb1', this)">Mostrar solución</button>
+                        <div id="sol-eb1" class="solucion-box">
+                            <p><strong>Ec. 1:</strong> <span class="math-expr">5(2) + 2(-3) = 10 - 6 = 4</span> (Cumple).<br>
+                            <strong>Ec. 2:</strong> <span class="math-expr">3(2) - (-3) = 6 + 3 = 9</span> (Cumple).</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Sí, (2, -3) es solución del sistema.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 2</span>
+                        <p class="font-semibold text-base">Determina si <span class="math-expr">(-1, 4)</span> es solución del sistema: <span class="math-expr">{ 2x + 3y = 10 ; 4x - y = 0 }</span>.</p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-eb2', this)">Mostrar solución</button>
+                        <div id="sol-eb2" class="solucion-box">
+                            <p><strong>Ec. 1:</strong> <span class="math-expr">2(-1) + 3(4) = -2 + 12 = 10</span> (Cumple).<br>
+                            <strong>Ec. 2:</strong> <span class="math-expr">4(-1) - 4 = -8 ≠ 0</span> (No cumple).</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: No es solución del sistema.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 3</span>
+                        <p class="font-semibold text-base">Despeja <span class="math-expr">y</span> en ambas ecuaciones para llevarlas a la forma <span class="math-expr">y = mx + b</span>: <span class="math-expr">{ 6x + 3y = 15 ; -4x + 2y = 8 }</span>.</p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-eb3', this)">Mostrar solución</button>
+                        <div id="sol-eb3" class="solucion-box">
+                            <p><strong>Ec. 1:</strong> <span class="math-expr">3y = -6x + 15 ➔ y = -2x + 5</span> (<span class="math-expr">m₁ = -2, b₁ = 5</span>).<br>
+                            <strong>Ec. 2:</strong> <span class="math-expr">2y = 4x + 8 ➔ y = 2x + 4</span> (<span class="math-expr">m₂ = 2, b₂ = 4</span>).</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: y = -2x + 5  y  y = 2x + 4.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 4</span>
+                        <p class="font-semibold text-base">Completa los pares ordenados para que pertenezcan a la recta <span class="math-expr">2x + 5y = 16</span>: <span class="math-expr">(3, y)</span> y <span class="math-expr">(x, 4)</span>.</p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-eb4', this)">Mostrar solución</button>
+                        <div id="sol-eb4" class="solucion-box">
+                            <p><strong>Si <span class="math-expr">x = 3</span>:</strong> <span class="math-expr">2(3) + 5y = 16 ➔ 5y = 10 ➔ y = 2</span>.<br>
+                            <strong>Si <span class="math-expr">y = 4</span>:</strong> <span class="math-expr">2x + 5(4) = 16 ➔ 2x = -4 ➔ x = -2</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Los puntos son (3, 2) y (-2, 4).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 5</span>
+                        <p class="font-semibold text-base">Plantea el sistema de ecuaciones: <em>"La diferencia de dos números es 11 y la suma del triple del primero más el segundo es 45"</em>.</p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-eb5', this)">Mostrar solución</button>
+                        <div id="sol-eb5" class="solucion-box">
+                            <p><strong>Planteamiento:</strong> Sean <span class="math-expr">x</span> el primer número e <span class="math-expr">y</span> el segundo.<br>
+                            Condición 1: <span class="math-expr">x - y = 11</span> | Condición 2: <span class="math-expr">3x + y = 45</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: { x - y = 11 ; 3x + y = 45 }.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EJERCICIOS INTERMEDIOS -->
+                <div id="ejercicios-intermedio" class="subcontenido-ejercicios hidden space-y-4">
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 1</span>
+                        <p class="font-semibold text-base">Clasifica el siguiente sistema según su número de soluciones: <span class="math-expr">{ 4x - 2y = 10 ; -6x + 3y = -15 }</span>.</p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-ei1', this)">Mostrar solución</button>
+                        <div id="sol-ei1" class="solucion-box">
+                            <p><strong>Razones:</strong> <span class="math-expr">4/(-6) = -2/3</span>; &nbsp; <span class="math-expr">-2/3 = -2/3</span>; &nbsp; <span class="math-expr">10/(-15) = -2/3</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Compatible Indeterminado (infinitas soluciones; rectas coincidentes).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 2</span>
+                        <p class="font-semibold text-base">Clasifica el sistema: <span class="math-expr">{ 5x + 10y = 20 ; 2x + 4y = 12 }</span>.</p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-ei2', this)">Mostrar solución</button>
+                        <div id="sol-ei2" class="solucion-box">
+                            <p><strong>Razones:</strong> <span class="math-expr">5/2 = 2.5</span>; &nbsp; <span class="math-expr">10/4 = 2.5</span>; &nbsp; <span class="math-expr">20/12 = 5/3 ≈ 1.67</span>. Como <span class="math-expr">a₁/a₂ = b₁/b₂ ≠ c₁/c₂</span>, son rectas paralelas.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Sistema Incompatible (sin solución).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 3</span>
+                        <p class="font-semibold text-base">Mediante tabulación para <span class="math-expr">x ∈ {1, 2, 3, 4}</span>, halla la solución común de: <span class="math-expr">{ y = 3x - 2 ; x + y = 10 }</span>.</p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-ei3', this)">Mostrar solución</button>
+                        <div id="sol-ei3" class="solucion-box">
+                            <p><strong>Tabla 1 (<span class="math-expr">y = 3x - 2</span>):</strong> <span class="math-expr">(1, 1), (2, 4), <strong>(3, 7)</strong>, (4, 10)</span>.<br>
+                            <strong>Tabla 2 (<span class="math-expr">y = 10 - x</span>):</strong> <span class="math-expr">(1, 9), (2, 8), <strong>(3, 7)</strong>, (4, 6)</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: La solución es el punto (3, 7) (x = 3, y = 7).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 4</span>
+                        <p class="font-semibold text-base">Verifica si el punto fraccionario <span class="math-expr">(-1/2, 2/3)</span> es solución de: <span class="math-expr">{ 6x + 9y = 3 ; 4x - 3y = -4 }</span>.</p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-ei4', this)">Mostrar solución</button>
+                        <div id="sol-ei4" class="solucion-box">
+                            <p><strong>Ec. 1:</strong> <span class="math-expr">6(-1/2) + 9(2/3) = -3 + 6 = 3</span> (Cumple).<br>
+                            <strong>Ec. 2:</strong> <span class="math-expr">4(-1/2) - 3(2/3) = -2 - 2 = -4</span> (Cumple).</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Sí, (-1/2, 2/3) es solución del sistema.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 5</span>
+                        <p class="font-semibold text-base">Plantea el sistema 2×2: <em>"Un terreno rectangular tiene un perímetro de 64 metros, y su largo mide 6 metros más que el doble de su ancho"</em>.</p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-ei5', this)">Mostrar solución</button>
+                        <div id="sol-ei5" class="solucion-box">
+                            <p><strong>Variables:</strong> <span class="math-expr">x</span> = largo; <span class="math-expr">y</span> = ancho.<br>
+                            Perímetro: <span class="math-expr">2x + 2y = 64</span> | Relación de lados: <span class="math-expr">x = 2y + 6 ➔ x - 2y = 6</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: { 2x + 2y = 64 ; x - 2y = 6 }.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EJERCICIOS AVANZADOS -->
+                <div id="ejercicios-avanzado" class="subcontenido-ejercicios hidden space-y-4">
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 1</span>
+                        <p class="font-semibold text-base">Sabiendo que <span class="math-expr">(-2, 4)</span> es la solución del sistema, determina los coeficientes <span class="math-expr">p</span> y <span class="math-expr">q</span>: <span class="math-expr">{ px + 3y = 6 ; 5x - qy = -22 }</span>.</p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-ea1', this)">Mostrar solución</button>
+                        <div id="sol-ea1" class="solucion-box">
+                            <p><strong>En Ec. 1:</strong> <span class="math-expr">p(-2) + 3(4) = 6 ➔ -2p + 12 = 6 ➔ -2p = -6 ➔ p = 3</span>.<br>
+                            <strong>En Ec. 2:</strong> <span class="math-expr">5(-2) - q(4) = -22 ➔ -10 - 4q = -22 ➔ -4q = -12 ➔ q = 3</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: p = 3 y q = 3.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 2</span>
+                        <p class="font-semibold text-base">Halla el valor de <span class="math-expr">k</span> para que el sistema NO tenga solución: <span class="math-expr">{ 3x + ky = 11 ; 6x - 8y = 5 }</span>.</p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-ea2', this)">Mostrar solución</button>
+                        <div id="sol-ea2" class="solucion-box">
+                            <p><strong>Condición:</strong> <span class="math-expr">3 / 6 = k / (-8) ➔ 1 / 2 = k / (-8) ➔ 2k = -8 ➔ k = -4</span>. (Además <span class="math-expr">11/5 ≠ 1/2</span>).</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: k = -4.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 3</span>
+                        <p class="font-semibold text-base">Determina los valores de <span class="math-expr">a</span> y <span class="math-expr">b</span> para que el sistema tenga infinitas soluciones: <span class="math-expr">{ ax - 4y = 10 ; 9x + 6y = b }</span>.</p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-ea3', this)">Mostrar solución</button>
+                        <div id="sol-ea3" class="solucion-box">
+                            <p><strong>Razón común:</strong> <span class="math-expr">-4 / 6 = -2 / 3</span>.<br>
+                            <strong>Para <span class="math-expr">a</span>:</strong> <span class="math-expr">a / 9 = -2 / 3 ➔ 3a = -18 ➔ a = -6</span>.<br>
+                            <strong>Para <span class="math-expr">b</span>:</strong> <span class="math-expr">10 / b = -2 / 3 ➔ -2b = 30 ➔ b = -15</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: a = -6 y b = -15.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 4</span>
+                        <p class="font-semibold text-base">Una recta de ecuación <span class="math-expr">y = mx + b</span> pasa por los puntos <span class="math-expr">(-1, -4)</span> y <span class="math-expr">(3, 8)</span>. Plantea el sistema en <span class="math-expr">m</span> y <span class="math-expr">b</span>, y verifica que <span class="math-expr">(3, -1)</span> es su solución.</p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-ea4', this)">Mostrar solución</button>
+                        <div id="sol-ea4" class="solucion-box">
+                            <p><strong>Sistema:</strong> <span class="math-expr">{ -m + b = -4 ; 3m + b = 8 }</span>.<br>
+                            <strong>Verificación de <span class="math-expr">m = 3, b = -1</span>:</strong> <span class="math-expr">-(3) + (-1) = -4</span> (Cumple) y <span class="math-expr">3(3) + (-1) = 8</span> (Cumple).</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Sistema { -m + b = -4 ; 3m + b = 8 }; ecuación y = 3x - 1.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 5</span>
+                        <p class="font-semibold text-base">Plantea el sistema canónico: <em>"En un laboratorio se mezclan dos soluciones ácidas al 20% y al 50% de concentración para obtener 60 litros de una mezcla al 30%"</em>.</p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-ea5', this)">Mostrar solución</button>
+                        <div id="sol-ea5" class="solucion-box">
+                            <p><strong>Variables:</strong> <span class="math-expr">x</span> = litros al 20%; <span class="math-expr">y</span> = litros al 50%.<br>
+                            <strong>Volumen total:</strong> <span class="math-expr">x + y = 60</span>.<br>
+                            <strong>Ácido puro:</strong> <span class="math-expr">0.20x + 0.50y = 0.30(60) ➔ 0.2x + 0.5y = 18</span> (o <span class="math-expr">2x + 5y = 180</span>).</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: { x + y = 60 ; 2x + 5y = 180 }.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 4: PREGUNTAS DE REFLEXIÓN CRÍTICA  -->
+            <!-- ========================================== -->
+            <section id="sec-reflexion" class="seccion-contenido hidden">
+                <div class="card-montano">
+                    <h2 class="text-2xl font-bold text-[#1269A8] mb-2">🧠 Análisis Conceptual y Pensamiento Crítico</h2>
+                    <p class="text-sm text-slate-600 mb-4">Reflexiona sobre la estructura algebraica y geométrica de los sistemas antes de revisar la explicación.</p>
+
+                    <div class="space-y-4">
+                        <div class="p-4 bg-[#F2F5E9] rounded-xl border-2 border-[#54887D]">
+                            <h3 class="font-bold text-lg text-[#1269A8]">1. ¿Por qué una sola ecuación con dos incógnitas no basta?</h3>
+                            <p class="mt-1">Si tenemos únicamente la ecuación <span class="math-expr">x + y = 10</span>, ¿cuántas parejas <span class="math-expr">(x, y)</span> la cumplen? ¿Por qué necesitamos una segunda ecuación independiente para encontrar una única respuesta?</p>
+                            <button class="btn-solucion" onclick="toggleSolucion('ref-1', this)">Ver análisis conceptual</button>
+                            <div id="ref-1" class="solucion-box">
+                                <p><strong>Análisis:</strong> Una sola ecuación lineal con dos incógnitas tiene <strong>infinitas soluciones</strong> (todos los puntos que forman una recta). Cada ecuación aporta una restricción; al cruzar dos restricciones independientes (dos rectas no paralelas), el conjunto de soluciones se reduce al único punto donde ambas se intersecan.</p>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-[#F2F5E9] rounded-xl border-2 border-[#54887D]">
+                            <h3 class="font-bold text-lg text-[#1269A8]">2. Rectas Paralelas y Contradicciones Algebraicas</h3>
+                            <p class="mt-1">Si intentas resolver un sistema incompatible (dos rectas paralelas como <span class="math-expr">x + y = 5</span> y <span class="math-expr">x + y = 9</span>), ¿qué absurdo matemático aparecería al restar ambas ecuaciones?</p>
+                            <button class="btn-solucion" onclick="toggleSolucion('ref-2', this)">Ver análisis conceptual</button>
+                            <div id="ref-2" class="solucion-box">
+                                <p><strong>Análisis:</strong> Al restarlas se eliminan ambas variables y queda una falsedad lógica como <span class="math-expr">0 = 4</span>. Esto demuestra algebraicamente que no existe ningún par <span class="math-expr">(x, y)</span> cuya suma sea 5 y 9 simultáneamente.</p>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-[#F2F5E9] rounded-xl border-2 border-[#54887D]">
+                            <h3 class="font-bold text-lg text-[#1269A8]">3. ¿Pueden dos rectas distintas cortarse en exactamente DOS puntos?</h3>
+                            <p class="mt-1">En geometría euclidiana, ¿es posible diseñar un sistema de dos ecuaciones <strong>lineales</strong> que tenga exactamente 2 soluciones?</p>
+                            <button class="btn-solucion" onclick="toggleSolucion('ref-3', this)">Ver análisis conceptual</button>
+                            <div id="ref-3" class="solucion-box">
+                                <p><strong>Análisis:</strong> No es posible. Dos líneas rectas en un plano pueden cortarse en <strong>0 puntos</strong> (paralelas), en <strong>1 punto</strong> (secantes) o en <strong>infinitos puntos</strong> (coincidentes). Para tener 2 intersecciones al menos una ecuación tendría que ser curva (cuadrática o superior).</p>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-[#F2F5E9] rounded-xl border-2 border-[#54887D]">
+                            <h3 class="font-bold text-lg text-[#1269A8]">4. La importancia de verificar en AMBAS ecuaciones</h3>
+                            <p class="mt-1">Un estudiante encuentra un punto <span class="math-expr">(x, y)</span>, lo prueba en la primera ecuación y como la igualdad se cumple, da por terminado su examen. ¿Por qué este procedimiento es insuficiente?</p>
+                            <button class="btn-solucion" onclick="toggleSolucion('ref-4', this)">Ver análisis conceptual</button>
+                            <div id="ref-4" class="solucion-box">
+                                <p><strong>Análisis:</strong> Porque existen infinitos puntos sobre la primera recta que <strong>no pertenecen</strong> a la segunda recta. Un punto solo es solución del <em>sistema</em> si pertenece simultáneamente a ambas rectas.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 5: EVALUACIÓN FORMATIVA            -->
+            <!-- ========================================== -->
+            <section id="sec-evaluacion" class="seccion-contenido hidden">
+                <div class="card-montano">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b-2 border-[#F7D615] pb-3 mb-4">
+                        <div>
+                            <h2 class="text-2xl font-bold text-[#1269A8]">✅ Evaluación Formativa de Comprobación</h2>
+                            <p class="text-sm text-slate-600">Comprueba tu dominio de los conceptos fundamentales de la Tercera Unidad.</p>
+                        </div>
+                        <span class="badge-nivel badge-avanzado mt-2 sm:mt-0">5 Reactivos de Diagnóstico</span>
+                    </div>
+
+                    <div class="space-y-4">
+                        <!-- Pregunta 1 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 1 • Verificación de Soluciones</span>
+                            <p class="font-bold text-base mt-1">¿Cuál de los siguientes pares ordenados es solución del sistema <span class="math-expr">{ 4x - y = 11 ; 2x + 3y = -5 }</span>? <br><em>Opciones:</em> A) <span class="math-expr">(3, 1)</span> &nbsp;|&nbsp; B) <span class="math-expr">(2, -3)</span> &nbsp;|&nbsp; C) <span class="math-expr">(1, -7)</span></p>
+                            <button class="btn-solucion" onclick="toggleSolucion('eval-1', this)">Mostrar solución</button>
+                            <div id="eval-1" class="solucion-box">
+                                <p><strong>Evaluación de B) <span class="math-expr">(2, -3)</span>:</strong><br>
+                                Ec. 1: <span class="math-expr">4(2) - (-3) = 8 + 3 = 11</span> (Cumple).<br>
+                                Ec. 2: <span class="math-expr">2(2) + 3(-3) = 4 - 9 = -5</span> (Cumple).</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: Opción B) (2, -3).</p>
+                            </div>
+                        </div>
+
+                        <!-- Pregunta 2 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 2 • Clasificación de Sistemas</span>
+                            <p class="font-bold text-base mt-1">Clasifica el sistema <span class="math-expr">{ 6x - 9y = 12 ; -4x + 6y = 5 }</span> e indica cómo son sus gráficas en el plano cartesiano.</p>
+                            <button class="btn-solucion" onclick="toggleSolucion('eval-2', this)">Mostrar solución</button>
+                            <div id="eval-2" class="solucion-box">
+                                <p><strong>Razones:</strong> <span class="math-expr">6/(-4) = -3/2</span>; &nbsp; <span class="math-expr">-9/6 = -3/2</span>; &nbsp; <span class="math-expr">12/5 = 2.4</span>.<br>
+                                Como <span class="math-expr">a₁/a₂ = b₁/b₂ ≠ c₁/c₂</span>, el sistema no tiene solución.</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: Sistema Incompatible; sus gráficas son dos rectas paralelas.</p>
+                            </div>
+                        </div>
+
+                        <!-- Pregunta 3 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 3 • Cálculo de Coeficientes</span>
+                            <p class="font-bold text-base mt-1">Si <span class="math-expr">(4, -1)</span> es solución del sistema <span class="math-expr">{ ax + 5y = 11 ; 3x - by = 16 }</span>, determina los valores de <span class="math-expr">a</span> y <span class="math-expr">b</span>.</p>
+                            <button class="btn-solucion" onclick="toggleSolucion('eval-3', this)">Mostrar solución</button>
+                            <div id="eval-3" class="solucion-box">
+                                <p><strong>En Ec. 1:</strong> <span class="math-expr">4a + 5(-1) = 11 ➔ 4a = 16 ➔ a = 4</span>.<br>
+                                <strong>En Ec. 2:</strong> <span class="math-expr">3(4) - b(-1) = 16 ➔ 12 + b = 16 ➔ b = 4</span>.</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: a = 4 y b = 4.</p>
+                            </div>
+                        </div>
+
+                        <!-- Pregunta 4 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 4 • Parámetro de Indeterminación</span>
+                            <p class="font-bold text-base mt-1">¿Qué valor debe tomar <span class="math-expr">k</span> para que el sistema <span class="math-expr">{ 2x + 5y = 8 ; 6x + ky = 24 }</span> tenga infinitas soluciones?</p>
+                            <button class="btn-solucion" onclick="toggleSolucion('eval-4', this)">Mostrar solución</button>
+                            <div id="eval-4" class="solucion-box">
+                                <p><strong>Proporcionalidad:</strong> <span class="math-expr">2 / 6 = 5 / k = 8 / 24 = 1 / 3</span>.<br>
+                                Despejando: <span class="math-expr">5 / k = 1 / 3 ➔ k = 15</span>.</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: k = 15.</p>
+                            </div>
+                        </div>
+
+                        <!-- Pregunta 5 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 5 • Modelado Algebraico</span>
+                            <p class="font-bold text-base mt-1">Plantea el sistema de ecuaciones: <em>"En una granja hay gallinas y conejos. Si en total se cuentan 42 cabezas y 116 patas, ¿cuál es el sistema que modela el problema?"</em></p>
+                            <button class="btn-solucion" onclick="toggleSolucion('eval-5', this)">Mostrar solución</button>
+                            <div id="eval-5" class="solucion-box">
+                                <p><strong>Variables:</strong> <span class="math-expr">x</span> = gallinas (2 patas); <span class="math-expr">y</span> = conejos (4 patas).<br>
+                                Total de animales (cabezas): <span class="math-expr">x + y = 42</span>.<br>
+                                Total de patas: <span class="math-expr">2x + 4y = 116</span>.</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: { x + y = 42 ; 2x + 4y = 116 }.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Pie de Pizarra -->
+        <footer class="bg-[#1269A8] text-white text-center py-3 px-4 text-xs sm:text-sm border-t-2 border-[#F7D615]">
+            <strong>Colegio Montano</strong> • Departamento de Matemática • Tercera Unidad • Pizarra Digital Interactiva
+        </footer>
+    </div>
+
+    <!-- Scripts de Interactividad -->
+    <script>
+        /**
+         * Cambia entre las pestañas principales de la pizarra (Teoría, Ejemplos, Ejercicios, Reflexión, Evaluación).
+         */
+        function cambiarSeccion(seccionId, botonActivo) {
+            const secciones = document.querySelectorAll('.seccion-contenido');
+            secciones.forEach(sec => sec.classList.add('hidden'));
+
+            const target = document.getElementById('sec-' + seccionId);
+            if (target) {
+                target.classList.remove('hidden');
+            }
+
+            const botones = document.querySelectorAll('.tab-btn');
+            botones.forEach(btn => btn.classList.remove('active'));
+            botonActivo.classList.add('active');
+        }
+
+        /**
+         * Filtra los subniveles (Básico, Intermedio, Avanzado) dentro de Ejemplos o Ejercicios.
+         */
+        function filtrarSubnivel(grupo, nivel, botonActivo) {
+            const contenedores = document.querySelectorAll('.subcontenido-' + grupo);
+            contenedores.forEach(cont => cont.classList.add('hidden'));
+
+            const target = document.getElementById(grupo + '-' + nivel);
+            if (target) {
+                target.classList.remove('hidden');
+            }
+
+            const parent = botonActivo.parentElement;
+            const subBotones = parent.querySelectorAll('.subtab-btn');
+            subBotones.forEach(btn => btn.classList.remove('active'));
+            botonActivo.classList.add('active');
+        }
+
+        /**
+         * Alterna la visibilidad de las soluciones paso a paso y actualiza el texto del botón.
+         */
+        function toggleSolucion(solucionId, boton) {
+            const box = document.getElementById(solucionId);
+            if (!box) return;
+
+            if (box.style.display === 'block') {
+                box.style.display = 'none';
+                boton.textContent = boton.textContent.replace('Ocultar', 'Mostrar').replace('Ocultar análisis conceptual', 'Ver análisis conceptual');
+            } else {
+                box.style.display = 'block';
+                if (boton.textContent.includes('Ver análisis')) {
+                    boton.textContent = 'Ocultar análisis conceptual';
+                } else {
+                    boton.textContent = 'Ocultar solución';
+                }
+            }
+        }
+
+        /**
+         * Controla el modo de pantalla completa (Fullscreen API) para proyección en aula.
+         */
+        function toggleFullscreen() {
+            const btn = document.getElementById('fullscreen-btn');
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().then(() => {
+                    btn.innerHTML = '<span>✖ Salir de pantalla completa</span>';
+                }).catch(err => {
+                    console.warn('Error al intentar activar pantalla completa:', err);
+                });
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen().then(() => {
+                        btn.innerHTML = '<span>⛶ Pantalla completa</span>';
+                    });
+                }
+            }
+        }
+
+        document.addEventListener('fullscreenchange', () => {
+            const btn = document.getElementById('fullscreen-btn');
+            if (!document.fullscreenElement && btn) {
+                btn.innerHTML = '<span>⛶ Pantalla completa</span>';
+            }
+        });
+    </script>
+</body>
+</html>

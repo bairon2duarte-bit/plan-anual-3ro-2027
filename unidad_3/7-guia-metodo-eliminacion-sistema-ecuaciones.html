@@ -1,0 +1,1681 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pizarra Digital - Método de Eliminación (Suma o Resta) | Colegio Montano</title>
+    <!-- Carga de Tailwind CSS para utilidades de diseño responsivo y layout -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Configuración de Variables Institucionales Colegio Montano */
+        :root {
+            --azul-principal: #1269A8;
+            --amarillo-brillante: #F7D615;
+            --verde-grisaceo: #54887D;
+            --azul-claro: #88B5C7;
+            --verde-oliva: #A6B046;
+            --blanco-suave: #F2F5E9;
+        }
+
+        /* Tipografía Institucional */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e2e8f0;
+            color: #1e293b;
+            margin: 0;
+            padding: 12px;
+        }
+
+        /* Marco Principal de Pizarra Digital */
+        #pizarra-container {
+            background-color: var(--blanco-suave);
+            border: 5px solid var(--amarillo-brillante);
+            border-radius: 12px;
+            box-shadow: 0 12px 30px rgba(18, 105, 168, 0.25);
+            max-width: 1200px;
+            margin: 0 auto;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 85vh;
+        }
+
+        /* Encabezado de la Pizarra */
+        .pizarra-header {
+            background: linear-gradient(135deg, var(--azul-principal) 0%, #0d4f80 100%);
+            color: white;
+            padding: 16px 24px;
+            border-bottom: 4px solid var(--amarillo-brillante);
+        }
+
+        /* Botón Fullscreen */
+        .btn-fullscreen {
+            background-color: var(--amarillo-brillante);
+            color: #0f172a;
+            font-weight: 700;
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: 2px solid #ffffff;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+        .btn-fullscreen:hover {
+            background-color: #ffe234;
+            transform: translateY(-1px);
+        }
+
+        /* Navegación de Pestañas */
+        .nav-tabs {
+            background-color: #ffffff;
+            border-bottom: 2px solid var(--azul-claro);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            padding: 10px 20px;
+        }
+
+        .tab-btn {
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.92rem;
+            color: var(--azul-principal);
+            background-color: transparent;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .tab-btn:hover {
+            background-color: rgba(136, 181, 199, 0.25);
+            border-color: var(--azul-claro);
+        }
+
+        .tab-btn.active {
+            background-color: var(--azul-principal);
+            color: #ffffff;
+            border-color: var(--amarillo-brillante);
+            box-shadow: 0 3px 8px rgba(18, 105, 168, 0.3);
+        }
+
+        /* Pestaña destacada para el Solucionador */
+        .tab-btn-solucionador {
+            background-color: rgba(247, 214, 21, 0.25);
+            border-color: var(--amarillo-brillante);
+        }
+        .tab-btn-solucionador.active {
+            background-color: var(--azul-principal);
+            color: #ffffff;
+            border-color: var(--amarillo-brillante);
+        }
+
+        /* Tarjetas de Contenido */
+        .card-montano {
+            background-color: #ffffff;
+            border: 2px solid var(--verde-grisaceo);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 18px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Etiquetas de Nivel */
+        .badge-nivel {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .badge-basico {
+            background-color: var(--verde-oliva);
+            color: #ffffff;
+        }
+        .badge-intermedio {
+            background-color: var(--verde-grisaceo);
+            color: #ffffff;
+        }
+        .badge-avanzado {
+            background-color: var(--azul-principal);
+            color: #ffffff;
+            border: 1px solid var(--amarillo-brillante);
+        }
+
+        /* Contenedor de Soluciones Ocultas */
+        .solucion-box {
+            background-color: rgba(136, 181, 199, 0.25);
+            border: 1.5px dashed var(--azul-principal);
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin-top: 12px;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .btn-solucion {
+            background-color: var(--azul-principal);
+            color: white;
+            font-weight: 600;
+            padding: 7px 14px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.2s;
+            margin-top: 10px;
+        }
+        .btn-solucion:hover {
+            background-color: var(--verde-grisaceo);
+        }
+
+        /* Botón Directo para Resolver en Pizarra */
+        .btn-resolver-directo {
+            background-color: var(--amarillo-brillante);
+            color: #0f172a;
+            font-weight: 700;
+            padding: 7px 14px;
+            border-radius: 6px;
+            font-size: 0.88rem;
+            cursor: pointer;
+            border: 1.5px solid #0f172a;
+            transition: all 0.2s ease;
+            margin-top: 10px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .btn-resolver-directo:hover {
+            background-color: #ffe234;
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Bloques Matemáticos Visuales */
+        .math-expr {
+            font-family: 'Cambria Math', 'Times New Roman', serif;
+            font-size: 1.08rem;
+            font-weight: bold;
+            color: var(--azul-principal);
+            background-color: #f8fafc;
+            padding: 2px 8px;
+            border-radius: 4px;
+            border: 1px solid #cbd5e1;
+            display: inline-block;
+        }
+
+        /* Fracción Visual en Línea */
+        .frac {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            vertical-align: middle;
+            margin: 0 4px;
+            font-size: 0.92em;
+            line-height: 1.1;
+        }
+        .frac-num {
+            border-bottom: 1.5px solid currentColor;
+            padding: 0 4px 2px 4px;
+        }
+        .frac-den {
+            padding: 2px 4px 0 4px;
+        }
+
+        /* Llave Visual para Sistemas */
+        .sistema-box {
+            display: inline-flex;
+            align-items: center;
+            background-color: #f8fafc;
+            border: 1.5px solid var(--azul-claro);
+            border-left: 5px solid var(--azul-principal);
+            border-radius: 8px;
+            padding: 6px 14px;
+            font-family: 'Cambria Math', 'Times New Roman', serif;
+            font-weight: bold;
+            color: var(--azul-principal);
+            margin: 4px 0;
+            line-height: 1.5;
+        }
+
+        /* Caja de Suma Vertical en Pizarra */
+        .suma-vertical-box {
+            font-family: 'Cambria Math', 'Times New Roman', serif;
+            background-color: #f8fafc;
+            border: 1.5px solid var(--azul-claro);
+            border-radius: 8px;
+            padding: 12px 16px;
+            display: inline-block;
+            min-width: 240px;
+        }
+        .linea-suma {
+            border-bottom: 2.5px solid var(--azul-principal);
+            padding-bottom: 6px;
+            margin-bottom: 6px;
+        }
+
+        /* Sub-pestañas de Nivel */
+        .subtab-btn {
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 0.88rem;
+            cursor: pointer;
+            border: 2px solid var(--verde-grisaceo);
+            background-color: #ffffff;
+            color: var(--verde-grisaceo);
+            transition: all 0.2s;
+        }
+        .subtab-btn.active {
+            background-color: var(--verde-grisaceo);
+            color: #ffffff;
+        }
+
+        /* Tarjetas de Paso en el Solucionador */
+        .paso-solver {
+            background-color: #ffffff;
+            border-left: 5px solid var(--azul-principal);
+            border-top: 1px solid #cbd5e1;
+            border-right: 1px solid #cbd5e1;
+            border-bottom: 1px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 14px 16px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Modo Fullscreen */
+        :fullscreen #pizarra-container {
+            max-width: 100%;
+            width: 100vw;
+            height: 100vh;
+            border-radius: 0;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Marco Principal de la Pizarra Digital -->
+    <div id="pizarra-container">
+        
+        <!-- Encabezado Institucional -->
+        <header class="pizarra-header flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-4">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyEop0yf6lZ7Jk9MILZxF1rBj4Oqs5esyhIQ&s" 
+                     alt="Logo Colegio Montano" 
+                     class="w-14 h-14 rounded-lg bg-white p-1 object-contain border-2 border-[#F7D615]"
+                     onerror="this.src='https://placehold.co/60x60/1269A8/F7D615?text=CM'">
+                <div>
+                    <span class="text-xs uppercase tracking-widest font-bold text-[#F7D615] block">Colegio Montano • Tercera Unidad • Matemática</span>
+                    <h1 class="text-xl sm:text-2xl font-bold leading-tight">Método de Eliminación (Suma o Resta)</h1>
+                    <p class="text-sm text-[#88B5C7] font-semibold">Nivel: Tercero Básico • Guía Interactiva de Pizarra Digital</p>
+                </div>
+            </div>
+            <button id="fullscreen-btn" class="btn-fullscreen flex items-center gap-2" onclick="toggleFullscreen()">
+                <span>⛶ Pantalla completa</span>
+            </button>
+        </header>
+
+        <!-- Barra de Navegación Horizontal -->
+        <nav class="nav-tabs" role="tablist">
+            <button id="tab-teoria" class="tab-btn active" onclick="cambiarSeccion('teoria', this)">📘 1. Teoría</button>
+            <button id="tab-ejemplos" class="tab-btn" onclick="cambiarSeccion('ejemplos', this)">💡 2. Ejemplos Resueltos (15)</button>
+            <button id="tab-ejercicios" class="tab-btn" onclick="cambiarSeccion('ejercicios', this)">✍️ 3. Ejercicios Prácticos (15)</button>
+            <button id="tab-reflexion" class="tab-btn" onclick="cambiarSeccion('reflexion', this)">🧠 4. Reflexión Crítica</button>
+            <button id="tab-evaluacion" class="tab-btn" onclick="cambiarSeccion('evaluacion', this)">✅ 5. Evaluación Formativa</button>
+            <button id="tab-solucionador" class="tab-btn tab-btn-solucionador" onclick="cambiarSeccion('solucionador', this)">➕➖ 6. Solucionador Paso a Paso</button>
+        </nav>
+
+        <!-- Lienzo Principal de Contenido -->
+        <main class="p-4 sm:p-6 flex-1">
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 1: EXPLICACIÓN TEÓRICA             -->
+            <!-- ========================================== -->
+            <section id="sec-teoria" class="seccion-contenido">
+                <div class="card-montano">
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-3 border-b-2 border-[#F7D615] pb-2">
+                        <h2 class="text-2xl font-bold text-[#1269A8]">¿Qué es el Método de Eliminación (Suma o Resta) y Por Qué Funciona?</h2>
+                        <button class="btn-resolver-directo !mt-0" onclick="abrirEnSolucionador(2, 1, 11, 3, -2, 6, 'y', 'Ejemplo Teórico')">➕➖ Probar en Solucionador</button>
+                    </div>
+                    <p class="text-base leading-relaxed mb-4">
+                        El <strong>Método de Eliminación</strong> —también llamado <strong>Método de Suma o Resta</strong> o <strong>Método de Reducción</strong>— se fundamenta en la propiedad de igualdad: <em>si sumamos o restamos miembro a miembro dos ecuaciones verdaderas, obtenemos una nueva ecuación equivalente</em>. Al lograr que una de las dos incógnitas tenga <strong>coeficientes opuestos</strong> (<span class="math-expr">+k</span> y <span class="math-expr">-k</span>), su suma es cero y la incógnita desaparece.
+                    </p>
+                    <p class="text-base leading-relaxed mb-4">
+                        Si los coeficientes de la variable elegida ya son opuestos, sumamos directamente. Si son iguales (<span class="math-expr">+k</span> y <span class="math-expr">+k</span>), multiplicamos una ecuación por <span class="math-expr">-1</span>. Y si son distintos, multiplicamos una o ambas ecuaciones por factores convenientes (idealmente usando el <strong>Mínimo Común Múltiplo, MCM</strong>) para convertirlos en opuestos exactos.
+                    </p>
+
+                    <!-- Algoritmo en 5 Pasos -->
+                    <div class="bg-[#F2F5E9] border-2 border-[#A6B046] rounded-xl p-4 my-4">
+                        <h3 class="font-bold text-[#54887D] mb-3">🧭 Procedimiento Sistemático en 5 Pasos (Método de Eliminación)</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 text-sm">
+                            <div class="bg-white p-3 rounded-lg border-t-4 border-[#1269A8] shadow-sm">
+                                <strong class="text-[#1269A8] block mb-1">Paso 1: Ordenar en Forma Estándar</strong>
+                                <p class="text-slate-700">Alinea ambas ecuaciones en columnas semejantes de la forma <span class="math-expr text-xs">Ax + By = C</span>.</p>
+                            </div>
+                            <div class="bg-white p-3 rounded-lg border-t-4 border-[#54887D] shadow-sm">
+                                <strong class="text-[#54887D] block mb-1">Paso 2: Igualar con Signos Opuestos</strong>
+                                <p class="text-slate-700">Elige una incógnita y multiplica una o ambas ecuaciones usando el <strong>MCM</strong> para lograr coeficientes <span class="math-expr text-xs">+k</span> y <span class="math-expr text-xs">-k</span>.</p>
+                            </div>
+                            <div class="bg-white p-3 rounded-lg border-t-4 border-[#A6B046] shadow-sm">
+                                <strong class="text-[#54887D] block mb-1">Paso 3: Sumar Verticalmente</strong>
+                                <p class="text-slate-700">Suma columna por columna (<span class="math-expr text-xs">x</span> con <span class="math-expr text-xs">x</span>, <span class="math-expr text-xs">y</span> con <span class="math-expr text-xs">y</span>, independientes) para anular la incógnita elegida.</p>
+                            </div>
+                            <div class="bg-white p-3 rounded-lg border-t-4 border-[#F7D615] shadow-sm">
+                                <strong class="text-[#1269A8] block mb-1">Paso 4: Despejar y Sustituir</strong>
+                                <p class="text-slate-700">Resuelve la ecuación de una variable y reemplaza ese valor en una ecuación original para hallar la segunda.</p>
+                            </div>
+                            <div class="bg-white p-3 rounded-lg border-t-4 border-[#1269A8] shadow-sm">
+                                <strong class="text-[#1269A8] block mb-1">Paso 5: Comprobar</strong>
+                                <p class="text-slate-700">Verifica que el par ordenado <span class="math-expr text-xs">(x, y)</span> satisfaga ambas ecuaciones originales.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Explorador Visual SVG de los 3 Casos Algebraicos al Sumar Columnas -->
+                <div class="card-montano">
+                    <h3 class="text-xl font-bold text-[#1269A8] mb-2">📐 Interpretación Algebraica al Sumar las Ecuaciones</h3>
+                    <p class="text-sm text-slate-600 mb-4">Al realizar la suma vertical columna por columna en el Paso 3, siempre ocurre uno de estos tres escenarios:</p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <!-- Caso 1: Solución Única -->
+                        <div class="p-4 bg-emerald-50 border-2 border-[#A6B046] rounded-xl text-center flex flex-col justify-between">
+                            <div>
+                                <span class="badge-nivel badge-basico mb-2">Compatible Determinado</span>
+                                <h4 class="font-bold text-[#1269A8]">Solución Única (ax = c)</h4>
+                                <div class="my-2 flex justify-center">
+                                    <svg width="210" height="114" viewBox="0 0 210 114" class="bg-white rounded border border-slate-300">
+                                        <text x="105" y="21" text-anchor="middle" font-size="11" font-weight="bold" fill="#1269A8">  3x + 2y = 11</text>
+                                        <text x="105" y="37" text-anchor="middle" font-size="11" font-weight="bold" fill="#54887D">+ 2x - 2y =  4</text>
+                                        <line x1="25" y1="44" x2="185" y2="44" stroke="#0f172a" stroke-width="2"/>
+                                        <rect x="25" y="51" width="160" height="24" rx="5" fill="#fef9c3" stroke="#0f172a" stroke-width="1.3"/>
+                                        <text x="105" y="67" text-anchor="middle" font-size="11" font-weight="bold" fill="#0f172a">5x + 0 = 15  ➔  x = 3</text>
+                                        <text x="105" y="95" text-anchor="middle" font-size="10" font-weight="bold" fill="#54887D">Solución Única: (3, 1)</text>
+                                    </svg>
+                                </div>
+                                <p class="text-xs sm:text-sm text-slate-700">Se elimina una incógnita y sobrevive la otra con coeficiente distinto de cero (<span class="math-expr text-xs">5x = 15</span>), generando un <strong>único par ordenado</strong>.</p>
+                            </div>
+                            <button class="btn-resolver-directo justify-center w-full" onclick="abrirEnSolucionador(3, 2, 11, 2, -2, 4, 'y', 'Caso 1: Solución Única')">➕➖ Probar este caso</button>
+                        </div>
+
+                        <!-- Caso 2: Sin Solución -->
+                        <div class="p-4 bg-amber-50 border-2 border-[#F7D615] rounded-xl text-center flex flex-col justify-between">
+                            <div>
+                                <span class="badge-nivel badge-avanzado mb-2">Sistema Inconsistente</span>
+                                <h4 class="font-bold text-[#1269A8]">Sin Solución (0 = k)</h4>
+                                <div class="my-2 flex justify-center">
+                                    <svg width="210" height="114" viewBox="0 0 210 114" class="bg-white rounded border border-slate-300">
+                                        <text x="105" y="21" text-anchor="middle" font-size="11" font-weight="bold" fill="#1269A8">  4x - 6y = 5</text>
+                                        <text x="105" y="37" text-anchor="middle" font-size="11" font-weight="bold" fill="#54887D">+ (-4x + 6y) = 2</text>
+                                        <line x1="25" y1="44" x2="185" y2="44" stroke="#0f172a" stroke-width="2"/>
+                                        <rect x="25" y="51" width="160" height="24" rx="5" fill="#fee2e2" stroke="#b91c1c" stroke-width="1.3"/>
+                                        <text x="105" y="67" text-anchor="middle" font-size="11" font-weight="bold" fill="#b91c1c">0 + 0 = 7  ➔  0 = 7</text>
+                                        <text x="105" y="95" text-anchor="middle" font-size="10" font-weight="bold" fill="#7f1d1d">Falsedad: Sin solución</text>
+                                    </svg>
+                                </div>
+                                <p class="text-xs sm:text-sm text-slate-700">Al sumar se anulan <strong>ambas variables</strong> (<span class="math-expr text-xs">0</span>), pero el lado derecho da un número distinto de cero (<span class="math-expr text-xs">0 = 7</span>). <strong>No tiene solución</strong>.</p>
+                            </div>
+                            <button class="btn-resolver-directo justify-center w-full" onclick="abrirEnSolucionador(4, -6, 5, -4, 6, 2, 'y', 'Caso 2: Sin Solución')">➕➖ Probar este caso</button>
+                        </div>
+
+                        <!-- Caso 3: Infinitas Soluciones -->
+                        <div class="p-4 bg-sky-50 border-2 border-[#88B5C7] rounded-xl text-center flex flex-col justify-between">
+                            <div>
+                                <span class="badge-nivel badge-intermedio mb-2">Sistema Dependiente</span>
+                                <h4 class="font-bold text-[#1269A8]">Infinitas Soluciones (0 = 0)</h4>
+                                <div class="my-2 flex justify-center">
+                                    <svg width="210" height="114" viewBox="0 0 210 114" class="bg-white rounded border border-slate-300">
+                                        <text x="105" y="21" text-anchor="middle" font-size="11" font-weight="bold" fill="#1269A8">  6x - 8y = 12</text>
+                                        <text x="105" y="37" text-anchor="middle" font-size="11" font-weight="bold" fill="#54887D">+ (-6x + 8y) = -12</text>
+                                        <line x1="25" y1="44" x2="185" y2="44" stroke="#0f172a" stroke-width="2"/>
+                                        <rect x="25" y="51" width="160" height="24" rx="5" fill="#dcfce7" stroke="#15803d" stroke-width="1.3"/>
+                                        <text x="105" y="67" text-anchor="middle" font-size="11" font-weight="bold" fill="#15803d">0 + 0 = 0  ➔  0 = 0</text>
+                                        <text x="105" y="95" text-anchor="middle" font-size="10" font-weight="bold" fill="#166534">Identidad: Infinitas soluciones</text>
+                                    </svg>
+                                </div>
+                                <p class="text-xs sm:text-sm text-slate-700">Al sumar se anulan <strong>ambas variables y los términos independientes</strong>, quedando la identidad <span class="math-expr text-xs">0 = 0</span>. <strong>Infinitas soluciones</strong>.</p>
+                            </div>
+                            <button class="btn-resolver-directo justify-center w-full" onclick="abrirEnSolucionador(3, -4, 6, -6, 8, -12, 'y', 'Caso 3: Infinitas Soluciones')">➕➖ Probar este caso</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 2: EJEMPLOS RESUELTOS (15)         -->
+            <!-- ========================================== -->
+            <section id="sec-ejemplos" class="seccion-contenido hidden">
+                <div class="flex flex-wrap items-center justify-between gap-3 mb-4 bg-white p-4 rounded-xl border-2 border-[#54887D]">
+                    <div>
+                        <h2 class="text-xl font-bold text-[#1269A8]">Ejemplos Resueltos Paso a Paso (Método de Eliminación)</h2>
+                        <p class="text-sm text-slate-600">Analiza el uso del MCM, factores multiplicadores con signos opuestos, suma vertical y comprobación.</p>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <button class="subtab-btn active" onclick="filtrarSubnivel('ejemplos', 'basico', this)">Nivel Básico (5)</button>
+                        <button class="subtab-btn" onclick="filtrarSubnivel('ejemplos', 'intermedio', this)">Nivel Intermedio (5)</button>
+                        <button class="subtab-btn" onclick="filtrarSubnivel('ejemplos', 'avanzado', this)">Nivel Avanzado (5)</button>
+                    </div>
+                </div>
+
+                <!-- EJEMPLOS BÁSICOS -->
+                <div id="ejemplos-basico" class="subcontenido-ejemplos space-y-4">
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-basico">Básico • Ejemplo 1 (Coeficientes opuestos directamente en y)</span>
+                            <button class="btn-resolver-directo !mt-0" onclick="abrirEnSolucionador(1, 1, 9, 1, -1, 3, 'y', 'Ejemplo Básico 1')">➕➖ Resolver en Pizarra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Resolver por suma o resta: 
+                            <span class="sistema-box text-sm ml-2"><span>x + y = 9 <br> x - y = 3</span></span>
+                        </p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 y 2 (Observación):</strong> En la columna de <span class="math-expr">y</span> ya tenemos <span class="math-expr">+y</span> y <span class="math-expr">-y</span> (coeficientes opuestos <span class="math-expr">+1</span> y <span class="math-expr">-1</span>).</p>
+                            <p><strong>Paso 3 (Sumar verticalmente):</strong> <span class="math-expr">(x + x) + (y - y) = 9 + 3 ➔ 2x = 12 ➔ x = 6</span>.</p>
+                            <p><strong>Paso 4 (Sustituir en Ec. 1):</strong> <span class="math-expr">6 + y = 9 ➔ y = 3</span>.</p>
+                            <p><strong>Paso 5 (Comprobación):</strong> <span class="math-expr">6 + 3 = 9</span> y <span class="math-expr">6 - 3 = 3</span> (Correcto).</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: Solución = (6, 3) (x = 6, y = 3).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-basico">Básico • Ejemplo 2 (Coeficientes opuestos directamente en x)</span>
+                            <button class="btn-resolver-directo !mt-0" onclick="abrirEnSolucionador(2, 3, 13, -2, 1, -1, 'x', 'Ejemplo Básico 2')">➕➖ Resolver en Pizarra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Resolver por suma o resta: 
+                            <span class="sistema-box text-sm ml-2"><span>2x + 3y = 13 <br> -2x + y = -1</span></span>
+                        </p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 y 2 (Observación):</strong> La variable <span class="math-expr">x</span> ya tiene coeficientes opuestos (<span class="math-expr">+2</span> y <span class="math-expr">-2</span>).</p>
+                            <p><strong>Paso 3 (Sumar verticalmente):</strong> <span class="math-expr">(2x - 2x) + (3y + y) = 13 + (-1) ➔ 4y = 12 ➔ y = 3</span>.</p>
+                            <p><strong>Paso 4 (Sustituir en Ec. 1):</strong> <span class="math-expr">2x + 3(3) = 13 ➔ 2x + 9 = 13 ➔ 2x = 4 ➔ x = 2</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: Solución = (2, 3) (x = 2, y = 3).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-basico">Básico • Ejemplo 3 (Coeficientes iguales en y: multiplicar por -1)</span>
+                            <button class="btn-resolver-directo !mt-0" onclick="abrirEnSolucionador(3, 2, 16, 1, 2, 8, 'y', 'Ejemplo Básico 3')">➕➖ Resolver en Pizarra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Resolver restando la segunda ecuación (multiplicándola por -1): 
+                            <span class="sistema-box text-sm ml-2"><span>3x + 2y = 16 <br> x + 2y = 8</span></span>
+                        </p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 y 2 (Multiplicar Ec. 2 por -1):</strong> Obtenemos <span class="math-expr">-x - 2y = -8</span> para tener <span class="math-expr">+2y</span> y <span class="math-expr">-2y</span>.</p>
+                            <p><strong>Paso 3 (Sumar verticalmente):</strong> <span class="math-expr">(3x - x) + (2y - 2y) = 16 - 8 ➔ 2x = 8 ➔ x = 4</span>.</p>
+                            <p><strong>Paso 4 (Sustituir en Ec. 2 original):</strong> <span class="math-expr">4 + 2y = 8 ➔ 2y = 4 ➔ y = 2</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: Solución = (4, 2) (x = 4, y = 2).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-basico">Básico • Ejemplo 4 (Multiplicar una sola ecuación por un entero)</span>
+                            <button class="btn-resolver-directo !mt-0" onclick="abrirEnSolucionador(2, 1, 11, 3, -2, 6, 'y', 'Ejemplo Básico 4')">➕➖ Resolver en Pizarra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Resolver eliminando <span class="math-expr">y</span>: 
+                            <span class="sistema-box text-sm ml-2"><span>2x + y = 11 <br> 3x - 2y = 6</span></span>
+                        </p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 y 2 (Multiplicar Ec. 1 por 2):</strong> <span class="math-expr">2(2x + y = 11) ➔ 4x + 2y = 22</span>.</p>
+                            <p><strong>Paso 3 (Sumar con Ec. 2):</strong> <span class="math-expr">(4x + 3x) + (2y - 2y) = 22 + 6 ➔ 7x = 28 ➔ x = 4</span>.</p>
+                            <p><strong>Paso 4 (Sustituir en Ec. 1 original):</strong> <span class="math-expr">2(4) + y = 11 ➔ 8 + y = 11 ➔ y = 3</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: Solución = (4, 3) (x = 4, y = 3).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-basico">Básico • Ejemplo 5 (Ordenamiento previo a forma estándar Ax + By = C)</span>
+                            <button class="btn-resolver-directo !mt-0" onclick="abrirEnSolucionador(-2, 1, -1, 2, 1, 7, 'x', 'Ejemplo Básico 5')">➕➖ Resolver en Pizarra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Ordenar a forma estándar y eliminar <span class="math-expr">x</span>: 
+                            <span class="sistema-box text-sm ml-2"><span>y = 2x - 1 <br> 2x + y = 7</span></span>
+                        </p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Ordenar Ec. 1 a Ax + By = C):</strong> Transponemos <span class="math-expr">2x</span>: <span class="math-expr">-2x + y = -1</span>.</p>
+                            <p><strong>Paso 2 y 3 (Sumar verticalmente):</strong> <span class="math-expr">(-2x + 2x) + (y + y) = -1 + 7 ➔ 2y = 6 ➔ y = 3</span>.</p>
+                            <p><strong>Paso 4 (Sustituir en Ec. 2):</strong> <span class="math-expr">2x + 3 = 7 ➔ 2x = 4 ➔ x = 2</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: Solución = (2, 3) (x = 2, y = 3).</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EJEMPLOS INTERMEDIOS -->
+                <div id="ejemplos-intermedio" class="subcontenido-ejemplos hidden space-y-4">
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-intermedio">Intermedio • Ejemplo 1 (Multiplicar ambas ecuaciones por factores cruzados)</span>
+                            <button class="btn-resolver-directo !mt-0" onclick="abrirEnSolucionador(3, 2, 19, 4, 5, 30, 'y', 'Ejemplo Intermedio 1')">➕➖ Resolver en Pizarra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Eliminar <span class="math-expr">y</span> usando factores opuestos: 
+                            <span class="sistema-box text-sm ml-2"><span>3x + 2y = 19 <br> 4x + 5y = 30</span></span>
+                        </p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 2 (MCM(2, 5) = 10):</strong> Multiplicamos Ec. 1 por <span class="math-expr">5</span> (<span class="math-expr">15x + 10y = 95</span>) y Ec. 2 por <span class="math-expr">-2</span> (<span class="math-expr">-8x - 10y = -60</span>).</p>
+                            <p><strong>Paso 3 (Sumar verticalmente):</strong> <span class="math-expr">(15x - 8x) + (10y - 10y) = 95 - 60 ➔ 7x = 35 ➔ x = 5</span>.</p>
+                            <p><strong>Paso 4 (Sustituir en Ec. 1):</strong> <span class="math-expr">3(5) + 2y = 19 ➔ 15 + 2y = 19 ➔ 2y = 4 ➔ y = 2</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: Solución = (5, 2) (x = 5, y = 2).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-intermedio">Intermedio • Ejemplo 2 (Uso eficiente del MCM para evitar números grandes)</span>
+                            <button class="btn-resolver-directo !mt-0" onclick="abrirEnSolucionador(4, 6, 26, 6, -9, 3, 'y', 'Ejemplo Intermedio 2')">➕➖ Resolver en Pizarra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Eliminar <span class="math-expr">y</span> usando <span class="math-expr">MCM(6, 9) = 18</span>: 
+                            <span class="sistema-box text-sm ml-2"><span>4x + 6y = 26 <br> 6x - 9y = 3</span></span>
+                        </p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 2 (MCM(6, 9) = 18):</strong> Multiplicamos Ec. 1 por <span class="math-expr">3</span> (<span class="math-expr">12x + 18y = 78</span>) y Ec. 2 por <span class="math-expr">2</span> (<span class="math-expr">12x - 18y = 6</span>).</p>
+                            <p><strong>Paso 3 (Sumar verticalmente):</strong> <span class="math-expr">(12x + 12x) + (18y - 18y) = 78 + 6 ➔ 24x = 84 ➔ x = 84/24 = 7/2 (3.5)</span>.</p>
+                            <p><strong>Paso 4 (Sustituir en Ec. 1):</strong> <span class="math-expr">4(3.5) + 6y = 26 ➔ 14 + 6y = 26 ➔ 6y = 12 ➔ y = 2</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: Solución = (7/2, 2) o (3.5, 2).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-intermedio">Intermedio • Ejemplo 3 (Detección de sistema incompatible / sin solución)</span>
+                            <button class="btn-resolver-directo !mt-0" onclick="abrirEnSolucionador(2, -3, 5, -4, 6, 2, 'x', 'Ejemplo Intermedio 3 (Sin Solución)')">➕➖ Resolver en Pizarra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Aplicar eliminación al sistema: 
+                            <span class="sistema-box text-sm ml-2"><span>2x - 3y = 5 <br> -4x + 6y = 2</span></span>
+                        </p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 2 (Multiplicar Ec. 1 por 2):</strong> <span class="math-expr">4x - 6y = 10</span>.</p>
+                            <p><strong>Paso 3 (Sumar con Ec. 2):</strong> <span class="math-expr">(4x - 4x) + (-6y + 6y) = 10 + 2 ➔ 0 = 12</span> (Falsedad numérica).</p>
+                            <p><strong>Análisis:</strong> Se eliminan ambas incógnitas y queda una contradicción (<span class="math-expr">0 = 12</span>).</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: Sistema incompatible (inconsistente); NO tiene solución.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-intermedio">Intermedio • Ejemplo 4 (Detección de sistema dependiente / infinitas soluciones)</span>
+                            <button class="btn-resolver-directo !mt-0" onclick="abrirEnSolucionador(3, -4, 6, -6, 8, -12, 'x', 'Ejemplo Intermedio 4 (Infinitas)')">➕➖ Resolver en Pizarra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Aplicar eliminación al sistema: 
+                            <span class="sistema-box text-sm ml-2"><span>3x - 4y = 6 <br> -6x + 8y = -12</span></span>
+                        </p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 2 (Multiplicar Ec. 1 por 2):</strong> <span class="math-expr">6x - 8y = 12</span>.</p>
+                            <p><strong>Paso 3 (Sumar con Ec. 2):</strong> <span class="math-expr">(6x - 6x) + (-8y + 8y) = 12 - 12 ➔ 0 = 0</span> (Identidad verdadera).</p>
+                            <p><strong>Análisis:</strong> Ambas ecuaciones representan la misma recta.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: Sistema compatible dependiente; tiene INFINITAS SOLUCIONES.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-intermedio">Intermedio • Ejemplo 5 (Ecuaciones con paréntesis y agrupación previa)</span>
+                            <button class="btn-resolver-directo !mt-0" onclick="abrirEnSolucionador(2, 1, 9, 3, -2, 6, 'y', 'Ejemplo Intermedio 5')">➕➖ Resolver en Pizarra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Simplificar paréntesis a <span class="math-expr">Ax + By = C</span> y eliminar: 
+                            <span class="sistema-box text-sm ml-2"><span>2(x + 1) + y = 11 <br> 3x - 2(y - 1) = 8</span></span>
+                        </p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Simplificar a Ax + By = C):</strong> Ec. 1: <span class="math-expr">2x + 2 + y = 11 ➔ 2x + y = 9</span>. Ec. 2: <span class="math-expr">3x - 2y + 2 = 8 ➔ 3x - 2y = 6</span>.</p>
+                            <p><strong>Paso 2 (Multiplicar Ec. 1 por 2):</strong> <span class="math-expr">4x + 2y = 18</span>.</p>
+                            <p><strong>Paso 3 (Sumar con Ec. 2):</strong> <span class="math-expr">(4x + 3x) + (2y - 2y) = 18 + 6 ➔ 7x = 24 ➔ x = 24/7</span>.</p>
+                            <p><strong>Paso 4 (Sustituir en Ec. 1):</strong> <span class="math-expr">2(24/7) + y = 9 ➔ y = 63/7 - 48/7 = 15/7</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: Solución = (24/7, 15/7).</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EJEMPLOS AVANZADOS -->
+                <div id="ejemplos-avanzado" class="subcontenido-ejemplos hidden space-y-4">
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-avanzado">Avanzado • Ejemplo 1 (Sistema con coeficientes fraccionarios)</span>
+                            <button class="btn-resolver-directo !mt-0" onclick="abrirEnSolucionador(3, 2, 24, 2, -3, 3, 'y', 'Ejemplo Avanzado 1')">➕➖ Resolver en Pizarra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Eliminar denominadores con MCM antes de aplicar suma o resta: 
+                            <span class="sistema-box text-sm ml-2"><span>x/2 + y/3 = 4 <br> x/3 - y/2 = 1/2</span></span>
+                        </p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Multiplicar ambas por MCM = 6):</strong> Ec. 1: <span class="math-expr">3x + 2y = 24</span>. Ec. 2: <span class="math-expr">2x - 3y = 3</span>.</p>
+                            <p><strong>Paso 2 (Igualar y con MCM(2, 3) = 6):</strong> Ec. 1 por <span class="math-expr">3</span> (<span class="math-expr">9x + 6y = 72</span>) y Ec. 2 por <span class="math-expr">2</span> (<span class="math-expr">4x - 6y = 6</span>).</p>
+                            <p><strong>Paso 3 y 4 (Sumar y despejar):</strong> <span class="math-expr">13x = 78 ➔ x = 6</span>. Sustituyendo en <span class="math-expr">3(6) + 2y = 24 ➔ 2y = 6 ➔ y = 3</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Solución = (6, 3) (x = 6, y = 3).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-avanzado">Avanzado • Ejemplo 2 (Sistema con coeficientes decimales)</span>
+                            <button class="btn-resolver-directo !mt-0" onclick="abrirEnSolucionador(4, 3, 23, 2, -5, -3, 'x', 'Ejemplo Avanzado 2')">➕➖ Resolver en Pizarra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Multiplicar por 10 y resolver por eliminación: 
+                            <span class="sistema-box text-sm ml-2"><span>0.4x + 0.3y = 2.3 <br> 0.2x - 0.5y = -0.3</span></span>
+                        </p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Multiplicar por 10):</strong> Ec. 1: <span class="math-expr">4x + 3y = 23</span>. Ec. 2: <span class="math-expr">2x - 5y = -3</span>.</p>
+                            <p><strong>Paso 2 (Multiplicar Ec. 2 por -2):</strong> <span class="math-expr">-4x + 10y = 6</span>.</p>
+                            <p><strong>Paso 3 y 4 (Sumar con Ec. 1):</strong> <span class="math-expr">13y = 29 ➔ y = 29/13</span>. Sustituyendo: <span class="math-expr">2x - 5(29/13) = -3 ➔ 2x = 106/13 ➔ x = 53/13</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Solución = (53/13, 29/13).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-avanzado">Avanzado • Ejemplo 3 (Aplicación contextual en Quetzales - Guatemala)</span>
+                            <button class="btn-resolver-directo !mt-0" onclick="abrirEnSolucionador(5, 3, 59, 3, 2, 37, 'y', 'Ejemplo Avanzado 3 (Útiles Q)')">➕➖ Resolver en Pizarra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">En una librería de la Ciudad de Guatemala, <span class="math-expr">5</span> cuadernos y <span class="math-expr">3</span> lapiceros cuestan <span class="math-expr">Q59</span>, mientras que <span class="math-expr">3</span> cuadernos y <span class="math-expr">2</span> lapiceros cuestan <span class="math-expr">Q37</span>. Plantea el sistema y halla el precio unitario por eliminación.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Sistema):</strong> <span class="math-expr">5x + 3y = 59</span> y <span class="math-expr">3x + 2y = 37</span> (<span class="math-expr">x</span> = cuaderno, <span class="math-expr">y</span> = lapicero).</p>
+                            <p><strong>Paso 2 (MCM(3, 2) = 6 en y):</strong> Ec. 1 por <span class="math-expr">2</span> (<span class="math-expr">10x + 6y = 118</span>) y Ec. 2 por <span class="math-expr">-3</span> (<span class="math-expr">-9x - 6y = -111</span>).</p>
+                            <p><strong>Paso 3 y 4 (Sumar verticalmente):</strong> <span class="math-expr">(10x - 9x) = 118 - 111 ➔ x = 7</span>. En Ec. 2: <span class="math-expr">3(7) + 2y = 37 ➔ 2y = 16 ➔ y = 8</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Cada cuaderno cuesta Q7 y cada lapicero cuesta Q8 (7, 8).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-avanzado">Avanzado • Ejemplo 4 (Determinación de parámetro k para anular ambas variables)</span>
+                            <button class="btn-resolver-directo !mt-0" onclick="abrirEnSolucionador(4, 6, 10, 2, 3, 5, 'x', 'Ejemplo Avanzado 4 (k = 6)')">➕➖ Probar con k = 6</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Determina el valor de <span class="math-expr">k</span> para que en el sistema 
+                            <span class="sistema-box text-sm mx-1"><span>4x + ky = 10 <br> 2x + 3y = 5</span></span> 
+                            al eliminar <span class="math-expr">x</span> se anulen ambas variables.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 2 (Multiplicar Ec. 2 por -2):</strong> <span class="math-expr">-4x - 6y = -10</span>.</p>
+                            <p><strong>Paso 3 (Sumar con Ec. 1):</strong> <span class="math-expr">(4x - 4x) + (k - 6)y = 10 - 10 ➔ (k - 6)y = 0</span>.</p>
+                            <p><strong>Análisis:</strong> Para que <span class="math-expr">y</span> también se anule, <span class="math-expr">k - 6 = 0 ➔ k = 6</span> (quedando la identidad <span class="math-expr">0 = 0</span>).</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: k = 6.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-avanzado">Avanzado • Ejemplo 5 (Sistema con soluciones fraccionarias exactas)</span>
+                            <button class="btn-resolver-directo !mt-0" onclick="abrirEnSolucionador(5, 3, 14, 3, -2, 5, 'y', 'Ejemplo Avanzado 5 (Fracciones)')">➕➖ Resolver en Pizarra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Hallar las soluciones fraccionarias exactas por eliminación: 
+                            <span class="sistema-box text-sm ml-2"><span>5x + 3y = 14 <br> 3x - 2y = 5</span></span>
+                        </p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 2 (MCM(3, 2) = 6 en y):</strong> Ec. 1 por <span class="math-expr">2</span> (<span class="math-expr">10x + 6y = 28</span>) y Ec. 2 por <span class="math-expr">3</span> (<span class="math-expr">9x - 6y = 15</span>).</p>
+                            <p><strong>Paso 3 (Sumar verticalmente):</strong> <span class="math-expr">19x = 43 ➔ x = 43/19</span>.</p>
+                            <p><strong>Paso 4 (Sustituir en Ec. 2):</strong> <span class="math-expr">3(43/19) - 2y = 5 ➔ 129/19 - 95/19 = 2y ➔ 2y = 34/19 ➔ y = 17/19</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Solución = (43/19, 17/19).</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 3: EJERCICIOS PRÁCTICOS (15)       -->
+            <!-- ========================================== -->
+            <section id="sec-ejercicios" class="seccion-contenido hidden">
+                <div class="flex flex-wrap items-center justify-between gap-3 mb-4 bg-white p-4 rounded-xl border-2 border-[#54887D]">
+                    <div>
+                        <h2 class="text-xl font-bold text-[#1269A8]">Práctica Guiada en Pizarra (Método de Eliminación)</h2>
+                        <p class="text-sm text-slate-600">Alinea las variables, iguala coeficientes con signos opuestos, suma verticalmente y comprueba.</p>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <button class="subtab-btn active" onclick="filtrarSubnivel('ejercicios', 'basico', this)">Básico (5)</button>
+                        <button class="subtab-btn" onclick="filtrarSubnivel('ejercicios', 'intermedio', this)">Intermedio (5)</button>
+                        <button class="subtab-btn" onclick="filtrarSubnivel('ejercicios', 'avanzado', this)">Avanzado (5)</button>
+                    </div>
+                </div>
+
+                <!-- EJERCICIOS BÁSICOS -->
+                <div id="ejercicios-basico" class="subcontenido-ejercicios space-y-4">
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 1 (Suma directa)</span>
+                        <p class="font-semibold text-base">Resuelve por suma o resta: <span class="math-expr">{ 2x + y = 10 ; 3x - y = 5 }</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-eb1', this)">Mostrar solución</button>
+                            <button class="btn-resolver-directo" onclick="abrirEnSolucionador(2, 1, 10, 3, -1, 5, 'y', 'Ejercicio Básico 1')">➕➖ Resolver en Pizarra</button>
+                        </div>
+                        <div id="sol-eb1" class="solucion-box">
+                            <p><strong>Sumando verticalmente:</strong> <span class="math-expr">5x = 15 ➔ x = 3</span>.<br>
+                            <strong>Sustituyendo en Ec. 1:</strong> <span class="math-expr">2(3) + y = 10 ➔ y = 4</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Solución = (3, 4) (x = 3, y = 4).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 2 (Resta: multiplicar por -1)</span>
+                        <p class="font-semibold text-base">Resuelve por eliminación: <span class="math-expr">{ 4x + 3y = 17 ; 4x + y = 11 }</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-eb2', this)">Mostrar solución</button>
+                            <button class="btn-resolver-directo" onclick="abrirEnSolucionador(4, 3, 17, 4, 1, 11, 'x', 'Ejercicio Básico 2')">➕➖ Resolver en Pizarra</button>
+                        </div>
+                        <div id="sol-eb2" class="solucion-box">
+                            <p><strong>Multiplicando Ec. 2 por -1:</strong> <span class="math-expr">-4x - y = -11</span>.<br>
+                            <strong>Sumando con Ec. 1:</strong> <span class="math-expr">2y = 6 ➔ y = 3</span>. En Ec. 2: <span class="math-expr">4x + 3 = 11 ➔ x = 2</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Solución = (2, 3) (x = 2, y = 3).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 3 (Multiplicar una ecuación por 2)</span>
+                        <p class="font-semibold text-base">Resuelve eliminando <span class="math-expr">y</span>: <span class="math-expr">{ 3x + 2y = 14 ; x - y = 3 }</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-eb3', this)">Mostrar solución</button>
+                            <button class="btn-resolver-directo" onclick="abrirEnSolucionador(3, 2, 14, 1, -1, 3, 'y', 'Ejercicio Básico 3')">➕➖ Resolver en Pizarra</button>
+                        </div>
+                        <div id="sol-eb3" class="solucion-box">
+                            <p><strong>Multiplicando Ec. 2 por 2:</strong> <span class="math-expr">2x - 2y = 6</span>.<br>
+                            <strong>Sumando con Ec. 1:</strong> <span class="math-expr">5x = 20 ➔ x = 4</span>. En Ec. 2: <span class="math-expr">4 - y = 3 ➔ y = 1</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Solución = (4, 1) (x = 4, y = 1).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 4 (Multiplicar una ecuación por 3)</span>
+                        <p class="font-semibold text-base">Resuelve eliminando <span class="math-expr">x</span>: <span class="math-expr">{ x + 4y = 13 ; -3x + 2y = -11 }</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-eb4', this)">Mostrar solución</button>
+                            <button class="btn-resolver-directo" onclick="abrirEnSolucionador(1, 4, 13, -3, 2, -11, 'x', 'Ejercicio Básico 4')">➕➖ Resolver en Pizarra</button>
+                        </div>
+                        <div id="sol-eb4" class="solucion-box">
+                            <p><strong>Multiplicando Ec. 1 por 3:</strong> <span class="math-expr">3x + 12y = 39</span>.<br>
+                            <strong>Sumando con Ec. 2:</strong> <span class="math-expr">14y = 28 ➔ y = 2</span>. En Ec. 1: <span class="math-expr">x + 4(2) = 13 ➔ x = 5</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Solución = (5, 2) (x = 5, y = 2).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 5 (Ordenar antes de eliminar)</span>
+                        <p class="font-semibold text-base">Ordena a forma estándar y resuelve por eliminación: <span class="math-expr">{ y = 3x - 5 ; 3x + y = 7 }</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-eb5', this)">Mostrar solución</button>
+                            <button class="btn-resolver-directo" onclick="abrirEnSolucionador(-3, 1, -5, 3, 1, 7, 'x', 'Ejercicio Básico 5')">➕➖ Resolver en Pizarra</button>
+                        </div>
+                        <div id="sol-eb5" class="solucion-box">
+                            <p><strong>Ordenando Ec. 1:</strong> <span class="math-expr">-3x + y = -5</span>.<br>
+                            <strong>Sumando con Ec. 2:</strong> <span class="math-expr">2y = 2 ➔ y = 1</span>. En Ec. 2: <span class="math-expr">3x + 1 = 7 ➔ x = 2</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Solución = (2, 1) (x = 2, y = 1).</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EJERCICIOS INTERMEDIOS -->
+                <div id="ejercicios-intermedio" class="subcontenido-ejercicios hidden space-y-4">
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 1 (Multiplicación cruzada)</span>
+                        <p class="font-semibold text-base">Resuelve por eliminación: <span class="math-expr">{ 2x + 3y = 16 ; 5x - 2y = 21 }</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ei1', this)">Mostrar solución</button>
+                            <button class="btn-resolver-directo" onclick="abrirEnSolucionador(2, 3, 16, 5, -2, 21, 'y', 'Ejercicio Intermedio 1')">➕➖ Resolver en Pizarra</button>
+                        </div>
+                        <div id="sol-ei1" class="solucion-box">
+                            <p><strong>Ec. 1 por 2 y Ec. 2 por 3:</strong> <span class="math-expr">4x + 6y = 32</span> y <span class="math-expr">15x - 6y = 63</span>.<br>
+                            <strong>Sumando:</strong> <span class="math-expr">19x = 95 ➔ x = 5</span>. En Ec. 1: <span class="math-expr">2(5) + 3y = 16 ➔ y = 2</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Solución = (5, 2) (x = 5, y = 2).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 2 (Uso del MCM de coeficientes)</span>
+                        <p class="font-semibold text-base">Usa el MCM para eliminar <span class="math-expr">x</span>: <span class="math-expr">{ 6x + 5y = 27 ; 9x - 2y = 12 }</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ei2', this)">Mostrar solución</button>
+                            <button class="btn-resolver-directo" onclick="abrirEnSolucionador(6, 5, 27, 9, -2, 12, 'x', 'Ejercicio Intermedio 2')">➕➖ Resolver en Pizarra</button>
+                        </div>
+                        <div id="sol-ei2" class="solucion-box">
+                            <p><strong>MCM(6, 9) = 18:</strong> Ec. 1 por <span class="math-expr">3</span> (<span class="math-expr">18x + 15y = 81</span>) y Ec. 2 por <span class="math-expr">-2</span> (<span class="math-expr">-18x + 4y = -24</span>).<br>
+                            <strong>Sumando:</strong> <span class="math-expr">19y = 57 ➔ y = 3</span>. En Ec. 1: <span class="math-expr">6x + 15 = 27 ➔ x = 2</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Solución = (2, 3) (x = 2, y = 3).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 3 (Sistema incompatible)</span>
+                        <p class="font-semibold text-base">Clasifica el sistema por eliminación: <span class="math-expr">{ 3x - 2y = 4 ; -6x + 4y = 3 }</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ei3', this)">Mostrar solución</button>
+                            <button class="btn-resolver-directo" onclick="abrirEnSolucionador(3, -2, 4, -6, 4, 3, 'x', 'Ejercicio Intermedio 3')">➕➖ Resolver en Pizarra</button>
+                        </div>
+                        <div id="sol-ei3" class="solucion-box">
+                            <p><strong>Multiplicando Ec. 1 por 2:</strong> <span class="math-expr">6x - 4y = 8</span>. Al sumar con Ec. 2 queda <span class="math-expr">0 = 11</span> (Falsedad).</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Sistema incompatible; NO tiene solución.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 4 (Sistema dependiente / coincidente)</span>
+                        <p class="font-semibold text-base">Clasifica el sistema por eliminación: <span class="math-expr">{ 2x + 5y = 7 ; -6x - 15y = -21 }</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ei4', this)">Mostrar solución</button>
+                            <button class="btn-resolver-directo" onclick="abrirEnSolucionador(2, 5, 7, -6, -15, -21, 'x', 'Ejercicio Intermedio 4')">➕➖ Resolver en Pizarra</button>
+                        </div>
+                        <div id="sol-ei4" class="solucion-box">
+                            <p><strong>Multiplicando Ec. 1 por 3:</strong> <span class="math-expr">6x + 15y = 21</span>. Al sumar con Ec. 2 queda <span class="math-expr">0 = 0</span> (Identidad).</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Sistema compatible dependiente; tiene INFINITAS SOLUCIONES.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 5 (Ecuaciones con paréntesis)</span>
+                        <p class="font-semibold text-base">Simplifica paréntesis y resuelve por eliminación: <span class="math-expr">{ 3(x - 1) + 2y = 11 ; 2x - (y + 3) = 2 }</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ei5', this)">Mostrar solución</button>
+                            <button class="btn-resolver-directo" onclick="abrirEnSolucionador(3, 2, 14, 2, -1, 5, 'y', 'Ejercicio Intermedio 5')">➕➖ Resolver en Pizarra</button>
+                        </div>
+                        <div id="sol-ei5" class="solucion-box">
+                            <p><strong>Ordenando:</strong> Ec. 1: <span class="math-expr">3x + 2y = 14</span>; Ec. 2: <span class="math-expr">2x - y = 5</span>.<br>
+                            <strong>Multiplicando Ec. 2 por 2 y sumando:</strong> <span class="math-expr">7x = 24 ➔ x = 24/7</span>; <span class="math-expr">y = 2(24/7) - 5 = 13/7</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Solución = (24/7, 13/7).</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EJERCICIOS AVANZADOS -->
+                <div id="ejercicios-avanzado" class="subcontenido-ejercicios hidden space-y-4">
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 1 (Coeficientes fraccionarios)</span>
+                        <p class="font-semibold text-base">Elimina denominadores y resuelve por suma o resta: <span class="math-expr">{ x/4 + y/3 = 3 ; x/2 - y/3 = 3 }</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ea1', this)">Mostrar solución</button>
+                            <button class="btn-resolver-directo" onclick="abrirEnSolucionador(3, 4, 36, 3, -2, 18, 'x', 'Ejercicio Avanzado 1')">➕➖ Resolver en Pizarra</button>
+                        </div>
+                        <div id="sol-ea1" class="solucion-box">
+                            <p><strong>Ec. 1 por 12 y Ec. 2 por 6:</strong> <span class="math-expr">3x + 4y = 36</span> y <span class="math-expr">3x - 2y = 18</span>.<br>
+                            <strong>Restando (Ec. 2 por -1):</strong> <span class="math-expr">6y = 18 ➔ y = 3</span>. En Ec. 2: <span class="math-expr">3x - 6 = 18 ➔ x = 8</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Solución = (8, 3) (x = 8, y = 3).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 2 (Coeficientes decimales)</span>
+                        <p class="font-semibold text-base">Multiplica por 10 y resuelve por eliminación: <span class="math-expr">{ 0.3x + 0.2y = 1.6 ; 0.5x - 0.2y = 1.6 }</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ea2', this)">Mostrar solución</button>
+                            <button class="btn-resolver-directo" onclick="abrirEnSolucionador(3, 2, 16, 5, -2, 16, 'y', 'Ejercicio Avanzado 2')">➕➖ Resolver en Pizarra</button>
+                        </div>
+                        <div id="sol-ea2" class="solucion-box">
+                            <p><strong>Multiplicando por 10:</strong> <span class="math-expr">3x + 2y = 16</span> y <span class="math-expr">5x - 2y = 16</span>.<br>
+                            <strong>Sumando verticalmente:</strong> <span class="math-expr">8x = 32 ➔ x = 4</span>. En Ec. 1: <span class="math-expr">12 + 2y = 16 ➔ y = 2</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Solución = (4, 2) (x = 4, y = 2).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 3 (Problema contextual en Quetzales)</span>
+                        <p class="font-semibold text-base">En un cine de Guatemala, <span class="math-expr">2</span> entradas de adulto y <span class="math-expr">3</span> de niño cuestan <span class="math-expr">Q165</span>, mientras que <span class="math-expr">3</span> de adulto y <span class="math-expr">2</span> de niño cuestan <span class="math-expr">Q185</span>. Halla el precio de cada entrada por eliminación.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ea3', this)">Mostrar solución</button>
+                            <button class="btn-resolver-directo" onclick="abrirEnSolucionador(2, 3, 165, 3, 2, 185, 'y', 'Ejercicio Avanzado 3 (Cine Q)')">➕➖ Resolver en Pizarra</button>
+                        </div>
+                        <div id="sol-ea3" class="solucion-box">
+                            <p><strong>Sistema:</strong> <span class="math-expr">2x + 3y = 165</span> y <span class="math-expr">3x + 2y = 185</span>.<br>
+                            <strong>Ec. 1 por 2 y Ec. 2 por -3:</strong> <span class="math-expr">-5x = 330 - 555 = -225 ➔ x = 45</span>; <span class="math-expr">2(45) + 3y = 165 ➔ y = 25</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Entrada de adulto Q45 y de niño Q25 (45, 25).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 4 (Parámetro k para rectas paralelas / sin solución)</span>
+                        <p class="font-semibold text-base">Halla el valor de <span class="math-expr">k</span> para que el sistema <span class="math-expr">{ 3x + ky = 8 ; 6x - 4y = 5 }</span> no tenga solución al eliminar <span class="math-expr">x</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ea4', this)">Mostrar solución</button>
+                            <button class="btn-resolver-directo" onclick="abrirEnSolucionador(3, -2, 8, 6, -4, 5, 'x', 'Ejercicio Avanzado 4 (k = -2)')">➕➖ Probar con k = -2</button>
+                        </div>
+                        <div id="sol-ea4" class="solucion-box">
+                            <p><strong>Multiplicando Ec. 1 por -2 y sumando con Ec. 2:</strong> <span class="math-expr">(-2k - 4)y = -11</span>.<br>
+                            <strong>Anulando el coeficiente de y:</strong> <span class="math-expr">-2k - 4 = 0 ➔ k = -2</span> (quedando la falsedad <span class="math-expr">0 = -11</span>).</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: k = -2.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 5 (Solución racional fraccionaria)</span>
+                        <p class="font-semibold text-base">Resuelve exactamente por eliminación: <span class="math-expr">{ 4x + 3y = 11 ; 2x - 5y = 3 }</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ea5', this)">Mostrar solución</button>
+                            <button class="btn-resolver-directo" onclick="abrirEnSolucionador(4, 3, 11, 2, -5, 3, 'x', 'Ejercicio Avanzado 5')">➕➖ Resolver en Pizarra</button>
+                        </div>
+                        <div id="sol-ea5" class="solucion-box">
+                            <p><strong>Multiplicando Ec. 2 por -2:</strong> <span class="math-expr">-4x + 10y = -6</span>. Sumando con Ec. 1: <span class="math-expr">13y = 5 ➔ y = 5/13</span>.<br>
+                            <strong>Sustituyendo en Ec. 2:</strong> <span class="math-expr">2x - 25/13 = 3 ➔ 2x = 64/13 ➔ x = 32/13</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Solución = (32/13, 5/13).</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 4: PREGUNTAS DE REFLEXIÓN CRÍTICA  -->
+            <!-- ========================================== -->
+            <section id="sec-reflexion" class="seccion-contenido hidden">
+                <div class="card-montano">
+                    <h2 class="text-2xl font-bold text-[#1269A8] mb-2">🧠 Análisis Conceptual y Pensamiento Crítico (Método de Eliminación)</h2>
+                    <p class="text-sm text-slate-600 mb-4">Reflexiona sobre la estructura algebraica y el significado geométrico de sumar o restar ecuaciones.</p>
+
+                    <div class="space-y-4">
+                        <div class="p-4 bg-[#F2F5E9] rounded-xl border-2 border-[#54887D]">
+                            <h3 class="font-bold text-lg text-[#1269A8]">1. ¿Por qué es indispensable alinear las variables en columnas (<span class="math-expr">Ax + By = C</span>) antes de sumar o restar?</h3>
+                            <p class="mt-1">Imagina un sistema escrito como <span class="math-expr">{ 3x + 2y = 12 ; 4y = 8 - 3x }</span>. ¿Qué error ocurre si sumas verticalmente sin ordenar primero?</p>
+                            <button class="btn-solucion" onclick="toggleSolucion('ref-1', this)">Ver análisis conceptual</button>
+                            <div id="ref-1" class="solucion-box">
+                                <p><strong>Análisis:</strong> En álgebra solo se pueden reducir <strong>términos semejantes</strong> que estén en el mismo miembro de la igualdad. Si sumas sin alinear, mezclarías <span class="math-expr">x</span> con <span class="math-expr">y</span> o términos de lados opuestos del signo igual. Al reescribir la segunda ecuación como <span class="math-expr">3x + 4y = 8</span>, cada columna agrupa términos semejantes (<span class="math-expr">x</span> bajo <span class="math-expr">x</span>, <span class="math-expr">y</span> bajo <span class="math-expr">y</span>, constantes bajo constantes).</p>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-[#F2F5E9] rounded-xl border-2 border-[#54887D]">
+                            <h3 class="font-bold text-lg text-[#1269A8]">2. ¿Qué ventaja tiene usar el Mínimo Común Múltiplo (MCM) de los coeficientes frente a multiplicarlos directamente entre sí?</h3>
+                            <p class="mt-1">Si deseas eliminar <span class="math-expr">y</span> en <span class="math-expr">{ 5x + 6y = 22 ; 3x - 9y = 9 }</span>, puedes multiplicar por <span class="math-expr">9</span> y <span class="math-expr">6</span> (llegando a <span class="math-expr">54y</span>), o usar <span class="math-expr">MCM(6, 9) = 18</span> multiplicando por <span class="math-expr">3</span> y <span class="math-expr">2</span>. ¿Por qué es mejor el MCM?</p>
+                            <button class="btn-solucion" onclick="toggleSolucion('ref-2', this)">Ver análisis conceptual</button>
+                            <div id="ref-2" class="solucion-box">
+                                <p><strong>Análisis:</strong> El <strong>MCM</strong> produce los factores enteros más pequeños posibles (<span class="math-expr">3</span> y <span class="math-expr">2</span> en lugar de <span class="math-expr">9</span> y <span class="math-expr">6</span>), manteniendo coeficientes pequeños, reduciendo la probabilidad de errores aritméticos y evitando tener que simplificar fracciones grandes al final.</p>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-[#F2F5E9] rounded-xl border-2 border-[#54887D]">
+                            <h3 class="font-bold text-lg text-[#1269A8]">3. ¿Por qué sumar dos ecuaciones con coeficientes opuestos (<span class="math-expr">+4y</span> y <span class="math-expr">-4y</span>) es más seguro que restar ecuaciones con signos negativos?</h3>
+                            <p class="mt-1">Muchos estudiantes cometen errores al "restar" directamente una ecuación que contiene coeficientes negativos (por ejemplo, restar <span class="math-expr">-3y</span>). ¿Cómo evita ese error el multiplicar primero por <span class="math-expr">-1</span> y luego sumar?</p>
+                            <button class="btn-solucion" onclick="toggleSolucion('ref-3', this)">Ver análisis conceptual</button>
+                            <div id="ref-3" class="solucion-box">
+                                <p><strong>Análisis:</strong> Al multiplicar explícitamente toda la ecuación por <span class="math-expr">-1</span>, cambias visiblemente el signo de cada término (incluyendo el término independiente de la derecha). Luego aplicas una <strong>suma directa</strong>, evitando olvidar el doble negativo (<span class="math-expr">- (-3y) = +3y</span>) en las columnas siguientes.</p>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-[#F2F5E9] rounded-xl border-2 border-[#54887D]">
+                            <h3 class="font-bold text-lg text-[#1269A8]">4. ¿Cómo interpretamos geométricamente cuando en el método de eliminación desaparecen tanto la <span class="math-expr">x</span> como la <span class="math-expr">y</span>?</h3>
+                            <p class="mt-1">Si al sumar las ecuaciones se anulan ambas variables simultáneamente, ¿qué posición relativa tienen las dos rectas en el plano cartesiano?</p>
+                            <button class="btn-solucion" onclick="toggleSolucion('ref-4', this)">Ver análisis conceptual</button>
+                            <div id="ref-4" class="solucion-box">
+                                <p><strong>Análisis:</strong> Que ambas variables tengan coeficientes proporcionales (y se anulen juntas) significa que las dos rectas tienen exactamente la <strong>misma pendiente</strong>. Si queda <span class="math-expr">0 = k</span> (con <span class="math-expr">k ≠ 0</span>), son <strong>rectas paralelas distintas</strong> (sin puntos de corte). Si queda <span class="math-expr">0 = 0</span>, son <strong>rectas coincidentes</strong> (una encima de la otra, con infinitos puntos en común).</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 5: EVALUACIÓN FORMATIVA            -->
+            <!-- ========================================== -->
+            <section id="sec-evaluacion" class="seccion-contenido hidden">
+                <div class="card-montano">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b-2 border-[#F7D615] pb-3 mb-4">
+                        <div>
+                            <h2 class="text-2xl font-bold text-[#1269A8]">✅ Evaluación Formativa de Comprobación (Método de Eliminación)</h2>
+                            <p class="text-sm text-slate-600">Resuelve cada reactivo aplicando los 5 pasos del método de suma o resta y comprueba tu resultado.</p>
+                        </div>
+                        <span class="badge-nivel badge-avanzado mt-2 sm:mt-0">5 Reactivos de Comprobación</span>
+                    </div>
+
+                    <div class="space-y-4">
+                        <!-- Pregunta 1 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 1 • Suma Vertical Directa</span>
+                            <p class="font-bold text-base mt-1">Al sumar miembro a miembro las ecuaciones del sistema <span class="math-expr">{ 3x + 2y = 14 ; 5x - 2y = 18 }</span>, ¿qué par ordenado <span class="math-expr">(x, y)</span> se obtiene?</p>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="btn-solucion" onclick="toggleSolucion('eval-1', this)">Mostrar solución</button>
+                                <button class="btn-resolver-directo" onclick="abrirEnSolucionador(3, 2, 14, 5, -2, 18, 'y', 'Evaluación • Reactivo 1')">➕➖ Comprobar en Solucionador</button>
+                            </div>
+                            <div id="eval-1" class="solucion-box">
+                                <p><strong>Sumando verticalmente:</strong> <span class="math-expr">(3x + 5x) + (2y - 2y) = 14 + 18 ➔ 8x = 32 ➔ x = 4</span>.<br>
+                                <strong>Sustituyendo en Ec. 1:</strong> <span class="math-expr">3(4) + 2y = 14 ➔ 12 + 2y = 14 ➔ 2y = 2 ➔ y = 1</span>.</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: Solución = (4, 1) (x = 4, y = 1).</p>
+                            </div>
+                        </div>
+
+                        <!-- Pregunta 2 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 2 • Multiplicación de una Ecuación</span>
+                            <p class="font-bold text-base mt-1">Resuelve por eliminación: <span class="math-expr">{ 4x + y = 13 ; 3x - 2y = 7 }</span>.</p>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="btn-solucion" onclick="toggleSolucion('eval-2', this)">Mostrar solución</button>
+                                <button class="btn-resolver-directo" onclick="abrirEnSolucionador(4, 1, 13, 3, -2, 7, 'y', 'Evaluación • Reactivo 2')">➕➖ Comprobar en Solucionador</button>
+                            </div>
+                            <div id="eval-2" class="solucion-box">
+                                <p><strong>Multiplicando Ec. 1 por 2:</strong> <span class="math-expr">8x + 2y = 26</span>.<br>
+                                <strong>Sumando con Ec. 2:</strong> <span class="math-expr">11x = 33 ➔ x = 3</span>. En Ec. 1: <span class="math-expr">4(3) + y = 13 ➔ y = 1</span>.</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: Solución = (3, 1) (x = 3, y = 1).</p>
+                            </div>
+                        </div>
+
+                        <!-- Pregunta 3 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 3 • Uso del MCM en Ambas Ecuaciones</span>
+                            <p class="font-bold text-base mt-1">Usa el MCM para eliminar <span class="math-expr">y</span> en <span class="math-expr">{ 2x + 3y = 19 ; 5x - 4y = 13 }</span>.</p>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="btn-solucion" onclick="toggleSolucion('eval-3', this)">Mostrar solución</button>
+                                <button class="btn-resolver-directo" onclick="abrirEnSolucionador(2, 3, 19, 5, -4, 13, 'y', 'Evaluación • Reactivo 3')">➕➖ Comprobar en Solucionador</button>
+                            </div>
+                            <div id="eval-3" class="solucion-box">
+                                <p><strong>MCM(3, 4) = 12:</strong> Ec. 1 por <span class="math-expr">4</span> (<span class="math-expr">8x + 12y = 76</span>) y Ec. 2 por <span class="math-expr">3</span> (<span class="math-expr">15x - 12y = 39</span>).<br>
+                                <strong>Sumando:</strong> <span class="math-expr">23x = 115 ➔ x = 5</span>. En Ec. 1: <span class="math-expr">2(5) + 3y = 19 ➔ y = 3</span>.</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: Solución = (5, 3) (x = 5, y = 3).</p>
+                            </div>
+                        </div>
+
+                        <!-- Pregunta 4 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 4 • Sistema Incompatible por Eliminación</span>
+                            <p class="font-bold text-base mt-1">Al multiplicar por <span class="math-expr">-3</span> la primera ecuación de <span class="math-expr">{ 2x - y = 4 ; 6x - 3y = 15 }</span> y sumar con la segunda, ¿qué igualdad queda?</p>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="btn-solucion" onclick="toggleSolucion('eval-4', this)">Mostrar solución</button>
+                                <button class="btn-resolver-directo" onclick="abrirEnSolucionador(2, -1, 4, 6, -3, 15, 'x', 'Evaluación • Reactivo 4')">➕➖ Comprobar en Solucionador</button>
+                            </div>
+                            <div id="eval-4" class="solucion-box">
+                                <p><strong>Ec. 1 por -3:</strong> <span class="math-expr">-6x + 3y = -12</span>. Al sumar con <span class="math-expr">6x - 3y = 15</span> resulta <span class="math-expr">0 = 3</span> (Falsedad).</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: Queda 0 = 3 (falsedad); el sistema es incompatible (no tiene solución).</p>
+                            </div>
+                        </div>
+
+                        <!-- Pregunta 5 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 5 • Problema de Aplicación (Contexto Guatemala)</span>
+                            <p class="font-bold text-base mt-1">En una panadería de Quetzaltenango, <span class="math-expr">4</span> panes dulces y <span class="math-expr">2</span> tazas de café cuestan <span class="math-expr">Q26</span>, mientras que <span class="math-expr">2</span> panes dulces y <span class="math-expr">3</span> tazas de café cuestan <span class="math-expr">Q25</span>. Halla el precio de cada producto por eliminación.</p>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="btn-solucion" onclick="toggleSolucion('eval-5', this)">Mostrar solución</button>
+                                <button class="btn-resolver-directo" onclick="abrirEnSolucionador(4, 2, 26, 2, 3, 25, 'x', 'Evaluación • Reactivo 5')">➕➖ Comprobar en Solucionador</button>
+                            </div>
+                            <div id="eval-5" class="solucion-box">
+                                <p><strong>Sistema:</strong> <span class="math-expr">4x + 2y = 26</span> y <span class="math-expr">2x + 3y = 25</span>.<br>
+                                <strong>Ec. 2 por -2:</strong> <span class="math-expr">-4x - 6y = -50</span>. Sumando con Ec. 1: <span class="math-expr">-4y = -24 ➔ y = 6</span>; <span class="math-expr">4x + 12 = 26 ➔ x = 3.5</span>.</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: El pan dulce cuesta Q3.50 (7/2) y el café cuesta Q6 (3.5, 6).</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 6: SOLUCIONADOR PASO A PASO        -->
+            <!-- ========================================== -->
+            <section id="sec-solucionador" class="seccion-contenido hidden">
+                <div class="card-montano">
+                    <!-- Encabezado y Botones Rápidos de Prueba -->
+                    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b-2 border-[#F7D615] pb-4 mb-5">
+                        <div>
+                            <div class="flex flex-wrap items-center gap-2">
+                                <span class="badge-nivel badge-avanzado">Herramienta de Pizarra Digital</span>
+                                <span id="solver-preset-badge" class="text-xs font-bold text-[#54887D] bg-[#F2F5E9] px-2.5 py-1 rounded-full border border-[#54887D]">Sistema Personalizado</span>
+                            </div>
+                            <h2 class="text-2xl font-bold text-[#1269A8] mt-1">➕➖ Solucionador Algebraico Paso a Paso (Método de Eliminación)</h2>
+                            <p class="text-sm text-slate-600">Ingresa los coeficientes <span class="font-mono font-bold text-[#1269A8]">a₁x + b₁y = c₁</span> y <span class="font-mono font-bold text-[#1269A8]">a₂x + b₂y = c₂</span>, elige qué incógnita eliminar o usa la elección óptima automática.</p>
+                        </div>
+
+                        <!-- Botones Rápidos de Sistemas de Prueba -->
+                        <div class="flex flex-wrap gap-1.5">
+                            <button onclick="abrirEnSolucionador(2, 1, 11, 3, -2, 6, 'y', 'Prueba: Solución Única')" class="text-xs font-bold px-2.5 py-1.5 rounded-lg bg-emerald-100 text-emerald-900 border border-emerald-500 hover:bg-emerald-200 cursor-pointer">✔ Solución única</button>
+                            <button onclick="abrirEnSolucionador(4, -6, 5, -4, 6, 2, 'y', 'Prueba: Sin Solución')" class="text-xs font-bold px-2.5 py-1.5 rounded-lg bg-amber-100 text-amber-900 border border-amber-500 hover:bg-amber-200 cursor-pointer">✖ Sin solución</button>
+                            <button onclick="abrirEnSolucionador(3, -4, 6, -6, 8, -12, 'y', 'Prueba: Infinitas Soluciones')" class="text-xs font-bold px-2.5 py-1.5 rounded-lg bg-sky-100 text-sky-900 border border-sky-500 hover:bg-sky-200 cursor-pointer">∞ Infinitas</button>
+                            <button onclick="abrirEnSolucionador(5, 3, 14, 3, -2, 5, 'y', 'Prueba: Fracciones Exactas')" class="text-xs font-bold px-2.5 py-1.5 rounded-lg bg-purple-100 text-purple-900 border border-purple-500 hover:bg-purple-200 cursor-pointer">½ Fracciones</button>
+                        </div>
+                    </div>
+
+                    <!-- Grid Principal: Configuración Izquierda + Desarrollo Paso a Paso Derecha -->
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                        
+                        <!-- Panel Izquierdo: Entrada de Coeficientes y Vista Previa con Llave -->
+                        <div class="lg:col-span-5 space-y-4">
+                            
+                            <!-- Vista Previa en Vivo con Llave del Sistema -->
+                            <div class="p-3.5 rounded-xl bg-white border-2 border-[#1269A8] flex items-center justify-between gap-2">
+                                <div>
+                                    <span class="text-xs font-bold uppercase text-[#54887D] block">Sistema Ordenado:</span>
+                                    <div class="sistema-box text-base mt-1">
+                                        <span id="solver-preview-sistema">2x + y = 11 <br> 3x - 2y = 6</span>
+                                    </div>
+                                </div>
+                                <button onclick="elegirOptimoAutomatico()" class="bg-[#F7D615] hover:bg-[#ffe234] text-[#0f172a] font-bold text-xs py-2 px-3 rounded-lg border border-[#0f172a] shadow-sm cursor-pointer">
+                                    ✨ Elección Óptima<br>Automática
+                                </button>
+                            </div>
+
+                            <!-- Ecuación 1 -->
+                            <div class="p-3.5 rounded-xl bg-sky-50 border-2 border-[#1269A8]">
+                                <span class="font-bold text-sm text-[#1269A8] block mb-2">Ecuación 1: <span class="font-mono">a₁x + b₁y = c₁</span></span>
+                                <div class="flex items-center gap-1.5 font-mono font-bold text-base">
+                                    <input id="coef-a1" type="number" step="any" value="2" class="w-16 p-2 text-center rounded-lg border-2 border-[#88B5C7] bg-white text-[#0f172a]" oninput="ejecutarSolucionador()">
+                                    <span class="text-[#1269A8]">x +</span>
+                                    <input id="coef-b1" type="number" step="any" value="1" class="w-16 p-2 text-center rounded-lg border-2 border-[#88B5C7] bg-white text-[#0f172a]" oninput="ejecutarSolucionador()">
+                                    <span class="text-[#1269A8]">y =</span>
+                                    <input id="coef-c1" type="number" step="any" value="11" class="w-20 p-2 text-center rounded-lg border-2 border-[#88B5C7] bg-white text-[#0f172a]" oninput="ejecutarSolucionador()">
+                                </div>
+                            </div>
+
+                            <!-- Ecuación 2 -->
+                            <div class="p-3.5 rounded-xl bg-emerald-50 border-2 border-[#54887D]">
+                                <span class="font-bold text-sm text-[#54887D] block mb-2">Ecuación 2: <span class="font-mono">a₂x + b₂y = c₂</span></span>
+                                <div class="flex items-center gap-1.5 font-mono font-bold text-base">
+                                    <input id="coef-a2" type="number" step="any" value="3" class="w-16 p-2 text-center rounded-lg border-2 border-[#A6B046] bg-white text-[#0f172a]" oninput="ejecutarSolucionador()">
+                                    <span class="text-[#54887D]">x +</span>
+                                    <input id="coef-b2" type="number" step="any" value="-2" class="w-16 p-2 text-center rounded-lg border-2 border-[#A6B046] bg-white text-[#0f172a]" oninput="ejecutarSolucionador()">
+                                    <span class="text-[#54887D]">y =</span>
+                                    <input id="coef-c2" type="number" step="any" value="6" class="w-20 p-2 text-center rounded-lg border-2 border-[#A6B046] bg-white text-[#0f172a]" oninput="ejecutarSolucionador()">
+                                </div>
+                            </div>
+
+                            <!-- Selector de Incógnita a Eliminar -->
+                            <div class="p-3.5 rounded-xl bg-[#F2F5E9] border-2 border-[#A6B046]">
+                                <label class="block text-xs font-bold uppercase text-[#54887D] mb-2">Elige qué incógnita eliminar por suma o resta:</label>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <button id="btn-elim-y" onclick="cambiarVariableEliminar('y')" class="py-2 px-3 rounded-lg font-bold text-xs sm:text-sm bg-[#1269A8] text-white border-2 border-[#F7D615] shadow cursor-pointer">
+                                        Eliminar "y" (recomendado)
+                                    </button>
+                                    <button id="btn-elim-x" onclick="cambiarVariableEliminar('x')" class="py-2 px-3 rounded-lg font-bold text-xs sm:text-sm bg-white text-[#1269A8] border-2 border-[#1269A8] cursor-pointer">
+                                        Eliminar "x"
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Tarjeta de Resultado Final -->
+                            <div id="solver-resumen-box" class="p-4 rounded-xl bg-gradient-to-br from-[#1269A8] to-[#0d4f80] text-white border-2 border-[#F7D615] shadow-md">
+                                <span class="text-xs uppercase tracking-wider font-bold text-[#F7D615] block">Resultado del Sistema</span>
+                                <h3 id="solver-titulo-final" class="text-xl font-bold mt-0.5">Solución Única: (4, 3)</h3>
+                                <p id="solver-detalle-final" class="text-xs sm:text-sm text-[#F2F5E9] mt-1">x = 4   |   y = 3</p>
+                            </div>
+                        </div>
+
+                        <!-- Panel Derecho: Pasos Detallados del Método de Eliminación -->
+                        <div class="lg:col-span-7 space-y-3" id="solver-pasos-contenedor">
+                            <!-- Generado dinámicamente por JS -->
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Pie de Pizarra -->
+        <footer class="bg-[#1269A8] text-white text-center py-3 px-4 text-xs sm:text-sm border-t-2 border-[#F7D615]">
+            <strong>Colegio Montano</strong> • Departamento de Matemática • Tercera Unidad • Pizarra Digital Interactiva
+        </footer>
+    </div>
+
+    <!-- Scripts de Interactividad y Motor Exacto de Fracciones del Método de Eliminación -->
+    <script>
+        /* =========================================================================
+           1. NAVEGACIÓN DE PESTAÑAS Y PANTALLA COMPLETA
+           ========================================================================= */
+
+        function cambiarSeccion(seccionId, botonActivo) {
+            const secciones = document.querySelectorAll('.seccion-contenido');
+            secciones.forEach(sec => sec.classList.add('hidden'));
+
+            const target = document.getElementById('sec-' + seccionId);
+            if (target) {
+                target.classList.remove('hidden');
+            }
+
+            const botones = document.querySelectorAll('.tab-btn');
+            botones.forEach(btn => btn.classList.remove('active'));
+            if (botonActivo) {
+                botonActivo.classList.add('active');
+            }
+
+            if (seccionId === 'solucionador') {
+                ejecutarSolucionador();
+            }
+        }
+
+        function filtrarSubnivel(grupo, nivel, botonActivo) {
+            const contenedores = document.querySelectorAll('.subcontenido-' + grupo);
+            contenedores.forEach(cont => cont.classList.add('hidden'));
+
+            const target = document.getElementById(grupo + '-' + nivel);
+            if (target) {
+                target.classList.remove('hidden');
+            }
+
+            const parent = botonActivo.parentElement;
+            const subBotones = parent.querySelectorAll('.subtab-btn');
+            subBotones.forEach(btn => btn.classList.remove('active'));
+            botonActivo.classList.add('active');
+        }
+
+        function toggleSolucion(solucionId, boton) {
+            const box = document.getElementById(solucionId);
+            if (!box) return;
+
+            if (box.style.display === 'block') {
+                box.style.display = 'none';
+                boton.textContent = boton.textContent.replace('Ocultar', 'Mostrar').replace('Ocultar análisis conceptual', 'Ver análisis conceptual');
+            } else {
+                box.style.display = 'block';
+                if (boton.textContent.includes('Ver análisis')) {
+                    boton.textContent = 'Ocultar análisis conceptual';
+                } else {
+                    boton.textContent = 'Ocultar solución';
+                }
+            }
+        }
+
+        function toggleFullscreen() {
+            const btn = document.getElementById('fullscreen-btn');
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().then(() => {
+                    btn.innerHTML = '<span>✖ Salir de pantalla completa</span>';
+                }).catch(err => {
+                    console.warn('Error al intentar activar pantalla completa:', err);
+                });
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen().then(() => {
+                        btn.innerHTML = '<span>⛶ Pantalla completa</span>';
+                    });
+                }
+            }
+        }
+
+        document.addEventListener('fullscreenchange', () => {
+            const btn = document.getElementById('fullscreen-btn');
+            if (!document.fullscreenElement && btn) {
+                btn.innerHTML = '<span>⛶ Pantalla completa</span>';
+            }
+        });
+
+        /* =========================================================================
+           2. ARITMÉTICA RACIONAL EXACTA (FRACCIONES, GCD Y LCM SIN ERROR DECIMAL)
+           ========================================================================= */
+
+        let variableEliminarActual = 'y'; // 'y' o 'x'
+
+        function gcdBig(a, b) {
+            a = a < 0n ? -a : a;
+            b = b < 0n ? -b : b;
+            while (b !== 0n) {
+                const t = b;
+                b = a % b;
+                a = t;
+            }
+            return a === 0n ? 1n : a;
+        }
+
+        function lcmBig(a, b) {
+            a = a < 0n ? -a : a;
+            b = b < 0n ? -b : b;
+            if (a === 0n || b === 0n) return 0n;
+            return (a / gcdBig(a, b)) * b;
+        }
+
+        /**
+         * Convierte un número decimal o entero a fracción exacta { n: BigInt, d: BigInt }.
+         */
+        function toFrac(val) {
+            if (!isFinite(val) || Math.abs(val) < 1e-12) return { n: 0n, d: 1n };
+            const str = val.toString().toLowerCase();
+            if (str.includes('e')) {
+                const fixed = val.toFixed(10).replace(/0+$/, '').replace(/\.$/, '');
+                return toFrac(parseFloat(fixed));
+            }
+            if (!str.includes('.')) {
+                return { n: BigInt(Math.round(val)), d: 1n };
+            }
+            const parts = str.split('.');
+            const decLen = BigInt(parts[1].length);
+            const den = 10n ** decLen;
+            const sign = val < 0 ? -1n : 1n;
+            const intPart = BigInt(parts[0].replace('-', '') || '0');
+            const fracPart = BigInt(parts[1]);
+            const num = sign * (intPart * den + fracPart);
+            return normFrac(num, den);
+        }
+
+        function normFrac(n, d) {
+            if (d === 0n) return { n: 0n, d: 0n };
+            if (n === 0n) return { n: 0n, d: 1n };
+            if (d < 0n) {
+                n = -n;
+                d = -d;
+            }
+            const g = gcdBig(n, d);
+            return { n: n / g, d: d / g };
+        }
+
+        function addFrac(f1, f2) {
+            return normFrac(f1.n * f2.d + f2.n * f1.d, f1.d * f2.d);
+        }
+
+        function subFrac(f1, f2) {
+            return normFrac(f1.n * f2.d - f2.n * f1.d, f1.d * f2.d);
+        }
+
+        function mulFrac(f1, f2) {
+            return normFrac(f1.n * f2.n, f1.d * f2.d);
+        }
+
+        function divFrac(f1, f2) {
+            return normFrac(f1.n * f2.d, f1.d * f2.n);
+        }
+
+        function negFrac(f) {
+            return { n: -f.n, d: f.d };
+        }
+
+        function fracToStr(f, includeApprox = false) {
+            if (f.d === 0n) return 'Indefinido';
+            if (f.n === 0n) return '0';
+            if (f.d === 1n) return f.n.toString();
+            const base = `${f.n.toString()}/${f.d.toString()}`;
+            if (includeApprox) {
+                const approx = Number(f.n) / Number(f.d);
+                return `${base} (≈ ${approx.toFixed(2).replace(/\.?0+$/, '')})`;
+            }
+            return base;
+        }
+
+        function fracToHTML(f) {
+            if (f.d === 0n) return 'Indefinido';
+            if (f.n === 0n || f.d === 1n) return f.n.toString();
+            return `<span class="frac"><span class="frac-num">${f.n.toString()}</span><span class="frac-den">${f.d.toString()}</span></span>`;
+        }
+
+        function fracToCoefStr(f, variable, isFirst) {
+            if (f.n === 0n) return '';
+            const isNeg = f.n < 0n;
+            const absF = { n: isNeg ? -f.n : f.n, d: f.d };
+            const isOne = absF.n === 1n && absF.d === 1n;
+            const coefPart = isOne ? variable : `${fracToStr(absF)}${variable}`;
+            if (isFirst) {
+                return isNeg ? `-${coefPart}` : coefPart;
+            }
+            return isNeg ? `- ${coefPart}` : `+ ${coefPart}`;
+        }
+
+        function formatearEcuacionFrac(fa, fb, fc) {
+            const partes = [];
+            if (fa.n !== 0n) partes.push(fracToCoefStr(fa, 'x', true));
+            if (fb.n !== 0n) partes.push(fracToCoefStr(fb, 'y', partes.length === 0));
+            if (partes.length === 0) partes.push('0');
+            return `${partes.join(' ')} = ${fracToStr(fc)}`;
+        }
+
+        /* =========================================================================
+           3. CONTROL DEL SOLUCIONADOR PASO A PASO (MÉTODO DE ELIMINACIÓN)
+           ========================================================================= */
+
+        function abrirEnSolucionador(a1, b1, c1, a2, b2, c2, varElim, etiqueta) {
+            document.getElementById('coef-a1').value = a1;
+            document.getElementById('coef-b1').value = b1;
+            document.getElementById('coef-c1').value = c1;
+            document.getElementById('coef-a2').value = a2;
+            document.getElementById('coef-b2').value = b2;
+            document.getElementById('coef-c2').value = c2;
+            document.getElementById('solver-preset-badge').textContent = etiqueta || 'Sistema Cargado';
+
+            cambiarVariableEliminar(varElim || 'y', false);
+
+            const btnTab6 = document.getElementById('tab-solucionador');
+            cambiarSeccion('solucionador', btnTab6);
+        }
+
+        function cambiarVariableEliminar(variable, recalcular = true) {
+            variableEliminarActual = variable;
+            const btnY = document.getElementById('btn-elim-y');
+            const btnX = document.getElementById('btn-elim-x');
+            if (variable === 'y') {
+                btnY.className = 'py-2 px-3 rounded-lg font-bold text-xs sm:text-sm bg-[#1269A8] text-white border-2 border-[#F7D615] shadow cursor-pointer';
+                btnX.className = 'py-2 px-3 rounded-lg font-bold text-xs sm:text-sm bg-white text-[#1269A8] border-2 border-[#1269A8] cursor-pointer';
+            } else {
+                btnX.className = 'py-2 px-3 rounded-lg font-bold text-xs sm:text-sm bg-[#1269A8] text-white border-2 border-[#F7D615] shadow cursor-pointer';
+                btnY.className = 'py-2 px-3 rounded-lg font-bold text-xs sm:text-sm bg-white text-[#1269A8] border-2 border-[#1269A8] cursor-pointer';
+            }
+            if (recalcular) ejecutarSolucionador();
+        }
+
+        /**
+         * Evalúa cuál incógnita ('x' o 'y') tiene coeficientes más fáciles de eliminar (opuestos, iguales o menor MCM).
+         */
+        function elegirOptimoAutomatico() {
+            const a1 = toFrac(parseFloat(document.getElementById('coef-a1').value));
+            const b1 = toFrac(parseFloat(document.getElementById('coef-b1').value));
+            const a2 = toFrac(parseFloat(document.getElementById('coef-a2').value));
+            const b2 = toFrac(parseFloat(document.getElementById('coef-b2').value));
+
+            const scoreVar = (c1, c2) => {
+                if (c1.n === 0n && c2.n === 0n) return 999999;
+                if (c1.n === 0n || c2.n === 0n) return 0; // Ya está eliminada en una ecuación
+                if (c1.n === -c2.n && c1.d === c2.d) return 1; // Ya son opuestos (+k y -k)
+                if (c1.n === c2.n && c1.d === c2.d) return 2; // Ya son iguales (+k y +k)
+                if (c1.d === 1n && c2.d === 1n) {
+                    const m = lcmBig(c1.n, c2.n);
+                    if (m === (c1.n < 0n ? -c1.n : c1.n) || m === (c2.n < 0n ? -c2.n : c2.n)) return 3; // Solo multiplicar una ecuación
+                    return 4 + Number(m);
+                }
+                return 50;
+            };
+
+            const sx = scoreVar(a1, a2);
+            const sy = scoreVar(b1, b2);
+            const mejor = sy <= sx ? 'y' : 'x';
+            cambiarVariableEliminar(mejor, true);
+        }
+
+        /**
+         * Calcula los multiplicadores exactos m1 y m2 (como fracciones) para que m1*k1 + m2*k2 = 0.
+         */
+        function calcularMultiplicadoresEliminacion(k1, k2) {
+            if (k1.n === 0n && k2.n === 0n) {
+                return { m1: { n: 1n, d: 1n }, m2: { n: 1n, d: 1n }, mcmStr: '0 (ya anulada)' };
+            }
+            if (k1.n === 0n) {
+                return { m1: { n: 1n, d: 1n }, m2: { n: 0n, d: 1n }, mcmStr: fracToStr(k2) };
+            }
+            if (k2.n === 0n) {
+                return { m1: { n: 0n, d: 1n }, m2: { n: 1n, d: 1n }, mcmStr: fracToStr(k1) };
+            }
+
+            // Si ya son opuestos exactos: m1 = 1, m2 = 1
+            if (k1.n === -k2.n && k1.d === k2.d) {
+                const absK = { n: k1.n < 0n ? -k1.n : k1.n, d: k1.d };
+                return { m1: { n: 1n, d: 1n }, m2: { n: 1n, d: 1n }, mcmStr: fracToStr(absK) };
+            }
+
+            // Si son iguales exactos: m1 = 1, m2 = -1
+            if (k1.n === k2.n && k1.d === k2.d) {
+                const absK = { n: k1.n < 0n ? -k1.n : k1.n, d: k1.d };
+                return { m1: { n: 1n, d: 1n }, m2: { n: -1n, d: 1n }, mcmStr: fracToStr(absK) };
+            }
+
+            // Caso entero: usar MCM(|k1|, |k2|)
+            if (k1.d === 1n && k2.d === 1n) {
+                const abs1 = k1.n < 0n ? -k1.n : k1.n;
+                const abs2 = k2.n < 0n ? -k2.n : k2.n;
+                const M = lcmBig(abs1, abs2);
+                const f1 = M / abs1;
+                const f2 = M / abs2;
+                // Si k1 y k2 tienen el mismo signo, multiplicamos Ec. 2 por negativo para lograr signos opuestos
+                const mismoSigno = (k1.n > 0n && k2.n > 0n) || (k1.n < 0n && k2.n < 0n);
+                return {
+                    m1: { n: f1, d: 1n },
+                    m2: { n: mismoSigno ? -f2 : f2, d: 1n },
+                    mcmStr: M.toString()
+                };
+            }
+
+            // Caso racional general: eliminar denominadores y aplicar MCM
+            const n1 = k1.n * k2.d;
+            const n2 = k2.n * k1.d;
+            const abs1 = n1 < 0n ? -n1 : n1;
+            const abs2 = n2 < 0n ? -n2 : n2;
+            const M = lcmBig(abs1, abs2);
+            const f1 = M / abs1;
+            const f2 = M / abs2;
+            const mismoSigno = (n1 > 0n && n2 > 0n) || (n1 < 0n && n2 < 0n);
+            return {
+                m1: { n: f1, d: 1n },
+                m2: { n: mismoSigno ? -f2 : f2, d: 1n },
+                mcmStr: fracToStr(normFrac(M, k1.d * k2.d))
+            };
+        }
+
+        /**
+         * Genera y renderiza los 5 pasos exactos del Método de Eliminación (Suma o Resta).
+         */
+        function ejecutarSolucionador() {
+            const rawA1 = parseFloat(document.getElementById('coef-a1').value);
+            const rawB1 = parseFloat(document.getElementById('coef-b1').value);
+            const rawC1 = parseFloat(document.getElementById('coef-c1').value);
+            const rawA2 = parseFloat(document.getElementById('coef-a2').value);
+            const rawB2 = parseFloat(document.getElementById('coef-b2').value);
+            const rawC2 = parseFloat(document.getElementById('coef-c2').value);
+
+            const contenedor = document.getElementById('solver-pasos-contenedor');
+            const resumenBox = document.getElementById('solver-resumen-box');
+            const tituloFinal = document.getElementById('solver-titulo-final');
+            const detalleFinal = document.getElementById('solver-detalle-final');
+            const previewSistema = document.getElementById('solver-preview-sistema');
+
+            if ([rawA1, rawB1, rawC1, rawA2, rawB2, rawC2].some(v => isNaN(v))) {
+                contenedor.innerHTML = `<div class="paso-solver border-red-600 text-red-700 font-bold">⚠️ Por favor, completa todos los coeficientes numéricos del sistema.</div>`;
+                return;
+            }
+
+            const a1 = toFrac(rawA1), b1 = toFrac(rawB1), c1 = toFrac(rawC1);
+            const a2 = toFrac(rawA2), b2 = toFrac(rawB2), c2 = toFrac(rawC2);
+
+            const eq1Str = formatearEcuacionFrac(a1, b1, c1);
+            const eq2Str = formatearEcuacionFrac(a2, b2, c2);
+            previewSistema.innerHTML = `${eq1Str} <br> ${eq2Str}`;
+
+            const vElim = variableEliminarActual;
+            const vSobrevive = vElim === 'y' ? 'x' : 'y';
+
+            // Coeficientes de la variable a eliminar (k1, k2)
+            const k1 = vElim === 'y' ? b1 : a1;
+            const k2 = vElim === 'y' ? b2 : a2;
+
+            const { m1, m2, mcmStr } = calcularMultiplicadoresEliminacion(k1, k2);
+
+            // Nuevas ecuaciones multiplicadas
+            const na1 = mulFrac(m1, a1), nb1 = mulFrac(m1, b1), nc1 = mulFrac(m1, c1);
+            const na2 = mulFrac(m2, a2), nb2 = mulFrac(m2, b2), nc2 = mulFrac(m2, c2);
+
+            const neq1Str = formatearEcuacionFrac(na1, nb1, nc1);
+            const neq2Str = formatearEcuacionFrac(na2, nb2, nc2);
+
+            // Suma vertical columna por columna
+            const sumA = addFrac(na1, na2);
+            const sumB = addFrac(nb1, nb2);
+            const sumC = addFrac(nc1, nc2);
+
+            const coefSobrevive = vSobrevive === 'x' ? sumA : sumB;
+            const eqResultanteStr = `${fracToStr(coefSobrevive)}${vSobrevive} = ${fracToStr(sumC)}`;
+
+            // Descripción clara del Paso 2
+            let descPaso2 = '';
+            if (m1.n === 1n && m1.d === 1n && m2.n === 1n && m2.d === 1n) {
+                descPaso2 = `Los coeficientes de <strong>"${vElim}"</strong> (<span class="font-mono font-bold">${fracToStr(k1)}</span> y <span class="font-mono font-bold">${fracToStr(k2)}</span>) ya son <strong>opuestos directos</strong> (MCM = ${mcmStr}). No es necesario multiplicar; sumamos directamente.`;
+            } else {
+                descPaso2 = `El <strong>MCM</strong> de los valores absolutos de los coeficientes de <strong>"${vElim}"</strong> (<span class="font-mono font-bold">${fracToStr(k1)}</span> y <span class="font-mono font-bold">${fracToStr(k2)}</span>) es <strong>${mcmStr}</strong>.<br>
+                • Multiplicamos <strong>Ec. 1</strong> por <span class="math-expr">${fracToStr(m1)}</span> ➔ <span class="font-mono font-bold text-[#1269A8]">${neq1Str}</span><br>
+                • Multiplicamos <strong>Ec. 2</strong> por <span class="math-expr">${fracToStr(m2)}</span> ➔ <span class="font-mono font-bold text-[#54887D]">${neq2Str}</span>`;
+            }
+
+            let htmlPasos = `
+                <!-- PASO 1 -->
+                <div class="paso-solver">
+                    <span class="text-xs font-extrabold uppercase tracking-wider text-[#1269A8] block mb-1">Paso 1 • Sistema Alineado en Forma Estándar (Ax + By = C)</span>
+                    <div class="text-sm sm:text-base mt-1">
+                        <span class="font-mono font-bold text-[#1269A8]">Ec. 1: ${eq1Str}</span> &nbsp;&nbsp;|&nbsp;&nbsp;
+                        <span class="font-mono font-bold text-[#54887D]">Ec. 2: ${eq2Str}</span>
+                    </div>
+                </div>
+
+                <!-- PASO 2 -->
+                <div class="paso-solver" style="border-left-color: #54887D;">
+                    <span class="text-xs font-extrabold uppercase tracking-wider text-[#54887D] block mb-1">Paso 2 • Igualar Coeficientes de "${vElim}" con Signos Opuestos</span>
+                    <div class="text-xs sm:text-sm text-slate-700 leading-relaxed mt-1">${descPaso2}</div>
+                </div>
+
+                <!-- PASO 3 -->
+                <div class="paso-solver" style="border-left-color: #A6B046;">
+                    <span class="text-xs font-extrabold uppercase tracking-wider text-[#54887D] block mb-2">Paso 3 • Suma Vertical Columna por Columna (Eliminando "${vElim}")</span>
+                    <div class="suma-vertical-box text-sm sm:text-base">
+                        <div class="text-[#1269A8] font-bold">&nbsp;&nbsp;${neq1Str}</div>
+                        <div class="text-[#54887D] font-bold linea-suma">+ (${neq2Str})</div>
+                        <div class="text-[#0f172a] font-extrabold">${coefSobrevive.n === 0n ? `0 = ${fracToStr(sumC)}` : eqResultanteStr}</div>
+                    </div>
+                </div>
+            `;
+
+            // Evaluar resultado tras la suma vertical
+            if (coefSobrevive.n === 0n) {
+                if (sumC.n === 0n) {
+                    htmlPasos += `
+                        <div class="paso-solver" style="border-left-color: #54887D;">
+                            <span class="text-xs font-extrabold uppercase tracking-wider text-[#54887D] block mb-1">Paso 4 • Análisis del Resultado (0 = 0)</span>
+                            <p class="text-sm text-slate-700">Al sumar columna por columna se anularon <strong>ambas incógnitas y los términos independientes</strong>, quedando la identidad verdadera <span class="math-expr">0 = 0</span>. Ambas ecuaciones representan la misma recta y tienen <strong>INFINITAS SOLUCIONES</strong>.</p>
+                        </div>`;
+                    tituloFinal.textContent = 'Infinitas Soluciones (0 = 0)';
+                    detalleFinal.textContent = 'Sistema Compatible Dependiente: rectas coincidentes.';
+                    resumenBox.style.background = 'linear-gradient(135deg, #54887D 0%, #375c54 100%)';
+                } else {
+                    htmlPasos += `
+                        <div class="paso-solver" style="border-left-color: #b45309;">
+                            <span class="text-xs font-extrabold uppercase tracking-wider text-amber-800 block mb-1">Paso 4 • Análisis del Resultado (0 = ${fracToStr(sumC)})</span>
+                            <p class="text-sm text-slate-700">Al sumar columna por columna se anularon <strong>ambas incógnitas</strong> (<span class="math-expr">0</span>), quedando la falsedad numérica <span class="math-expr">0 = ${fracToStr(sumC)}</span>. Las rectas son paralelas y el sistema <strong>NO TIENE SOLUCIÓN</strong>.</p>
+                        </div>`;
+                    tituloFinal.textContent = `Sin Solución (0 = ${fracToStr(sumC)})`;
+                    detalleFinal.textContent = 'Sistema Incompatible (Inconsistente): rectas paralelas sin intersección.';
+                    resumenBox.style.background = 'linear-gradient(135deg, #b45309 0%, #78350f 100%)';
+                }
+            } else {
+                // Solución única exacta en fracciones
+                const valSobrevive = divFrac(sumC, coefSobrevive);
+
+                // Elegir ecuación original donde el coeficiente de vElim sea no nulo para despejar vElim
+                const usarEc1 = (vElim === 'y' ? b1.n !== 0n : a1.n !== 0n);
+                const cObj = usarEc1 ? c1 : c2;
+                const coefSobOrig = usarEc1 ? (vSobrevive === 'x' ? a1 : b1) : (vSobrevive === 'x' ? a2 : b2);
+                const coefElimOrig = usarEc1 ? (vElim === 'y' ? b1 : a1) : (vElim === 'y' ? b2 : a2);
+
+                const prodSob = mulFrac(coefSobOrig, valSobrevive);
+                const rhsElim = subFrac(cObj, prodSob);
+                const valElim = divFrac(rhsElim, coefElimOrig);
+
+                const solX = vSobrevive === 'x' ? valSobrevive : valElim;
+                const solY = vSobrevive === 'y' ? valSobrevive : valElim;
+
+                // Verificación exacta en ambas ecuaciones
+                const check1 = addFrac(mulFrac(a1, solX), mulFrac(b1, solY));
+                const check2 = addFrac(mulFrac(a2, solX), mulFrac(b2, solY));
+
+                htmlPasos += `
+                    <!-- PASO 4 -->
+                    <div class="paso-solver" style="border-left-color: #F7D615;">
+                        <span class="text-xs font-extrabold uppercase tracking-wider text-[#1269A8] block mb-1">Paso 4 • Despejar "${vSobrevive}" y Sustituir en Ecuación ${usarEc1 ? '1' : '2'} Original</span>
+                        <div class="text-sm sm:text-base space-y-1.5 mt-1">
+                            <p>• Despejando <span class="font-mono font-bold">${vSobrevive}</span>: &nbsp; <span class="math-expr">${vSobrevive} = ${fracToStr(valSobrevive, true)}</span></p>
+                            <p>• Sustituyendo <span class="font-mono font-bold">${vSobrevive} = ${fracToStr(valSobrevive)}</span> en <strong>Ec. ${usarEc1 ? '1' : '2'}</strong> (<span class="font-mono font-bold">${usarEc1 ? eq1Str : eq2Str}</span>):</p>
+                            <p>&nbsp;&nbsp;<span class="math-expr">${fracToStr(coefElimOrig)}${vElim} = ${fracToStr(cObj)} - (${fracToStr(prodSob)}) = ${fracToStr(rhsElim)}</span> &nbsp;➔&nbsp; <span class="math-expr">${vElim} = ${fracToStr(valElim, true)}</span></p>
+                        </div>
+                    </div>
+
+                    <!-- PASO 5 -->
+                    <div class="paso-solver">
+                        <span class="text-xs font-extrabold uppercase tracking-wider text-[#54887D] block mb-1">Paso 5 • Verificación en Ambas Ecuaciones Originales</span>
+                        <div class="text-xs sm:text-sm space-y-1 mt-1 text-slate-700">
+                            <p>✔ Ec. 1: <span class="font-mono font-bold">${fracToStr(a1)}(${fracToStr(solX)}) + ${fracToStr(b1)}(${fracToStr(solY)}) = ${fracToStr(check1)}</span> (coincide con <span class="font-mono font-bold">${fracToStr(c1)}</span>)</p>
+                            <p>✔ Ec. 2: <span class="font-mono font-bold">${fracToStr(a2)}(${fracToStr(solX)}) + ${fracToStr(b2)}(${fracToStr(solY)}) = ${fracToStr(check2)}</span> (coincide con <span class="font-mono font-bold">${fracToStr(c2)}</span>)</p>
+                        </div>
+                    </div>
+                `;
+
+                tituloFinal.textContent = `Solución Única: (${fracToStr(solX)}, ${fracToStr(solY)})`;
+                detalleFinal.textContent = `x = ${fracToStr(solX, true)}   |   y = ${fracToStr(solY, true)}`;
+                resumenBox.style.background = 'linear-gradient(135deg, #1269A8 0%, #0d4f80 100%)';
+            }
+
+            contenedor.innerHTML = htmlPasos;
+        }
+
+        // Inicializar solucionador al cargar la ventana
+        window.onload = function () {
+            ejecutarSolucionador();
+        };
+    </script>
+</body>
+</html>

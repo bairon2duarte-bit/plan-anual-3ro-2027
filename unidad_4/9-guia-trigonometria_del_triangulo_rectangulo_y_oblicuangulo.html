@@ -1,0 +1,1641 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trigonometría del Triángulo Rectángulo y Triángulo Oblicuángulo | Colegio Montano</title>
+    <!-- Carga de Tailwind CSS para utilidades de diseño responsivo y layout -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Carga oficial de GeoGebra Classic / Geometry API -->
+    <script src="https://www.geogebra.org/apps/deployggb.js"></script>
+    <style>
+        /* Configuración de Variables Institucionales Colegio Montano */
+        :root {
+            --azul-principal: #1269A8;
+            --amarillo-brillante: #F7D615;
+            --verde-grisaceo: #54887D;
+            --azul-claro: #88B5C7;
+            --verde-oliva: #A6B046;
+            --blanco-suave: #F2F5E9;
+        }
+
+        /* Tipografía Institucional */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e2e8f0;
+            color: #1e293b;
+            margin: 0;
+            padding: 12px;
+        }
+
+        /* Marco Principal de Pizarra Digital */
+        #pizarra-container {
+            background-color: var(--blanco-suave);
+            border: 5px solid var(--amarillo-brillante);
+            border-radius: 12px;
+            box-shadow: 0 12px 30px rgba(18, 105, 168, 0.25);
+            max-width: 1240px;
+            margin: 0 auto;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 86vh;
+        }
+
+        /* Encabezado de la Pizarra */
+        .pizarra-header {
+            background: linear-gradient(135deg, var(--azul-principal) 0%, #0d4f80 100%);
+            color: white;
+            padding: 16px 24px;
+            border-bottom: 4px solid var(--amarillo-brillante);
+        }
+
+        /* Botón Fullscreen */
+        .btn-fullscreen {
+            background-color: var(--amarillo-brillante);
+            color: #0f172a;
+            font-weight: 700;
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: 2px solid #ffffff;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+        .btn-fullscreen:hover {
+            background-color: #ffe234;
+            transform: translateY(-1px);
+        }
+
+        /* Navegación de Pestañas */
+        .nav-tabs {
+            background-color: #ffffff;
+            border-bottom: 2px solid var(--azul-claro);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            padding: 10px 20px;
+        }
+
+        .tab-btn {
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.92rem;
+            color: var(--azul-principal);
+            background-color: transparent;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .tab-btn:hover {
+            background-color: rgba(136, 181, 199, 0.25);
+            border-color: var(--azul-claro);
+        }
+
+        .tab-btn.active {
+            background-color: var(--azul-principal);
+            color: #ffffff;
+            border-color: var(--amarillo-brillante);
+            box-shadow: 0 3px 8px rgba(18, 105, 168, 0.3);
+        }
+
+        /* Pestaña destacada para GeoGebra */
+        .tab-btn-ggb {
+            background-color: rgba(247, 214, 21, 0.28);
+            border-color: var(--amarillo-brillante);
+        }
+        .tab-btn-ggb.active {
+            background-color: var(--azul-principal);
+            color: #ffffff;
+            border-color: var(--amarillo-brillante);
+        }
+
+        /* Tarjetas de Contenido */
+        .card-montano {
+            background-color: #ffffff;
+            border: 2px solid var(--verde-grisaceo);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 18px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Tarjetas Visuales de Fórmulas */
+        .card-formula {
+            background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+            border: 2px solid var(--azul-principal);
+            border-top: 5px solid var(--amarillo-brillante);
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 4px 10px rgba(18, 105, 168, 0.08);
+            transition: transform 0.2s ease;
+        }
+        .card-formula:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Etiquetas de Nivel */
+        .badge-nivel {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .badge-basico {
+            background-color: var(--verde-oliva);
+            color: #ffffff;
+        }
+        .badge-intermedio {
+            background-color: var(--verde-grisaceo);
+            color: #ffffff;
+        }
+        .badge-avanzado {
+            background-color: var(--azul-principal);
+            color: #ffffff;
+            border: 1px solid var(--amarillo-brillante);
+        }
+
+        /* Contenedor de Soluciones Ocultas */
+        .solucion-box {
+            background-color: rgba(136, 181, 199, 0.25);
+            border: 1.5px dashed var(--azul-principal);
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin-top: 12px;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .btn-solucion {
+            background-color: var(--azul-principal);
+            color: white;
+            font-weight: 600;
+            padding: 7px 14px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.2s;
+            margin-top: 10px;
+        }
+        .btn-solucion:hover {
+            background-color: var(--verde-grisaceo);
+        }
+
+        /* Botón Directo para Construir en GeoGebra */
+        .btn-geogebra {
+            background-color: var(--amarillo-brillante);
+            color: #0f172a;
+            font-weight: 700;
+            padding: 7px 14px;
+            border-radius: 6px;
+            font-size: 0.88rem;
+            cursor: pointer;
+            border: 1.5px solid #0f172a;
+            transition: all 0.2s ease;
+            margin-top: 10px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .btn-geogebra:hover {
+            background-color: #ffe234;
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Bloques Matemáticos Visuales */
+        .math-expr {
+            font-family: 'Cambria Math', 'Times New Roman', serif;
+            font-size: 1.05rem;
+            font-weight: bold;
+            color: var(--azul-principal);
+            background-color: #f8fafc;
+            padding: 2px 8px;
+            border-radius: 4px;
+            border: 1px solid #cbd5e1;
+            display: inline-block;
+        }
+
+        /* Sub-pestañas de Nivel */
+        .subtab-btn {
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 0.88rem;
+            cursor: pointer;
+            border: 2px solid var(--verde-grisaceo);
+            background-color: #ffffff;
+            color: var(--verde-grisaceo);
+            transition: all 0.2s;
+        }
+        .subtab-btn.active {
+            background-color: var(--verde-grisaceo);
+            color: #ffffff;
+        }
+
+        /* Contenedor del Applet de GeoGebra */
+        #ggb-wrapper {
+            width: 100%;
+            min-height: 550px;
+            border: 3px solid var(--azul-principal);
+            border-radius: 10px;
+            overflow: hidden;
+            background-color: #ffffff;
+            position: relative;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Modo Fullscreen */
+        :fullscreen #pizarra-container {
+            max-width: 100%;
+            width: 100vw;
+            height: 100vh;
+            border-radius: 0;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Marco Principal de la Pizarra Digital -->
+    <div id="pizarra-container">
+        
+        <!-- Encabezado Institucional -->
+        <header class="pizarra-header flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-4">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyEop0yf6lZ7Jk9MILZxF1rBj4Oqs5esyhIQ&s" 
+                     alt="Logo Colegio Montano" 
+                     class="w-14 h-14 rounded-lg bg-white p-1 object-contain border-2 border-[#F7D615]"
+                     onerror="this.src='https://placehold.co/60x60/1269A8/F7D615?text=CM'">
+                <div>
+                    <span class="text-xs uppercase tracking-widest font-bold text-[#F7D615] block">Colegio Montano • Tercero Básico • Cuarta Unidad • Matemática</span>
+                    <h1 class="text-xl sm:text-2xl font-bold leading-tight">Trigonometría del Triángulo Rectángulo y Triángulo Oblicuángulo</h1>
+                    <p class="text-sm text-[#88B5C7] font-semibold">Guía 9 • Pizarra Digital Interactiva con GeoGebra</p>
+                </div>
+            </div>
+            <button id="fullscreen-btn" class="btn-fullscreen flex items-center gap-2" onclick="toggleFullscreen()">
+                <span>⛶ Pantalla completa</span>
+            </button>
+        </header>
+
+        <!-- Barra de Navegación Horizontal de 6 Pestañas -->
+        <nav class="nav-tabs" role="tablist">
+            <button id="tab-teoria" class="tab-btn active" onclick="cambiarSeccion('teoria', this)">📘 1. Teoría</button>
+            <button id="tab-ejemplos" class="tab-btn" onclick="cambiarSeccion('ejemplos', this)">💡 2. Ejemplos Resueltos (15)</button>
+            <button id="tab-ejercicios" class="tab-btn" onclick="cambiarSeccion('ejercicios', this)">✍️ 3. Ejercicios Prácticos (15)</button>
+            <button id="tab-reflexion" class="tab-btn" onclick="cambiarSeccion('reflexion', this)">🧠 4. Reflexión Crítica</button>
+            <button id="tab-evaluacion" class="tab-btn" onclick="cambiarSeccion('evaluacion', this)">✅ 5. Evaluación Formativa</button>
+            <button id="tab-geogebra" class="tab-btn tab-btn-ggb" onclick="cambiarSeccion('geogebra', this)">📐 6. Laboratorio GeoGebra</button>
+        </nav>
+
+        <!-- Lienzo Principal de Contenido -->
+        <main class="p-4 sm:p-6 flex-1">
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 1: EXPLICACIÓN TEÓRICA             -->
+            <!-- ========================================== -->
+            <section id="sec-teoria" class="seccion-contenido">
+                
+                <!-- PARTE A: TRIGONOMETRÍA DEL TRIÁNGULO RECTÁNGULO -->
+                <div class="card-montano">
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-3 border-b-2 border-[#F7D615] pb-2">
+                        <h2 class="text-2xl font-bold text-[#1269A8]">Parte A: Trigonometría del Triángulo Rectángulo</h2>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-geogebra !mt-0" onclick="lanzarPlantilla('razones_rectangulo')">📐 Construir en GeoGebra</button>
+                            <button class="btn-geogebra !mt-0" onclick="lanzarPlantilla('notables_30_45_60')">📐 Triángulos Notables</button>
+                        </div>
+                    </div>
+                    <p class="text-base leading-relaxed mb-4">
+                        En un <strong>triángulo rectángulo</strong> (<span class="math-expr text-xs">∠C = 90°</span>), respecto a un ángulo agudo <span class="math-expr text-xs">θ</span> se distinguen tres lados: la <strong>hipotenusa (<span class="math-expr text-xs">c</span>)</strong> opuesta al ángulo recto, el <strong>cateto opuesto (<span class="math-expr text-xs">CO</span>)</strong> situado frente al ángulo <span class="math-expr text-xs">θ</span>, y el <strong>cateto adyacente (<span class="math-expr text-xs">CA</span>)</strong> que forma el ángulo <span class="math-expr text-xs">θ</span> junto con la hipotenusa.
+                    </p>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center mb-4">
+                        <!-- Esquema SVG Triángulo Rectángulo y SOH-CAH-TOA -->
+                        <div class="lg:col-span-5 flex justify-center bg-slate-50 p-3 rounded-xl border border-slate-200">
+                            <svg width="265" height="190" viewBox="0 0 265 190">
+                                <!-- Triángulo rectángulo -->
+                                <polygon points="40,150 215,150 215,38" fill="rgba(18,105,168,0.14)" stroke="#1269A8" stroke-width="2.5"/>
+                                <!-- Cuadro ángulo recto en C -->
+                                <polyline points="200,150 200,135 215,135" fill="none" stroke="#1269A8" stroke-width="1.8"/>
+                                <!-- Arco del ángulo agudo theta en A -->
+                                <path d="M 76 150 A 36 36 0 0 0 70 131" fill="none" stroke="#b45309" stroke-width="2.2"/>
+                                <text x="82" y="143" font-size="12" font-weight="bold" fill="#b45309">θ</text>
+                                <!-- Etiquetas de vértices y lados -->
+                                <text x="27" y="156" font-size="11" font-weight="bold" fill="#0f172a">A</text>
+                                <text x="220" y="156" font-size="11" font-weight="bold" fill="#0f172a">C (90°)</text>
+                                <text x="220" y="36" font-size="11" font-weight="bold" fill="#0f172a">B</text>
+                                <text x="115" y="82" font-size="10.5" font-weight="bold" fill="#1269A8" transform="rotate(-32 115 82)">Hipotenusa (c)</text>
+                                <text x="222" y="96" font-size="10" font-weight="bold" fill="#15803d">CO</text>
+                                <text x="128" y="168" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#54887D">Cateto Adyacente (CA)</text>
+                                <text x="132" y="184" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#b45309">SOH • CAH • TOA  |  c² = CO² + CA²</text>
+                            </svg>
+                        </div>
+
+                        <!-- Las 6 Razones Trigonométricas + Recíprocas + Pitagórica -->
+                        <div class="lg:col-span-7 space-y-2.5 text-xs sm:text-sm">
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                                <div class="p-2.5 bg-sky-50 border-2 border-[#1269A8] rounded-lg text-center">
+                                    <strong class="text-[#1269A8] block">Seno (SOH)</strong>
+                                    <span class="math-expr text-xs mt-1">sen θ = CO / c</span>
+                                    <div class="mt-1.5 border-t border-sky-200 pt-1">
+                                        <strong class="text-[#54887D] block">Cosecante</strong>
+                                        <span class="math-expr text-xs">csc θ = c / CO</span>
+                                    </div>
+                                </div>
+                                <div class="p-2.5 bg-[#F2F5E9] border-2 border-[#54887D] rounded-lg text-center">
+                                    <strong class="text-[#1269A8] block">Coseno (CAH)</strong>
+                                    <span class="math-expr text-xs mt-1">cos θ = CA / c</span>
+                                    <div class="mt-1.5 border-t border-emerald-200 pt-1">
+                                        <strong class="text-[#54887D] block">Secante</strong>
+                                        <span class="math-expr text-xs">sec θ = c / CA</span>
+                                    </div>
+                                </div>
+                                <div class="p-2.5 bg-amber-50 border-2 border-[#F7D615] rounded-lg text-center">
+                                    <strong class="text-[#1269A8] block">Tangente (TOA)</strong>
+                                    <span class="math-expr text-xs mt-1">tan θ = CO / CA</span>
+                                    <div class="mt-1.5 border-t border-amber-200 pt-1">
+                                        <strong class="text-[#54887D] block">Cotangente</strong>
+                                        <span class="math-expr text-xs">cot θ = CA / CO</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Identidades Recíprocas y Pitagórica Fundamental -->
+                            <div class="p-3 bg-white border-2 border-[#A6B046] rounded-xl flex flex-wrap justify-between items-center gap-2">
+                                <div>
+                                    <strong class="text-[#1269A8] block">🔗 Identidades Recíprocas y Cociente:</strong>
+                                    <span class="text-xs text-slate-700"><span class="font-mono">csc θ = 1/sen θ</span> &nbsp;|&nbsp; <span class="font-mono">sec θ = 1/cos θ</span> &nbsp;|&nbsp; <span class="font-mono">cot θ = 1/tan θ = cos θ / sen θ</span></span>
+                                </div>
+                                <div class="bg-sky-50 px-3 py-1.5 rounded-lg border border-[#1269A8]">
+                                    <strong class="text-[#1269A8] text-xs block">Identidad Pitagórica Fundamental:</strong>
+                                    <span class="math-expr text-xs">sen²θ + cos²θ = 1</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tabla de Ángulos Notables (30°, 45°, 60°) y Esquemas SVG de Elevación y Depresión -->
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch">
+                        <!-- Tabla de Ángulos Notables -->
+                        <div class="lg:col-span-6 bg-white border-2 border-[#1269A8] rounded-xl p-3 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="badge-nivel badge-basico">Tabla de Ángulos Notables (30°, 45°, 60°)</span>
+                                </div>
+                                <div class="overflow-x-auto">
+                                    <table class="w-full text-center text-xs sm:text-sm border-collapse">
+                                        <thead>
+                                            <tr class="bg-[#1269A8] text-white">
+                                                <th class="p-1.5 border border-sky-700">Razón</th>
+                                                <th class="p-1.5 border border-sky-700">30°</th>
+                                                <th class="p-1.5 border border-sky-700">45°</th>
+                                                <th class="p-1.5 border border-sky-700">60°</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="font-semibold">
+                                            <tr class="bg-slate-50">
+                                                <td class="p-1.5 border border-slate-300 text-[#1269A8]">sen θ</td>
+                                                <td class="p-1.5 border border-slate-300">1/2</td>
+                                                <td class="p-1.5 border border-slate-300">√2/2</td>
+                                                <td class="p-1.5 border border-slate-300">√3/2</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="p-1.5 border border-slate-300 text-[#1269A8]">cos θ</td>
+                                                <td class="p-1.5 border border-slate-300">√3/2</td>
+                                                <td class="p-1.5 border border-slate-300">√2/2</td>
+                                                <td class="p-1.5 border border-slate-300">1/2</td>
+                                            </tr>
+                                            <tr class="bg-slate-50">
+                                                <td class="p-1.5 border border-slate-300 text-[#1269A8]">tan θ</td>
+                                                <td class="p-1.5 border border-slate-300">√3/3</td>
+                                                <td class="p-1.5 border border-slate-300">1</td>
+                                                <td class="p-1.5 border border-slate-300">√3</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <button class="btn-geogebra justify-center w-full text-xs" onclick="lanzarPlantilla('notables_30_45_60')">📐 Explorar Triángulos Notables en GeoGebra</button>
+                        </div>
+
+                        <!-- Esquema SVG Ángulos de Elevación y Depresión -->
+                        <div class="lg:col-span-6 bg-white border-2 border-[#54887D] rounded-xl p-3 flex flex-col justify-between">
+                            <div>
+                                <span class="badge-nivel badge-intermedio mb-2">Ángulos de Elevación y Depresión</span>
+                                <svg width="280" height="118" viewBox="0 0 280 118" class="w-full bg-slate-50 rounded border border-slate-200 my-1">
+                                    <!-- Horizontal superior (Observador alto) -->
+                                    <line x1="150" y1="22" x2="265" y2="22" stroke="#64748b" stroke-width="1.5" stroke-dasharray="4,2"/>
+                                    <!-- Horizontal inferior (Observador suelo) -->
+                                    <line x1="20" y1="98" x2="255" y2="98" stroke="#0f172a" stroke-width="2"/>
+                                    <!-- Torre / Faro -->
+                                    <rect x="235" y="22" width="16" height="76" fill="rgba(18,105,168,0.28)" stroke="#1269A8" stroke-width="1.8"/>
+                                    <!-- Visual diagonal -->
+                                    <line x1="35" y1="98" x2="235" y2="22" stroke="#b45309" stroke-width="2.2"/>
+                                    <!-- Ángulo de elevación α -->
+                                    <path d="M 68 98 A 33 33 0 0 0 65 86" fill="none" stroke="#15803d" stroke-width="2"/>
+                                    <text x="74" y="93" font-size="9.5" font-weight="bold" fill="#15803d">α (Elevación)</text>
+                                    <!-- Ángulo de depresión β -->
+                                    <path d="M 195 22 A 40 40 0 0 0 200 35" fill="none" stroke="#dc2626" stroke-width="2"/>
+                                    <text x="155" y="16" font-size="9.5" font-weight="bold" fill="#dc2626">β (Depresión)</text>
+                                    <text x="140" y="113" text-anchor="middle" font-size="9" font-weight="bold" fill="#1269A8">Por alternos internos entre horizontales paralelas: α = β</text>
+                                </svg>
+                            </div>
+                            <button class="btn-geogebra justify-center w-full text-xs" onclick="lanzarPlantilla('elevacion_depresion')">📐 Simular Elevación y Depresión en GeoGebra</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PARTE B: TRIGONOMETRÍA DEL TRIÁNGULO OBLICUÁNGULO -->
+                <div class="card-montano">
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-3 border-b-2 border-[#F7D615] pb-2">
+                        <h2 class="text-2xl font-bold text-[#1269A8]">Parte B: Trigonometría del Triángulo Oblicuángulo</h2>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-geogebra !mt-0" onclick="lanzarPlantilla('ley_senos_2R')">📐 Ley de Senos en GeoGebra</button>
+                            <button class="btn-geogebra !mt-0" onclick="lanzarPlantilla('ley_cosenos')">📐 Ley de Cosenos en GeoGebra</button>
+                        </div>
+                    </div>
+                    <p class="text-sm sm:text-base leading-relaxed mb-4">
+                        Un <strong>triángulo oblicuángulo</strong> es aquel que <strong>no tiene ningún ángulo recto</strong> (puede ser acutángulo u obtusángulo). Para resolverlo se emplean la <strong>Ley de Senos</strong>, la <strong>Ley de Cosenos</strong> y la <strong>fórmula trigonométrica del área</strong>.
+                    </p>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                        <!-- Tarjeta Ley de Senos -->
+                        <div class="card-formula">
+                            <div>
+                                <div class="flex items-center justify-between mb-1">
+                                    <span class="badge-nivel badge-intermedio">1. Ley de Senos</span>
+                                    <svg width="56" height="40" viewBox="0 0 56 40">
+                                        <circle cx="28" cy="20" r="17" fill="none" stroke="#88B5C7" stroke-width="1.3" stroke-dasharray="2,2"/>
+                                        <polygon points="13,28 44,28 24,5" fill="rgba(18,105,168,0.18)" stroke="#1269A8" stroke-width="1.8"/>
+                                    </svg>
+                                </div>
+                                <p class="text-xs text-slate-700 mt-1">Los lados son proporcionales a los senos de sus ángulos opuestos (y equivalen al diámetro <span class="font-mono">2R</span> de la circunferencia circunscrita):</p>
+                                <div class="my-2 text-center">
+                                    <span class="math-expr text-xs">a / sen A = b / sen B = c / sen C = 2R</span>
+                                </div>
+                                <ul class="text-xs text-slate-700 space-y-1">
+                                    <li>• <strong>Casos directos:</strong> <span class="font-bold text-[#1269A8]">ALA</span> (dos ángulos y el lado comprendido) y <span class="font-bold text-[#1269A8]">AAL</span> (dos ángulos y un lado opuesto).</li>
+                                    <li>• <strong>Caso ambiguo <span class="font-bold text-amber-700">LLA</span>:</strong> Dados dos lados (<span class="font-mono">a, b</span>) y el ángulo opuesto a uno (<span class="font-mono">A</span>), con altura <span class="font-mono">h = b·sen A</span> puede haber <strong>0, 1 o 2 triángulos</strong>.</li>
+                                </ul>
+                            </div>
+                            <div class="flex gap-1.5 mt-2">
+                                <button class="btn-geogebra justify-center flex-1 text-xs" onclick="lanzarPlantilla('ley_senos_2R')">📐 Ley Senos</button>
+                                <button class="btn-geogebra justify-center flex-1 text-xs" onclick="lanzarPlantilla('caso_ambiguo_lla')">📐 Caso LLA</button>
+                            </div>
+                        </div>
+
+                        <!-- Tarjeta Ley de Cosenos -->
+                        <div class="card-formula">
+                            <div>
+                                <div class="flex items-center justify-between mb-1">
+                                    <span class="badge-nivel badge-avanzado">2. Ley de Cosenos</span>
+                                    <svg width="56" height="40" viewBox="0 0 56 40">
+                                        <polygon points="8,32 48,32 20,8" fill="rgba(84,136,125,0.22)" stroke="#54887D" stroke-width="1.8"/>
+                                    </svg>
+                                </div>
+                                <p class="text-xs text-slate-700 mt-1">Generaliza el Teorema de Pitágoras a cualquier triángulo:</p>
+                                <div class="my-2 space-y-1 text-center">
+                                    <span class="math-expr text-xs">a² = b² + c² - 2bc · cos A</span><br>
+                                    <span class="math-expr text-xs">b² = a² + c² - 2ac · cos B</span><br>
+                                    <span class="math-expr text-xs">c² = a² + b² - 2ab · cos C</span>
+                                </div>
+                                <ul class="text-xs text-slate-700 space-y-1">
+                                    <li>• <strong>Caso <span class="font-bold text-[#1269A8]">LAL</span>:</strong> Dos lados y el ángulo comprendido (halla el tercer lado).</li>
+                                    <li>• <strong>Caso <span class="font-bold text-[#1269A8]">LLL</span>:</strong> Tres lados conocidos; despeja ángulos con <span class="font-mono">cos A = (b² + c² - a²) / (2bc)</span>.</li>
+                                </ul>
+                            </div>
+                            <button class="btn-geogebra justify-center w-full text-xs" onclick="lanzarPlantilla('ley_cosenos')">📐 Explorar Ley de Cosenos en GeoGebra</button>
+                        </div>
+
+                        <!-- Tarjeta Área Trigonométrica del Triángulo -->
+                        <div class="card-formula">
+                            <div>
+                                <div class="flex items-center justify-between mb-1">
+                                    <span class="badge-nivel badge-basico">3. Área Trigonométrica</span>
+                                    <svg width="56" height="40" viewBox="0 0 56 40">
+                                        <polygon points="8,32 48,32 24,8" fill="rgba(247,214,21,0.35)" stroke="#b45309" stroke-width="1.8"/>
+                                        <line x1="24" y1="8" x2="24" y2="32" stroke="#1269A8" stroke-width="1.3" stroke-dasharray="2,2"/>
+                                    </svg>
+                                </div>
+                                <p class="text-xs text-slate-700 mt-1">Cuando se conocen dos lados y el ángulo comprendido entre ellos, la altura es <span class="font-mono">h = b · sen C</span>, por lo que:</p>
+                                <div class="my-2 space-y-1 text-center">
+                                    <span class="math-expr text-xs">Área = ½ · a · b · sen C</span><br>
+                                    <span class="math-expr text-xs">Área = ½ · b · c · sen A</span><br>
+                                    <span class="math-expr text-xs">Área = ½ · a · c · sen B</span>
+                                </div>
+                                <p class="text-xs text-slate-600">Permite calcular superficies de parcelas triangulares sin medir alturas perpendiculares en campo.</p>
+                            </div>
+                            <button class="btn-geogebra justify-center w-full text-xs" onclick="lanzarPlantilla('ley_cosenos')">📐 Verificar Área en GeoGebra</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 2: EJEMPLOS RESUELTOS (15)         -->
+            <!-- ========================================== -->
+            <section id="sec-ejemplos" class="seccion-contenido hidden">
+                <div class="flex flex-wrap items-center justify-between gap-3 mb-4 bg-white p-4 rounded-xl border-2 border-[#54887D]">
+                    <div>
+                        <h2 class="text-xl font-bold text-[#1269A8]">Ejemplos Resueltos Paso a Paso (15 Problemas)</h2>
+                        <p class="text-sm text-slate-600">Analiza cada desarrollo y pulsa <strong>"📐 Construir en GeoGebra"</strong> para visualizar el modelo trigonométrico.</p>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <button class="subtab-btn active" onclick="filtrarSubnivel('ejemplos', 'basico', this)">Nivel Básico (5)</button>
+                        <button class="subtab-btn" onclick="filtrarSubnivel('ejemplos', 'intermedio', this)">Nivel Intermedio (5)</button>
+                        <button class="subtab-btn" onclick="filtrarSubnivel('ejemplos', 'avanzado', this)">Nivel Avanzado (5)</button>
+                    </div>
+                </div>
+
+                <!-- EJEMPLOS BÁSICOS (5) -->
+                <div id="ejemplos-basico" class="subcontenido-ejemplos space-y-4">
+                    <!-- Básico 1 -->
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-basico">Básico • Ejemplo 1 (Las 6 razones trigonométricas en triángulo 5-12-13)</span>
+                            <button class="btn-geogebra !mt-0" onclick="lanzarPlantilla('razones_rectangulo')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">En un triángulo rectángulo <span class="math-expr">△ABC</span> (<span class="math-expr">∠C = 90°</span>), el cateto opuesto al ángulo <span class="math-expr">θ</span> mide <span class="math-expr">CO = 5</span> y el cateto adyacente mide <span class="math-expr">CA = 12</span>. Calcula la hipotenusa y las 6 razones trigonométricas de <span class="math-expr">θ</span>.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Hipotenusa por Pitágoras):</strong> <span class="math-expr">c = √(5² + 12²) = √(25 + 144) = √169 = 13</span>.</p>
+                            <p><strong>Paso 2 (Razones directas SOH-CAH-TOA):</strong> <span class="math-expr">sen θ = 5/13</span>, <span class="math-expr">cos θ = 12/13</span>, <span class="math-expr">tan θ = 5/12</span>.</p>
+                            <p><strong>Paso 3 (Razones recíprocas):</strong> <span class="math-expr">csc θ = 13/5</span>, <span class="math-expr">sec θ = 13/12</span>, <span class="math-expr">cot θ = 12/5</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: sen θ = 5/13, cos θ = 12/13, tan θ = 5/12, csc θ = 13/5, sec θ = 13/12 y cot θ = 12/5.</p>
+                        </div>
+                    </div>
+
+                    <!-- Básico 2 -->
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-basico">Básico • Ejemplo 2 (Altura de un edificio usando tan 35°)</span>
+                            <button class="btn-geogebra !mt-0" onclick="lanzarPlantilla('elevacion_depresion')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Desde un punto situado a <span class="math-expr">40 m</span> de la base de un edificio, se observa su azotea con un ángulo de elevación de <span class="math-expr">35°</span>. Calcula la altura del edificio (considera <span class="math-expr">tan 35° ≈ 0.7002</span>).</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Identificar razón):</strong> Se conocen <span class="math-expr">θ = 35°</span> y <span class="math-expr">CA = 40 m</span>; buscamos <span class="math-expr">CO = h</span>: <span class="math-expr">tan 35° = h / 40</span>.</p>
+                            <p><strong>Paso 2 (Despeje):</strong> <span class="math-expr">h = 40 · tan 35° ≈ 40 · 0.7002 = 28.01 m</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: La altura del edificio es aproximadamente 28.01 m.</p>
+                        </div>
+                    </div>
+
+                    <!-- Básico 3 -->
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-basico">Básico • Ejemplo 3 (Ángulo de depresión desde un faro de 40 m)</span>
+                            <button class="btn-geogebra !mt-0" onclick="lanzarPlantilla('elevacion_depresion')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Desde lo alto de un faro de <span class="math-expr">40 m</span> de altura sobre el nivel del mar, se divisa un barco con un ángulo de depresión de <span class="math-expr">28°</span>. Calcula la distancia horizontal del barco a la base del faro (<span class="math-expr">tan 28° ≈ 0.5317</span>).</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Alternos internos):</strong> El ángulo de elevación desde el barco hacia el faro también mide <span class="math-expr">28°</span>. Entonces <span class="math-expr">tan 28° = 40 / d</span>.</p>
+                            <p><strong>Paso 2 (Despeje):</strong> <span class="math-expr">d = 40 / tan 28° ≈ 40 / 0.5317 ≈ 75.23 m</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: El barco se encuentra a 75.23 m de la base del faro.</p>
+                        </div>
+                    </div>
+
+                    <!-- Básico 4 -->
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-basico">Básico • Ejemplo 4 (Triángulo oblicuángulo caso ALA con Ley de Senos)</span>
+                            <button class="btn-geogebra !mt-0" onclick="lanzarPlantilla('ley_senos_2R')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">En un triángulo oblicuángulo <span class="math-expr">△ABC</span>, <span class="math-expr">A = 42°</span>, <span class="math-expr">B = 68°</span> y el lado comprendido mide <span class="math-expr">c = 15 cm</span>. Calcula el ángulo <span class="math-expr">C</span> y el lado <span class="math-expr">a</span> (<span class="math-expr">sen 42° ≈ 0.6691</span>, <span class="math-expr">sen 70° ≈ 0.9397</span>).</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Ángulo C):</strong> <span class="math-expr">C = 180° - (42° + 68°) = 70°</span>.</p>
+                            <p><strong>Paso 2 (Ley de Senos):</strong> <span class="math-expr">a / sen 42° = 15 / sen 70° ➔ a = (15 · 0.6691) / 0.9397 ≈ 10.68 cm</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: C = 70° y a ≈ 10.68 cm.</p>
+                        </div>
+                    </div>
+
+                    <!-- Básico 5 -->
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-basico">Básico • Ejemplo 5 (Triángulo oblicuángulo caso LAL con Ley de Cosenos)</span>
+                            <button class="btn-geogebra !mt-0" onclick="lanzarPlantilla('ley_cosenos')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">En un triángulo <span class="math-expr">△ABC</span> se conocen <span class="math-expr">b = 10 cm</span>, <span class="math-expr">c = 14 cm</span> y el ángulo comprendido <span class="math-expr">A = 60°</span>. Halla la longitud del lado <span class="math-expr">a</span>.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Ley de Cosenos):</strong> <span class="math-expr">a² = 10² + 14² - 2(10)(14) · cos 60°</span>.</p>
+                            <p><strong>Paso 2 (Cálculo con cos 60° = 0.5):</strong> <span class="math-expr">a² = 100 + 196 - 280(0.5) = 296 - 140 = 156 ➔ a = √156 ≈ 12.49 cm</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: El lado a mide √156 cm ≈ 12.49 cm.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EJEMPLOS INTERMEDIOS (5) -->
+                <div id="ejemplos-intermedio" class="subcontenido-ejemplos hidden space-y-4">
+                    <!-- Intermedio 1 -->
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-intermedio">Intermedio • Ejemplo 1 (Escalera apoyada con ángulo de 62° y longitud de 8 m)</span>
+                            <button class="btn-geogebra !mt-0" onclick="lanzarPlantilla('razones_rectangulo')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Una escalera de <span class="math-expr">8 m</span> de longitud se apoya contra una pared vertical formando un ángulo de <span class="math-expr">62°</span> con el suelo horizontal. Calcula la altura <span class="math-expr">h</span> que alcanza sobre la pared y la distancia <span class="math-expr">d</span> de su pie a la pared (<span class="math-expr">sen 62° ≈ 0.8829</span>, <span class="math-expr">cos 62° ≈ 0.4695</span>).</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Altura h = CO):</strong> <span class="math-expr">h = 8 · sen 62° ≈ 8 · 0.8829 = 7.06 m</span>.</p>
+                            <p><strong>Paso 2 (Distancia basal d = CA):</strong> <span class="math-expr">d = 8 · cos 62° ≈ 8 · 0.4695 = 3.76 m</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: Alcanza 7.06 m de altura y su base está a 3.76 m de la pared.</p>
+                        </div>
+                    </div>
+
+                    <!-- Intermedio 2 -->
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-intermedio">Intermedio • Ejemplo 2 (Triángulo caso LLL: lados 7, 9, 12 cm, ángulo mayor)</span>
+                            <button class="btn-geogebra !mt-0" onclick="lanzarPlantilla('ley_cosenos')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Los lados de un triángulo miden <span class="math-expr">a = 7 cm</span>, <span class="math-expr">b = 9 cm</span> y <span class="math-expr">c = 12 cm</span>. Calcula la medida del ángulo mayor <span class="math-expr">C</span> (opuesto al lado de 12 cm).</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Despeje de cos C):</strong> <span class="math-expr">cos C = (7² + 9² - 12²) / (2 · 7 · 9) = (49 + 81 - 144) / 126 = -14 / 126 = -1 / 9 ≈ -0.1111</span>.</p>
+                            <p><strong>Paso 2 (Arcocoseno):</strong> Como <span class="math-expr">cos C &lt; 0</span>, <span class="math-expr">C = arccos(-1/9) ≈ 96.38°</span> (triángulo obtusángulo).</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: El ángulo mayor mide C ≈ 96.38°.</p>
+                        </div>
+                    </div>
+
+                    <!-- Intermedio 3 -->
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-intermedio">Intermedio • Ejemplo 3 (Caso ambiguo LLA con dos soluciones: a = 7, b = 10, A = 30°)</span>
+                            <button class="btn-geogebra !mt-0" onclick="lanzarPlantilla('caso_ambiguo_lla')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Resuelve el caso ambiguo <span class="math-expr">LLA</span> para <span class="math-expr">a = 7 cm</span>, <span class="math-expr">b = 10 cm</span> y <span class="math-expr">A = 30°</span>, determinando las dos medidas posibles del ángulo <span class="math-expr">B</span>.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Verificar condición de 2 soluciones):</strong> Altura <span class="math-expr">h = b · sen 30° = 10 · 0.5 = 5 cm</span>. Como <span class="math-expr">h &lt; a &lt; b</span> (<span class="math-expr">5 &lt; 7 &lt; 10</span>), existen <strong>dos triángulos</strong>.</p>
+                            <p><strong>Paso 2 (Ley de Senos para B):</strong> <span class="math-expr">sen B = (10 · sen 30°) / 7 = 5 / 7 ≈ 0.7143</span>.</p>
+                            <p><strong>Paso 3 (Dos soluciones suplementarias):</strong> <span class="math-expr">B₁ = arcsen(5/7) ≈ 45.58°</span> (con <span class="math-expr">C₁ ≈ 104.42°</span>) y <span class="math-expr">B₂ = 180° - 45.58° = 134.42°</span> (con <span class="math-expr">C₂ ≈ 15.58°</span>).</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: Dos soluciones: B₁ ≈ 45.58° y B₂ ≈ 134.42°.</p>
+                        </div>
+                    </div>
+
+                    <!-- Intermedio 4 -->
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-intermedio">Intermedio • Ejemplo 4 (Área de terreno triangular: 18 m, 25 m y 52°)</span>
+                            <button class="btn-geogebra !mt-0" onclick="lanzarPlantilla('ley_cosenos')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Un terreno triangular tiene dos linderos de <span class="math-expr">18 m</span> y <span class="math-expr">25 m</span> que forman entre sí un ángulo de <span class="math-expr">52°</span>. Calcula la superficie del terreno (<span class="math-expr">sen 52° ≈ 0.7880</span>).</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Fórmula trigonométrica del área):</strong> <span class="math-expr">Área = ½ · a · b · sen C</span>.</p>
+                            <p><strong>Paso 2 (Sustitución):</strong> <span class="math-expr">Área = ½ · 18 · 25 · sen 52° = 225 · 0.7880 = 177.30 m²</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: La superficie del terreno es 177.30 m².</p>
+                        </div>
+                    </div>
+
+                    <!-- Intermedio 5 -->
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-intermedio">Intermedio • Ejemplo 5 (Ángulo de elevación del sol con sombra de 6.2 m)</span>
+                            <button class="btn-geogebra !mt-0" onclick="lanzarPlantilla('elevacion_depresion')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Un poste vertical de <span class="math-expr">4.5 m</span> proyecta sobre el suelo horizontal una sombra de <span class="math-expr">6.2 m</span>. Calcula el ángulo de elevación <span class="math-expr">θ</span> del sol en ese instante.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Tangente del ángulo):</strong> <span class="math-expr">tan θ = CO / CA = 4.5 / 6.2 ≈ 0.7258</span>.</p>
+                            <p><strong>Paso 2 (Función inversa arctan):</strong> <span class="math-expr">θ = arctan(0.7258) ≈ 35.97°</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: El ángulo de elevación del sol es aproximadamente 35.97°.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EJEMPLOS AVANZADOS (5) -->
+                <div id="ejemplos-avanzado" class="subcontenido-ejemplos hidden space-y-4">
+                    <!-- Avanzado 1 -->
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-avanzado">Avanzado • Ejemplo 1 (Doble triángulo rectángulo: elevaciones 24° y 38° separados 50 m)</span>
+                            <button class="btn-geogebra !mt-0" onclick="lanzarPlantilla('doble_observacion')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Para medir la altura <span class="math-expr">h</span> de una torre inaccesible, un topógrafo mide un ángulo de elevación de <span class="math-expr">24°</span> desde un punto <span class="math-expr">A</span>, avanza <span class="math-expr">50 m</span> en línea recta hacia la base hasta un punto <span class="math-expr">B</span> y mide un ángulo de elevación de <span class="math-expr">38°</span>. Calcula la altura <span class="math-expr">h</span> (<span class="math-expr">tan 24° ≈ 0.4452</span>, <span class="math-expr">tan 38° ≈ 0.7813</span>).</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Sistema con x = distancia de B a la base):</strong> <span class="math-expr">tan 38° = h / x ➔ x = h / tan 38°</span>; además <span class="math-expr">tan 24° = h / (50 + x) ➔ 50 + x = h / tan 24°</span>.</p>
+                            <p><strong>Paso 2 (Fórmula directa de doble observación):</strong> <span class="math-expr">h = 50 / (cot 24° - cot 38°) = 50 / (1/0.4452 - 1/0.7813) ≈ 50 / (2.2462 - 1.2799) ≈ 50 / 0.9663 ≈ 51.74 m</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: La altura de la torre es aproximadamente 51.74 m.</p>
+                        </div>
+                    </div>
+
+                    <!-- Avanzado 2 -->
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-avanzado">Avanzado • Ejemplo 2 (Navegación con rumbos: 20 km/h y 26 km/h formando 65° tras 2 h)</span>
+                            <button class="btn-geogebra !mt-0" onclick="lanzarPlantilla('navegacion_rumbos')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Dos embarcaciones parten simultáneamente desde Puerto Quetzal (Guatemala) con velocidades constantes de <span class="math-expr">20 km/h</span> y <span class="math-expr">26 km/h</span>, siguiendo rumbos que forman entre sí un ángulo de <span class="math-expr">65°</span>. Calcula la distancia que los separa al cabo de <span class="math-expr">2 horas</span> (<span class="math-expr">cos 65° ≈ 0.4226</span>).</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Distancias recorridas en t = 2 h):</strong> <span class="math-expr">d₁ = 20 · 2 = 40 km</span>; <span class="math-expr">d₂ = 26 · 2 = 52 km</span>.</p>
+                            <p><strong>Paso 2 (Ley de Cosenos LAL):</strong> <span class="math-expr">d² = 40² + 52² - 2(40)(52) · cos 65° = 1600 + 2704 - 4160(0.4226) = 4304 - 1758.02 = 2545.98 ➔ d ≈ 50.46 km</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Al cabo de 2 horas los separa una distancia de 50.46 km.</p>
+                        </div>
+                    </div>
+
+                    <!-- Avanzado 3 -->
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-avanzado">Avanzado • Ejemplo 3 (Topografía: distancia entre puntos inaccesibles A y B separados por un lago)</span>
+                            <button class="btn-geogebra !mt-0" onclick="lanzarPlantilla('ley_cosenos')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Para determinar el ancho <span class="math-expr">AB</span> de un sector del Lago de Atitlán, un agrimensor elige un punto accesible <span class="math-expr">C</span> en tierra firme y mide <span class="math-expr">AC = 140 m</span>, <span class="math-expr">BC = 185 m</span> y el ángulo <span class="math-expr">∠ACB = 74°</span>. Calcula la distancia <span class="math-expr">AB</span> (<span class="math-expr">cos 74° ≈ 0.2756</span>).</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Ley de Cosenos):</strong> <span class="math-expr">AB² = 140² + 185² - 2(140)(185) · cos 74°</span>.</p>
+                            <p><strong>Paso 2 (Cálculo):</strong> <span class="math-expr">AB² = 19600 + 34225 - 51800(0.2756) = 53825 - 14276.08 = 39548.92 ➔ AB ≈ 198.87 m</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: La distancia entre A y B es aproximadamente 198.87 m.</p>
+                        </div>
+                    </div>
+
+                    <!-- Avanzado 4 -->
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-avanzado">Avanzado • Ejemplo 4 (Triángulo inscrito en una circunferencia: radio R con a/sen A = 2R)</span>
+                            <button class="btn-geogebra !mt-0" onclick="lanzarPlantilla('ley_senos_2R')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Un triángulo <span class="math-expr">△ABC</span> está inscrito en una circunferencia. Si el lado <span class="math-expr">a = 18 cm</span> es opuesto a un ángulo <span class="math-expr">A = 30°</span>, calcula el diámetro <span class="math-expr">2R</span> y el radio <span class="math-expr">R</span> de la circunferencia circunscrita.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Ley de Senos extendida):</strong> <span class="math-expr">a / sen A = 2R ➔ 18 / sen 30° = 2R</span>.</p>
+                            <p><strong>Paso 2 (Despeje):</strong> <span class="math-expr">2R = 18 / 0.5 = 36 cm ➔ R = 18 cm</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: El diámetro es 36 cm y el radio circunscrito es R = 18 cm.</p>
+                        </div>
+                    </div>
+
+                    <!-- Avanzado 5 -->
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-avanzado">Avanzado • Ejemplo 5 (Problema combinado: Ley de Cosenos + Ley de Senos en puente atirantado)</span>
+                            <button class="btn-geogebra !mt-0" onclick="lanzarPlantilla('navegacion_rumbos')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">En un puente atirantado, dos cables anclados en el mismo punto superior de un pilón tienen longitudes <span class="math-expr">b = 30 m</span> y <span class="math-expr">c = 42 m</span>, formando entre ellos en el vértice superior un ángulo <span class="math-expr">A = 48°</span>. Calcula la separación <span class="math-expr">a</span> entre sus anclajes en el tablero y el ángulo <span class="math-expr">B</span> que forma el cable de 42 m con el tablero (<span class="math-expr">cos 48° ≈ 0.6691</span>, <span class="math-expr">sen 48° ≈ 0.7431</span>).</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Ley de Cosenos para el tramo a del tablero):</strong> <span class="math-expr">a² = 30² + 42² - 2(30)(42) · cos 48° = 900 + 1764 - 2520(0.6691) = 2664 - 1686.13 = 977.87 ➔ a ≈ 31.27 m</span>.</p>
+                            <p><strong>Paso 2 (Ley de Senos para el ángulo B):</strong> <span class="math-expr">sen B = (30 · sen 48°) / 31.27 ≈ (30 · 0.7431) / 31.27 ≈ 0.7129 ➔ B ≈ 45.47°</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Separación entre anclajes a ≈ 31.27 m y ángulo B ≈ 45.47°.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 3: EJERCICIOS PRÁCTICOS (15)       -->
+            <!-- ========================================== -->
+            <section id="sec-ejercicios" class="seccion-contenido hidden">
+                <div class="flex flex-wrap items-center justify-between gap-3 mb-4 bg-white p-4 rounded-xl border-2 border-[#54887D]">
+                    <div>
+                        <h2 class="text-xl font-bold text-[#1269A8]">Práctica Guiada en Pizarra (15 Ejercicios)</h2>
+                        <p class="text-sm text-slate-600">Resuelve cada ejercicio en tu cuaderno, despliega la solución y verifica la construcción en GeoGebra.</p>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <button class="subtab-btn active" onclick="filtrarSubnivel('ejercicios', 'basico', this)">Básico (5)</button>
+                        <button class="subtab-btn" onclick="filtrarSubnivel('ejercicios', 'intermedio', this)">Intermedio (5)</button>
+                        <button class="subtab-btn" onclick="filtrarSubnivel('ejercicios', 'avanzado', this)">Avanzado (5)</button>
+                    </div>
+                </div>
+
+                <!-- EJERCICIOS BÁSICOS (5) -->
+                <div id="ejercicios-basico" class="subcontenido-ejercicios space-y-4">
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 1</span>
+                        <p class="font-semibold text-base">En un triángulo rectángulo <span class="math-expr">△ABC</span> (<span class="math-expr">∠C = 90°</span>), los catetos miden <span class="math-expr">CO = 8</span> y <span class="math-expr">CA = 15</span> respecto al ángulo <span class="math-expr">θ</span>. Calcula la hipotenusa y las 6 razones trigonométricas de <span class="math-expr">θ</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-eb1', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="lanzarPlantilla('razones_rectangulo')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-eb1" class="solucion-box">
+                            <p><strong>Operación:</strong> Hipotenusa <span class="math-expr">c = √(8² + 15²) = 17</span>. <span class="math-expr">sen θ = 8/17</span>, <span class="math-expr">cos θ = 15/17</span>, <span class="math-expr">tan θ = 8/15</span>, <span class="math-expr">csc θ = 17/8</span>, <span class="math-expr">sec θ = 17/15</span>, <span class="math-expr">cot θ = 15/8</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: c = 17; sen θ = 8/17, cos θ = 15/17, tan θ = 8/15, csc θ = 17/8, sec θ = 17/15, cot θ = 15/8.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 2</span>
+                        <p class="font-semibold text-base">Calcula el valor exacto de la expresión <span class="math-expr">E = 2 · sen 30° + √2 · cos 45° + tan² 60°</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-eb2', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="lanzarPlantilla('notables_30_45_60')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-eb2" class="solucion-box">
+                            <p><strong>Operación:</strong> <span class="math-expr">E = 2(1/2) + √2(√2/2) + (√3)² = 1 + 1 + 3 = 5</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: E = 5.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 3</span>
+                        <p class="font-semibold text-base">Una rampa de acceso tiene una longitud inclinada de <span class="math-expr">12 m</span> y forma un ángulo de elevación de <span class="math-expr">30°</span> con el piso. Calcula la altura vertical que alcanza la rampa.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-eb3', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="lanzarPlantilla('elevacion_depresion')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-eb3" class="solucion-box">
+                            <p><strong>Operación:</strong> <span class="math-expr">h = 12 · sen 30° = 12 · 0.5 = 6 m</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: 6 m.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 4</span>
+                        <p class="font-semibold text-base">En un triángulo <span class="math-expr">△ABC</span>, <span class="math-expr">A = 30°</span>, <span class="math-expr">B = 45°</span> y <span class="math-expr">a = 10 cm</span>. Calcula la longitud del lado <span class="math-expr">b</span> usando la Ley de Senos.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-eb4', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="lanzarPlantilla('ley_senos_2R')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-eb4" class="solucion-box">
+                            <p><strong>Operación:</strong> <span class="math-expr">b / sen 45° = 10 / sen 30° ➔ b = (10 · √2/2) / (1/2) = 10√2 cm ≈ 14.14 cm</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: b = 10√2 cm (≈ 14.14 cm).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 5</span>
+                        <p class="font-semibold text-base">En un triángulo <span class="math-expr">△ABC</span>, <span class="math-expr">a = 6 cm</span>, <span class="math-expr">b = 8 cm</span> y el ángulo comprendido mide <span class="math-expr">C = 60°</span>. Halla la medida del lado <span class="math-expr">c</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-eb5', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="lanzarPlantilla('ley_cosenos')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-eb5" class="solucion-box">
+                            <p><strong>Operación:</strong> <span class="math-expr">c² = 6² + 8² - 2(6)(8) · cos 60° = 36 + 64 - 48 = 52 ➔ c = √52 = 2√13 cm ≈ 7.21 cm</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: c = 2√13 cm (≈ 7.21 cm).</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EJERCICIOS INTERMEDIOS (5) -->
+                <div id="ejercicios-intermedio" class="subcontenido-ejercicios hidden space-y-4">
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 1</span>
+                        <p class="font-semibold text-base">Desde la ventana de un edificio a <span class="math-expr">24 m</span> de altura se observa un vehículo estacionado con un ángulo de depresión de <span class="math-expr">32°</span>. Calcula la distancia horizontal del vehículo al edificio (<span class="math-expr">tan 32° ≈ 0.6249</span>).</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ei1', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="lanzarPlantilla('elevacion_depresion')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-ei1" class="solucion-box">
+                            <p><strong>Resolución:</strong> <span class="math-expr">d = 24 / tan 32° ≈ 24 / 0.6249 ≈ 38.41 m</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: 38.41 m.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 2</span>
+                        <p class="font-semibold text-base">Los lados de un triángulo miden <span class="math-expr">a = 5 cm</span>, <span class="math-expr">b = 7 cm</span> y <span class="math-expr">c = 8 cm</span>. Calcula la medida del ángulo <span class="math-expr">B</span> (opuesto al lado de 7 cm).</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ei2', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="lanzarPlantilla('ley_cosenos')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-ei2" class="solucion-box">
+                            <p><strong>Resolución:</strong> <span class="math-expr">cos B = (5² + 8² - 7²) / (2 · 5 · 8) = (25 + 64 - 49) / 80 = 40 / 80 = 0.5 ➔ B = arccos(0.5) = 60°</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: B = 60°.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 3</span>
+                        <p class="font-semibold text-base">Calcula el área de un triángulo cuyos lados miden <span class="math-expr">14 cm</span> y <span class="math-expr">20 cm</span> y forman un ángulo comprendido de <span class="math-expr">45°</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ei3', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="lanzarPlantilla('ley_cosenos')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-ei3" class="solucion-box">
+                            <p><strong>Resolución:</strong> <span class="math-expr">Área = ½ · 14 · 20 · sen 45° = 140 · (√2 / 2) = 70√2 cm² ≈ 98.99 cm²</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: 70√2 cm² (≈ 98.99 cm²).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 4</span>
+                        <p class="font-semibold text-base">Determina cuántas soluciones tiene el triángulo con datos <span class="math-expr">a = 6 cm</span>, <span class="math-expr">b = 10 cm</span> y <span class="math-expr">A = 30°</span>, y calcula los posibles valores del ángulo <span class="math-expr">B</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ei4', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="lanzarPlantilla('caso_ambiguo_lla')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-ei4" class="solucion-box">
+                            <p><strong>Resolución:</strong> Altura <span class="math-expr">h = 10 · sen 30° = 5 cm</span>. Como <span class="math-expr">5 &lt; 6 &lt; 10</span>, hay <strong>2 soluciones</strong>: <span class="math-expr">sen B = 5 / 6 ≈ 0.8333 ➔ B₁ ≈ 56.44°</span> y <span class="math-expr">B₂ = 180° - 56.44° = 123.56°</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: 2 soluciones: B₁ ≈ 56.44° y B₂ ≈ 123.56°.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 5</span>
+                        <p class="font-semibold text-base">Un árbol de <span class="math-expr">7.5 m</span> proyecta una sombra de <span class="math-expr">5.0 m</span> sobre un terreno plano. Halla el ángulo de elevación <span class="math-expr">θ</span> del sol.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ei5', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="lanzarPlantilla('elevacion_depresion')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-ei5" class="solucion-box">
+                            <p><strong>Resolución:</strong> <span class="math-expr">tan θ = 7.5 / 5.0 = 1.5 ➔ θ = arctan(1.5) ≈ 56.31°</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: θ ≈ 56.31°.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EJERCICIOS AVANZADOS (5) -->
+                <div id="ejercicios-avanzado" class="subcontenido-ejercicios hidden space-y-4">
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 1</span>
+                        <p class="font-semibold text-base">Desde un punto <span class="math-expr">P</span> en el suelo se observa la cúspide de un monumento con un ángulo de elevación de <span class="math-expr">30°</span>; al acercarse <span class="math-expr">40 m</span> en línea recta hacia el monumento, el ángulo de elevación aumenta a <span class="math-expr">60°</span>. Calcula la altura exacta del monumento.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ea1', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="lanzarPlantilla('doble_observacion')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-ea1" class="solucion-box">
+                            <p><strong>Resolución:</strong> <span class="math-expr">h = 40 / (cot 30° - cot 60°) = 40 / (√3 - √3/3) = 40 / (2√3/3) = 20√3 m ≈ 34.64 m</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: 20√3 m (≈ 34.64 m).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 2</span>
+                        <p class="font-semibold text-base">Dos drones despegan del mismo punto: el primero vuela a <span class="math-expr">15 m/s</span> hacia el Norte y el segundo a <span class="math-expr">20 m/s</span> con rumbo <span class="math-expr">N 60° E</span>. Calcula la distancia entre ambos drones después de <span class="math-expr">10 segundos</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ea2', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="lanzarPlantilla('navegacion_rumbos')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-ea2" class="solucion-box">
+                            <p><strong>Resolución:</strong> Distancias en 10 s: <span class="math-expr">150 m</span> y <span class="math-expr">200 m</span> con ángulo <span class="math-expr">60°</span>. <span class="math-expr">d² = 150² + 200² - 2(150)(200) · cos 60° = 22500 + 40000 - 30000 = 32500 ➔ d = 50√13 m ≈ 180.28 m</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: 50√13 m (≈ 180.28 m).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 3</span>
+                        <p class="font-semibold text-base">Un triángulo <span class="math-expr">△ABC</span> está inscrito en una circunferencia de radio <span class="math-expr">R = 14 cm</span>. Si el ángulo <span class="math-expr">C = 45°</span>, calcula la longitud exacta del lado <span class="math-expr">c</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ea3', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="lanzarPlantilla('ley_senos_2R')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-ea3" class="solucion-box">
+                            <p><strong>Resolución:</strong> <span class="math-expr">c = 2R · sen C = 2(14) · sen 45° = 28 · (√2 / 2) = 14√2 cm ≈ 19.80 cm</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: c = 14√2 cm (≈ 19.80 cm).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 4</span>
+                        <p class="font-semibold text-base">Sabiendo que <span class="math-expr">θ</span> es un ángulo agudo y <span class="math-expr">sen θ = 3/5</span>, utiliza la identidad pitagórica fundamental (<span class="math-expr">sen²θ + cos²θ = 1</span>) para calcular <span class="math-expr">cos θ</span> y <span class="math-expr">tan θ</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ea4', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="lanzarPlantilla('razones_rectangulo')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-ea4" class="solucion-box">
+                            <p><strong>Resolución:</strong> <span class="math-expr">(3/5)² + cos²θ = 1 ➔ cos²θ = 1 - 9/25 = 16/25 ➔ cos θ = 4/5</span>. Luego <span class="math-expr">tan θ = (3/5) / (4/5) = 3/4</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: cos θ = 4/5 y tan θ = 3/4.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 5</span>
+                        <p class="font-semibold text-base">En un cuadrilátero <span class="math-expr">ABCD</span>, la diagonal <span class="math-expr">AC</span> divide la figura en dos triángulos: <span class="math-expr">△ABC</span> tiene <span class="math-expr">AB = 10 m</span>, <span class="math-expr">BC = 12 m</span> y <span class="math-expr">∠B = 60°</span>; <span class="math-expr">△ADC</span> es rectángulo en <span class="math-expr">D</span> con <span class="math-expr">∠DAC = 30°</span>. Calcula la diagonal <span class="math-expr">AC</span> y el cateto <span class="math-expr">CD</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ea5', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="lanzarPlantilla('ley_cosenos')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-ea5" class="solucion-box">
+                            <p><strong>Resolución:</strong> En <span class="math-expr">△ABC</span> (Ley de Cosenos): <span class="math-expr">AC² = 10² + 12² - 2(10)(12) · cos 60° = 100 + 144 - 120 = 124 ➔ AC = √124 = 2√31 m ≈ 11.14 m</span>. En <span class="math-expr">△ADC</span>: <span class="math-expr">CD = AC · sen 30° = √31 m ≈ 5.57 m</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: AC = 2√31 m (≈ 11.14 m) y CD = √31 m (≈ 5.57 m).</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 4: PREGUNTAS DE REFLEXIÓN CRÍTICA  -->
+            <!-- ========================================== -->
+            <section id="sec-reflexion" class="seccion-contenido hidden">
+                <div class="card-montano">
+                    <h2 class="text-2xl font-bold text-[#1269A8] mb-2">🧠 Análisis Conceptual y Pensamiento Crítico</h2>
+                    <p class="text-sm text-slate-600 mb-4">Reflexiona sobre los fundamentos geométricos de las razones trigonométricas y de las leyes de senos y cosenos.</p>
+
+                    <div class="space-y-4">
+                        <!-- Pregunta 1 -->
+                        <div class="p-4 bg-[#F2F5E9] rounded-xl border-2 border-[#54887D]">
+                            <h3 class="font-bold text-lg text-[#1269A8]">1. ¿Por qué el seno y el coseno de un ángulo agudo son siempre menores que 1 y no dependen del tamaño del triángulo rectángulo?</h3>
+                            <p class="mt-1">Analiza la relación de longitud entre los catetos y la hipotenusa, así como la semejanza de triángulos rectángulos con un mismo ángulo agudo <span class="math-expr">θ</span>.</p>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="btn-solucion" onclick="toggleSolucion('ref-1', this)">Ver análisis conceptual</button>
+                                <button class="btn-geogebra" onclick="lanzarPlantilla('razones_rectangulo')">📐 Construir en GeoGebra</button>
+                            </div>
+                            <div id="ref-1" class="solucion-box">
+                                <p><strong>Análisis:</strong> En todo triángulo rectángulo, la hipotenusa <span class="math-expr">c</span> es el lado opuesto al mayor ángulo (<span class="math-expr">90°</span>), por lo que siempre cumple <span class="math-expr">0 &lt; CO &lt; c</span> y <span class="math-expr">0 &lt; CA &lt; c</span>. Al dividir entre <span class="math-expr">c</span>, resulta <span class="math-expr">0 &lt; sen θ &lt; 1</span> y <span class="math-expr">0 &lt; cos θ &lt; 1</span>. Además, dos triángulos rectángulos que comparten el mismo ángulo agudo <span class="math-expr">θ</span> son semejantes por el criterio <span class="math-expr">AA</span> (<span class="math-expr">90°</span> y <span class="math-expr">θ</span>), por lo que los cocientes entre sus lados correspondientes son invariantes respecto a la escala.</p>
+                            </div>
+                        </div>
+
+                        <!-- Pregunta 2 -->
+                        <div class="p-4 bg-[#F2F5E9] rounded-xl border-2 border-[#54887D]">
+                            <h3 class="font-bold text-lg text-[#1269A8]">2. ¿Cómo decidir rápidamente entre la Ley de Senos y la Ley de Cosenos según los datos conocidos (ALA/AAL vs LAL/LLL)?</h3>
+                            <p class="mt-1">Explica el criterio práctico basado en la presencia de una "pareja completa" lado-ángulo opuesto.</p>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="btn-solucion" onclick="toggleSolucion('ref-2', this)">Ver análisis conceptual</button>
+                                <button class="btn-geogebra" onclick="lanzarPlantilla('ley_senos_2R')">📐 Construir en GeoGebra</button>
+                            </div>
+                            <div id="ref-2" class="solucion-box">
+                                <p><strong>Análisis:</strong> La <strong>Ley de Senos</strong> exige conocer al menos una pareja completa de <strong>lado y su ángulo opuesto</strong> (casos <span class="math-expr">AAL</span>, <span class="math-expr">ALA</span> —donde el tercer ángulo se obtiene por <span class="math-expr">180° - A - B</span>— y <span class="math-expr">LLA</span>). Cuando <strong>no existe ninguna pareja completa lado-ángulo opuesto</strong>, como ocurre al conocer dos lados y el ángulo comprendido (<span class="math-expr">LAL</span>) o los tres lados sin ningún ángulo (<span class="math-expr">LLL</span>), la Ley de Senos deja dos incógnitas en cada fracción y debe aplicarse primero la <strong>Ley de Cosenos</strong>.</p>
+                            </div>
+                        </div>
+
+                        <!-- Pregunta 3 -->
+                        <div class="p-4 bg-[#F2F5E9] rounded-xl border-2 border-[#54887D]">
+                            <h3 class="font-bold text-lg text-[#1269A8]">3. ¿Qué ocurre con la Ley de Cosenos cuando el ángulo <span class="math-expr">C = 90°</span>?</h3>
+                            <p class="mt-1">Evalúa <span class="math-expr">c² = a² + b² - 2ab · cos C</span> en <span class="math-expr">C = 90°</span> e interpreta los signos para ángulos agudos y obtusos.</p>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="btn-solucion" onclick="toggleSolucion('ref-3', this)">Ver análisis conceptual</button>
+                                <button class="btn-geogebra" onclick="lanzarPlantilla('ley_cosenos')">📐 Construir en GeoGebra</button>
+                            </div>
+                            <div id="ref-3" class="solucion-box">
+                                <p><strong>Análisis:</strong> Como <span class="math-expr">cos 90° = 0</span>, el término corrector <span class="math-expr">-2ab · cos 90°</span> se anula y la Ley de Cosenos se reduce exactamente al <strong>Teorema de Pitágoras</strong>: <span class="math-expr">c² = a² + b²</span>. Si <span class="math-expr">C &lt; 90°</span> (agudo), <span class="math-expr">cos C &gt; 0</span> y <span class="math-expr">c² &lt; a² + b²</span>; si <span class="math-expr">C &gt; 90°</span> (obtuso), <span class="math-expr">cos C &lt; 0</span> y <span class="math-expr">c² &gt; a² + b²</span>.</p>
+                            </div>
+                        </div>
+
+                        <!-- Pregunta 4 -->
+                        <div class="p-4 bg-[#F2F5E9] rounded-xl border-2 border-[#54887D]">
+                            <h3 class="font-bold text-lg text-[#1269A8]">4. ¿Por qué surge el caso ambiguo (<span class="math-expr">LLA</span>) al usar la función seno (<span class="math-expr">sen θ = sen(180° - θ)</span>)?</h3>
+                            <p class="mt-1">Analiza la simetría de la función seno en el primer y segundo cuadrante y su interpretación geométrica al girar el lado opuesto <span class="math-expr">a</span>.</p>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="btn-solucion" onclick="toggleSolucion('ref-4', this)">Ver análisis conceptual</button>
+                                <button class="btn-geogebra" onclick="lanzarPlantilla('caso_ambiguo_lla')">📐 Construir en GeoGebra</button>
+                            </div>
+                            <div id="ref-4" class="solucion-box">
+                                <p><strong>Análisis:</strong> Un ángulo agudo <span class="math-expr">B₁</span> y su suplemento obtuso <span class="math-expr">B₂ = 180° - B₁</span> tienen exactamente el mismo valor de seno (<span class="math-expr">sen B₁ = sen(180° - B₁) &gt; 0</span>). Geométricamente, cuando el lado <span class="math-expr">a</span> es mayor que la altura <span class="math-expr">h = b · sen A</span> pero menor que el lado adyacente <span class="math-expr">b</span> (<span class="math-expr">h &lt; a &lt; b</span>), el arco de circunferencia de radio <span class="math-expr">a</span> centrado en <span class="math-expr">C</span> corta al rayo opuesto en dos puntos distintos <span class="math-expr">B₁</span> y <span class="math-expr">B₂</span>, formando dos triángulos válidos.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 5: EVALUACIÓN FORMATIVA            -->
+            <!-- ========================================== -->
+            <section id="sec-evaluacion" class="seccion-contenido hidden">
+                <div class="card-montano">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b-2 border-[#F7D615] pb-3 mb-4">
+                        <div>
+                            <h2 class="text-2xl font-bold text-[#1269A8]">✅ Evaluación Formativa de Comprobación</h2>
+                            <p class="text-sm text-slate-600">Resuelve cada reactivo, verifica tu procedimiento y explora la construcción en GeoGebra.</p>
+                        </div>
+                        <span class="badge-nivel badge-avanzado mt-2 sm:mt-0">5 Reactivos Integradores</span>
+                    </div>
+
+                    <div class="space-y-4">
+                        <!-- Reactivo 1 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 1 • Razones Trigonométricas</span>
+                            <p class="font-bold text-base mt-1">En un triángulo rectángulo (<span class="math-expr">∠C = 90°</span>), la hipotenusa mide <span class="math-expr">10 cm</span> y el cateto adyacente al ángulo <span class="math-expr">θ</span> mide <span class="math-expr">6 cm</span>. Calcula <span class="math-expr">sen θ</span>, <span class="math-expr">tan θ</span> y <span class="math-expr">sec θ</span>.</p>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="btn-solucion" onclick="toggleSolucion('eval-1', this)">Mostrar solución</button>
+                                <button class="btn-geogebra" onclick="lanzarPlantilla('razones_rectangulo')">📐 Construir en GeoGebra</button>
+                            </div>
+                            <div id="eval-1" class="solucion-box">
+                                <p><strong>Resolución:</strong> Cateto opuesto <span class="math-expr">CO = √(10² - 6²) = 8 cm</span>. Entonces <span class="math-expr">sen θ = 8/10 = 4/5</span>, <span class="math-expr">tan θ = 8/6 = 4/3</span> y <span class="math-expr">sec θ = 10/6 = 5/3</span>.</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: sen θ = 4/5, tan θ = 4/3 y sec θ = 5/3.</p>
+                            </div>
+                        </div>
+
+                        <!-- Reactivo 2 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 2 • Ángulo de Elevación</span>
+                            <p class="font-bold text-base mt-1">Un cable tensor sujeto a la punta de un poste vertical forma un ángulo de <span class="math-expr">60°</span> con el suelo y está anclado a <span class="math-expr">9 m</span> de la base del poste. Calcula la altura exacta del poste y la longitud del cable.</p>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="btn-solucion" onclick="toggleSolucion('eval-2', this)">Mostrar solución</button>
+                                <button class="btn-geogebra" onclick="lanzarPlantilla('elevacion_depresion')">📐 Construir en GeoGebra</button>
+                            </div>
+                            <div id="eval-2" class="solucion-box">
+                                <p><strong>Resolución:</strong> Altura <span class="math-expr">h = 9 · tan 60° = 9√3 m ≈ 15.59 m</span>; Cable <span class="math-expr">L = 9 / cos 60° = 9 / 0.5 = 18 m</span>.</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: Altura = 9√3 m (≈ 15.59 m) y longitud del cable = 18 m.</p>
+                            </div>
+                        </div>
+
+                        <!-- Reactivo 3 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 3 • Ley de Senos</span>
+                            <p class="font-bold text-base mt-1">En un triángulo <span class="math-expr">△ABC</span>, <span class="math-expr">B = 30°</span>, <span class="math-expr">C = 105°</span> y <span class="math-expr">b = 8 cm</span>. Calcula la medida del ángulo <span class="math-expr">A</span> y del lado <span class="math-expr">a</span>.</p>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="btn-solucion" onclick="toggleSolucion('eval-3', this)">Mostrar solución</button>
+                                <button class="btn-geogebra" onclick="lanzarPlantilla('ley_senos_2R')">📐 Construir en GeoGebra</button>
+                            </div>
+                            <div id="eval-3" class="solucion-box">
+                                <p><strong>Resolución:</strong> <span class="math-expr">A = 180° - (30° + 105°) = 45°</span>. Por Ley de Senos: <span class="math-expr">a = (8 · sen 45°) / sen 30° = (8 · √2/2) / (1/2) = 8√2 cm ≈ 11.31 cm</span>.</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: A = 45° y a = 8√2 cm (≈ 11.31 cm).</p>
+                            </div>
+                        </div>
+
+                        <!-- Reactivo 4 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 4 • Ley de Cosenos</span>
+                            <p class="font-bold text-base mt-1">Un triángulo tiene lados <span class="math-expr">a = 8 cm</span>, <span class="math-expr">b = 15 cm</span> y <span class="math-expr">c = 13 cm</span>. Calcula la medida del ángulo <span class="math-expr">C</span> (opuesto al lado de 13 cm).</p>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="btn-solucion" onclick="toggleSolucion('eval-4', this)">Mostrar solución</button>
+                                <button class="btn-geogebra" onclick="lanzarPlantilla('ley_cosenos')">📐 Construir en GeoGebra</button>
+                            </div>
+                            <div id="eval-4" class="solucion-box">
+                                <p><strong>Resolución:</strong> <span class="math-expr">cos C = (8² + 15² - 13²) / (2 · 8 · 15) = (64 + 225 - 169) / 240 = 120 / 240 = 0.5 ➔ C = arccos(0.5) = 60°</span>.</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: C = 60°.</p>
+                            </div>
+                        </div>
+
+                        <!-- Reactivo 5 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 5 • Problema Contextualizado (Rumbos y Distancia)</span>
+                            <p class="font-bold text-base mt-1">Dos senderistas parten de un refugio en Antigua Guatemala: uno camina <span class="math-expr">6 km</span> y el otro <span class="math-expr">10 km</span>, siguiendo senderos que forman entre sí un ángulo de <span class="math-expr">120°</span>. Calcula la distancia recta entre ambos senderistas (<span class="math-expr">cos 120° = -0.5</span>).</p>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="btn-solucion" onclick="toggleSolucion('eval-5', this)">Mostrar solución</button>
+                                <button class="btn-geogebra" onclick="lanzarPlantilla('navegacion_rumbos')">📐 Construir en GeoGebra</button>
+                            </div>
+                            <div id="eval-5" class="solucion-box">
+                                <p><strong>Resolución:</strong> <span class="math-expr">d² = 6² + 10² - 2(6)(10) · cos 120° = 36 + 100 - 120(-0.5) = 136 + 60 = 196 ➔ d = √196 = 14 km</span>.</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: Los separa una distancia de 14 km.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 6: LABORATORIO INTERACTIVO GEOGEBRA -->
+            <!-- ========================================== -->
+            <section id="sec-geogebra" class="seccion-contenido hidden">
+                <div class="card-montano">
+                    <!-- Encabezado y Selector de 8 Plantillas -->
+                    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 border-b-2 border-[#F7D615] pb-3 mb-4">
+                        <div>
+                            <div class="flex flex-wrap items-center gap-2">
+                                <span class="badge-nivel badge-avanzado">GeoGebra Geometry Interactivo</span>
+                                <span id="ggb-status-badge" class="text-xs font-bold text-[#54887D] bg-[#F2F5E9] px-2.5 py-1 rounded-full border border-[#54887D]">Cargando applet de GeoGebra...</span>
+                            </div>
+                            <h2 class="text-2xl font-bold text-[#1269A8] mt-1">📐 Laboratorio de Trigonometría: Rectángulos y Oblicuángulos</h2>
+                            <p class="text-sm text-slate-600">Manipula los vértices en el lienzo o selecciona una de las 8 construcciones trigonométricas preprogramadas.</p>
+                        </div>
+
+                        <!-- Selector Rápido de 8 Plantillas -->
+                        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+                            <select id="ggb-preset-select" onchange="lanzarPlantilla(this.value)" class="p-2 rounded-lg border-2 border-[#1269A8] bg-white font-bold text-xs sm:text-sm text-[#1269A8] cursor-pointer">
+                                <option value="razones_rectangulo">1. Razones Trigonométricas en Triángulo Rectángulo Manipulable</option>
+                                <option value="notables_30_45_60">2. Triángulo Notable 30°-60°-90° y 45°-45°-90°</option>
+                                <option value="elevacion_depresion">3. Simulador de Ángulo de Elevación y Depresión</option>
+                                <option value="doble_observacion">4. Doble Observación Topográfica (Dos Triángulos Rectángulos)</option>
+                                <option value="ley_senos_2R">5. Explorador Dinámico de la Ley de Senos y Circunferencia (2R)</option>
+                                <option value="caso_ambiguo_lla">6. Caso Ambiguo LLA (Visualización de 2 Triángulos Posibles)</option>
+                                <option value="ley_cosenos">7. Explorador Dinámico de la Ley de Cosenos (LAL y LLL)</option>
+                                <option value="navegacion_rumbos">8. Problema de Navegación y Rumbos con Vectores/Segmentos</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Botones Rápidos de las 8 Plantillas -->
+                    <div class="flex flex-wrap gap-1.5 mb-3">
+                        <button onclick="lanzarPlantilla('razones_rectangulo')" class="text-xs font-bold px-2.5 py-1.5 rounded-lg bg-sky-100 text-sky-950 border border-sky-500 hover:bg-sky-200 cursor-pointer">📐 1. Razones Rectángulo</button>
+                        <button onclick="lanzarPlantilla('notables_30_45_60')" class="text-xs font-bold px-2.5 py-1.5 rounded-lg bg-emerald-100 text-emerald-950 border border-emerald-500 hover:bg-emerald-200 cursor-pointer">📏 2. Notables 30°-45°-60°</button>
+                        <button onclick="lanzarPlantilla('elevacion_depresion')" class="text-xs font-bold px-2.5 py-1.5 rounded-lg bg-amber-100 text-amber-950 border border-amber-500 hover:bg-amber-200 cursor-pointer">🔭 3. Elevación y Depresión</button>
+                        <button onclick="lanzarPlantilla('doble_observacion')" class="text-xs font-bold px-2.5 py-1.5 rounded-lg bg-indigo-100 text-indigo-950 border border-indigo-500 hover:bg-indigo-200 cursor-pointer">🏔️ 4. Doble Observación</button>
+                        <button onclick="lanzarPlantilla('ley_senos_2R')" class="text-xs font-bold px-2.5 py-1.5 rounded-lg bg-teal-100 text-teal-950 border border-teal-500 hover:bg-teal-200 cursor-pointer">⭕ 5. Ley de Senos (2R)</button>
+                        <button onclick="lanzarPlantilla('caso_ambiguo_lla')" class="text-xs font-bold px-2.5 py-1.5 rounded-lg bg-lime-100 text-lime-950 border border-lime-500 hover:bg-lime-200 cursor-pointer">🔀 6. Caso Ambiguo LLA</button>
+                        <button onclick="lanzarPlantilla('ley_cosenos')" class="text-xs font-bold px-2.5 py-1.5 rounded-lg bg-rose-100 text-rose-950 border border-rose-500 hover:bg-rose-200 cursor-pointer">△ 7. Ley de Cosenos</button>
+                        <button onclick="lanzarPlantilla('navegacion_rumbos')" class="text-xs font-bold px-2.5 py-1.5 rounded-lg bg-yellow-100 text-yellow-950 border border-yellow-600 hover:bg-yellow-200 cursor-pointer">🧭 8. Navegación y Rumbos</button>
+                    </div>
+
+                    <!-- Barra de Herramientas Rápidas de Control -->
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-3 p-2.5 bg-[#F2F5E9] rounded-xl border border-[#A6B046]">
+                        <div class="flex flex-wrap gap-2">
+                            <button onclick="limpiarGeoGebra()" class="px-3 py-1.5 rounded-lg bg-white hover:bg-red-50 text-red-700 font-bold text-xs border border-red-400 cursor-pointer">🗑️ Limpiar Lienzo</button>
+                            <button onclick="alternarCuadriculaYEjes()" class="px-3 py-1.5 rounded-lg bg-white hover:bg-sky-50 text-[#1269A8] font-bold text-xs border border-[#1269A8] cursor-pointer">⊞ Mostrar/Ocultar Ejes y Cuadrícula</button>
+                            <button onclick="reiniciarPlantillaActual()" class="px-3 py-1.5 rounded-lg bg-white hover:bg-emerald-50 text-[#54887D] font-bold text-xs border border-[#54887D] cursor-pointer">↺ Reiniciar Construcción</button>
+                        </div>
+                        <span class="text-xs font-semibold text-[#54887D]">💡 Consejo: Arrastra los puntos y observa en tiempo real los ángulos en grados (°) y las razones trigonométricas.</span>
+                    </div>
+
+                    <!-- Banner Descriptivo de la Construcción Activa -->
+                    <div id="ggb-info-construccion" class="mb-3 p-3 bg-gradient-to-r from-[#1269A8] to-[#0d4f80] text-white rounded-xl border-2 border-[#F7D615]">
+                        <h3 id="ggb-titulo-construccion" class="font-bold text-base text-[#F7D615]">1. Razones Trigonométricas en Triángulo Rectángulo Manipulable</h3>
+                        <p id="ggb-desc-construccion" class="text-xs sm:text-sm text-[#F2F5E9] mt-0.5">Arrastra los vértices B o C para variar los catetos y el ángulo θ, observando sen θ, cos θ y tan θ en tiempo real.</p>
+                    </div>
+
+                    <!-- Lienzo Embebido de GeoGebra -->
+                    <div id="ggb-wrapper">
+                        <div id="ggb-element"></div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Pie de Pizarra -->
+        <footer class="bg-[#1269A8] text-white text-center py-3 px-4 text-xs sm:text-sm border-t-2 border-[#F7D615]">
+            <strong>Colegio Montano</strong> • Tercero Básico • Cuarta Unidad • Matemática • Pizarra Digital Interactiva con GeoGebra
+        </footer>
+    </div>
+
+    <!-- Scripts de Interactividad y Motor de Construcciones GeoGebra -->
+    <script>
+        /* =========================================================================
+           1. NAVEGACIÓN DE PESTAÑAS Y PANTALLA COMPLETA
+           ========================================================================= */
+
+        function cambiarSeccion(seccionId, botonActivo) {
+            const secciones = document.querySelectorAll('.seccion-contenido');
+            secciones.forEach(sec => sec.classList.add('hidden'));
+
+            const target = document.getElementById('sec-' + seccionId);
+            if (target) {
+                target.classList.remove('hidden');
+            }
+
+            const botones = document.querySelectorAll('.tab-btn');
+            botones.forEach(btn => btn.classList.remove('active'));
+            if (botonActivo) {
+                botonActivo.classList.add('active');
+            }
+
+            if (seccionId === 'geogebra') {
+                inicializarGeoGebraSiNecesario();
+                setTimeout(() => {
+                    redimensionarGeoGebra();
+                }, 130);
+            }
+        }
+
+        function filtrarSubnivel(grupo, nivel, botonActivo) {
+            const contenedores = document.querySelectorAll('.subcontenido-' + grupo);
+            contenedores.forEach(cont => cont.classList.add('hidden'));
+
+            const target = document.getElementById(grupo + '-' + nivel);
+            if (target) {
+                target.classList.remove('hidden');
+            }
+
+            const parent = botonActivo.parentElement;
+            const subBotones = parent.querySelectorAll('.subtab-btn');
+            subBotones.forEach(btn => btn.classList.remove('active'));
+            botonActivo.classList.add('active');
+        }
+
+        function toggleSolucion(solucionId, boton) {
+            const box = document.getElementById(solucionId);
+            if (!box) return;
+
+            if (box.style.display === 'block') {
+                box.style.display = 'none';
+                boton.textContent = boton.textContent.replace('Ocultar', 'Mostrar').replace('Ocultar análisis conceptual', 'Ver análisis conceptual');
+            } else {
+                box.style.display = 'block';
+                if (boton.textContent.includes('Ver análisis')) {
+                    boton.textContent = 'Ocultar análisis conceptual';
+                } else {
+                    boton.textContent = 'Ocultar solución';
+                }
+            }
+        }
+
+        function toggleFullscreen() {
+            const btn = document.getElementById('fullscreen-btn');
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().then(() => {
+                    btn.innerHTML = '<span>✖ Salir de pantalla completa</span>';
+                    setTimeout(redimensionarGeoGebra, 200);
+                }).catch(err => {
+                    console.warn('Error al intentar activar pantalla completa:', err);
+                });
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen().then(() => {
+                        btn.innerHTML = '<span>⛶ Pantalla completa</span>';
+                        setTimeout(redimensionarGeoGebra, 200);
+                    });
+                }
+            }
+        }
+
+        document.addEventListener('fullscreenchange', () => {
+            const btn = document.getElementById('fullscreen-btn');
+            if (!document.fullscreenElement && btn) {
+                btn.innerHTML = '<span>⛶ Pantalla completa</span>';
+                setTimeout(redimensionarGeoGebra, 200);
+            }
+        });
+
+        /* =========================================================================
+           2. MOTOR DE CONSTRUCCIONES GEOGEBRA Y COLA DE COMANDOS PENDIENTES
+           ========================================================================= */
+
+        let ggbIniciado = false;
+        let ggbListo = false;
+        let cuadriculaYEjesVisibles = true;
+
+        const PLANTILLAS_TRIGONOMETRIA = {
+            razones_rectangulo: {
+                titulo: '1. Razones Trigonométricas en Triángulo Rectángulo Manipulable',
+                desc: 'Arrastra los puntos B o C para cambiar los catetos y observa el ángulo θ en grados (°), sen θ = CO/c, cos θ = CA/c y tan θ = CO/CA.',
+                comandos: [
+                    'SetCoordSystem(-2, 14, -2, 9)',
+                    'A = (0, 0)',
+                    'C = (12, 0)',
+                    'B = (12, 5)',
+                    'triRect = Polygon(A, C, B)',
+                    'SetColor(triRect, 18, 105, 168)',
+                    'angRecto = Angle(B, C, A)',
+                    'theta = Angle(C, A, B)',
+                    'SetColor(theta, 180, 83, 9)',
+                    'CA = Distance(A, C)',
+                    'CO = Distance(C, B)',
+                    'hip = Distance(A, B)',
+                    'senT = CO / hip',
+                    'cosT = CA / hip',
+                    'tanT = CO / CA',
+                    'Text("θ = " + theta + " | CO = " + CO + ", CA = " + CA + ", c = " + hip, (-1.2, 7.8))',
+                    'Text("sen(θ) = " + senT + "  |  cos(θ) = " + cosT + "  |  tan(θ) = " + tanT, (-1.2, 6.9))'
+                ]
+            },
+            notables_30_45_60: {
+                titulo: '2. Triángulo Notable 30°-60°-90° y 45°-45°-90°',
+                desc: 'Comparación simultánea del triángulo notable 30°-60°-90° (izquierda) y el triángulo rectángulo isósceles 45°-45°-90° (derecha).',
+                comandos: [
+                    'SetCoordSystem(-2, 15, -2, 8)',
+                    'A = (0, 0)',
+                    'C = (6.928, 0)',
+                    'B = (6.928, 4)',
+                    't3060 = Polygon(A, C, B)',
+                    'SetColor(t3060, 18, 105, 168)',
+                    'ang30 = Angle(C, A, B)',
+                    'ang60 = Angle(A, B, C)',
+                    'D = (9, 0)',
+                    'F = (13.5, 0)',
+                    'E = (13.5, 4.5)',
+                    't4545 = Polygon(D, F, E)',
+                    'SetColor(t4545, 84, 136, 125)',
+                    'ang45 = Angle(F, D, E)',
+                    'Text("Notable 30°-60°-90°: sen 30° = 1/2, cos 30° = √3/2", (-1, 6.8))',
+                    'Text("Notable 45°-45°-90°: sen 45° = cos 45° = √2/2, tan 45° = 1", (-1, 5.9))'
+                ]
+            },
+            elevacion_depresion: {
+                titulo: '3. Simulador de Ángulo de Elevación y Depresión',
+                desc: 'Arrastra el observador A o la altura B de la torre: por rectas horizontales paralelas, el ángulo de elevación α equivale al ángulo de depresión β.',
+                comandos: [
+                    'SetCoordSystem(-2, 13, -1.5, 8)',
+                    'A = (0, 0)',
+                    'C = (10, 0)',
+                    'B = (10, 5.5)',
+                    'suelo = Segment(A, C)',
+                    'torre = Segment(C, B)',
+                    'visual = Segment(A, B)',
+                    'SetColor(torre, 18, 105, 168)',
+                    'SetColor(visual, 180, 83, 9)',
+                    'H_horiz = (5, 5.5)',
+                    'horizSup = Line(B, H_horiz)',
+                    'SetLineStyle(horizSup, 1)',
+                    'angElev = Angle(C, A, B)',
+                    'angDepr = Angle(H_horiz, B, A)',
+                    'Text("Elevación α = " + angElev + "   =   Depresión β = " + angDepr, (-1, 7))'
+                ]
+            },
+            doble_observacion: {
+                titulo: '4. Doble Observación Topográfica (Dos Triángulos Rectángulos)',
+                desc: 'Observaciones sucesivas A (24°) y B (38°) separadas 50 m hacia la torre CD para determinar su altura inaccesible h.',
+                comandos: [
+                    'SetCoordSystem(-2, 14, -1.5, 8)',
+                    'A = (0, 0)',
+                    'B = (5, 0)',
+                    'C = (11.6, 0)',
+                    'D = (11.6, 5.17)',
+                    'segAB = Segment(A, B)',
+                    'segBC = Segment(B, C)',
+                    'torreCD = Segment(C, D)',
+                    'visAD = Segment(A, D)',
+                    'visBD = Segment(B, D)',
+                    'SetColor(torreCD, 18, 105, 168)',
+                    'SetColor(visAD, 180, 83, 9)',
+                    'SetColor(visBD, 84, 136, 125)',
+                    'angA = Angle(C, A, D)',
+                    'angB = Angle(C, B, D)',
+                    'Text("Ángulo desde A = " + angA + " | Ángulo desde B = " + angB + " | Avance AB = 50 m", (-1, 7))'
+                ]
+            },
+            ley_senos_2R: {
+                titulo: '5. Explorador Dinámico de la Ley de Senos y Circunferencia (2R)',
+                desc: 'Arrastra A, B o C: verifica a/sen A = b/sen B = c/sen C = 2R (diámetro de la circunferencia circunscrita).',
+                comandos: [
+                    'SetCoordSystem(-6.5, 6.5, -5.5, 5.5)',
+                    'A = (-3.2, -2.4)',
+                    'B = (3.4, -2.1)',
+                    'C = (-0.6, 3.95)',
+                    'tri = Polygon(A, B, C)',
+                    'SetColor(tri, 18, 105, 168)',
+                    'circ = Circumcircle(A, B, C)',
+                    'SetColor(circ, 136, 181, 199)',
+                    'angA = Angle(B, A, C)',
+                    'angB = Angle(C, B, A)',
+                    'angC = Angle(A, C, B)',
+                    'ladoA = Distance(B, C)',
+                    'razon2R = ladoA / sin(angA)',
+                    'Text("A = " + angA + ", B = " + angB + ", C = " + angC + "  |  a/sen(A) = 2R = " + razon2R, (-5.8, 4.7))'
+                ]
+            },
+            caso_ambiguo_lla: {
+                titulo: '6. Caso Ambiguo LLA (Visualización de 2 Triángulos Posibles)',
+                desc: 'Con A = 30°, b = 10 y a = 7 (h = 5 < 7 < 10), la circunferencia de radio a = 7 corta la base en dos puntos B₁ y B₂.',
+                comandos: [
+                    'SetCoordSystem(-2, 15, -2, 8.5)',
+                    'A = (0, 0)',
+                    'C = (8.66, 5)',
+                    'ladoB = Segment(A, C)',
+                    'SetColor(ladoB, 18, 105, 168)',
+                    'rayoBase = Ray(A, (14, 0))',
+                    'circA = Circle(C, 7)',
+                    'SetLineStyle(circA, 1)',
+                    'SetColor(circA, 180, 83, 9)',
+                    'B1 = Intersect(rayoBase, circA, 2)',
+                    'B2 = Intersect(rayoBase, circA, 1)',
+                    'ladoA1 = Segment(C, B1)',
+                    'ladoA2 = Segment(C, B2)',
+                    'SetColor(ladoA1, 84, 136, 125)',
+                    'SetColor(ladoA2, 247, 214, 21)',
+                    'angA = Angle(B1, A, C)',
+                    'angB1 = Angle(C, B1, A)',
+                    'angB2 = Angle(C, B2, A)',
+                    'Text("A = " + angA + " | Dos triángulos posibles: B₁ = " + angB1 + " y B₂ = " + angB2, (-1, 7.6))'
+                ]
+            },
+            ley_cosenos: {
+                titulo: '7. Explorador Dinámico de la Ley de Cosenos (LAL y LLL)',
+                desc: 'Arrastra los vértices A, B o C para observar a² = b² + c² - 2bc·cos(A) y el área trigonométrica ½·b·c·sen(A).',
+                comandos: [
+                    'SetCoordSystem(-2, 13, -2, 8.5)',
+                    'A = (0, 0)',
+                    'B = (10, 0)',
+                    'C = (4.5, 6.2)',
+                    'triCos = Polygon(A, B, C)',
+                    'SetColor(triCos, 84, 136, 125)',
+                    'angA = Angle(B, A, C)',
+                    'ladoA = Distance(B, C)',
+                    'ladoB = Distance(A, C)',
+                    'ladoC = Distance(A, B)',
+                    'Text("a = " + ladoA + ", b = " + ladoB + ", c = " + ladoC + " | A = " + angA + " | Área = " + triCos, (-1.2, 7.5))'
+                ]
+            },
+            navegacion_rumbos: {
+                titulo: '8. Problema de Navegación y Rumbos con Vectores/Segmentos',
+                desc: 'Dos trayectorias parten del puerto O formando un ángulo de 65° con distancias recorridas d₁ = 4.0 y d₂ = 5.2 (escala 1:10 km).',
+                comandos: [
+                    'SetCoordSystem(-2, 9, -1.5, 7)',
+                    'O = (0, 0)',
+                    'P1 = (4, 0)',
+                    'P2 = (2.198, 4.713)',
+                    'rumbo1 = Vector(O, P1)',
+                    'rumbo2 = Vector(O, P2)',
+                    'distSep = Segment(P1, P2)',
+                    'SetColor(rumbo1, 18, 105, 168)',
+                    'SetColor(rumbo2, 84, 136, 125)',
+                    'SetColor(distSep, 180, 83, 9)',
+                    'SetLineStyle(distSep, 1)',
+                    'angRumbo = Angle(P1, O, P2)',
+                    'Text("Ángulo entre rumbos = " + angRumbo + " | Separación (escala 1:10 km) = " + distSep, (-1.2, 6.1))'
+                ]
+            }
+        };
+
+        let pendingCommands = {
+            titulo: PLANTILLAS_TRIGONOMETRIA.razones_rectangulo.titulo,
+            descripcion: PLANTILLAS_TRIGONOMETRIA.razones_rectangulo.desc,
+            comandos: PLANTILLAS_TRIGONOMETRIA.razones_rectangulo.comandos,
+            presetKey: 'razones_rectangulo'
+        };
+
+        /**
+         * Inicializa el applet oficial de GeoGebra en modo geometry al abrir la pestaña 6.
+         */
+        function inicializarGeoGebraSiNecesario() {
+            if (ggbIniciado) return;
+            ggbIniciado = true;
+
+            const wrapper = document.getElementById('ggb-wrapper');
+            const ancho = wrapper ? Math.max(wrapper.clientWidth - 6, 320) : 960;
+
+            const params = {
+                id: 'ggbApplet',
+                appName: 'geometry',
+                width: ancho,
+                height: 550,
+                showToolBar: true,
+                showAlgebraInput: true,
+                showMenuBar: true,
+                showResetIcon: false,
+                enableRightClick: true,
+                enableLabelDrags: true,
+                showZoomButtons: true,
+                language: 'es',
+                appletOnLoad: function(api) {
+                    window.ggbApplet = api;
+                    ggbListo = true;
+                    const badge = document.getElementById('ggb-status-badge');
+                    if (badge) {
+                        badge.textContent = '✔ GeoGebra Listo e Interactivo';
+                    }
+                    aplicarComandosEnApplet(pendingCommands.titulo, pendingCommands.descripcion, pendingCommands.comandos);
+                }
+            };
+
+            if (typeof GGBApplet !== 'undefined') {
+                const applet = new GGBApplet(params, true);
+                applet.inject('ggb-element');
+            } else {
+                const badge = document.getElementById('ggb-status-badge');
+                if (badge) {
+                    badge.textContent = '⚠️ Verifica tu conexión para cargar GeoGebra';
+                }
+            }
+        }
+
+        function redimensionarGeoGebra() {
+            if (!ggbListo || !window.ggbApplet) return;
+            const wrapper = document.getElementById('ggb-wrapper');
+            if (wrapper && wrapper.clientWidth > 100) {
+                try {
+                    window.ggbApplet.setSize(wrapper.clientWidth - 6, 550);
+                } catch (e) {
+                    console.warn('No se pudo redimensionar GeoGebra:', e);
+                }
+            }
+        }
+
+        window.addEventListener('resize', () => {
+            if (!document.getElementById('sec-geogebra').classList.contains('hidden')) {
+                redimensionarGeoGebra();
+            }
+        });
+
+        /**
+         * Cambia a la pestaña 6 y ejecuta (o encola en pendingCommands) la construcción solicitada.
+         */
+        function ejecutarConstruccionTrig(titulo, descripcion, comandos, presetKey) {
+            pendingCommands = {
+                titulo: titulo,
+                descripcion: descripcion,
+                comandos: comandos,
+                presetKey: presetKey || pendingCommands.presetKey
+            };
+
+            const selectEl = document.getElementById('ggb-preset-select');
+            if (selectEl && presetKey && PLANTILLAS_TRIGONOMETRIA[presetKey]) {
+                selectEl.value = presetKey;
+            }
+
+            const btnTab6 = document.getElementById('tab-geogebra');
+            cambiarSeccion('geogebra', btnTab6);
+
+            if (ggbListo && window.ggbApplet) {
+                aplicarComandosEnApplet(titulo, descripcion, comandos);
+            }
+        }
+
+        function lanzarPlantilla(clavePlantilla) {
+            const plantilla = PLANTILLAS_TRIGONOMETRIA[clavePlantilla] || PLANTILLAS_TRIGONOMETRIA.razones_rectangulo;
+            ejecutarConstruccionTrig(plantilla.titulo, plantilla.desc, plantilla.comandos, clavePlantilla);
+        }
+
+        function reiniciarPlantillaActual() {
+            aplicarComandosEnApplet(pendingCommands.titulo, pendingCommands.descripcion, pendingCommands.comandos);
+        }
+
+        function aplicarComandosEnApplet(titulo, descripcion, comandos) {
+            const tituloEl = document.getElementById('ggb-titulo-construccion');
+            const descEl = document.getElementById('ggb-desc-construccion');
+            if (tituloEl) tituloEl.textContent = titulo;
+            if (descEl) descEl.textContent = descripcion;
+
+            if (!ggbListo || !window.ggbApplet) return;
+
+            try {
+                window.ggbApplet.reset();
+                window.ggbApplet.setGridVisible(cuadriculaYEjesVisibles);
+                window.ggbApplet.setAxesVisible(cuadriculaYEjesVisibles, cuadriculaYEjesVisibles);
+
+                comandos.forEach(cmd => {
+                    window.ggbApplet.evalCommand(cmd);
+                });
+            } catch (err) {
+                console.error('Error ejecutando comandos en GeoGebra:', err);
+            }
+        }
+
+        function limpiarGeoGebra() {
+            if (!ggbListo || !window.ggbApplet) return;
+            window.ggbApplet.reset();
+            window.ggbApplet.setGridVisible(cuadriculaYEjesVisibles);
+            window.ggbApplet.setAxesVisible(cuadriculaYEjesVisibles, cuadriculaYEjesVisibles);
+            document.getElementById('ggb-titulo-construccion').textContent = 'Lienzo en Blanco (Construcción Libre)';
+            document.getElementById('ggb-desc-construccion').textContent = 'Utiliza las herramientas superiores de GeoGebra para trazar triángulos rectángulos, oblicuángulos, circunferencias y medir ángulos en grados (°).';
+        }
+
+        function alternarCuadriculaYEjes() {
+            cuadriculaYEjesVisibles = !cuadriculaYEjesVisibles;
+            if (ggbListo && window.ggbApplet) {
+                window.ggbApplet.setGridVisible(cuadriculaYEjesVisibles);
+                window.ggbApplet.setAxesVisible(cuadriculaYEjesVisibles, cuadriculaYEjesVisibles);
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,1588 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pizarra Digital - Teoremas Fundamentales: Pitágoras, Thales y Euclides | Colegio Montano</title>
+    <!-- Carga de Tailwind CSS para utilidades de diseño responsivo y layout -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Carga oficial de GeoGebra Classic / Geometry API -->
+    <script src="https://www.geogebra.org/apps/deployggb.js"></script>
+    <style>
+        /* Configuración de Variables Institucionales Colegio Montano */
+        :root {
+            --azul-principal: #1269A8;
+            --amarillo-brillante: #F7D615;
+            --verde-grisaceo: #54887D;
+            --azul-claro: #88B5C7;
+            --verde-oliva: #A6B046;
+            --blanco-suave: #F2F5E9;
+        }
+
+        /* Tipografía Institucional */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e2e8f0;
+            color: #1e293b;
+            margin: 0;
+            padding: 12px;
+        }
+
+        /* Marco Principal de Pizarra Digital */
+        #pizarra-container {
+            background-color: var(--blanco-suave);
+            border: 5px solid var(--amarillo-brillante);
+            border-radius: 12px;
+            box-shadow: 0 12px 30px rgba(18, 105, 168, 0.25);
+            max-width: 1240px;
+            margin: 0 auto;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 86vh;
+        }
+
+        /* Encabezado de la Pizarra */
+        .pizarra-header {
+            background: linear-gradient(135deg, var(--azul-principal) 0%, #0d4f80 100%);
+            color: white;
+            padding: 16px 24px;
+            border-bottom: 4px solid var(--amarillo-brillante);
+        }
+
+        /* Botón Fullscreen */
+        .btn-fullscreen {
+            background-color: var(--amarillo-brillante);
+            color: #0f172a;
+            font-weight: 700;
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: 2px solid #ffffff;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+        .btn-fullscreen:hover {
+            background-color: #ffe234;
+            transform: translateY(-1px);
+        }
+
+        /* Navegación de Pestañas */
+        .nav-tabs {
+            background-color: #ffffff;
+            border-bottom: 2px solid var(--azul-claro);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            padding: 10px 20px;
+        }
+
+        .tab-btn {
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.92rem;
+            color: var(--azul-principal);
+            background-color: transparent;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .tab-btn:hover {
+            background-color: rgba(136, 181, 199, 0.25);
+            border-color: var(--azul-claro);
+        }
+
+        .tab-btn.active {
+            background-color: var(--azul-principal);
+            color: #ffffff;
+            border-color: var(--amarillo-brillante);
+            box-shadow: 0 3px 8px rgba(18, 105, 168, 0.3);
+        }
+
+        /* Pestaña destacada para GeoGebra */
+        .tab-btn-ggb {
+            background-color: rgba(247, 214, 21, 0.28);
+            border-color: var(--amarillo-brillante);
+        }
+        .tab-btn-ggb.active {
+            background-color: var(--azul-principal);
+            color: #ffffff;
+            border-color: var(--amarillo-brillante);
+        }
+
+        /* Tarjetas de Contenido */
+        .card-montano {
+            background-color: #ffffff;
+            border: 2px solid var(--verde-grisaceo);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 18px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Etiquetas de Nivel */
+        .badge-nivel {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .badge-basico {
+            background-color: var(--verde-oliva);
+            color: #ffffff;
+        }
+        .badge-intermedio {
+            background-color: var(--verde-grisaceo);
+            color: #ffffff;
+        }
+        .badge-avanzado {
+            background-color: var(--azul-principal);
+            color: #ffffff;
+            border: 1px solid var(--amarillo-brillante);
+        }
+
+        /* Contenedor de Soluciones Ocultas */
+        .solucion-box {
+            background-color: rgba(136, 181, 199, 0.25);
+            border: 1.5px dashed var(--azul-principal);
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin-top: 12px;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .btn-solucion {
+            background-color: var(--azul-principal);
+            color: white;
+            font-weight: 600;
+            padding: 7px 14px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.2s;
+            margin-top: 10px;
+        }
+        .btn-solucion:hover {
+            background-color: var(--verde-grisaceo);
+        }
+
+        /* Botón Directo para Construir en GeoGebra */
+        .btn-geogebra {
+            background-color: var(--amarillo-brillante);
+            color: #0f172a;
+            font-weight: 700;
+            padding: 7px 14px;
+            border-radius: 6px;
+            font-size: 0.88rem;
+            cursor: pointer;
+            border: 1.5px solid #0f172a;
+            transition: all 0.2s ease;
+            margin-top: 10px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .btn-geogebra:hover {
+            background-color: #ffe234;
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Bloques Matemáticos Visuales */
+        .math-expr {
+            font-family: 'Cambria Math', 'Times New Roman', serif;
+            font-size: 1.05rem;
+            font-weight: bold;
+            color: var(--azul-principal);
+            background-color: #f8fafc;
+            padding: 2px 8px;
+            border-radius: 4px;
+            border: 1px solid #cbd5e1;
+            display: inline-block;
+        }
+
+        /* Sub-pestañas de Nivel */
+        .subtab-btn {
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 0.88rem;
+            cursor: pointer;
+            border: 2px solid var(--verde-grisaceo);
+            background-color: #ffffff;
+            color: var(--verde-grisaceo);
+            transition: all 0.2s;
+        }
+        .subtab-btn.active {
+            background-color: var(--verde-grisaceo);
+            color: #ffffff;
+        }
+
+        /* Contenedor del Applet de GeoGebra */
+        #ggb-wrapper {
+            width: 100%;
+            min-height: 540px;
+            border: 3px solid var(--azul-principal);
+            border-radius: 10px;
+            overflow: hidden;
+            background-color: #ffffff;
+            position: relative;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Modo Fullscreen */
+        :fullscreen #pizarra-container {
+            max-width: 100%;
+            width: 100vw;
+            height: 100vh;
+            border-radius: 0;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Marco Principal de la Pizarra Digital -->
+    <div id="pizarra-container">
+        
+        <!-- Encabezado Institucional -->
+        <header class="pizarra-header flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-4">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyEop0yf6lZ7Jk9MILZxF1rBj4Oqs5esyhIQ&s" 
+                     alt="Logo Colegio Montano" 
+                     class="w-14 h-14 rounded-lg bg-white p-1 object-contain border-2 border-[#F7D615]"
+                     onerror="this.src='https://placehold.co/60x60/1269A8/F7D615?text=CM'">
+                <div>
+                    <span class="text-xs uppercase tracking-widest font-bold text-[#F7D615] block">Colegio Montano • Cuarta Unidad • Matemática</span>
+                    <h1 class="text-xl sm:text-2xl font-bold leading-tight">Teoremas Fundamentales: Pitágoras, Thales y Euclides</h1>
+                    <p class="text-sm text-[#88B5C7] font-semibold">Nivel: Tercero Básico • Guía 4 • Pizarra Digital con GeoGebra</p>
+                </div>
+            </div>
+            <button id="fullscreen-btn" class="btn-fullscreen flex items-center gap-2" onclick="toggleFullscreen()">
+                <span>⛶ Pantalla completa</span>
+            </button>
+        </header>
+
+        <!-- Barra de Navegación Horizontal -->
+        <nav class="nav-tabs" role="tablist">
+            <button id="tab-teoria" class="tab-btn active" onclick="cambiarSeccion('teoria', this)">📘 1. Teoría</button>
+            <button id="tab-ejemplos" class="tab-btn" onclick="cambiarSeccion('ejemplos', this)">💡 2. Ejemplos Resueltos (15)</button>
+            <button id="tab-ejercicios" class="tab-btn" onclick="cambiarSeccion('ejercicios', this)">✍️ 3. Ejercicios Prácticos (15)</button>
+            <button id="tab-reflexion" class="tab-btn" onclick="cambiarSeccion('reflexion', this)">🧠 4. Reflexión Crítica</button>
+            <button id="tab-evaluacion" class="tab-btn" onclick="cambiarSeccion('evaluacion', this)">✅ 5. Evaluación Formativa</button>
+            <button id="tab-geogebra" class="tab-btn tab-btn-ggb" onclick="cambiarSeccion('geogebra', this)">📐 6. Laboratorio GeoGebra</button>
+        </nav>
+
+        <!-- Lienzo Principal de Contenido -->
+        <main class="p-4 sm:p-6 flex-1">
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 1: EXPLICACIÓN TEÓRICA             -->
+            <!-- ========================================== -->
+            <section id="sec-teoria" class="seccion-contenido">
+                
+                <!-- 1.1 Teorema de Pitágoras, Recíproco y Ternas Pitagóricas -->
+                <div class="card-montano">
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-3 border-b-2 border-[#F7D615] pb-2">
+                        <h2 class="text-2xl font-bold text-[#1269A8]">1. Teorema de Pitágoras, Recíproco y Ternas Pitagóricas</h2>
+                        <button class="btn-geogebra !mt-0" onclick="construirEnGeoGebra('pitagoras_areas')">📐 Demostración de Áreas en GeoGebra</button>
+                    </div>
+                    <p class="text-base leading-relaxed mb-4">
+                        En todo <strong>triángulo rectángulo</strong> (<span class="math-expr text-xs">∠C = 90°</span>), los dos lados que forman el ángulo recto se denominan <strong>catetos</strong> (<span class="math-expr text-xs">a</span> y <span class="math-expr text-xs">b</span>) y el lado opuesto al ángulo recto, que siempre es el de mayor longitud, recibe el nombre de <strong>hipotenusa</strong> (<span class="math-expr text-xs">c</span>). El <strong>Teorema de Pitágoras</strong> establece que el área del cuadrado construido sobre la hipotenusa equivale a la suma de las áreas de los cuadrados construidos sobre los catetos:
+                    </p>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center mb-4">
+                        <!-- Esquema SVG de Pitágoras con Cuadrados sobre los Lados -->
+                        <div class="lg:col-span-5 flex justify-center bg-slate-50 p-3 rounded-xl border border-slate-200">
+                            <svg width="260" height="205" viewBox="0 0 260 205">
+                                <!-- Cuadrado sobre cateto vertical a (izquierda) -->
+                                <rect x="44" y="65" width="48" height="48" fill="rgba(166,176,70,0.28)" stroke="#A6B046" stroke-width="2"/>
+                                <text x="68" y="93" text-anchor="middle" font-size="11" font-weight="bold" fill="#365314">a²</text>
+                                <!-- Cuadrado sobre cateto horizontal b (abajo) -->
+                                <rect x="92" y="113" width="64" height="64" fill="rgba(84,136,125,0.28)" stroke="#54887D" stroke-width="2"/>
+                                <text x="124" y="149" text-anchor="middle" font-size="11" font-weight="bold" fill="#134e4a">b²</text>
+                                <!-- Cuadrado sobre hipotenusa c (inclinado) -->
+                                <polygon points="92,65 156,113 204,49 140,1" fill="rgba(18,105,168,0.22)" stroke="#1269A8" stroke-width="2"/>
+                                <text x="148" y="60" text-anchor="middle" font-size="11" font-weight="bold" fill="#1269A8">c² = a² + b²</text>
+                                <!-- Triángulo Rectángulo Central -->
+                                <polygon points="92,65 92,113 156,113" fill="rgba(247,214,21,0.45)" stroke="#0f172a" stroke-width="2.5"/>
+                                <rect x="92" y="102" width="11" height="11" fill="none" stroke="#0f172a" stroke-width="1.5"/>
+                                <text x="83" y="93" font-size="11" font-weight="bold" fill="#0f172a">a</text>
+                                <text x="124" y="126" text-anchor="middle" font-size="11" font-weight="bold" fill="#0f172a">b</text>
+                                <text x="131" y="85" font-size="11" font-weight="bold" fill="#b45309">c</text>
+                            </svg>
+                        </div>
+
+                        <!-- Fórmulas de Despeje y Ternas -->
+                        <div class="lg:col-span-7 space-y-3">
+                            <div class="p-3 bg-sky-50 border-2 border-[#1269A8] rounded-xl">
+                                <span class="badge-nivel badge-avanzado mb-1">Fórmula Principal y Despejes</span>
+                                <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 mt-2 text-center">
+                                    <div class="p-2 bg-white rounded-lg border border-slate-300">
+                                        <span class="text-xs text-slate-500 block">Hallar Hipotenusa</span>
+                                        <span class="math-expr text-sm">c = √(a² + b²)</span>
+                                    </div>
+                                    <div class="p-2 bg-white rounded-lg border border-slate-300">
+                                        <span class="text-xs text-slate-500 block">Hallar Cateto a</span>
+                                        <span class="math-expr text-sm">a = √(c² - b²)</span>
+                                    </div>
+                                    <div class="p-2 bg-white rounded-lg border border-slate-300">
+                                        <span class="text-xs text-slate-500 block">Hallar Cateto b</span>
+                                        <span class="math-expr text-sm">b = √(c² - a²)</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="p-3 bg-[#F2F5E9] border-2 border-[#A6B046] rounded-xl text-sm">
+                                <strong class="text-[#1269A8]">🔢 Ternas Pitagóricas Primitivas y Múltiplos (<span class="font-mono">k · (a, b, c)</span>):</strong>
+                                <p class="text-slate-700 mt-1">Son tríos de números enteros positivos que satisfacen exactamente <span class="math-expr text-xs">a² + b² = c²</span>:</p>
+                                <div class="flex flex-wrap gap-2 mt-2">
+                                    <span class="math-expr text-xs">(3, 4, 5)</span>
+                                    <span class="math-expr text-xs">(6, 8, 10)</span>
+                                    <span class="math-expr text-xs">(9, 12, 15)</span>
+                                    <span class="math-expr text-xs">(5, 12, 13)</span>
+                                    <span class="math-expr text-xs">(8, 15, 17)</span>
+                                    <span class="math-expr text-xs">(7, 24, 25)</span>
+                                    <span class="math-expr text-xs">(20, 21, 29)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recíproco del Teorema de Pitágoras -->
+                    <div class="p-4 bg-amber-50 border-2 border-[#F7D615] rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <div class="text-sm">
+                            <span class="badge-nivel badge-intermedio mb-1">Recíproco del Teorema de Pitágoras (Clasificación por Lados)</span>
+                            <p class="text-slate-800 mt-1">Si <span class="math-expr text-xs">c</span> es el lado de mayor longitud de un triángulo de lados <span class="math-expr text-xs">a, b, c</span> (que cumple la desigualdad triangular <span class="math-expr text-xs">a + b &gt; c</span>):</p>
+                            <ul class="list-disc list-inside mt-1 text-slate-700 space-y-0.5">
+                                <li>Si <span class="math-expr text-xs">c² = a² + b²</span> ➔ El triángulo es <strong>Rectángulo</strong> (ángulo de <span class="font-mono">90°</span> opuesto a <span class="font-mono">c</span>).</li>
+                                <li>Si <span class="math-expr text-xs">c² &lt; a² + b²</span> ➔ El triángulo es <strong>Acutángulo</strong> (sus tres ángulos son agudos).</li>
+                                <li>Si <span class="math-expr text-xs">c² &gt; a² + b²</span> ➔ El triángulo es <strong>Obtusángulo</strong> (ángulo obtuso opuesto a <span class="font-mono">c</span>).</li>
+                            </ul>
+                        </div>
+                        <button class="btn-geogebra !mt-0 shrink-0" onclick="construirEnGeoGebra('pitagoras_reciproco')">📐 Simular Recíproco en GeoGebra</button>
+                    </div>
+                </div>
+
+                <!-- 1.2 Teorema de Thales y Corolario en Triángulos -->
+                <div class="card-montano">
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-3 border-b-2 border-[#F7D615] pb-2">
+                        <h2 class="text-2xl font-bold text-[#1269A8]">2. Teorema de Thales y Triángulos en Posición de Thales</h2>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-geogebra !mt-0" onclick="construirEnGeoGebra('thales_paralelas')">📐 Haz de Paralelas en GeoGebra</button>
+                            <button class="btn-geogebra !mt-0" onclick="construirEnGeoGebra('thales_triangulo')">📐 Corolario en Triángulo</button>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- Caso A: Rectas Paralelas cortadas por Dos Secantes -->
+                        <div class="p-4 bg-white border-2 border-[#54887D] rounded-xl flex flex-col justify-between">
+                            <div>
+                                <span class="badge-nivel badge-intermedio mb-1">Enunciado General</span>
+                                <h3 class="font-bold text-lg text-[#1269A8]">Rectas Paralelas Cortadas por Secantes</h3>
+                                <div class="my-2 flex justify-center">
+                                    <svg width="240" height="135" viewBox="0 0 240 135" class="bg-slate-50 rounded border border-slate-200">
+                                        <!-- 3 Paralelas L1, L2, L3 -->
+                                        <line x1="15" y1="25" x2="225" y2="25" stroke="#54887D" stroke-width="2" stroke-dasharray="4,2"/>
+                                        <line x1="15" y1="68" x2="225" y2="68" stroke="#54887D" stroke-width="2" stroke-dasharray="4,2"/>
+                                        <line x1="15" y1="115" x2="225" y2="115" stroke="#54887D" stroke-width="2" stroke-dasharray="4,2"/>
+                                        <text x="205" y="20" font-size="9.5" font-weight="bold" fill="#54887D">L₁</text>
+                                        <text x="205" y="63" font-size="9.5" font-weight="bold" fill="#54887D">L₂</text>
+                                        <text x="205" y="110" font-size="9.5" font-weight="bold" fill="#54887D">L₃</text>
+                                        <!-- Secante r (izquierda) y Secante s (derecha) -->
+                                        <line x1="88" y1="10" x2="48" y2="128" stroke="#1269A8" stroke-width="2.4"/>
+                                        <line x1="142" y1="10" x2="188" y2="128" stroke="#b45309" stroke-width="2.4"/>
+                                        <!-- Puntos de corte -->
+                                        <circle cx="83" cy="25" r="3.5" fill="#1269A8"/><text x="68" y="21" font-size="10" font-weight="bold">A</text>
+                                        <circle cx="68" cy="68" r="3.5" fill="#1269A8"/><text x="53" y="64" font-size="10" font-weight="bold">B</text>
+                                        <circle cx="52" cy="115" r="3.5" fill="#1269A8"/><text x="37" y="111" font-size="10" font-weight="bold">C</text>
+                                        <circle cx="148" cy="25" r="3.5" fill="#b45309"/><text x="155" y="21" font-size="10" font-weight="bold">A'</text>
+                                        <circle cx="165" cy="68" r="3.5" fill="#b45309"/><text x="172" y="64" font-size="10" font-weight="bold">B'</text>
+                                        <circle cx="183" cy="115" r="3.5" fill="#b45309"/><text x="190" y="111" font-size="10" font-weight="bold">C'</text>
+                                    </svg>
+                                </div>
+                                <p class="text-xs sm:text-sm text-slate-700">Si tres o más rectas paralelas (<span class="font-mono">L₁ ∥ L₂ ∥ L₃</span>) son cortadas por dos rectas transversales, los segmentos determinados sobre una de ellas son <strong>proporcionales</strong> a los segmentos correspondientes determinados sobre la otra:</p>
+                                <div class="text-center my-2">
+                                    <span class="math-expr text-sm">AB / BC = A'B' / B'C'</span> &nbsp;y&nbsp; <span class="math-expr text-sm">AB / AC = A'B' / A'C'</span>
+                                </div>
+                            </div>
+                            <button class="btn-geogebra justify-center w-full" onclick="construirEnGeoGebra('thales_paralelas')">📐 Manipular Rectas en GeoGebra</button>
+                        </div>
+
+                        <!-- Caso B: Corolario en el Triángulo (Posición de Thales) -->
+                        <div class="p-4 bg-white border-2 border-[#1269A8] rounded-xl flex flex-col justify-between">
+                            <div>
+                                <span class="badge-nivel badge-avanzado mb-1">Corolario Fundamental</span>
+                                <h3 class="font-bold text-lg text-[#1269A8]">Triángulos en Posición de Thales (<span class="font-mono">DE ∥ BC</span>)</h3>
+                                <div class="my-2 flex justify-center">
+                                    <svg width="240" height="135" viewBox="0 0 240 135" class="bg-slate-50 rounded border border-slate-200">
+                                        <polygon points="120,14 42,118 198,118" fill="rgba(18,105,168,0.1)" stroke="#1269A8" stroke-width="2.4"/>
+                                        <line x1="75" y1="74" x2="165" y2="74" stroke="#b45309" stroke-width="2.4"/>
+                                        <circle cx="120" cy="14" r="3" fill="#0f172a"/><text x="120" y="10" text-anchor="middle" font-size="10" font-weight="bold">A</text>
+                                        <circle cx="75" cy="74" r="3" fill="#b45309"/><text x="61" y="74" font-size="10" font-weight="bold" fill="#b45309">D</text>
+                                        <circle cx="165" cy="74" r="3" fill="#b45309"/><text x="172" y="74" font-size="10" font-weight="bold" fill="#b45309">E</text>
+                                        <circle cx="42" cy="118" r="3" fill="#1269A8"/><text x="30" y="124" font-size="10" font-weight="bold">B</text>
+                                        <circle cx="198" cy="118" r="3" fill="#1269A8"/><text x="204" y="124" font-size="10" font-weight="bold">C</text>
+                                        <text x="120" y="69" text-anchor="middle" font-size="9" font-weight="bold" fill="#b45309">DE ∥ BC</text>
+                                    </svg>
+                                </div>
+                                <p class="text-xs sm:text-sm text-slate-700">Toda recta paralela a un lado de un triángulo (<span class="font-mono">DE ∥ BC</span>) que corta a los otros dos lados determina un triángulo menor (<span class="font-mono">△ADE</span>) <strong>semejante</strong> al triángulo original (<span class="font-mono">△ABC</span>):</p>
+                                <div class="text-center my-2">
+                                    <span class="math-expr text-xs">AD / DB = AE / EC</span> &nbsp;y&nbsp; <span class="math-expr text-xs">AD / AB = AE / AC = DE / BC</span>
+                                </div>
+                            </div>
+                            <button class="btn-geogebra justify-center w-full" onclick="construirEnGeoGebra('thales_triangulo')">📐 Explorar en GeoGebra</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 1.3 Teoremas de Euclides en el Triángulo Rectángulo -->
+                <div class="card-montano">
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-3 border-b-2 border-[#F7D615] pb-2">
+                        <h2 class="text-2xl font-bold text-[#1269A8]">3. Teoremas de Euclides en el Triángulo Rectángulo</h2>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-geogebra !mt-0" onclick="construirEnGeoGebra('euclides_altura')">📐 Teorema de la Altura</button>
+                            <button class="btn-geogebra !mt-0" onclick="construirEnGeoGebra('euclides_cateto')">📐 Teorema del Cateto</button>
+                        </div>
+                    </div>
+                    <p class="text-sm sm:text-base text-slate-700 mb-4">
+                        Cuando en un triángulo rectángulo <span class="math-expr text-xs">△ABC</span> (recto en <span class="math-expr text-xs">C</span>) se traza la <strong>altura relativa a la hipotenusa</strong> (<span class="math-expr text-xs">h = CD ⊥ AB</span>), la hipotenusa <span class="math-expr text-xs">c</span> queda dividida en dos segmentos llamados <strong>proyecciones ortogonales</strong> de los catetos sobre la hipotenusa: <span class="math-expr text-xs">m = BD</span> (proyección del cateto <span class="math-expr text-xs">a</span>) y <span class="math-expr text-xs">n = AD</span> (proyección del cateto <span class="math-expr text-xs">b</span>), cumpliéndose <span class="math-expr text-xs">c = m + n</span>.
+                    </p>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center">
+                        <!-- Diagrama SVG de Euclides -->
+                        <div class="lg:col-span-5 flex justify-center bg-slate-50 p-3 rounded-xl border border-slate-200">
+                            <svg width="265" height="165" viewBox="0 0 265 165">
+                                <polygon points="30,125 235,125 95,30" fill="rgba(18,105,168,0.12)" stroke="#1269A8" stroke-width="2.4"/>
+                                <!-- Altura h = CD -->
+                                <line x1="95" y1="30" x2="95" y2="125" stroke="#b45309" stroke-width="2.2" stroke-dasharray="4,2"/>
+                                <rect x="95" y="114" width="11" height="11" fill="none" stroke="#b45309" stroke-width="1.5"/>
+                                <!-- Etiquetas de Vértices y Lados -->
+                                <text x="95" y="22" text-anchor="middle" font-size="11" font-weight="bold" fill="#0f172a">C (90°)</text>
+                                <text x="20" y="132" font-size="11" font-weight="bold" fill="#0f172a">A</text>
+                                <text x="240" y="132" font-size="11" font-weight="bold" fill="#0f172a">B</text>
+                                <text x="95" y="138" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#b45309">D</text>
+                                <text x="54" y="72" font-size="11" font-weight="bold" fill="#1269A8">b</text>
+                                <text x="172" y="72" font-size="11" font-weight="bold" fill="#54887D">a</text>
+                                <text x="103" y="84" font-size="11" font-weight="bold" fill="#b45309">h</text>
+                                <text x="62" y="121" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#1269A8">n</text>
+                                <text x="165" y="121" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#54887D">m</text>
+                                <text x="132" y="154" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#0f172a">Hipotenusa c = n + m</text>
+                            </svg>
+                        </div>
+
+                        <!-- 3 Relaciones Métricas de Euclides -->
+                        <div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            <div class="p-3.5 bg-amber-50 border-2 border-[#F7D615] rounded-xl flex flex-col justify-between">
+                                <div>
+                                    <span class="badge-nivel badge-basico mb-1">1. Teorema de la Altura</span>
+                                    <h4 class="font-bold text-[#1269A8] text-sm mt-1">Media Proporcional</h4>
+                                    <p class="text-xs text-slate-700 mt-1">El cuadrado de la altura sobre la hipotenusa es igual al producto de las dos proyecciones:</p>
+                                    <div class="my-2 text-center">
+                                        <span class="math-expr text-sm">h² = m · n</span><br>
+                                        <span class="math-expr text-xs mt-1">h = √(m · n)</span>
+                                    </div>
+                                </div>
+                                <button class="btn-geogebra justify-center w-full text-xs" onclick="construirEnGeoGebra('euclides_altura')">📐 Ver en GeoGebra</button>
+                            </div>
+
+                            <div class="p-3.5 bg-sky-50 border-2 border-[#1269A8] rounded-xl flex flex-col justify-between">
+                                <div>
+                                    <span class="badge-nivel badge-avanzado mb-1">2. Teorema del Cateto</span>
+                                    <h4 class="font-bold text-[#1269A8] text-sm mt-1">Proyección Adyacente</h4>
+                                    <p class="text-xs text-slate-700 mt-1">El cuadrado de cada cateto equivale al producto de la hipotenusa completa por su proyección adyacente:</p>
+                                    <div class="my-2 text-center">
+                                        <span class="math-expr text-xs">a² = c · m</span><br>
+                                        <span class="math-expr text-xs mt-1">b² = c · n</span>
+                                    </div>
+                                </div>
+                                <button class="btn-geogebra justify-center w-full text-xs" onclick="construirEnGeoGebra('euclides_cateto')">📐 Ver en GeoGebra</button>
+                            </div>
+
+                            <div class="p-3.5 bg-[#F2F5E9] border-2 border-[#54887D] rounded-xl flex flex-col justify-between">
+                                <div>
+                                    <span class="badge-nivel badge-intermedio mb-1">3. Relación de Área</span>
+                                    <h4 class="font-bold text-[#1269A8] text-sm mt-1">Producto Catetos = c · h</h4>
+                                    <p class="text-xs text-slate-700 mt-1">Al igualar el doble del área del triángulo (<span class="font-mono">a·b = c·h</span>), se calcula directamente la altura:</p>
+                                    <div class="my-2 text-center">
+                                        <span class="math-expr text-xs">a · b = c · h</span><br>
+                                        <span class="math-expr text-xs mt-1">h = (a · b) / c</span>
+                                    </div>
+                                </div>
+                                <button class="btn-geogebra justify-center w-full text-xs" onclick="construirEnGeoGebra('euclides_altura')">📐 Ver en GeoGebra</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 2: EJEMPLOS RESUELTOS (15)         -->
+            <!-- ========================================== -->
+            <section id="sec-ejemplos" class="seccion-contenido hidden">
+                <div class="flex flex-wrap items-center justify-between gap-3 mb-4 bg-white p-4 rounded-xl border-2 border-[#54887D]">
+                    <div>
+                        <h2 class="text-xl font-bold text-[#1269A8]">Ejemplos Resueltos Paso a Paso (15 Problemas)</h2>
+                        <p class="text-sm text-slate-600">Analiza cada desarrollo y pulsa <strong>"📐 Construir en GeoGebra"</strong> para visualizar el teorema aplicado.</p>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <button class="subtab-btn active" onclick="filtrarSubnivel('ejemplos', 'basico', this)">Nivel Básico (5)</button>
+                        <button class="subtab-btn" onclick="filtrarSubnivel('ejemplos', 'intermedio', this)">Nivel Intermedio (5)</button>
+                        <button class="subtab-btn" onclick="filtrarSubnivel('ejemplos', 'avanzado', this)">Nivel Avanzado (5)</button>
+                    </div>
+                </div>
+
+                <!-- EJEMPLOS BÁSICOS (5) -->
+                <div id="ejemplos-basico" class="subcontenido-ejemplos space-y-4">
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-basico">Básico • Ejemplo 1 (Pitágoras: Cálculo de la hipotenusa)</span>
+                            <button class="btn-geogebra !mt-0" onclick="construirEnGeoGebra('pitagoras_areas')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">En un triángulo rectángulo, los catetos miden <span class="math-expr">a = 6 cm</span> y <span class="math-expr">b = 8 cm</span>. Calcula la longitud de la hipotenusa <span class="math-expr">c</span>.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Teorema de Pitágoras):</strong> <span class="math-expr">c² = 6² + 8² = 36 + 64 = 100</span>.</p>
+                            <p><strong>Paso 2 (Raíz cuadrada):</strong> <span class="math-expr">c = √100 = 10 cm</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: La hipotenusa mide c = 10 cm (terna pitagórica 6, 8, 10).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-basico">Básico • Ejemplo 2 (Pitágoras: Cálculo de un cateto)</span>
+                            <button class="btn-geogebra !mt-0" onclick="construirEnGeoGebra('pitagoras_areas')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">La hipotenusa de un triángulo rectángulo mide <span class="math-expr">c = 13 m</span> y uno de sus catetos mide <span class="math-expr">b = 12 m</span>. Determina la medida del otro cateto <span class="math-expr">a</span>.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Despeje del cateto):</strong> <span class="math-expr">a² = c² - b² = 13² - 12² = 169 - 144 = 25</span>.</p>
+                            <p><strong>Paso 2 (Raíz cuadrada):</strong> <span class="math-expr">a = √25 = 5 m</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: El cateto faltante mide a = 5 m.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-basico">Básico • Ejemplo 3 (Recíproco de Pitágoras)</span>
+                            <button class="btn-geogebra !mt-0" onclick="construirEnGeoGebra('pitagoras_reciproco')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Clasifica según sus ángulos los triángulos cuyos lados miden: a) <span class="math-expr">7, 24, 25</span>; b) <span class="math-expr">5, 6, 9</span>.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>a) Lado mayor c = 25:</strong> <span class="math-expr">25² = 625</span> y <span class="math-expr">7² + 24² = 49 + 576 = 625</span>. Como <span class="math-expr">c² = a² + b²</span>, es un <strong>triángulo rectángulo</strong>.</p>
+                            <p><strong>b) Lado mayor c = 9:</strong> <span class="math-expr">9² = 81</span> y <span class="math-expr">5² + 6² = 25 + 36 = 61</span>. Como <span class="math-expr">81 &gt; 61</span> (<span class="math-expr">c² &gt; a² + b²</span>), es un <strong>triángulo obtusángulo</strong>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: a) Rectángulo; b) Obtusángulo.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-basico">Básico • Ejemplo 4 (Teorema de Thales en rectas paralelas)</span>
+                            <button class="btn-geogebra !mt-0" onclick="construirEnGeoGebra('thales_paralelas')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Tres rectas paralelas determinan sobre una transversal segmentos de <span class="math-expr">AB = 4 cm</span> y <span class="math-expr">BC = 6 cm</span>. Si sobre otra transversal el segmento correspondiente a <span class="math-expr">AB</span> mide <span class="math-expr">A'B' = 10 cm</span>, calcula la longitud de <span class="math-expr">B'C'</span>.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Proporción de Thales):</strong> <span class="math-expr">4 / 6 = 10 / x</span>.</p>
+                            <p><strong>Paso 2 (Producto cruzado):</strong> <span class="math-expr">4x = 60 ➔ x = 60 / 4 = 15 cm</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: B'C' = 15 cm.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-basico">Básico • Ejemplo 5 (Teorema de la Altura de Euclides)</span>
+                            <button class="btn-geogebra !mt-0" onclick="construirEnGeoGebra('euclides_altura')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">En un triángulo rectángulo, las proyecciones de los catetos sobre la hipotenusa miden <span class="math-expr">m = 4 cm</span> y <span class="math-expr">n = 9 cm</span>. Halla la altura <span class="math-expr">h</span> relativa a la hipotenusa.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Teorema de la altura):</strong> <span class="math-expr">h² = m · n = 4 · 9 = 36</span>.</p>
+                            <p><strong>Paso 2 (Despeje):</strong> <span class="math-expr">h = √36 = 6 cm</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: La altura mide h = 6 cm.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EJEMPLOS INTERMEDIOS (5) -->
+                <div id="ejemplos-intermedio" class="subcontenido-ejemplos hidden space-y-4">
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-intermedio">Intermedio • Ejemplo 1 (Corolario de Thales en el triángulo)</span>
+                            <button class="btn-geogebra !mt-0" onclick="construirEnGeoGebra('thales_triangulo')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">En <span class="math-expr">△ABC</span> se traza <span class="math-expr">DE ∥ BC</span> (<span class="math-expr">D ∈ AB</span>, <span class="math-expr">E ∈ AC</span>). Si <span class="math-expr">AD = 6 cm</span>, <span class="math-expr">DB = 3 cm</span> y <span class="math-expr">BC = 12 cm</span>, calcula la longitud del segmento paralelo <span class="math-expr">DE</span>.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Lado total AB):</strong> <span class="math-expr">AB = AD + DB = 6 + 3 = 9 cm</span>. (¡Atención: para comparar bases paralelas se usa el lado completo <span class="math-expr">AB</span>!).</p>
+                            <p><strong>Paso 2 (Semejanza △ADE ~ △ABC):</strong> <span class="math-expr">AD / AB = DE / BC ➔ 6 / 9 = DE / 12 ➔ DE = (6 · 12) / 9 = 8 cm</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: DE = 8 cm.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-intermedio">Intermedio • Ejemplo 2 (Teorema del Cateto de Euclides)</span>
+                            <button class="btn-geogebra !mt-0" onclick="construirEnGeoGebra('euclides_cateto')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">En un triángulo rectángulo, las proyecciones de los catetos sobre la hipotenusa miden <span class="math-expr">m = 9 cm</span> y <span class="math-expr">n = 16 cm</span>. Calcula la longitud de la hipotenusa <span class="math-expr">c</span> y de los dos catetos <span class="math-expr">a</span> y <span class="math-expr">b</span>.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Hipotenusa):</strong> <span class="math-expr">c = m + n = 9 + 16 = 25 cm</span>.</p>
+                            <p><strong>Paso 2 (Teorema del cateto):</strong> <span class="math-expr">a² = c · m = 25 · 9 = 225 ➔ a = 15 cm</span>; <span class="math-expr">b² = c · n = 25 · 16 = 400 ➔ b = 20 cm</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: c = 25 cm, a = 15 cm y b = 20 cm.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-intermedio">Intermedio • Ejemplo 3 (Altura de un triángulo equilátero)</span>
+                            <button class="btn-geogebra !mt-0" onclick="construirEnGeoGebra('triangulo_equilatero')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Calcula la altura <span class="math-expr">h</span> y el área de un triángulo equilátero cuyo lado mide <span class="math-expr">L = 10 cm</span>.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (División en dos triángulos rectángulos):</strong> La altura biseca la base en dos segmentos de <span class="math-expr">5 cm</span>: <span class="math-expr">h² + 5² = 10² ➔ h² = 100 - 25 = 75</span>.</p>
+                            <p><strong>Paso 2 (Simplificación de radical):</strong> <span class="math-expr">h = √75 = 5√3 ≈ 8.66 cm</span>. Área = <span class="math-expr">(10 · 5√3) / 2 = 25√3 ≈ 43.30 cm²</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: Altura h = 5√3 cm (≈ 8.66 cm) y Área = 25√3 cm².</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-intermedio">Intermedio • Ejemplo 4 (Problema de escalera apoyada en muro)</span>
+                            <button class="btn-geogebra !mt-0" onclick="construirEnGeoGebra('escalera_muro')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Una escalera de <span class="math-expr">10 m</span> de longitud está apoyada contra una pared vertical con su pie a <span class="math-expr">6 m</span> de la base. Si el extremo superior resbala y baja <span class="math-expr">2 m</span>, ¿cuánto se desliza el pie hacia afuera?</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Altura inicial):</strong> <span class="math-expr">h₁ = √(10² - 6²) = √(100 - 36) = √64 = 8 m</span>.</p>
+                            <p><strong>Paso 2 (Nueva altura y nueva distancia horizontal):</strong> Al bajar <span class="math-expr">2 m</span>, <span class="math-expr">h₂ = 8 - 2 = 6 m</span>. Entonces <span class="math-expr">x₂ = √(10² - 6²) = 8 m</span>. Desplazamiento = <span class="math-expr">8 - 6 = 2 m</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: El pie de la escalera se desliza 2 m hacia afuera.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-intermedio">Intermedio • Ejemplo 5 (Medición de alturas por sombras - Thales)</span>
+                            <button class="btn-geogebra !mt-0" onclick="construirEnGeoGebra('thales_triangulo')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">A la misma hora del día, un poste vertical de <span class="math-expr">2.5 m</span> proyecta una sombra de <span class="math-expr">1.5 m</span>, mientras que un edificio cercano proyecta una sombra de <span class="math-expr">18 m</span>. Calcula la altura <span class="math-expr">H</span> del edificio.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Rayos solares paralelos):</strong> <span class="math-expr">H / 18 = 2.5 / 1.5</span>.</p>
+                            <p><strong>Paso 2 (Despeje):</strong> <span class="math-expr">H = (18 · 2.5) / 1.5 = 45 / 1.5 = 30 m</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: El edificio tiene una altura de H = 30 m.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EJEMPLOS AVANZADOS (5) -->
+                <div id="ejemplos-avanzado" class="subcontenido-ejemplos hidden space-y-4">
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-avanzado">Avanzado • Ejemplo 1 (Ecuación con segmentos de Thales)</span>
+                            <button class="btn-geogebra !mt-0" onclick="construirEnGeoGebra('thales_triangulo')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">En <span class="math-expr">△ABC</span> con <span class="math-expr">DE ∥ BC</span>, los segmentos miden <span class="math-expr">AD = x + 1</span>, <span class="math-expr">DB = x + 4</span>, <span class="math-expr">AE = x - 1</span> y <span class="math-expr">EC = x + 1</span>. Halla el valor de <span class="math-expr">x</span> y las longitudes reales de <span class="math-expr">AB</span> y <span class="math-expr">AC</span>.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Proporción):</strong> <span class="math-expr">(x + 1) / (x + 4) = (x - 1) / (x + 1)</span>.</p>
+                            <p><strong>Paso 2 (Producto cruzado):</strong> <span class="math-expr">(x + 1)² = (x + 4)(x - 1) ➔ x² + 2x + 1 = x² + 3x - 4 ➔ x = 5</span>.</p>
+                            <p><strong>Paso 3 (Sustitución):</strong> <span class="math-expr">AD = 6, DB = 9 ➔ AB = 15</span>; <span class="math-expr">AE = 4, EC = 6 ➔ AC = 10</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: x = 5; AB = 15 unidades y AC = 10 unidades.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-avanzado">Avanzado • Ejemplo 2 (Relación de área y proyecciones en Euclides)</span>
+                            <button class="btn-geogebra !mt-0" onclick="construirEnGeoGebra('euclides_cateto')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Los catetos de un triángulo rectángulo miden <span class="math-expr">a = 15 cm</span> y <span class="math-expr">b = 20 cm</span>. Sin medir con regla, determina la hipotenusa <span class="math-expr">c</span>, la altura <span class="math-expr">h</span> relativa a la hipotenusa y las dos proyecciones <span class="math-expr">m</span> y <span class="math-expr">n</span>.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Hipotenusa por Pitágoras):</strong> <span class="math-expr">c = √(15² + 20²) = √625 = 25 cm</span>.</p>
+                            <p><strong>Paso 2 (Altura por relación de área):</strong> <span class="math-expr">h = (a · b) / c = (15 · 20) / 25 = 300 / 25 = 12 cm</span>.</p>
+                            <p><strong>Paso 3 (Proyecciones por teorema del cateto):</strong> <span class="math-expr">m = a² / c = 225 / 25 = 9 cm</span> y <span class="math-expr">n = b² / c = 400 / 25 = 16 cm</span> (comprobación: <span class="math-expr">9 + 16 = 25</span> y <span class="math-expr">9 · 16 = 144 = 12²</span>).</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: c = 25 cm, h = 12 cm, m = 9 cm y n = 16 cm.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-avanzado">Avanzado • Ejemplo 3 (Ecuación cuadrática con Pitágoras)</span>
+                            <button class="btn-geogebra !mt-0" onclick="construirEnGeoGebra('pitagoras_areas')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Los tres lados de un triángulo rectángulo son números enteros consecutivos: <span class="math-expr">x</span>, <span class="math-expr">x + 1</span> y <span class="math-expr">x + 2</span>. Determina sus dimensiones y su área.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Planteamiento):</strong> El lado mayor es la hipotenusa <span class="math-expr">x + 2</span>: <span class="math-expr">x² + (x + 1)² = (x + 2)²</span>.</p>
+                            <p><strong>Paso 2 (Desarrollo y factorización):</strong> <span class="math-expr">x² + x² + 2x + 1 = x² + 4x + 4 ➔ x² - 2x - 3 = 0 ➔ (x - 3)(x + 1) = 0</span>.</p>
+                            <p><strong>Paso 3 (Solución válida x &gt; 0):</strong> <span class="math-expr">x = 3</span>. Los lados son <span class="math-expr">3, 4, 5</span> y el área es <span class="math-expr">(3 · 4) / 2 = 6 u²</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Lados de 3, 4 y 5 unidades; Área = 6 u².</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-avanzado">Avanzado • Ejemplo 4 (Euclides: Proyecciones dada la altura y la hipotenusa)</span>
+                            <button class="btn-geogebra !mt-0" onclick="construirEnGeoGebra('euclides_altura')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">En un triángulo rectángulo, la hipotenusa mide <span class="math-expr">c = 13 cm</span> y la altura relativa a ella mide <span class="math-expr">h = 6 cm</span>. Calcula las longitudes de las dos proyecciones <span class="math-expr">m</span> y <span class="math-expr">n</span>.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Sistema de ecuaciones):</strong> Sabemos que <span class="math-expr">m + n = 13</span> y <span class="math-expr">m · n = h² = 6² = 36</span>.</p>
+                            <p><strong>Paso 2 (Ecuación cuadrática asociada):</strong> Buscamos dos números que sumen <span class="math-expr">13</span> y multipliquen <span class="math-expr">36</span>: <span class="math-expr">t² - 13t + 36 = 0 ➔ (t - 9)(t - 4) = 0</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Las proyecciones miden 4 cm y 9 cm.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-avanzado">Avanzado • Ejemplo 5 (Trapecio isósceles con Pitágoras)</span>
+                            <button class="btn-geogebra !mt-0" onclick="construirEnGeoGebra('pitagoras_areas')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Un trapecio isósceles tiene bases de <span class="math-expr">B = 22 cm</span> y <span class="math-expr">b = 10 cm</span>, y lados laterales iguales de <span class="math-expr">L = 10 cm</span>. Calcula la altura <span class="math-expr">h</span> del trapecio, su área y la longitud de su diagonal <span class="math-expr">d</span>.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Proyección lateral):</strong> <span class="math-expr">x = (22 - 10) / 2 = 6 cm</span>. Por Pitágoras: <span class="math-expr">h = √(10² - 6²) = 8 cm</span>.</p>
+                            <p><strong>Paso 2 (Área y diagonal):</strong> <span class="math-expr">Área = ((22 + 10) / 2) · 8 = 128 cm²</span>. La diagonal forma un triángulo rectángulo de catetos <span class="math-expr">8 cm</span> y <span class="math-expr">22 - 6 = 16 cm</span>: <span class="math-expr">d = √(8² + 16²) = √320 = 8√5 ≈ 17.89 cm</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: h = 8 cm, Área = 128 cm² y diagonal d = 8√5 cm.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 3: EJERCICIOS PRÁCTICOS (15)       -->
+            <!-- ========================================== -->
+            <section id="sec-ejercicios" class="seccion-contenido hidden">
+                <div class="flex flex-wrap items-center justify-between gap-3 mb-4 bg-white p-4 rounded-xl border-2 border-[#54887D]">
+                    <div>
+                        <h2 class="text-xl font-bold text-[#1269A8]">Práctica Guiada en Pizarra (15 Ejercicios)</h2>
+                        <p class="text-sm text-slate-600">Resuelve cada ejercicio en tu cuaderno, despliega la solución y verifica la construcción en GeoGebra.</p>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <button class="subtab-btn active" onclick="filtrarSubnivel('ejercicios', 'basico', this)">Básico (5)</button>
+                        <button class="subtab-btn" onclick="filtrarSubnivel('ejercicios', 'intermedio', this)">Intermedio (5)</button>
+                        <button class="subtab-btn" onclick="filtrarSubnivel('ejercicios', 'avanzado', this)">Avanzado (5)</button>
+                    </div>
+                </div>
+
+                <!-- EJERCICIOS BÁSICOS (5) -->
+                <div id="ejercicios-basico" class="subcontenido-ejercicios space-y-4">
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 1</span>
+                        <p class="font-semibold text-base">Calcula la hipotenusa de un triángulo rectángulo cuyos catetos miden <span class="math-expr">9 cm</span> y <span class="math-expr">12 cm</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-eb1', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="construirEnGeoGebra('pitagoras_areas')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-eb1" class="solucion-box">
+                            <p><strong>Operación:</strong> <span class="math-expr">c = √(9² + 12²) = √(81 + 144) = √225 = 15 cm</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: 15 cm.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 2</span>
+                        <p class="font-semibold text-base">En un triángulo rectángulo, la hipotenusa mide <span class="math-expr">17 cm</span> y un cateto mide <span class="math-expr">8 cm</span>. Halla la longitud del otro cateto.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-eb2', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="construirEnGeoGebra('pitagoras_areas')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-eb2" class="solucion-box">
+                            <p><strong>Operación:</strong> <span class="math-expr">b = √(17² - 8²) = √(289 - 64) = √225 = 15 cm</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: 15 cm.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 3</span>
+                        <p class="font-semibold text-base">Determina si un triángulo de lados <span class="math-expr">6 cm</span>, <span class="math-expr">7 cm</span> y <span class="math-expr">8 cm</span> es acutángulo, rectángulo u obtusángulo usando el recíproco de Pitágoras.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-eb3', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="construirEnGeoGebra('pitagoras_reciproco')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-eb3" class="solucion-box">
+                            <p><strong>Comparación:</strong> <span class="math-expr">8² = 64</span> y <span class="math-expr">6² + 7² = 36 + 49 = 85</span>. Como <span class="math-expr">64 &lt; 85</span> (<span class="math-expr">c² &lt; a² + b²</span>).</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Es un triángulo acutángulo.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 4</span>
+                        <p class="font-semibold text-base">Tres paralelas cortan dos secantes. En la primera secante los segmentos miden <span class="math-expr">3 cm</span> y <span class="math-expr">5 cm</span>. Si en la segunda secante el primer segmento mide <span class="math-expr">9 cm</span>, halla el segundo segmento <span class="math-expr">x</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-eb4', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="construirEnGeoGebra('thales_paralelas')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-eb4" class="solucion-box">
+                            <p><strong>Proporción:</strong> <span class="math-expr">3 / 5 = 9 / x ➔ x = (5 · 9) / 3 = 15 cm</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: 15 cm.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 5</span>
+                        <p class="font-semibold text-base">En un triángulo rectángulo, las proyecciones de los catetos sobre la hipotenusa miden <span class="math-expr">m = 2 cm</span> y <span class="math-expr">n = 8 cm</span>. Calcula la altura <span class="math-expr">h</span> relativa a la hipotenusa.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-eb5', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="construirEnGeoGebra('euclides_altura')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-eb5" class="solucion-box">
+                            <p><strong>Teorema de la altura:</strong> <span class="math-expr">h² = 2 · 8 = 16 ➔ h = √16 = 4 cm</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: h = 4 cm.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EJERCICIOS INTERMEDIOS (5) -->
+                <div id="ejercicios-intermedio" class="subcontenido-ejercicios hidden space-y-4">
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 1</span>
+                        <p class="font-semibold text-base">En <span class="math-expr">△ABC</span> con <span class="math-expr">DE ∥ BC</span>, se conoce que <span class="math-expr">AD = 4 cm</span>, <span class="math-expr">DB = 6 cm</span> y <span class="math-expr">BC = 15 cm</span>. Calcula la longitud del segmento <span class="math-expr">DE</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ei1', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="construirEnGeoGebra('thales_triangulo')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-ei1" class="solucion-box">
+                            <p><strong>Resolución:</strong> <span class="math-expr">AB = 4 + 6 = 10 cm</span>. Por semejanza: <span class="math-expr">4 / 10 = DE / 15 ➔ DE = 60 / 10 = 6 cm</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: DE = 6 cm.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 2</span>
+                        <p class="font-semibold text-base">En un triángulo rectángulo, la hipotenusa mide <span class="math-expr">c = 20 cm</span> y la proyección del cateto <span class="math-expr">a</span> sobre ella mide <span class="math-expr">m = 5 cm</span>. Calcula la longitud del cateto <span class="math-expr">a</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ei2', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="construirEnGeoGebra('euclides_cateto')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-ei2" class="solucion-box">
+                            <p><strong>Teorema del cateto:</strong> <span class="math-expr">a² = c · m = 20 · 5 = 100 ➔ a = √100 = 10 cm</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: a = 10 cm.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 3</span>
+                        <p class="font-semibold text-base">Calcula la diagonal de un rectángulo cuya base mide <span class="math-expr">24 cm</span> y su altura mide <span class="math-expr">7 cm</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ei3', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="construirEnGeoGebra('pitagoras_areas')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-ei3" class="solucion-box">
+                            <p><strong>Pitágoras:</strong> <span class="math-expr">d = √(24² + 7²) = √(576 + 49) = √625 = 25 cm</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: 25 cm.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 4</span>
+                        <p class="font-semibold text-base">Un árbol proyecta una sombra de <span class="math-expr">12 m</span> en el mismo instante en que una estaca de <span class="math-expr">1.8 m</span> proyecta una sombra de <span class="math-expr">2.4 m</span>. Halla la altura del árbol.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ei4', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="construirEnGeoGebra('thales_triangulo')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-ei4" class="solucion-box">
+                            <p><strong>Thales:</strong> <span class="math-expr">H / 12 = 1.8 / 2.4 ➔ H = (12 · 1.8) / 2.4 = 21.6 / 2.4 = 9 m</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: 9 m.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 5</span>
+                        <p class="font-semibold text-base">Calcula la altura de un triángulo equilátero cuyo perímetro es <span class="math-expr">36 cm</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ei5', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="construirEnGeoGebra('triangulo_equilatero')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-ei5" class="solucion-box">
+                            <p><strong>Resolución:</strong> Lado <span class="math-expr">L = 36 / 3 = 12 cm</span>. Mitad de base = <span class="math-expr">6 cm</span>: <span class="math-expr">h = √(12² - 6²) = √(144 - 36) = √108 = 6√3 ≈ 10.39 cm</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: h = 6√3 cm (≈ 10.39 cm).</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EJERCICIOS AVANZADOS (5) -->
+                <div id="ejercicios-avanzado" class="subcontenido-ejercicios hidden space-y-4">
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 1</span>
+                        <p class="font-semibold text-base">Los catetos de un triángulo rectángulo miden <span class="math-expr">a = 6 cm</span> y <span class="math-expr">b = 8 cm</span>. Calcula la altura <span class="math-expr">h</span> relativa a la hipotenusa y las dos proyecciones <span class="math-expr">m</span> y <span class="math-expr">n</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ea1', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="construirEnGeoGebra('euclides_cateto')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-ea1" class="solucion-box">
+                            <p><strong>Resolución:</strong> <span class="math-expr">c = 10 cm</span>. <span class="math-expr">h = (6 · 8) / 10 = 4.8 cm</span>; <span class="math-expr">m = 6² / 10 = 3.6 cm</span>; <span class="math-expr">n = 8² / 10 = 6.4 cm</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: h = 4.8 cm, m = 3.6 cm y n = 6.4 cm.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 2</span>
+                        <p class="font-semibold text-base">En <span class="math-expr">△ABC</span> con <span class="math-expr">DE ∥ BC</span>, los segmentos sobre los lados miden <span class="math-expr">AD = 2x - 1</span>, <span class="math-expr">DB = x + 3</span>, <span class="math-expr">AE = 6</span> y <span class="math-expr">EC = 9</span>. Calcula el valor de <span class="math-expr">x</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ea2', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="construirEnGeoGebra('thales_triangulo')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-ea2" class="solucion-box">
+                            <p><strong>Proporción:</strong> <span class="math-expr">(2x - 1) / (x + 3) = 6 / 9 = 2 / 3 ➔ 3(2x - 1) = 2(x + 3) ➔ 6x - 3 = 2x + 6 ➔ 4x = 9 ➔ x = 2.25</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: x = 2.25 (o 9/4).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 3</span>
+                        <p class="font-semibold text-base">En un triángulo rectángulo, la altura relativa a la hipotenusa mide <span class="math-expr">h = 12 cm</span> y una de las proyecciones mide <span class="math-expr">m = 9 cm</span>. Calcula la otra proyección <span class="math-expr">n</span>, la hipotenusa <span class="math-expr">c</span> y el área del triángulo.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ea3', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="construirEnGeoGebra('euclides_altura')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-ea3" class="solucion-box">
+                            <p><strong>Euclides:</strong> <span class="math-expr">12² = 9 · n ➔ 144 = 9n ➔ n = 16 cm</span>. Hipotenusa <span class="math-expr">c = 9 + 16 = 25 cm</span>. Área = <span class="math-expr">(25 · 12) / 2 = 150 cm²</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: n = 16 cm, c = 25 cm y Área = 150 cm².</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 4</span>
+                        <p class="font-semibold text-base">Las diagonales de un rombo miden <span class="math-expr">D = 16 cm</span> y <span class="math-expr">d = 12 cm</span>. Calcula la longitud de cada lado <span class="math-expr">L</span> del rombo y su perímetro.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ea4', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="construirEnGeoGebra('pitagoras_areas')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-ea4" class="solucion-box">
+                            <p><strong>Resolución:</strong> Las diagonales de un rombo se bisecan perpendicularmente formando 4 triángulos rectángulos de catetos <span class="math-expr">8 cm</span> y <span class="math-expr">6 cm</span>: <span class="math-expr">L = √(8² + 6²) = 10 cm</span>. Perímetro = <span class="math-expr">4 · 10 = 40 cm</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Lado L = 10 cm y Perímetro = 40 cm.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 5</span>
+                        <p class="font-semibold text-base">En un triángulo rectángulo, un cateto mide <span class="math-expr">x</span>, el otro cateto mide <span class="math-expr">x + 7</span> y la hipotenusa mide <span class="math-expr">x + 8</span>. Halla <span class="math-expr">x</span> y las medidas de los tres lados.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ea5', this)">Mostrar solución</button>
+                            <button class="btn-geogebra" onclick="construirEnGeoGebra('pitagoras_areas')">📐 Construir en GeoGebra</button>
+                        </div>
+                        <div id="sol-ea5" class="solucion-box">
+                            <p><strong>Ecuación:</strong> <span class="math-expr">x² + (x + 7)² = (x + 8)² ➔ 2x² + 14x + 49 = x² + 16x + 64 ➔ x² - 2x - 15 = 0 ➔ (x - 5)(x + 3) = 0 ➔ x = 5</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: x = 5; los lados miden 5, 12 y 13 unidades.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 4: PREGUNTAS DE REFLEXIÓN CRÍTICA  -->
+            <!-- ========================================== -->
+            <section id="sec-reflexion" class="seccion-contenido hidden">
+                <div class="card-montano">
+                    <h2 class="text-2xl font-bold text-[#1269A8] mb-2">🧠 Análisis Conceptual y Pensamiento Crítico</h2>
+                    <p class="text-sm text-slate-600 mb-4">Reflexiona sobre el alcance, las hipótesis y la conexión geométrica entre Pitágoras, Thales y Euclides.</p>
+
+                    <div class="space-y-4">
+                        <div class="p-4 bg-[#F2F5E9] rounded-xl border-2 border-[#54887D]">
+                            <h3 class="font-bold text-lg text-[#1269A8]">1. ¿Por qué es un error aplicar <span class="math-expr">c² = a² + b²</span> a cualquier triángulo sin verificar primero si tiene un ángulo de <span class="math-expr">90°</span>?</h3>
+                            <p class="mt-1">¿Qué ocurre con el valor de <span class="math-expr">c²</span> respecto a <span class="math-expr">a² + b²</span> cuando el ángulo opuesto a <span class="math-expr">c</span> deja de ser recto y se abre o se cierra?</p>
+                            <button class="btn-solucion" onclick="toggleSolucion('ref-1', this)">Ver análisis conceptual</button>
+                            <div id="ref-1" class="solucion-box">
+                                <p><strong>Análisis:</strong> La igualdad <span class="math-expr">c² = a² + b²</span> es exclusiva de los triángulos rectángulos. Si el ángulo opuesto al lado mayor <span class="math-expr">c</span> se cierra (<span class="math-expr">&lt; 90°</span>, triángulo acutángulo), el lado <span class="math-expr">c</span> se acorta y resulta <span class="math-expr">c² &lt; a² + b²</span>. Si el ángulo se abre (<span class="math-expr">&gt; 90°</span>, triángulo obtusángulo), el lado <span class="math-expr">c</span> se alarga y resulta <span class="math-expr">c² &gt; a² + b²</span> (generalizado posteriormente por la Ley de Cosenos).</p>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-[#F2F5E9] rounded-xl border-2 border-[#54887D]">
+                            <h3 class="font-bold text-lg text-[#1269A8]">2. En el corolario de Thales (<span class="math-expr">△ABC</span> con segmento <span class="math-expr">DE</span> interior), ¿por qué <span class="math-expr">AD / DB = DE / BC</span> es incorrecto?</h3>
+                            <p class="mt-1">Explica por qué para calcular el segmento paralelo <span class="math-expr">DE</span> debemos comparar <span class="math-expr">AD</span> con el lado completo <span class="math-expr">AB</span> y no con el tramo inferior <span class="math-expr">DB</span>.</p>
+                            <button class="btn-solucion" onclick="toggleSolucion('ref-2', this)">Ver análisis conceptual</button>
+                            <div id="ref-2" class="solucion-box">
+                                <p><strong>Análisis:</strong> El Teorema de Thales permite comparar tramos parciales (<span class="math-expr">AD / DB = AE / EC</span>) porque son segmentos correspondientes sobre las dos transversales. Sin embargo, los segmentos paralelos <span class="math-expr">DE</span> y <span class="math-expr">BC</span> son las <strong>bases de dos triángulos semejantes</strong> (<span class="math-expr">△ADE ~ △ABC</span>), por lo que deben compararse con los <strong>lados homólogos completos</strong> de esos mismos triángulos: <span class="math-expr">AD / AB = DE / BC</span>.</p>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-[#F2F5E9] rounded-xl border-2 border-[#54887D]">
+                            <h3 class="font-bold text-lg text-[#1269A8]">3. ¿De dónde surgen los Teoremas de Euclides (<span class="math-expr">h² = m·n</span> y <span class="math-expr">a² = c·m</span>) y cómo demuestran el Teorema de Pitágoras?</h3>
+                            <p class="mt-1">Analiza la semejanza entre los tres triángulos rectángulos que aparecen al trazar la altura <span class="math-expr">CD</span> sobre la hipotenusa.</p>
+                            <button class="btn-solucion" onclick="toggleSolucion('ref-3', this)">Ver análisis conceptual</button>
+                            <div id="ref-3" class="solucion-box">
+                                <p><strong>Análisis:</strong> Al trazar la altura <span class="math-expr">CD</span>, el triángulo rectángulo original <span class="math-expr">△ABC</span> queda dividido en dos triángulos rectángulos menores (<span class="math-expr">△ACD</span> y <span class="math-expr">△CBD</span>) que tienen exactamente los mismos ángulos agudos y son semejantes entre sí y con el grande. De esa semejanza salen <span class="math-expr">a² = c·m</span> y <span class="math-expr">b² = c·n</span>. Si sumamos ambas ecuaciones: <span class="math-expr">a² + b² = c·m + c·n = c(m + n) = c·c = c²</span>, obteniendo una demostración directa del Teorema de Pitágoras.</p>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-[#F2F5E9] rounded-xl border-2 border-[#54887D]">
+                            <h3 class="font-bold text-lg text-[#1269A8]">4. ¿En qué situaciones de arquitectura, topografía o navegación resulta indispensable combinar Thales con Pitágoras?</h3>
+                            <p class="mt-1">Propón un ejemplo donde no se pueda medir directamente una distancia y se requieran ambos teoremas.</p>
+                            <button class="btn-solucion" onclick="toggleSolucion('ref-4', this)">Ver análisis conceptual</button>
+                            <div id="ref-4" class="solucion-box">
+                                <p><strong>Análisis:</strong> Por ejemplo, al diseñar una rampa accesible o tensor de antena: primero se determina la altura inaccesible de la torre mediante sombras o visuales alineadas (<strong>Teorema de Thales</strong>), y una vez conocida la altura vertical y la distancia horizontal de anclaje, se calcula la longitud exacta del cable tensor diagonal mediante el <strong>Teorema de Pitágoras</strong>.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 5: EVALUACIÓN FORMATIVA            -->
+            <!-- ========================================== -->
+            <section id="sec-evaluacion" class="seccion-contenido hidden">
+                <div class="card-montano">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b-2 border-[#F7D615] pb-3 mb-4">
+                        <div>
+                            <h2 class="text-2xl font-bold text-[#1269A8]">✅ Evaluación Formativa de Comprobación</h2>
+                            <p class="text-sm text-slate-600">Resuelve cada reactivo, verifica tu procedimiento y explora la construcción en GeoGebra.</p>
+                        </div>
+                        <span class="badge-nivel badge-avanzado mt-2 sm:mt-0">5 Reactivos de Comprobación</span>
+                    </div>
+
+                    <div class="space-y-4">
+                        <!-- Reactivo 1 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 1 • Teorema de Pitágoras</span>
+                            <p class="font-bold text-base mt-1">Una rampa recta sube hasta una plataforma situada a <span class="math-expr">1.5 m</span> de altura y cubre una distancia horizontal de <span class="math-expr">3.6 m</span>. ¿Cuál es la longitud de la rampa?</p>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="btn-solucion" onclick="toggleSolucion('eval-1', this)">Mostrar solución</button>
+                                <button class="btn-geogebra" onclick="construirEnGeoGebra('pitagoras_areas')">📐 Construir en GeoGebra</button>
+                            </div>
+                            <div id="eval-1" class="solucion-box">
+                                <p><strong>Resolución:</strong> <span class="math-expr">c = √(1.5² + 3.6²) = √(2.25 + 12.96) = √15.21 = 3.9 m</span>.</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: 3.9 m.</p>
+                            </div>
+                        </div>
+
+                        <!-- Reactivo 2 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 2 • Recíproco de Pitágoras</span>
+                            <p class="font-bold text-base mt-1">Los lados de un triángulo miden <span class="math-expr">9 cm</span>, <span class="math-expr">11 cm</span> y <span class="math-expr">15 cm</span>. Clasifica el triángulo según sus ángulos.</p>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="btn-solucion" onclick="toggleSolucion('eval-2', this)">Mostrar solución</button>
+                                <button class="btn-geogebra" onclick="construirEnGeoGebra('pitagoras_reciproco')">📐 Construir en GeoGebra</button>
+                            </div>
+                            <div id="eval-2" class="solucion-box">
+                                <p><strong>Resolución:</strong> <span class="math-expr">15² = 225</span> y <span class="math-expr">9² + 11² = 81 + 121 = 202</span>. Como <span class="math-expr">225 &gt; 202</span> (<span class="math-expr">c² &gt; a² + b²</span>), es <strong>obtusángulo</strong>.</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: Triángulo Obtusángulo.</p>
+                            </div>
+                        </div>
+
+                        <!-- Reactivo 3 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 3 • Corolario de Thales</span>
+                            <p class="font-bold text-base mt-1">En <span class="math-expr">△ABC</span> con <span class="math-expr">DE ∥ BC</span>, <span class="math-expr">AD = 5 cm</span>, <span class="math-expr">DB = 10 cm</span> y <span class="math-expr">BC = 21 cm</span>. Calcula la medida de <span class="math-expr">DE</span>.</p>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="btn-solucion" onclick="toggleSolucion('eval-3', this)">Mostrar solución</button>
+                                <button class="btn-geogebra" onclick="construirEnGeoGebra('thales_triangulo')">📐 Construir en GeoGebra</button>
+                            </div>
+                            <div id="eval-3" class="solucion-box">
+                                <p><strong>Resolución:</strong> <span class="math-expr">AB = 5 + 10 = 15 cm</span>. <span class="math-expr">5 / 15 = DE / 21 ➔ DE = 21 / 3 = 7 cm</span>.</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: DE = 7 cm.</p>
+                            </div>
+                        </div>
+
+                        <!-- Reactivo 4 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 4 • Teorema de la Altura de Euclides</span>
+                            <p class="font-bold text-base mt-1">Las proyecciones de los catetos sobre la hipotenusa de un triángulo rectángulo miden <span class="math-expr">m = 3 cm</span> y <span class="math-expr">n = 27 cm</span>. Calcula la altura <span class="math-expr">h</span> relativa a la hipotenusa.</p>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="btn-solucion" onclick="toggleSolucion('eval-4', this)">Mostrar solución</button>
+                                <button class="btn-geogebra" onclick="construirEnGeoGebra('euclides_altura')">📐 Construir en GeoGebra</button>
+                            </div>
+                            <div id="eval-4" class="solucion-box">
+                                <p><strong>Resolución:</strong> <span class="math-expr">h² = 3 · 27 = 81 ➔ h = √81 = 9 cm</span>.</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: h = 9 cm.</p>
+                            </div>
+                        </div>
+
+                        <!-- Reactivo 5 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 5 • Teorema del Cateto de Euclides</span>
+                            <p class="font-bold text-base mt-1">En un triángulo rectángulo cuya hipotenusa mide <span class="math-expr">c = 18 cm</span>, la proyección del cateto <span class="math-expr">b</span> sobre la hipotenusa mide <span class="math-expr">n = 8 cm</span>. Halla la medida del cateto <span class="math-expr">b</span>.</p>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="btn-solucion" onclick="toggleSolucion('eval-5', this)">Mostrar solución</button>
+                                <button class="btn-geogebra" onclick="construirEnGeoGebra('euclides_cateto')">📐 Construir en GeoGebra</button>
+                            </div>
+                            <div id="eval-5" class="solucion-box">
+                                <p><strong>Resolución:</strong> <span class="math-expr">b² = c · n = 18 · 8 = 144 ➔ b = √144 = 12 cm</span>.</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: b = 12 cm.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 6: LABORATORIO INTERACTIVO GEOGEBRA -->
+            <!-- ========================================== -->
+            <section id="sec-geogebra" class="seccion-contenido hidden">
+                <div class="card-montano">
+                    <!-- Encabezado y Selector de 8 Construcciones -->
+                    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 border-b-2 border-[#F7D615] pb-3 mb-4">
+                        <div>
+                            <div class="flex flex-wrap items-center gap-2">
+                                <span class="badge-nivel badge-avanzado">GeoGebra Geometry Interactivo</span>
+                                <span id="ggb-status-badge" class="text-xs font-bold text-[#54887D] bg-[#F2F5E9] px-2.5 py-1 rounded-full border border-[#54887D]">Cargando applet de GeoGebra...</span>
+                            </div>
+                            <h2 class="text-2xl font-bold text-[#1269A8] mt-1">📐 Laboratorio de Pitágoras, Thales y Euclides</h2>
+                            <p class="text-sm text-slate-600">Manipula los puntos y segmentos en el lienzo o selecciona una de las 8 construcciones preprogramadas.</p>
+                        </div>
+
+                        <!-- Selector Rápido de 8 Plantillas -->
+                        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+                            <select id="ggb-preset-select" onchange="construirEnGeoGebra(this.value)" class="p-2 rounded-lg border-2 border-[#1269A8] bg-white font-bold text-xs sm:text-sm text-[#1269A8] cursor-pointer">
+                                <option value="pitagoras_areas">1. Demostración Geométrica de Áreas de Pitágoras (c² = a² + b²)</option>
+                                <option value="pitagoras_reciproco">2. Clasificación por Recíproco de Pitágoras (c² vs a² + b²)</option>
+                                <option value="thales_paralelas">3. Haz de Rectas Paralelas de Thales (AB/BC = A'B'/B'C')</option>
+                                <option value="thales_triangulo">4. Triángulo con Paralela Interna (DE ∥ BC)</option>
+                                <option value="euclides_altura">5. Teorema de la Altura de Euclides (h² = m · n)</option>
+                                <option value="euclides_cateto">6. Teorema del Cateto de Euclides (a² = c · m, b² = c · n)</option>
+                                <option value="triangulo_equilatero">7. Altura de un Triángulo Equilátero por Pitágoras</option>
+                                <option value="escalera_muro">8. Problema Aplicado: Escalera Apoyada en Muro</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Botones Rápidos de Teoremas -->
+                    <div class="flex flex-wrap gap-1.5 mb-3">
+                        <button onclick="construirEnGeoGebra('pitagoras_areas')" class="text-xs font-bold px-2.5 py-1.5 rounded-lg bg-sky-100 text-sky-950 border border-sky-500 hover:bg-sky-200 cursor-pointer">📐 Áreas Pitágoras</button>
+                        <button onclick="construirEnGeoGebra('pitagoras_reciproco')" class="text-xs font-bold px-2.5 py-1.5 rounded-lg bg-amber-100 text-amber-950 border border-amber-500 hover:bg-amber-200 cursor-pointer">🔍 Recíproco Pitágoras</button>
+                        <button onclick="construirEnGeoGebra('thales_paralelas')" class="text-xs font-bold px-2.5 py-1.5 rounded-lg bg-emerald-100 text-emerald-950 border border-emerald-500 hover:bg-emerald-200 cursor-pointer">║ Haz de Thales</button>
+                        <button onclick="construirEnGeoGebra('thales_triangulo')" class="text-xs font-bold px-2.5 py-1.5 rounded-lg bg-teal-100 text-teal-950 border border-teal-500 hover:bg-teal-200 cursor-pointer">△ Corolario Thales</button>
+                        <button onclick="construirEnGeoGebra('euclides_altura')" class="text-xs font-bold px-2.5 py-1.5 rounded-lg bg-rose-100 text-rose-950 border border-rose-500 hover:bg-rose-200 cursor-pointer">⊥ Altura Euclides</button>
+                        <button onclick="construirEnGeoGebra('euclides_cateto')" class="text-xs font-bold px-2.5 py-1.5 rounded-lg bg-indigo-100 text-indigo-950 border border-indigo-500 hover:bg-indigo-200 cursor-pointer">📏 Cateto Euclides</button>
+                        <button onclick="construirEnGeoGebra('triangulo_equilatero')" class="text-xs font-bold px-2.5 py-1.5 rounded-lg bg-lime-100 text-lime-950 border border-lime-500 hover:bg-lime-200 cursor-pointer">🔺 Altura Equilátero</button>
+                        <button onclick="construirEnGeoGebra('escalera_muro')" class="text-xs font-bold px-2.5 py-1.5 rounded-lg bg-yellow-100 text-yellow-950 border border-yellow-600 hover:bg-yellow-200 cursor-pointer">🪜 Escalera en Muro</button>
+                    </div>
+
+                    <!-- Barra de Herramientas Rápidas de Pizarra -->
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-3 p-2.5 bg-[#F2F5E9] rounded-xl border border-[#A6B046]">
+                        <div class="flex flex-wrap gap-2">
+                            <button onclick="limpiarGeoGebra()" class="px-3 py-1.5 rounded-lg bg-white hover:bg-red-50 text-red-700 font-bold text-xs border border-red-400 cursor-pointer">🗑️ Limpiar Lienzo</button>
+                            <button onclick="toggleCuadriculaGeoGebra()" class="px-3 py-1.5 rounded-lg bg-white hover:bg-sky-50 text-[#1269A8] font-bold text-xs border border-[#1269A8] cursor-pointer">⊞ Mostrar/Ocultar Cuadrícula</button>
+                            <button onclick="toggleEjesGeoGebra()" class="px-3 py-1.5 rounded-lg bg-white hover:bg-sky-50 text-[#1269A8] font-bold text-xs border border-[#1269A8] cursor-pointer">┼ Mostrar/Ocultar Ejes</button>
+                        </div>
+                        <span class="text-xs font-semibold text-[#54887D]">💡 Consejo: Arrastra los puntos libres en GeoGebra para observar cómo se conservan las proporciones y áreas.</span>
+                    </div>
+
+                    <!-- Banner Descriptivo de la Construcción Activa -->
+                    <div id="ggb-info-construccion" class="mb-3 p-3 bg-gradient-to-r from-[#1269A8] to-[#0d4f80] text-white rounded-xl border-2 border-[#F7D615]">
+                        <h3 id="ggb-titulo-construccion" class="font-bold text-base text-[#F7D615]">1. Demostración Geométrica de Áreas de Pitágoras (c² = a² + b²)</h3>
+                        <p id="ggb-desc-construccion" class="text-xs sm:text-sm text-[#F2F5E9] mt-0.5">Observa los cuadrados construidos sobre los catetos (a = 3, b = 4) y sobre la hipotenusa (c = 5): la suma de áreas 9 + 16 equivale exactamente a 25.</p>
+                    </div>
+
+                    <!-- Lienzo Embebido de GeoGebra -->
+                    <div id="ggb-wrapper">
+                        <div id="ggb-element"></div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Pie de Pizarra -->
+        <footer class="bg-[#1269A8] text-white text-center py-3 px-4 text-xs sm:text-sm border-t-2 border-[#F7D615]">
+            <strong>Colegio Montano</strong> • Departamento de Matemática • Cuarta Unidad • Pizarra Digital Interactiva
+        </footer>
+    </div>
+
+    <!-- Scripts de Interactividad y Motor de Construcciones GeoGebra -->
+    <script>
+        /* =========================================================================
+           1. NAVEGACIÓN DE PESTAÑAS Y PANTALLA COMPLETA
+           ========================================================================= */
+
+        function cambiarSeccion(seccionId, botonActivo) {
+            const secciones = document.querySelectorAll('.seccion-contenido');
+            secciones.forEach(sec => sec.classList.add('hidden'));
+
+            const target = document.getElementById('sec-' + seccionId);
+            if (target) {
+                target.classList.remove('hidden');
+            }
+
+            const botones = document.querySelectorAll('.tab-btn');
+            botones.forEach(btn => btn.classList.remove('active'));
+            if (botonActivo) {
+                botonActivo.classList.add('active');
+            }
+
+            if (seccionId === 'geogebra') {
+                inicializarGeoGebraSiNecesario();
+                setTimeout(() => {
+                    redimensionarGeoGebra();
+                }, 120);
+            }
+        }
+
+        function filtrarSubnivel(grupo, nivel, botonActivo) {
+            const contenedores = document.querySelectorAll('.subcontenido-' + grupo);
+            contenedores.forEach(cont => cont.classList.add('hidden'));
+
+            const target = document.getElementById(grupo + '-' + nivel);
+            if (target) {
+                target.classList.remove('hidden');
+            }
+
+            const parent = botonActivo.parentElement;
+            const subBotones = parent.querySelectorAll('.subtab-btn');
+            subBotones.forEach(btn => btn.classList.remove('active'));
+            botonActivo.classList.add('active');
+        }
+
+        function toggleSolucion(solucionId, boton) {
+            const box = document.getElementById(solucionId);
+            if (!box) return;
+
+            if (box.style.display === 'block') {
+                box.style.display = 'none';
+                boton.textContent = boton.textContent.replace('Ocultar', 'Mostrar').replace('Ocultar análisis conceptual', 'Ver análisis conceptual');
+            } else {
+                box.style.display = 'block';
+                if (boton.textContent.includes('Ver análisis')) {
+                    boton.textContent = 'Ocultar análisis conceptual';
+                } else {
+                    boton.textContent = 'Ocultar solución';
+                }
+            }
+        }
+
+        function toggleFullscreen() {
+            const btn = document.getElementById('fullscreen-btn');
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().then(() => {
+                    btn.innerHTML = '<span>✖ Salir de pantalla completa</span>';
+                    setTimeout(redimensionarGeoGebra, 200);
+                }).catch(err => {
+                    console.warn('Error al intentar activar pantalla completa:', err);
+                });
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen().then(() => {
+                        btn.innerHTML = '<span>⛶ Pantalla completa</span>';
+                        setTimeout(redimensionarGeoGebra, 200);
+                    });
+                }
+            }
+        }
+
+        document.addEventListener('fullscreenchange', () => {
+            const btn = document.getElementById('fullscreen-btn');
+            if (!document.fullscreenElement && btn) {
+                btn.innerHTML = '<span>⛶ Pantalla completa</span>';
+                setTimeout(redimensionarGeoGebra, 200);
+            }
+        });
+
+        /* =========================================================================
+           2. MOTOR DE CONSTRUCCIONES GEOGEBRA Y COLA DE COMANDOS PENDIENTES
+           ========================================================================= */
+
+        let ggbIniciado = false;
+        let ggbListo = false;
+        let construccionPendiente = 'pitagoras_areas';
+        let cuadriculaVisible = true;
+        let ejesVisible = false;
+
+        const CONSTRUCCIONES_GGB = {
+            pitagoras_areas: {
+                titulo: '1. Demostración Geométrica de Áreas de Pitágoras (c² = a² + b²)',
+                desc: 'Observa los cuadrados construidos sobre los catetos (a = 3, b = 4) y sobre la hipotenusa (c = 5): la suma de áreas 9 + 16 equivale exactamente a 25.',
+                presetValue: 'pitagoras_areas',
+                comandos: [
+                    'SetCoordSystem(-5, 10, -5.5, 8.5)',
+                    'C = (0, 0)',
+                    'B = (4, 0)',
+                    'A = (0, 3)',
+                    'tri = Polygon(C, B, A)',
+                    'SetColor(tri, 247, 214, 21)',
+                    'ang90 = Angle(B, C, A)',
+                    'sqA = Polygon(C, A, 4)',
+                    'sqB = Polygon(B, C, 4)',
+                    'sqC = Polygon(A, B, 4)',
+                    'SetColor(sqA, 166, 176, 70)',
+                    'SetColor(sqB, 84, 136, 125)',
+                    'SetColor(sqC, 18, 105, 168)',
+                    'Text("a² = " + sqA + "  |  b² = " + sqB + "  |  c² = " + sqC + " (a² + b² = c²)", (-4.5, 7.5))'
+                ]
+            },
+            pitagoras_reciproco: {
+                titulo: '2. Clasificación por Recíproco de Pitágoras (c² vs a² + b²)',
+                desc: 'Arrastra el vértice C en el lienzo y compara c² frente a a² + b² para identificar cuándo el triángulo es acutángulo, rectángulo u obtusángulo.',
+                presetValue: 'pitagoras_reciproco',
+                comandos: [
+                    'SetCoordSystem(-4, 11, -2.5, 7)',
+                    'A = (0, 0)',
+                    'B = (7, 0)',
+                    'C = (2.2, 4.5)',
+                    'tri = Polygon(A, B, C)',
+                    'SetColor(tri, 18, 105, 168)',
+                    'c = Segment(A, B)',
+                    'b = Segment(A, C)',
+                    'a = Segment(B, C)',
+                    'angC = Angle(A, C, B)',
+                    'SetColor(angC, 180, 83, 9)',
+                    'Text("c² = " + (c^2) + "   vs   a² + b² = " + (a^2 + b^2), (-2.5, 6))'
+                ]
+            },
+            thales_paralelas: {
+                titulo: '3. Haz de Rectas Paralelas de Thales (AB/BC = A\'B\'/B\'C\')',
+                desc: 'Tres rectas paralelas cortadas por dos secantes determinan segmentos proporcionales. Arrastra los puntos sobre las rectas para comprobar que las razones coinciden.',
+                presetValue: 'thales_paralelas',
+                comandos: [
+                    'SetCoordSystem(-6, 7, -4.5, 5)',
+                    'L1 = Line((-5, 3), (5, 3))',
+                    'L2 = Line((-5, 0.5), (5, 0.5))',
+                    'L3 = Line((-5, -3), (5, -3))',
+                    'SetLineStyle(L1, 1)',
+                    'SetLineStyle(L2, 1)',
+                    'SetLineStyle(L3, 1)',
+                    'SetColor(L1, 84, 136, 125)',
+                    'SetColor(L2, 84, 136, 125)',
+                    'SetColor(L3, 84, 136, 125)',
+                    'r = Line((-2, 4), (-3.8, -4))',
+                    's = Line((1.5, 4), (4, -4))',
+                    'SetColor(r, 18, 105, 168)',
+                    'SetColor(s, 180, 83, 9)',
+                    'A = Intersect(r, L1)',
+                    'B = Intersect(r, L2)',
+                    'C = Intersect(r, L3)',
+                    'Ap = Intersect(s, L1)',
+                    'Bp = Intersect(s, L2)',
+                    'Cp = Intersect(s, L3)',
+                    'razon1 = Distance(A, B) / Distance(B, C)',
+                    'razon2 = Distance(Ap, Bp) / Distance(Bp, Cp)',
+                    'Text("AB / BC = " + razon1 + "   =   A\'B\' / B\'C\' = " + razon2, (-4.8, 4.3))'
+                ]
+            },
+            thales_triangulo: {
+                titulo: '4. Triángulo con Paralela Interna (Posición de Thales: DE ∥ BC)',
+                desc: 'Arrastra el punto D sobre el lado AB: la paralela DE determina △ADE ~ △ABC manteniendo iguales las razones AD/AB, AE/AC y DE/BC.',
+                presetValue: 'thales_triangulo',
+                comandos: [
+                    'SetCoordSystem(-5, 6, -3, 5.5)',
+                    'A = (0.5, 4)',
+                    'B = (-3.8, -2)',
+                    'C = (4.5, -2)',
+                    'tri = Polygon(A, B, C)',
+                    'SetColor(tri, 18, 105, 168)',
+                    'D = Point(Segment(A, B))',
+                    'SetCoords(D, -1.22, 1.6)',
+                    'par = Line(D, Segment(B, C))',
+                    'E = Intersect(par, Segment(A, C))',
+                    'segDE = Segment(D, E)',
+                    'SetColor(segDE, 180, 83, 9)',
+                    'r1 = Distance(A, D) / Distance(A, B)',
+                    'r2 = Distance(D, E) / Distance(B, C)',
+                    'Text("AD / AB = " + r1 + "   =   DE / BC = " + r2, (-4.2, 4.7))'
+                ]
+            },
+            euclides_altura: {
+                titulo: '5. Teorema de la Altura de Euclides (h² = m · n)',
+                desc: 'En el triángulo rectángulo △ABC (recto en C), el cuadrado de la altura CD es igual al producto de las dos proyecciones AD y DB.',
+                presetValue: 'euclides_altura',
+                comandos: [
+                    'SetCoordSystem(-2, 12, -2, 6.5)',
+                    'A = (0, 0)',
+                    'B = (10, 0)',
+                    'D = (3.6, 0)',
+                    'C = (3.6, 4.8)',
+                    'tri = Polygon(A, B, C)',
+                    'SetColor(tri, 18, 105, 168)',
+                    'h = Segment(C, D)',
+                    'SetColor(h, 180, 83, 9)',
+                    'angC = Angle(A, C, B)',
+                    'angD = Angle(B, D, C)',
+                    'n = Distance(A, D)',
+                    'm = Distance(D, B)',
+                    'Text("h² = " + (h^2) + "   =   m · n = " + (m * n), (1.5, 5.6))'
+                ]
+            },
+            euclides_cateto: {
+                titulo: '6. Teorema del Cateto de Euclides (a² = c · m  y  b² = c · n)',
+                desc: 'Cada cateto al cuadrado equivale al producto de la hipotenusa completa c por la proyección ortogonal adyacente a dicho cateto.',
+                presetValue: 'euclides_cateto',
+                comandos: [
+                    'SetCoordSystem(-2, 12, -2, 6.5)',
+                    'A = (0, 0)',
+                    'B = (10, 0)',
+                    'D = (3.6, 0)',
+                    'C = (3.6, 4.8)',
+                    'tri = Polygon(A, B, C)',
+                    'SetColor(tri, 84, 136, 125)',
+                    'h = Segment(C, D)',
+                    'SetLineStyle(h, 1)',
+                    'b = Distance(A, C)',
+                    'a = Distance(B, C)',
+                    'c = Distance(A, B)',
+                    'n = Distance(A, D)',
+                    'm = Distance(D, B)',
+                    'Text("b² = " + (b^2) + " = c·n (" + (c*n) + ")  |  a² = " + (a^2) + " = c·m (" + (c*m) + ")", (-1.2, 5.6))'
+                ]
+            },
+            triangulo_equilatero: {
+                titulo: '7. Altura de un Triángulo Equilátero por Pitágoras (L = 10)',
+                desc: 'La altura divide al triángulo equilátero de lado 10 en dos triángulos rectángulos de hipotenusa 10 y base 5, dando h = √(10² - 5²) = √75 ≈ 8.66.',
+                presetValue: 'triangulo_equilatero',
+                comandos: [
+                    'SetCoordSystem(-3, 13, -2, 10.5)',
+                    'A = (0, 0)',
+                    'B = (10, 0)',
+                    'C = Rotate(B, 60°, A)',
+                    'tri = Polygon(A, B, C)',
+                    'SetColor(tri, 166, 176, 70)',
+                    'M = Midpoint(A, B)',
+                    'h = Segment(C, M)',
+                    'SetColor(h, 180, 83, 9)',
+                    'angM = Angle(B, M, C)',
+                    'Text("Lado = 10 | Mitad base = 5 | Altura h = " + h + " (5√3)", (0.5, 9.5))'
+                ]
+            },
+            escalera_muro: {
+                titulo: '8. Problema Aplicado: Escalera de 10 m Apoyada en Muro',
+                desc: 'La escalera de 10 m forma la hipotenusa constante. Con base de 6 m alcanza 8 m de altura; al resbalar 2 m hacia abajo, su pie se desplaza a 8 m.',
+                presetValue: 'escalera_muro',
+                comandos: [
+                    'SetCoordSystem(-2, 11, -1.5, 10.5)',
+                    'O = (0, 0)',
+                    'Pared = Segment((0, 0), (0, 9.5))',
+                    'Suelo = Segment((0, 0), (10, 0))',
+                    'SetColor(Pared, 15, 23, 42)',
+                    'SetColor(Suelo, 15, 23, 42)',
+                    'Pie1 = (6, 0)',
+                    'Top1 = (0, 8)',
+                    'Esc1 = Segment(Pie1, Top1)',
+                    'SetColor(Esc1, 18, 105, 168)',
+                    'Pie2 = (8, 0)',
+                    'Top2 = (0, 6)',
+                    'Esc2 = Segment(Pie2, Top2)',
+                    'SetLineStyle(Esc2, 1)',
+                    'SetColor(Esc2, 180, 83, 9)',
+                    'Text("Posición 1: (6, 8, 10)  ➔  Posición 2: (8, 6, 10)", (1.5, 9.2))'
+                ]
+            }
+        };
+
+        /**
+         * Inicializa el applet de GeoGebra la primera vez que se accede a la pestaña 6.
+         */
+        function inicializarGeoGebraSiNecesario() {
+            if (ggbIniciado) return;
+            ggbIniciado = true;
+
+            const wrapper = document.getElementById('ggb-wrapper');
+            const ancho = wrapper ? Math.max(wrapper.clientWidth - 6, 320) : 960;
+
+            const params = {
+                id: 'ggbApplet',
+                appName: 'geometry',
+                width: ancho,
+                height: 540,
+                showToolBar: true,
+                showAlgebraInput: true,
+                showMenuBar: false,
+                showResetIcon: false,
+                enableRightClick: true,
+                enableLabelDrags: true,
+                showZoomButtons: true,
+                language: 'es',
+                appletOnLoad: function(api) {
+                    window.ggbApplet = api;
+                    ggbListo = true;
+                    const badge = document.getElementById('ggb-status-badge');
+                    if (badge) {
+                        badge.textContent = '✔ GeoGebra Listo e Interactivo';
+                    }
+                    ejecutarComandosConstruccion(construccionPendiente);
+                }
+            };
+
+            if (typeof GGBApplet !== 'undefined') {
+                const applet = new GGBApplet(params, true);
+                applet.inject('ggb-element');
+            } else {
+                const badge = document.getElementById('ggb-status-badge');
+                if (badge) {
+                    badge.textContent = '⚠️ Verifica tu conexión para cargar GeoGebra';
+                }
+            }
+        }
+
+        function redimensionarGeoGebra() {
+            if (!ggbListo || !window.ggbApplet) return;
+            const wrapper = document.getElementById('ggb-wrapper');
+            if (wrapper && wrapper.clientWidth > 100) {
+                try {
+                    window.ggbApplet.setSize(wrapper.clientWidth - 6, 540);
+                } catch (e) {
+                    console.warn('No se pudo redimensionar GeoGebra:', e);
+                }
+            }
+        }
+
+        window.addEventListener('resize', () => {
+            if (!document.getElementById('sec-geogebra').classList.contains('hidden')) {
+                redimensionarGeoGebra();
+            }
+        });
+
+        /**
+         * Abre la pestaña de GeoGebra y ejecuta la construcción solicitada (o la encola hasta que el applet termine de cargar).
+         */
+        function construirEnGeoGebra(claveConstruccion) {
+            construccionPendiente = claveConstruccion || 'pitagoras_areas';
+
+            const btnTab6 = document.getElementById('tab-geogebra');
+            cambiarSeccion('geogebra', btnTab6);
+
+            if (ggbListo && window.ggbApplet) {
+                ejecutarComandosConstruccion(construccionPendiente);
+            }
+        }
+
+        function ejecutarComandosConstruccion(clave) {
+            const datos = CONSTRUCCIONES_GGB[clave] || CONSTRUCCIONES_GGB.pitagoras_areas;
+
+            const tituloEl = document.getElementById('ggb-titulo-construccion');
+            const descEl = document.getElementById('ggb-desc-construccion');
+            const selectEl = document.getElementById('ggb-preset-select');
+
+            if (tituloEl) tituloEl.textContent = datos.titulo;
+            if (descEl) descEl.textContent = datos.desc;
+            if (selectEl && datos.presetValue) selectEl.value = datos.presetValue;
+
+            if (!ggbListo || !window.ggbApplet) return;
+
+            try {
+                window.ggbApplet.reset();
+                window.ggbApplet.setGridVisible(cuadriculaVisible);
+                window.ggbApplet.setAxesVisible(ejesVisible, ejesVisible);
+
+                datos.comandos.forEach(cmd => {
+                    window.ggbApplet.evalCommand(cmd);
+                });
+            } catch (err) {
+                console.error('Error ejecutando construcción en GeoGebra:', err);
+            }
+        }
+
+        function limpiarGeoGebra() {
+            if (!ggbListo || !window.ggbApplet) return;
+            window.ggbApplet.reset();
+            window.ggbApplet.setGridVisible(cuadriculaVisible);
+            window.ggbApplet.setAxesVisible(ejesVisible, ejesVisible);
+            document.getElementById('ggb-titulo-construccion').textContent = 'Lienzo en Blanco (Construcción Libre)';
+            document.getElementById('ggb-desc-construccion').textContent = 'Utiliza las herramientas superiores de GeoGebra para trazar triángulos rectángulos, rectas paralelas, alturas y proyecciones.';
+        }
+
+        function toggleCuadriculaGeoGebra() {
+            cuadriculaVisible = !cuadriculaVisible;
+            if (ggbListo && window.ggbApplet) {
+                window.ggbApplet.setGridVisible(cuadriculaVisible);
+            }
+        }
+
+        function toggleEjesGeoGebra() {
+            ejesVisible = !ejesVisible;
+            if (ggbListo && window.ggbApplet) {
+                window.ggbApplet.setAxesVisible(ejesVisible, ejesVisible);
+            }
+        }
+    </script>
+</body>
+</html>

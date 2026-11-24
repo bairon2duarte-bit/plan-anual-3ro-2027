@@ -1,0 +1,2384 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pizarra Digital - Método Gráfico de Sistemas de Ecuaciones | Colegio Montano</title>
+    <!-- Carga de Tailwind CSS para utilidades de diseño responsivo y layout -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Configuración de Variables Institucionales Colegio Montano */
+        :root {
+            --azul-principal: #1269A8;
+            --amarillo-brillante: #F7D615;
+            --verde-grisaceo: #54887D;
+            --azul-claro: #88B5C7;
+            --verde-oliva: #A6B046;
+            --blanco-suave: #F2F5E9;
+        }
+
+        /* Tipografía Institucional */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e2e8f0;
+            color: #1e293b;
+            margin: 0;
+            padding: 12px;
+        }
+
+        /* Marco Principal de Pizarra Digital */
+        #pizarra-container {
+            background-color: var(--blanco-suave);
+            border: 5px solid var(--amarillo-brillante);
+            border-radius: 12px;
+            box-shadow: 0 12px 30px rgba(18, 105, 168, 0.25);
+            max-width: 1200px;
+            margin: 0 auto;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 85vh;
+        }
+
+        /* Encabezado de la Pizarra */
+        .pizarra-header {
+            background: linear-gradient(135deg, var(--azul-principal) 0%, #0d4f80 100%);
+            color: white;
+            padding: 16px 24px;
+            border-bottom: 4px solid var(--amarillo-brillante);
+        }
+
+        /* Botón Fullscreen */
+        .btn-fullscreen {
+            background-color: var(--amarillo-brillante);
+            color: #0f172a;
+            font-weight: 700;
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: 2px solid #ffffff;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+        .btn-fullscreen:hover {
+            background-color: #ffe234;
+            transform: translateY(-1px);
+        }
+
+        /* Navegación de Pestañas */
+        .nav-tabs {
+            background-color: #ffffff;
+            border-bottom: 2px solid var(--azul-claro);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            padding: 10px 20px;
+        }
+
+        .tab-btn {
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.92rem;
+            color: var(--azul-principal);
+            background-color: transparent;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .tab-btn:hover {
+            background-color: rgba(136, 181, 199, 0.25);
+            border-color: var(--azul-claro);
+        }
+
+        .tab-btn.active {
+            background-color: var(--azul-principal);
+            color: #ffffff;
+            border-color: var(--amarillo-brillante);
+            box-shadow: 0 3px 8px rgba(18, 105, 168, 0.3);
+        }
+
+        /* Pestaña destacada para la Graficadora */
+        .tab-btn-graficadora {
+            background-color: rgba(247, 214, 21, 0.25);
+            border-color: var(--amarillo-brillante);
+        }
+        .tab-btn-graficadora.active {
+            background-color: var(--azul-principal);
+            color: #ffffff;
+            border-color: var(--amarillo-brillante);
+        }
+
+        /* Tarjetas de Contenido */
+        .card-montano {
+            background-color: #ffffff;
+            border: 2px solid var(--verde-grisaceo);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 18px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .card-formula {
+            background: linear-gradient(135deg, rgba(136, 181, 199, 0.25) 0%, rgba(242, 245, 233, 0.8) 100%);
+            border-left: 6px solid var(--azul-principal);
+            border-radius: 8px;
+            padding: 16px;
+            margin: 12px 0;
+        }
+
+        /* Etiquetas de Nivel */
+        .badge-nivel {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .badge-basico {
+            background-color: var(--verde-oliva);
+            color: #ffffff;
+        }
+        .badge-intermedio {
+            background-color: var(--verde-grisaceo);
+            color: #ffffff;
+        }
+        .badge-avanzado {
+            background-color: var(--azul-principal);
+            color: #ffffff;
+            border: 1px solid var(--amarillo-brillante);
+        }
+
+        /* Contenedor de Soluciones Ocultas */
+        .solucion-box {
+            background-color: rgba(136, 181, 199, 0.25);
+            border: 1.5px dashed var(--azul-principal);
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin-top: 12px;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .btn-solucion {
+            background-color: var(--azul-principal);
+            color: white;
+            font-weight: 600;
+            padding: 7px 14px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.2s;
+            margin-top: 10px;
+        }
+        .btn-solucion:hover {
+            background-color: var(--verde-grisaceo);
+        }
+
+        /* Botón Directo para Graficar en Pizarra */
+        .btn-graficar-directo {
+            background-color: var(--amarillo-brillante);
+            color: #0f172a;
+            font-weight: 700;
+            padding: 7px 14px;
+            border-radius: 6px;
+            font-size: 0.88rem;
+            cursor: pointer;
+            border: 1.5px solid #0f172a;
+            transition: all 0.2s ease;
+            margin-top: 10px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .btn-graficar-directo:hover {
+            background-color: #ffe234;
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Bloques Matemáticos Visuales */
+        .math-expr {
+            font-family: 'Cambria Math', 'Times New Roman', serif;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: var(--azul-principal);
+            background-color: #f8fafc;
+            padding: 2px 8px;
+            border-radius: 4px;
+            border: 1px solid #cbd5e1;
+            display: inline-block;
+        }
+
+        /* Llave Visual para Sistemas */
+        .sistema-box {
+            display: inline-flex;
+            align-items: center;
+            background-color: #f8fafc;
+            border: 1.5px solid var(--azul-claro);
+            border-left: 5px solid var(--azul-principal);
+            border-radius: 8px;
+            padding: 6px 14px;
+            font-family: 'Cambria Math', 'Times New Roman', serif;
+            font-weight: bold;
+            color: var(--azul-principal);
+            margin: 4px 0;
+            line-height: 1.5;
+        }
+
+        /* Sub-pestañas de Nivel */
+        .subtab-btn {
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 0.88rem;
+            cursor: pointer;
+            border: 2px solid var(--verde-grisaceo);
+            background-color: #ffffff;
+            color: var(--verde-grisaceo);
+            transition: all 0.2s;
+        }
+        .subtab-btn.active {
+            background-color: var(--verde-grisaceo);
+            color: #ffffff;
+        }
+
+        /* Estilos de la Graficadora Interactiva */
+        .canvas-wrapper {
+            position: relative;
+            width: 100%;
+            height: 460px;
+            background-color: #ffffff;
+            border: 3px solid var(--azul-principal);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.06);
+            touch-action: none;
+        }
+
+        #plano-canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+            cursor: grab;
+        }
+        #plano-canvas:active {
+            cursor: grabbing;
+        }
+
+        .zoom-toolbar {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            z-index: 10;
+        }
+
+        .btn-zoom {
+            width: 38px;
+            height: 38px;
+            background-color: #ffffff;
+            color: var(--azul-principal);
+            border: 2px solid var(--azul-principal);
+            border-radius: 8px;
+            font-weight: 800;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+            transition: all 0.15s ease;
+        }
+        .btn-zoom:hover {
+            background-color: var(--azul-principal);
+            color: #ffffff;
+        }
+
+        .coords-hud {
+            position: absolute;
+            bottom: 10px;
+            left: 12px;
+            background-color: rgba(15, 23, 42, 0.85);
+            color: #F7D615;
+            font-family: monospace;
+            font-size: 0.82rem;
+            padding: 4px 10px;
+            border-radius: 6px;
+            pointer-events: none;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Modo Fullscreen */
+        :fullscreen #pizarra-container {
+            max-width: 100%;
+            width: 100vw;
+            height: 100vh;
+            border-radius: 0;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Marco Principal de la Pizarra Digital -->
+    <div id="pizarra-container">
+        
+        <!-- Encabezado Institucional -->
+        <header class="pizarra-header flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-4">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyEop0yf6lZ7Jk9MILZxF1rBj4Oqs5esyhIQ&s" 
+                     alt="Logo Colegio Montano" 
+                     class="w-14 h-14 rounded-lg bg-white p-1 object-contain border-2 border-[#F7D615]"
+                     onerror="this.src='https://placehold.co/60x60/1269A8/F7D615?text=CM'">
+                <div>
+                    <span class="text-xs uppercase tracking-widest font-bold text-[#F7D615] block">Colegio Montano • Tercera Unidad • Matemática</span>
+                    <h1 class="text-xl sm:text-2xl font-bold leading-tight">Método Gráfico de Sistemas de Ecuaciones</h1>
+                    <p class="text-sm text-[#88B5C7] font-semibold">Nivel: Tercero Básico • Guía Interactiva de Pizarra Digital</p>
+                </div>
+            </div>
+            <button id="fullscreen-btn" class="btn-fullscreen flex items-center gap-2" onclick="toggleFullscreen()">
+                <span>⛶ Pantalla completa</span>
+            </button>
+        </header>
+
+        <!-- Barra de Navegación Horizontal -->
+        <nav class="nav-tabs" role="tablist">
+            <button id="tab-teoria" class="tab-btn active" onclick="cambiarSeccion('teoria', this)">📘 1. Teoría</button>
+            <button id="tab-ejemplos" class="tab-btn" onclick="cambiarSeccion('ejemplos', this)">💡 2. Ejemplos Resueltos (15)</button>
+            <button id="tab-ejercicios" class="tab-btn" onclick="cambiarSeccion('ejercicios', this)">✍️ 3. Ejercicios Prácticos (15)</button>
+            <button id="tab-reflexion" class="tab-btn" onclick="cambiarSeccion('reflexion', this)">🧠 4. Reflexión Crítica</button>
+            <button id="tab-evaluacion" class="tab-btn" onclick="cambiarSeccion('evaluacion', this)">✅ 5. Evaluación Formativa</button>
+            <button id="tab-graficadora" class="tab-btn tab-btn-graficadora" onclick="cambiarSeccion('graficadora', this)">📊 6. Graficadora Interactiva</button>
+        </nav>
+
+        <!-- Lienzo Principal de Contenido -->
+        <main class="p-4 sm:p-6 flex-1">
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 1: EXPLICACIÓN TEÓRICA             -->
+            <!-- ========================================== -->
+            <section id="sec-teoria" class="seccion-contenido">
+                <div class="card-montano">
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-3 border-b-2 border-[#F7D615] pb-2">
+                        <h2 class="text-2xl font-bold text-[#1269A8]">¿Qué es el Método Gráfico y Cómo Funciona?</h2>
+                        <button class="btn-graficar-directo !mt-0" onclick="abrirEnGraficadora('y = x + 2', 'y = -x + 6', 'Ejemplo Introductorio')">📊 Probar en Graficadora</button>
+                    </div>
+                    <p class="text-base leading-relaxed mb-4">
+                        El <strong>Método Gráfico</strong> consiste en representar cada ecuación de un sistema en el <strong>plano cartesiano</strong> mediante su gráfica correspondiente (una línea recta en el caso de ecuaciones lineales) e identificar la <strong>solución del sistema</strong> a partir de los puntos que ambas gráficas tienen en común.
+                    </p>
+                    <p class="text-base leading-relaxed mb-4">
+                        Cada punto <span class="math-expr">(x, y)</span> sobre una recta representa una pareja que hace verdadera esa ecuación. Por lo tanto, el punto <span class="math-expr">(x₀, y₀)</span> donde se <strong>intersecan</strong> dos rectas cumple simultáneamente ambas ecuaciones y es la solución del sistema.
+                    </p>
+
+                    <!-- Algoritmo Paso a Paso -->
+                    <div class="bg-[#F2F5E9] border-2 border-[#A6B046] rounded-xl p-4 my-4">
+                        <h3 class="font-bold text-[#54887D] mb-3">🧭 Procedimiento Sistemático para Graficar un Sistema Lineal</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-sm">
+                            <div class="bg-white p-3 rounded-lg border-t-4 border-[#1269A8] shadow-sm">
+                                <strong class="text-[#1269A8] block mb-1">Paso 1: Despejar o Elegir Puntos</strong>
+                                <p class="text-slate-700">Lleva cada ecuación a la forma <span class="math-expr text-xs">y = mx + b</span> o halla sus <strong>interceptos con los ejes</strong> (haciendo <span class="math-expr text-xs">x = 0</span> para hallar <span class="math-expr text-xs">y</span>, y <span class="math-expr text-xs">y = 0</span> para hallar <span class="math-expr text-xs">x</span>).</p>
+                            </div>
+                            <div class="bg-white p-3 rounded-lg border-t-4 border-[#54887D] shadow-sm">
+                                <strong class="text-[#54887D] block mb-1">Paso 2: Tabular al Menos 3 Puntos</strong>
+                                <p class="text-slate-700">Construye una tabla para cada recta con al menos <strong>tres puntos</strong>. El tercer punto actúa como control para asegurar que la recta esté bien trazada.</p>
+                            </div>
+                            <div class="bg-white p-3 rounded-lg border-t-4 border-[#A6B046] shadow-sm">
+                                <strong class="text-[#54887D] block mb-1">Paso 3: Trazar Ambas Rectas</strong>
+                                <p class="text-slate-700">Usa regla y escala uniforme en los ejes X e Y. Traza cada recta de extremo a extremo en el plano cartesiano.</p>
+                            </div>
+                            <div class="bg-white p-3 rounded-lg border-t-4 border-[#F7D615] shadow-sm">
+                                <strong class="text-[#1269A8] block mb-1">Paso 4: Leer y Comprobar</strong>
+                                <p class="text-slate-700">Lee las coordenadas <span class="math-expr text-xs">(x, y)</span> del punto de corte y <strong>verifícalas algebraicamente</strong> en ambas ecuaciones originales.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Explorador Visual SVG Interactivo de Casos Gráficos -->
+                <div class="card-montano">
+                    <h3 class="text-xl font-bold text-[#1269A8] mb-2">📐 Lectura Gráfica según la Posición de las Rectas</h3>
+                    <p class="text-sm text-slate-600 mb-4">Observa los tres escenarios gráficos fundamentales y cómo se interpretan en el plano cartesiano:</p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <!-- Escenario 1 -->
+                        <div class="p-4 bg-emerald-50 border-2 border-[#A6B046] rounded-xl text-center flex flex-col justify-between">
+                            <div>
+                                <span class="badge-nivel badge-basico mb-2">Intersección Única</span>
+                                <h4 class="font-bold text-[#1269A8]">Rectas Secantes</h4>
+                                <div class="my-2 flex justify-center">
+                                    <svg width="160" height="110" viewBox="0 0 160 110" class="bg-white rounded border border-slate-300">
+                                        <line x1="80" y1="8" x2="80" y2="102" stroke="#94a3b8" stroke-width="1.2"/>
+                                        <line x1="8" y1="55" x2="152" y2="55" stroke="#94a3b8" stroke-width="1.2"/>
+                                        <line x1="25" y1="92" x2="135" y2="18" stroke="#1269A8" stroke-width="2.5"/>
+                                        <line x1="25" y1="22" x2="135" y2="88" stroke="#54887D" stroke-width="2.5"/>
+                                        <circle cx="80" cy="55" r="5" fill="#F7D615" stroke="#0f172a" stroke-width="1.5"/>
+                                        <text x="88" y="47" font-size="10" font-weight="bold" fill="#0f172a">(x, y)</text>
+                                    </svg>
+                                </div>
+                                <p class="text-xs sm:text-sm text-slate-700">Se cortan en un solo punto. <strong>Solución única</strong> <span class="math-expr text-xs">(x, y)</span>.</p>
+                            </div>
+                            <button class="btn-graficar-directo justify-center w-full" onclick="abrirEnGraficadora('y = x + 1', 'y = -x + 5', 'Rectas Secantes (Solución Única)')">📊 Ver ejemplo vivo</button>
+                        </div>
+
+                        <!-- Escenario 2 -->
+                        <div class="p-4 bg-amber-50 border-2 border-[#F7D615] rounded-xl text-center flex flex-col justify-between">
+                            <div>
+                                <span class="badge-nivel badge-avanzado mb-2">Sin Intersección</span>
+                                <h4 class="font-bold text-[#1269A8]">Rectas Paralelas</h4>
+                                <div class="my-2 flex justify-center">
+                                    <svg width="160" height="110" viewBox="0 0 160 110" class="bg-white rounded border border-slate-300">
+                                        <line x1="80" y1="8" x2="80" y2="102" stroke="#94a3b8" stroke-width="1.2"/>
+                                        <line x1="8" y1="55" x2="152" y2="55" stroke="#94a3b8" stroke-width="1.2"/>
+                                        <line x1="20" y1="78" x2="130" y2="18" stroke="#1269A8" stroke-width="2.5"/>
+                                        <line x1="32" y1="96" x2="142" y2="36" stroke="#54887D" stroke-width="2.5"/>
+                                        <text x="95" y="25" font-size="10" font-weight="bold" fill="#54887D">m₁ = m₂</text>
+                                    </svg>
+                                </div>
+                                <p class="text-xs sm:text-sm text-slate-700">Misma pendiente, distinto corte en Y. <strong>No hay solución</strong>.</p>
+                            </div>
+                            <button class="btn-graficar-directo justify-center w-full" onclick="abrirEnGraficadora('y = 2x - 3', 'y = 2x + 1', 'Rectas Paralelas (Sin Solución)')">📊 Ver ejemplo vivo</button>
+                        </div>
+
+                        <!-- Escenario 3 -->
+                        <div class="p-4 bg-sky-50 border-2 border-[#88B5C7] rounded-xl text-center flex flex-col justify-between">
+                            <div>
+                                <span class="badge-nivel badge-intermedio mb-2">Todos los Puntos Comunes</span>
+                                <h4 class="font-bold text-[#1269A8]">Rectas Coincidentes</h4>
+                                <div class="my-2 flex justify-center">
+                                    <svg width="160" height="110" viewBox="0 0 160 110" class="bg-white rounded border border-slate-300">
+                                        <line x1="80" y1="8" x2="80" y2="102" stroke="#94a3b8" stroke-width="1.2"/>
+                                        <line x1="8" y1="55" x2="152" y2="55" stroke="#94a3b8" stroke-width="1.2"/>
+                                        <line x1="22" y1="85" x2="138" y2="25" stroke="#1269A8" stroke-width="4.5"/>
+                                        <line x1="22" y1="85" x2="138" y2="25" stroke="#F7D615" stroke-width="2" stroke-dasharray="6,4"/>
+                                        <text x="90" y="82" font-size="10" font-weight="bold" fill="#1269A8">L₁ ≡ L₂</text>
+                                    </svg>
+                                </div>
+                                <p class="text-xs sm:text-sm text-slate-700">Una recta queda sobre la otra. <strong>Infinitas soluciones</strong>.</p>
+                            </div>
+                            <button class="btn-graficar-directo justify-center w-full" onclick="abrirEnGraficadora('3x + y = 6', '6x + 2y = 12', 'Rectas Coincidentes (Infinitas Soluciones)')">📊 Ver ejemplo vivo</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 2: EJEMPLOS RESUELTOS (15)         -->
+            <!-- ========================================== -->
+            <section id="sec-ejemplos" class="seccion-contenido hidden">
+                <div class="flex flex-wrap items-center justify-between gap-3 mb-4 bg-white p-4 rounded-xl border-2 border-[#54887D]">
+                    <div>
+                        <h2 class="text-xl font-bold text-[#1269A8]">Ejemplos Resueltos Paso a Paso (Método Gráfico)</h2>
+                        <p class="text-sm text-slate-600">Observa el proceso de tabulación, interceptos, rectas especiales y aplicaciones gráficas.</p>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <button class="subtab-btn active" onclick="filtrarSubnivel('ejemplos', 'basico', this)">Nivel Básico (5)</button>
+                        <button class="subtab-btn" onclick="filtrarSubnivel('ejemplos', 'intermedio', this)">Nivel Intermedio (5)</button>
+                        <button class="subtab-btn" onclick="filtrarSubnivel('ejemplos', 'avanzado', this)">Nivel Avanzado (5)</button>
+                    </div>
+                </div>
+
+                <!-- EJEMPLOS BÁSICOS -->
+                <div id="ejemplos-basico" class="subcontenido-ejemplos space-y-4">
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-basico">Básico • Ejemplo 1 (Rectas en Forma Pendiente-Ordenada)</span>
+                            <button class="btn-graficar-directo !mt-0" onclick="abrirEnGraficadora('y = x + 2', 'y = -x + 6', 'Ejemplo Básico 1')">📊 Graficar en Pizarra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Resolver gráficamente el sistema: 
+                            <span class="sistema-box text-sm ml-2"><span>y = x + 2 <br> y = -x + 6</span></span>
+                        </p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>Recta 1 (<span class="math-expr">y = x + 2</span>):</strong> Puntos <span class="math-expr">(0, 2)</span>, <span class="math-expr">(1, 3)</span>, <strong><span class="math-expr">(2, 4)</span></strong>.</p>
+                            <p><strong>Recta 2 (<span class="math-expr">y = -x + 6</span>):</strong> Puntos <span class="math-expr">(0, 6)</span>, <span class="math-expr">(1, 5)</span>, <strong><span class="math-expr">(2, 4)</span></strong>.</p>
+                            <p><strong>Lectura e Intersección:</strong> Ambas rectas se cruzan en <span class="math-expr">(2, 4)</span>. Verificación: <span class="math-expr">4 = 2 + 2</span> y <span class="math-expr">4 = -2 + 6</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: Solución gráfica = (2, 4) (x = 2, y = 4).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-basico">Básico • Ejemplo 2 (Gráfica por Interceptos en los Ejes)</span>
+                            <button class="btn-graficar-directo !mt-0" onclick="abrirEnGraficadora('x + y = 5', 'y - x = 1', 'Ejemplo Básico 2')">📊 Graficar en Pizarra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Hallar el punto de corte graficando mediante interceptos: 
+                            <span class="sistema-box text-sm ml-2"><span>x + y = 5 <br> y - x = 1</span></span>
+                        </p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>Recta 1 (<span class="math-expr">x + y = 5</span>):</strong> Si <span class="math-expr">x = 0 ➔ y = 5</span> (punto <span class="math-expr">(0, 5)</span>); si <span class="math-expr">y = 0 ➔ x = 5</span> (punto <span class="math-expr">(5, 0)</span>).</p>
+                            <p><strong>Recta 2 (<span class="math-expr">y - x = 1</span>):</strong> Si <span class="math-expr">x = 0 ➔ y = 1</span> (punto <span class="math-expr">(0, 1)</span>); si <span class="math-expr">y = 0 ➔ x = -1</span> (punto <span class="math-expr">(-1, 0)</span>).</p>
+                            <p><strong>Intersección:</strong> Al trazar ambas rectas, se intersecan en <span class="math-expr">(2, 3)</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: El punto de intersección es (2, 3).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-basico">Básico • Ejemplo 3 (Rectas Horizontales y Verticales)</span>
+                            <button class="btn-graficar-directo !mt-0" onclick="abrirEnGraficadora('x = -3', 'y = 4', 'Ejemplo Básico 3')">📊 Graficar en Pizarra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Determinar gráficamente la solución del sistema: 
+                            <span class="sistema-box text-sm ml-2"><span>x = -3 <br> y = 4</span></span>
+                        </p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>Gráfica de <span class="math-expr">x = -3</span>:</strong> Es una recta <strong>vertical</strong> paralela al eje Y que pasa por <span class="math-expr">x = -3</span>.</p>
+                            <p><strong>Gráfica de <span class="math-expr">y = 4</span>:</strong> Es una recta <strong>horizontal</strong> paralela al eje X que pasa por <span class="math-expr">y = 4</span>.</p>
+                            <p><strong>Intersección:</strong> Una recta vertical y una horizontal siempre son perpendiculares y se cortan en <span class="math-expr">(-3, 4)</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: Solución = (-3, 4).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-basico">Básico • Ejemplo 4 (Lectura de Gráfica Dada)</span>
+                            <button class="btn-graficar-directo !mt-0" onclick="abrirEnGraficadora('y = x - 2', 'y = -x + 4', 'Ejemplo Básico 4')">📊 Graficar en Pizarra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Si una recta pasa por <span class="math-expr">(0, -2)</span> y <span class="math-expr">(3, 1)</span>, y otra pasa por <span class="math-expr">(0, 4)</span> y <span class="math-expr">(3, 1)</span>, ¿cuál es la solución del sistema que forman?</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>Observación directa:</strong> Ambas rectas contienen el mismo punto <span class="math-expr">(3, 1)</span>.</p>
+                            <p><strong>Interpretación gráfica:</strong> Ese punto común es el lugar donde se cruzan ambas rectas en el plano cartesiano.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: La solución del sistema es (3, 1) (x = 3, y = 1).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-basico">Básico • Ejemplo 5 (Recta que Pasa por el Origen)</span>
+                            <button class="btn-graficar-directo !mt-0" onclick="abrirEnGraficadora('y = 2x', 'x + y = 6', 'Ejemplo Básico 5')">📊 Graficar en Pizarra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Resolver gráficamente: 
+                            <span class="sistema-box text-sm ml-2"><span>y = 2x <br> x + y = 6</span></span>
+                        </p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>Recta 1 (<span class="math-expr">y = 2x</span>):</strong> Pasa por el origen <span class="math-expr">(0, 0)</span>, por <span class="math-expr">(1, 2)</span> y por <strong><span class="math-expr">(2, 4)</span></strong>.</p>
+                            <p><strong>Recta 2 (<span class="math-expr">y = 6 - x</span>):</strong> Pasa por <span class="math-expr">(0, 6)</span>, <strong><span class="math-expr">(2, 4)</span></strong> y <span class="math-expr">(6, 0)</span>.</p>
+                            <p><strong>Intersección:</strong> Se cortan en <span class="math-expr">(2, 4)</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: Solución = (2, 4).</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EJEMPLOS INTERMEDIOS -->
+                <div id="ejemplos-intermedio" class="subcontenido-ejemplos hidden space-y-4">
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-intermedio">Intermedio • Ejemplo 1 (Despeje Previo de Ecuaciones Generales)</span>
+                            <button class="btn-graficar-directo !mt-0" onclick="abrirEnGraficadora('2x + y = 7', '3x - 2y = 0', 'Ejemplo Intermedio 1')">📊 Graficar en Pizarra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Despejar <span class="math-expr">y</span> y hallar el punto de intersección gráfico: 
+                            <span class="sistema-box text-sm ml-2"><span>2x + y = 7 <br> 3x - 2y = 0</span></span>
+                        </p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Despeje Ec. 1:</strong> <span class="math-expr">y = -2x + 7</span>. Puntos: <span class="math-expr">(0, 7)</span>, <strong><span class="math-expr">(2, 3)</span></strong>, <span class="math-expr">(3, 1)</span>.</p>
+                            <p><strong>Despeje Ec. 2:</strong> <span class="math-expr">y = (3/2)x</span>. Puntos: <span class="math-expr">(0, 0)</span>, <strong><span class="math-expr">(2, 3)</span></strong>, <span class="math-expr">(4, 6)</span>.</p>
+                            <p><strong>Intersección:</strong> El punto común es <span class="math-expr">(2, 3)</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: Solución = (2, 3).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-intermedio">Intermedio • Ejemplo 2 (Identificación Gráfica de Rectas Paralelas)</span>
+                            <button class="btn-graficar-directo !mt-0" onclick="abrirEnGraficadora('2x - y = 3', '4x - 2y = -2', 'Ejemplo Intermedio 2')">📊 Graficar en Pizarra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Analizar gráficamente el sistema: 
+                            <span class="sistema-box text-sm ml-2"><span>2x - y = 3 <br> 4x - 2y = -2</span></span>
+                        </p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Forma pendiente-ordenada de Ec. 1:</strong> <span class="math-expr">y = 2x - 3</span> (pendiente <span class="math-expr">m₁ = 2</span>, corte en Y: <span class="math-expr">-3</span>).</p>
+                            <p><strong>Forma pendiente-ordenada de Ec. 2:</strong> <span class="math-expr">-2y = -4x - 2 ➔ y = 2x + 1</span> (pendiente <span class="math-expr">m₂ = 2</span>, corte en Y: <span class="math-expr">1</span>).</p>
+                            <p><strong>Análisis gráfico:</strong> Ambas rectas tienen inclinación <span class="math-expr">m = 2</span> pero cortan al eje Y en lugares distintos (<span class="math-expr">-3</span> y <span class="math-expr">1</span>), por lo que son paralelas.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: Las rectas son paralelas; el sistema NO tiene solución.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-intermedio">Intermedio • Ejemplo 3 (Identificación Gráfica de Rectas Coincidentes)</span>
+                            <button class="btn-graficar-directo !mt-0" onclick="abrirEnGraficadora('3x + y = 6', '6x + 2y = 12', 'Ejemplo Intermedio 3')">📊 Graficar en Pizarra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Determinar qué ocurre gráficamente en el sistema: 
+                            <span class="sistema-box text-sm ml-2"><span>3x + y = 6 <br> 6x + 2y = 12</span></span>
+                        </p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Ec. 1 en forma <span class="math-expr">y = mx + b</span>:</strong> <span class="math-expr">y = -3x + 6</span>.</p>
+                            <p><strong>Ec. 2 en forma <span class="math-expr">y = mx + b</span>:</strong> <span class="math-expr">2y = -6x + 12 ➔ y = -3x + 6</span>.</p>
+                            <p><strong>Análisis gráfico:</strong> Ambas ecuaciones representan exactamente la misma recta (<span class="math-expr">m = -3, b = 6</span>), compartiendo todos sus puntos.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: Rectas coincidentes; el sistema tiene infinitas soluciones.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-intermedio">Intermedio • Ejemplo 4 (Intersección con Coordenadas Negativas)</span>
+                            <button class="btn-graficar-directo !mt-0" onclick="abrirEnGraficadora('x + 2y = -2', '3x - y = 8', 'Ejemplo Intermedio 4')">📊 Graficar en Pizarra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Graficar y encontrar la intersección del sistema: 
+                            <span class="sistema-box text-sm ml-2"><span>x + 2y = -2 <br> 3x - y = 8</span></span>
+                        </p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Recta 1 (<span class="math-expr">y = -0.5x - 1</span>):</strong> Puntos <span class="math-expr">(0, -1)</span>, <strong><span class="math-expr">(2, -2)</span></strong>, <span class="math-expr">(-2, 0)</span>.</p>
+                            <p><strong>Recta 2 (<span class="math-expr">y = 3x - 8</span>):</strong> Puntos <span class="math-expr">(0, -8)</span>, <strong><span class="math-expr">(2, -2)</span></strong>, <span class="math-expr">(3, 1)</span>.</p>
+                            <p><strong>Intersección:</strong> Se cortan en el cuarto cuadrante en el punto <span class="math-expr">(2, -2)</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: Solución = (2, -2).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-intermedio">Intermedio • Ejemplo 5 (Área Formada con los Ejes Cartesianos)</span>
+                            <button class="btn-graficar-directo !mt-0" onclick="abrirEnGraficadora('y = x', 'x + y = 8', 'Ejemplo Intermedio 5')">📊 Graficar en Pizarra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Hallar gráficamente la intersección de las rectas <span class="math-expr">y = x</span> y <span class="math-expr">x + y = 8</span>, y calcular el área del triángulo formado por ambas rectas y el eje X.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Intersección de <span class="math-expr">y = x</span> y <span class="math-expr">y = 8 - x</span>:</strong> <span class="math-expr">x = 8 - x ➔ 2x = 8 ➔ x = 4, y = 4</span>. Vértice superior: <span class="math-expr">(4, 4)</span> (altura <span class="math-expr">h = 4</span>).</p>
+                            <p><strong>Vértices en el eje X (<span class="math-expr">y = 0</span>):</strong> De <span class="math-expr">y = x</span> obtenemos <span class="math-expr">(0, 0)</span>; de <span class="math-expr">x + y = 8</span> obtenemos <span class="math-expr">(8, 0)</span>. Base sobre el eje X: <span class="math-expr">b = 8 - 0 = 8</span>.</p>
+                            <p><strong>Área del triángulo:</strong> <span class="math-expr">Área = (base · altura) / 2 = (8 · 4) / 2 = 16 unidades²</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: Intersección en (4, 4); Área del triángulo = 16 u².</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EJEMPLOS AVANZADOS -->
+                <div id="ejemplos-avanzado" class="subcontenido-ejemplos hidden space-y-4">
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-avanzado">Avanzado • Ejemplo 1 (Ecuaciones con Coeficientes Fraccionarios)</span>
+                            <button class="btn-graficar-directo !mt-0" onclick="abrirEnGraficadora('x/2 + y/3 = 3', 'x/4 - y/2 = -1', 'Ejemplo Avanzado 1')">📊 Graficar en Pizarra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Eliminar fracciones, llevar a forma <span class="math-expr">y = mx + b</span> y hallar el punto de corte: 
+                            <span class="sistema-box text-sm ml-2"><span>x/2 + y/3 = 3 <br> x/4 - y/2 = -1</span></span>
+                        </p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Ec. 1 por 6:</strong> <span class="math-expr">3x + 2y = 18 ➔ y = -(3/2)x + 9</span>. Interceptos: <span class="math-expr">(0, 9)</span> y <span class="math-expr">(6, 0)</span>.</p>
+                            <p><strong>Ec. 2 por 4:</strong> <span class="math-expr">x - 2y = -4 ➔ 2y = x + 4 ➔ y = (1/2)x + 2</span>. Interceptos: <span class="math-expr">(0, 2)</span> y <span class="math-expr">(-4, 0)</span>.</p>
+                            <p><strong>Igualación para hallar corte exacto:</strong> <span class="math-expr">-(3/2)x + 9 = (1/2)x + 2 ➔ 7 = 2x ➔ x = 3.5</span>; luego <span class="math-expr">y = (1/2)(3.5) + 2 = 3.75</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Punto de intersección en (3.5, 3.75) o (7/2, 15/4).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-avanzado">Avanzado • Ejemplo 2 (Parámetro <span class="math-expr">k</span> en la Pendiente)</span>
+                            <button class="btn-graficar-directo !mt-0" onclick="abrirEnGraficadora('y = 5x + 4', 'y = 5x - 2', 'Ejemplo Avanzado 2 (k = 4)')">📊 Graficar en Pizarra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Determinar el valor de <span class="math-expr">k</span> para que las rectas <span class="math-expr">y = (k + 1)x + 4</span> y <span class="math-expr">y = 5x - 2</span> sean paralelas en el plano cartesiano.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Condición gráfica de paralelismo:</strong> Dos rectas no verticales son paralelas si y solo si tienen la <strong>misma pendiente</strong> (<span class="math-expr">m₁ = m₂</span>) y distinto intercepto en Y (<span class="math-expr">4 ≠ -2</span>, ya cumplido).</p>
+                            <p><strong>Igualamos pendientes:</strong> <span class="math-expr">k + 1 = 5 ➔ k = 4</span>.</p>
+                            <p><strong>Verificación:</strong> Con <span class="math-expr">k = 4</span>, la primera recta es <span class="math-expr">y = 5x + 4</span>, paralela a <span class="math-expr">y = 5x - 2</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: k = 4.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-avanzado">Avanzado • Ejemplo 3 (Aplicación: Punto de Equilibrio Financiero)</span>
+                            <button class="btn-graficar-directo !mt-0" onclick="abrirEnGraficadora('y = 4x + 60', 'y = 10x', 'Ejemplo Avanzado 3 (Equilibrio)')">📊 Graficar en Pizarra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">El costo de producir <span class="math-expr">x</span> cuadernos está dado por <span class="math-expr">C(x) = 4x + 60</span> (en quetzales) y el ingreso por ventas es <span class="math-expr">I(x) = 10x</span>. Hallar gráficamente y algebraicamente el <strong>punto de equilibrio</strong>.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Interpretación gráfica:</strong> El punto de equilibrio es la intersección de la recta de Costos <span class="math-expr">y = 4x + 60</span> y la recta de Ingresos <span class="math-expr">y = 10x</span>.</p>
+                            <p><strong>Tabulación para <span class="math-expr">x = 0, 5, 10, 15</span>:</strong><br>
+                            • Costo: <span class="math-expr">(0, 60), (5, 80), <strong>(10, 100)</strong>, (15, 120)</span>.<br>
+                            • Ingreso: <span class="math-expr">(0, 0), (5, 50), <strong>(10, 100)</strong>, (15, 150)</span>.</p>
+                            <p><strong>Conclusión:</strong> Para <span class="math-expr">x &lt; 10</span> hay pérdida (Costo &gt; Ingreso); en <span class="math-expr">(10, 100)</span> hay equilibrio; para <span class="math-expr">x &gt; 10</span> hay ganancia.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Punto de equilibrio en (10, 100) (10 cuadernos por Q100).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-avanzado">Avanzado • Ejemplo 4 (Intersección de Recta con Parábola)</span>
+                            <button class="btn-graficar-directo !mt-0" onclick="abrirEnGraficadora('y = x^2', 'y = x + 2', 'Ejemplo Avanzado 4 (Parábola y Recta)')">📊 Graficar en Pizarra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">Determinar los puntos de intersección gráficos entre la parábola <span class="math-expr">y = x²</span> y la recta <span class="math-expr">y = x + 2</span>.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Igualando ambas expresiones de <span class="math-expr">y</span>:</strong> <span class="math-expr">x² = x + 2 ➔ x² - x - 2 = 0</span>.</p>
+                            <p><strong>Factorización:</strong> <span class="math-expr">(x - 2)(x + 1) = 0 ➔ x₁ = 2</span> y <span class="math-expr">x₂ = -1</span>.</p>
+                            <p><strong>Coordenadas <span class="math-expr">y</span> correspondientes:</strong><br>
+                            • Si <span class="math-expr">x = 2 ➔ y = 2² = 4</span> ➔ Punto <span class="math-expr">(2, 4)</span>.<br>
+                            • Si <span class="math-expr">x = -1 ➔ y = (-1)² = 1</span> ➔ Punto <span class="math-expr">(-1, 1)</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Se intersecan en dos puntos: (-1, 1) y (2, 4).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <span class="badge-nivel badge-avanzado">Avanzado • Ejemplo 5 (Encuentro de Dos Móviles en Gráfica Tiempo-Distancia)</span>
+                            <button class="btn-graficar-directo !mt-0" onclick="abrirEnGraficadora('y = 60x', 'y = 40x + 20', 'Ejemplo Avanzado 5 (Móviles)')">📊 Graficar en Pizarra</button>
+                        </div>
+                        <p class="font-bold text-lg text-[#1269A8]">El móvil A parte desde el km 0 a <span class="math-expr">60 km/h</span> (<span class="math-expr">d = 60t</span>). El móvil B parte desde una ciudad ubicada a <span class="math-expr">20 km</span> por delante en la misma dirección a <span class="math-expr">40 km/h</span> (<span class="math-expr">d = 40t + 20</span>). ¿En qué tiempo <span class="math-expr">t</span> y distancia <span class="math-expr">d</span> se encuentran?</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Interpretación gráfica:</strong> El encuentro ocurre donde se cruzan las rectas <span class="math-expr">d = 60t</span> y <span class="math-expr">d = 40t + 20</span> en el plano <span class="math-expr">(t, d)</span>.</p>
+                            <p><strong>Igualación:</strong> <span class="math-expr">60t = 40t + 20 ➔ 20t = 20 ➔ t = 1 hora</span>.</p>
+                            <p><strong>Distancia de encuentro:</strong> <span class="math-expr">d = 60(1) = 60 km</span> (y en la segunda: <span class="math-expr">40(1) + 20 = 60 km</span>).</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Se encuentran a la 1 hora de viaje, a 60 km del origen (punto (1, 60)).</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 3: EJERCICIOS PRÁCTICOS (15)       -->
+            <!-- ========================================== -->
+            <section id="sec-ejercicios" class="seccion-contenido hidden">
+                <div class="flex flex-wrap items-center justify-between gap-3 mb-4 bg-white p-4 rounded-xl border-2 border-[#54887D]">
+                    <div>
+                        <h2 class="text-xl font-bold text-[#1269A8]">Práctica Guiada en Pizarra (Método Gráfico)</h2>
+                        <p class="text-sm text-slate-600">Traza las rectas en tu cuaderno o plano cartesiano y verifica el punto de intersección.</p>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <button class="subtab-btn active" onclick="filtrarSubnivel('ejercicios', 'basico', this)">Básico (5)</button>
+                        <button class="subtab-btn" onclick="filtrarSubnivel('ejercicios', 'intermedio', this)">Intermedio (5)</button>
+                        <button class="subtab-btn" onclick="filtrarSubnivel('ejercicios', 'avanzado', this)">Avanzado (5)</button>
+                    </div>
+                </div>
+
+                <!-- EJERCICIOS BÁSICOS -->
+                <div id="ejercicios-basico" class="subcontenido-ejercicios space-y-4">
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 1</span>
+                        <p class="font-semibold text-base">Halla gráficamente el punto de intersección de: <span class="math-expr">{ y = x + 4 ; y = -x + 8 }</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-eb1', this)">Mostrar solución</button>
+                            <button class="btn-graficar-directo" onclick="abrirEnGraficadora('y = x + 4', 'y = -x + 8', 'Ejercicio Básico 1')">📊 Graficar en Pizarra</button>
+                        </div>
+                        <div id="sol-eb1" class="solucion-box">
+                            <p><strong>Igualando:</strong> <span class="math-expr">x + 4 = -x + 8 ➔ 2x = 4 ➔ x = 2</span>; luego <span class="math-expr">y = 2 + 4 = 6</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Intersección en (2, 6).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 2</span>
+                        <p class="font-semibold text-base">Determina los interceptos en los ejes X e Y de <span class="math-expr">x + y = 7</span> y <span class="math-expr">y - x = 3</span>, y halla su intersección.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-eb2', this)">Mostrar solución</button>
+                            <button class="btn-graficar-directo" onclick="abrirEnGraficadora('x + y = 7', 'y - x = 3', 'Ejercicio Básico 2')">📊 Graficar en Pizarra</button>
+                        </div>
+                        <div id="sol-eb2" class="solucion-box">
+                            <p><strong>Interceptos Ec. 1:</strong> <span class="math-expr">(0, 7)</span> y <span class="math-expr">(7, 0)</span>. <strong>Ec. 2:</strong> <span class="math-expr">(0, 3)</span> y <span class="math-expr">(-3, 0)</span>.<br>
+                            <strong>Corte:</strong> <span class="math-expr">x + y = 7</span> y <span class="math-expr">y = x + 3 ➔ x + x + 3 = 7 ➔ x = 2, y = 5</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Intersección en (2, 5).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 3</span>
+                        <p class="font-semibold text-base">Encuentra la intersección de la recta vertical y la recta horizontal: <span class="math-expr">{ x = 5 ; y = -2 }</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-eb3', this)">Mostrar solución</button>
+                            <button class="btn-graficar-directo" onclick="abrirEnGraficadora('x = 5', 'y = -2', 'Ejercicio Básico 3')">📊 Graficar en Pizarra</button>
+                        </div>
+                        <div id="sol-eb3" class="solucion-box">
+                            <p><strong>Procedimiento:</strong> La recta <span class="math-expr">x = 5</span> cruza el eje X en 5 y la recta <span class="math-expr">y = -2</span> cruza el eje Y en -2.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Solución = (5, -2).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 4</span>
+                        <p class="font-semibold text-base">Tabula para <span class="math-expr">x ∈ {0, 1, 2, 3}</span> y halla el punto común de: <span class="math-expr">{ y = 2x - 1 ; x + y = 5 }</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-eb4', this)">Mostrar solución</button>
+                            <button class="btn-graficar-directo" onclick="abrirEnGraficadora('y = 2x - 1', 'x + y = 5', 'Ejercicio Básico 4')">📊 Graficar en Pizarra</button>
+                        </div>
+                        <div id="sol-eb4" class="solucion-box">
+                            <p><strong>Recta 1:</strong> <span class="math-expr">(0, -1), (1, 1), <strong>(2, 3)</strong>, (3, 5)</span>.<br>
+                            <strong>Recta 2 (<span class="math-expr">y = 5 - x</span>):</strong> <span class="math-expr">(0, 5), (1, 4), <strong>(2, 3)</strong>, (3, 2)</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Punto común (2, 3).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 5</span>
+                        <p class="font-semibold text-base">Halla gráficamente la solución del sistema: <span class="math-expr">{ y = 3x ; y = x + 6 }</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-eb5', this)">Mostrar solución</button>
+                            <button class="btn-graficar-directo" onclick="abrirEnGraficadora('y = 3x', 'y = x + 6', 'Ejercicio Básico 5')">📊 Graficar en Pizarra</button>
+                        </div>
+                        <div id="sol-eb5" class="solucion-box">
+                            <p><strong>Igualando:</strong> <span class="math-expr">3x = x + 6 ➔ 2x = 6 ➔ x = 3</span>; luego <span class="math-expr">y = 9</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Solución = (3, 9).</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EJERCICIOS INTERMEDIOS -->
+                <div id="ejercicios-intermedio" class="subcontenido-ejercicios hidden space-y-4">
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 1</span>
+                        <p class="font-semibold text-base">Despeja <span class="math-expr">y</span> en ambas ecuaciones y halla la intersección gráfica: <span class="math-expr">{ 2x + y = 8 ; x - y = 1 }</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ei1', this)">Mostrar solución</button>
+                            <button class="btn-graficar-directo" onclick="abrirEnGraficadora('2x + y = 8', 'x - y = 1', 'Ejercicio Intermedio 1')">📊 Graficar en Pizarra</button>
+                        </div>
+                        <div id="sol-ei1" class="solucion-box">
+                            <p><strong>Recta 1:</strong> <span class="math-expr">y = -2x + 8</span>. <strong>Recta 2:</strong> <span class="math-expr">y = x - 1</span>.<br>
+                            <strong>Igualando:</strong> <span class="math-expr">-2x + 8 = x - 1 ➔ 9 = 3x ➔ x = 3</span>; <span class="math-expr">y = 2</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Intersección en (3, 2).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 2</span>
+                        <p class="font-semibold text-base">Indica cómo son las rectas en el plano cartesiano y cuántas soluciones tiene: <span class="math-expr">{ 3x + y = 5 ; 6x + 2y = 4 }</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ei2', this)">Mostrar solución</button>
+                            <button class="btn-graficar-directo" onclick="abrirEnGraficadora('3x + y = 5', '6x + 2y = 4', 'Ejercicio Intermedio 2')">📊 Graficar en Pizarra</button>
+                        </div>
+                        <div id="sol-ei2" class="solucion-box">
+                            <p><strong>Ec. 1:</strong> <span class="math-expr">y = -3x + 5</span> (<span class="math-expr">m = -3, b = 5</span>).<br>
+                            <strong>Ec. 2:</strong> <span class="math-expr">y = -3x + 2</span> (<span class="math-expr">m = -3, b = 2</span>).</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Rectas paralelas distintas; el sistema no tiene solución.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 3</span>
+                        <p class="font-semibold text-base">Analiza gráficamente el sistema: <span class="math-expr">{ 4x - 2y = 6 ; 2x - y = 3 }</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ei3', this)">Mostrar solución</button>
+                            <button class="btn-graficar-directo" onclick="abrirEnGraficadora('4x - 2y = 6', '2x - y = 3', 'Ejercicio Intermedio 3')">📊 Graficar en Pizarra</button>
+                        </div>
+                        <div id="sol-ei3" class="solucion-box">
+                            <p><strong>Despejando <span class="math-expr">y</span> en ambas:</strong> De Ec. 1: <span class="math-expr">y = 2x - 3</span>; de Ec. 2: <span class="math-expr">y = 2x - 3</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Rectas coincidentes; tiene infinitas soluciones.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 4</span>
+                        <p class="font-semibold text-base">Halla el punto de intersección gráfico: <span class="math-expr">{ 2x + 3y = 12 ; 4x - 3y = 6 }</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ei4', this)">Mostrar solución</button>
+                            <button class="btn-graficar-directo" onclick="abrirEnGraficadora('2x + 3y = 12', '4x - 3y = 6', 'Ejercicio Intermedio 4')">📊 Graficar en Pizarra</button>
+                        </div>
+                        <div id="sol-ei4" class="solucion-box">
+                            <p><strong>Sumando ambas para hallar el corte:</strong> <span class="math-expr">6x = 18 ➔ x = 3</span>.<br>
+                            <strong>En Ec. 1:</strong> <span class="math-expr">2(3) + 3y = 12 ➔ 3y = 6 ➔ y = 2</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Intersección en (3, 2).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 5</span>
+                        <p class="font-semibold text-base">Halla la intersección de <span class="math-expr">y = -x + 6</span> con el eje X y con el eje Y, y calcula el área del triángulo que forma con los ejes coordenados.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ei5', this)">Mostrar solución</button>
+                            <button class="btn-graficar-directo" onclick="abrirEnGraficadora('y = -x + 6', 'y = 0', 'Ejercicio Intermedio 5')">📊 Graficar en Pizarra</button>
+                        </div>
+                        <div id="sol-ei5" class="solucion-box">
+                            <p><strong>Intercepto en Y (<span class="math-expr">x = 0</span>):</strong> <span class="math-expr">(0, 6)</span> (altura <span class="math-expr">h = 6</span>).<br>
+                            <strong>Intercepto en X (<span class="math-expr">y = 0</span>):</strong> <span class="math-expr">(6, 0)</span> (base <span class="math-expr">b = 6</span>).<br>
+                            <strong>Área:</strong> <span class="math-expr">(6 · 6) / 2 = 18 unidades²</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Cortes en (6, 0) y (0, 6); Área = 18 u².</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EJERCICIOS AVANZADOS -->
+                <div id="ejercicios-avanzado" class="subcontenido-ejercicios hidden space-y-4">
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 1</span>
+                        <p class="font-semibold text-base">Elimina fracciones, escribe en forma <span class="math-expr">y = mx + b</span> y halla la intersección de: <span class="math-expr">{ x/3 + y/2 = 3 ; x/2 - y/4 = 1 }</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ea1', this)">Mostrar solución</button>
+                            <button class="btn-graficar-directo" onclick="abrirEnGraficadora('x/3 + y/2 = 3', 'x/2 - y/4 = 1', 'Ejercicio Avanzado 1')">📊 Graficar en Pizarra</button>
+                        </div>
+                        <div id="sol-ea1" class="solucion-box">
+                            <p><strong>Ec. 1 por 6:</strong> <span class="math-expr">2x + 3y = 18 ➔ y = -(2/3)x + 6</span>.<br>
+                            <strong>Ec. 2 por 4:</strong> <span class="math-expr">2x - y = 4 ➔ y = 2x - 4</span>.<br>
+                            <strong>Igualando:</strong> <span class="math-expr">-(2/3)x + 6 = 2x - 4 ➔ 10 = (8/3)x ➔ x = 30/8 = 3.75</span>; luego <span class="math-expr">y = 2(3.75) - 4 = 3.5</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Intersección en (3.75, 3.5) o (15/4, 7/2).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 2</span>
+                        <p class="font-semibold text-base">Halla el valor de <span class="math-expr">m</span> para que las rectas <span class="math-expr">y = (2m - 3)x + 7</span> y <span class="math-expr">y = 5x - 1</span> sean paralelas en el plano.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ea2', this)">Mostrar solución</button>
+                            <button class="btn-graficar-directo" onclick="abrirEnGraficadora('y = 5x + 7', 'y = 5x - 1', 'Ejercicio Avanzado 2 (m = 4)')">📊 Graficar en Pizarra</button>
+                        </div>
+                        <div id="sol-ea2" class="solucion-box">
+                            <p><strong>Igualando pendientes:</strong> <span class="math-expr">2m - 3 = 5 ➔ 2m = 8 ➔ m = 4</span> (y <span class="math-expr">7 ≠ -1</span>).</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: m = 4.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 3</span>
+                        <p class="font-semibold text-base">Una empresa de impresión cobra <span class="math-expr">C(x) = 2x + 80</span> por producir <span class="math-expr">x</span> folletos y los vende a <span class="math-expr">I(x) = 6x</span>. Halla el punto de equilibrio <span class="math-expr">(x, y)</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ea3', this)">Mostrar solución</button>
+                            <button class="btn-graficar-directo" onclick="abrirEnGraficadora('y = 2x + 80', 'y = 6x', 'Ejercicio Avanzado 3 (Equilibrio)')">📊 Graficar en Pizarra</button>
+                        </div>
+                        <div id="sol-ea3" class="solucion-box">
+                            <p><strong>Igualando Costo e Ingreso:</strong> <span class="math-expr">6x = 2x + 80 ➔ 4x = 80 ➔ x = 20</span>; <span class="math-expr">y = 6(20) = 120</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Punto de equilibrio en (20, 120) (20 folletos; Q120).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 4</span>
+                        <p class="font-semibold text-base">Halla los puntos de intersección entre la parábola <span class="math-expr">y = x²</span> y la recta <span class="math-expr">y = 2x + 3</span>.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ea4', this)">Mostrar solución</button>
+                            <button class="btn-graficar-directo" onclick="abrirEnGraficadora('y = x^2', 'y = 2x + 3', 'Ejercicio Avanzado 4 (Parábola)')">📊 Graficar en Pizarra</button>
+                        </div>
+                        <div id="sol-ea4" class="solucion-box">
+                            <p><strong>Igualando:</strong> <span class="math-expr">x² = 2x + 3 ➔ x² - 2x - 3 = 0 ➔ (x - 3)(x + 1) = 0</span>.<br>
+                            <strong>Puntos:</strong> Si <span class="math-expr">x = 3 ➔ (3, 9)</span>; si <span class="math-expr">x = -1 ➔ (-1, 1)</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Puntos de corte (-1, 1) y (3, 9).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 5</span>
+                        <p class="font-semibold text-base">Calcula el área de la región triangular encerrada por las rectas <span class="math-expr">y = 2x</span>, <span class="math-expr">y = -2x + 8</span> y el eje X.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="btn-solucion" onclick="toggleSolucion('sol-ea5', this)">Mostrar solución</button>
+                            <button class="btn-graficar-directo" onclick="abrirEnGraficadora('y = 2x', 'y = -2x + 8', 'Ejercicio Avanzado 5 (Triángulo)')">📊 Graficar en Pizarra</button>
+                        </div>
+                        <div id="sol-ea5" class="solucion-box">
+                            <p><strong>Intersección de rectas:</strong> <span class="math-expr">2x = -2x + 8 ➔ 4x = 8 ➔ x = 2, y = 4</span> (altura <span class="math-expr">h = 4</span>).<br>
+                            <strong>Cortes en eje X (<span class="math-expr">y = 0</span>):</strong> <span class="math-expr">(0, 0)</span> y <span class="math-expr">(4, 0)</span> (base <span class="math-expr">b = 4</span>).<br>
+                            <strong>Área:</strong> <span class="math-expr">(4 · 4) / 2 = 8 unidades²</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Área = 8 unidades².</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 4: PREGUNTAS DE REFLEXIÓN CRÍTICA  -->
+            <!-- ========================================== -->
+            <section id="sec-reflexion" class="seccion-contenido hidden">
+                <div class="card-montano">
+                    <h2 class="text-2xl font-bold text-[#1269A8] mb-2">🧠 Análisis Conceptual y Pensamiento Crítico (Método Gráfico)</h2>
+                    <p class="text-sm text-slate-600 mb-4">Reflexiona sobre el significado geométrico y la precisión del método gráfico antes de revisar la explicación.</p>
+
+                    <div class="space-y-4">
+                        <div class="p-4 bg-[#F2F5E9] rounded-xl border-2 border-[#54887D]">
+                            <h3 class="font-bold text-lg text-[#1269A8]">1. ¿Por qué se recomienda tabular al menos tres puntos para trazar una recta?</h3>
+                            <p class="mt-1">Geométricamente, dos puntos determinan una recta. ¿Qué ventaja práctica tiene calcular un <strong>tercer punto</strong> al aplicar el método gráfico?</p>
+                            <button class="btn-solucion" onclick="toggleSolucion('ref-1', this)">Ver análisis conceptual</button>
+                            <div id="ref-1" class="solucion-box">
+                                <p><strong>Análisis:</strong> El tercer punto actúa como <strong>verificación visual</strong>. Si los tres puntos quedan perfectamente alineados, confirmas que no cometiste un error aritmético al tabular; si uno queda fuera de la línea, sabes de inmediato que debes revisar tus cálculos.</p>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-[#F2F5E9] rounded-xl border-2 border-[#54887D]">
+                            <h3 class="font-bold text-lg text-[#1269A8]">2. Ventaja visual vs. limitación de precisión</h3>
+                            <p class="mt-1">¿Por qué el método gráfico es excelente para entender el comportamiento de un sistema, pero puede ser menos preciso que los métodos algebraicos cuando la solución es <span class="math-expr">(13/7, -29/11)</span>?</p>
+                            <button class="btn-solucion" onclick="toggleSolucion('ref-2', this)">Ver análisis conceptual</button>
+                            <div id="ref-2" class="solucion-box">
+                                <p><strong>Análisis:</strong> Porque en una cuadrícula dibujada a mano es difícil distinguir con exactitud fracciones decimales no exactas o muy cercanas. El método gráfico ofrece una <strong>estimación visual rápida</strong>, mientras que el álgebra garantiza exactitud.</p>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-[#F2F5E9] rounded-xl border-2 border-[#54887D]">
+                            <h3 class="font-bold text-lg text-[#1269A8]">3. ¿Qué significa gráficamente que un sistema no tenga solución?</h3>
+                            <p class="mt-1">Si al graficar dos ecuaciones lineales observas que nunca se cruzan en ninguna parte del plano, ¿qué relación geométrica existe entre ambas rectas?</p>
+                            <button class="btn-solucion" onclick="toggleSolucion('ref-3', this)">Ver análisis conceptual</button>
+                            <div id="ref-3" class="solucion-box">
+                                <p><strong>Análisis:</strong> Significa que las rectas son <strong>paralelas</strong>: mantienen siempre la misma distancia entre sí y tienen la misma pendiente (<span class="math-expr">m₁ = m₂</span>), pero distintos interceptos en el eje Y (<span class="math-expr">b₁ ≠ b₂</span>).</p>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-[#F2F5E9] rounded-xl border-2 border-[#54887D]">
+                            <h3 class="font-bold text-lg text-[#1269A8]">4. Importancia de la escala uniforme en los ejes</h3>
+                            <p class="mt-1">Si en el eje X cada cuadrito vale <span class="math-expr">1</span> unidad, pero en el eje Y cada cuadrito vale <span class="math-expr">5</span> unidades sin indicarlo claramente, ¿cómo puede afectar la lectura del punto de corte?</p>
+                            <button class="btn-solucion" onclick="toggleSolucion('ref-4', this)">Ver análisis conceptual</button>
+                            <div id="ref-4" class="solucion-box">
+                                <p><strong>Análisis:</strong> Puede provocar que un estudiante lea erróneamente la coordenada <span class="math-expr">y</span> contando cuadritos en lugar de multiplicar por la escala correspondiente. Mantener escalas claras y uniformes evita errores de lectura.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 5: EVALUACIÓN FORMATIVA            -->
+            <!-- ========================================== -->
+            <section id="sec-evaluacion" class="seccion-contenido hidden">
+                <div class="card-montano">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b-2 border-[#F7D615] pb-3 mb-4">
+                        <div>
+                            <h2 class="text-2xl font-bold text-[#1269A8]">✅ Evaluación Formativa de Comprobación (Método Gráfico)</h2>
+                            <p class="text-sm text-slate-600">Resuelve cada reactivo y revisa la solución paso a paso.</p>
+                        </div>
+                        <span class="badge-nivel badge-avanzado mt-2 sm:mt-0">5 Reactivos de Comprobación</span>
+                    </div>
+
+                    <div class="space-y-4">
+                        <!-- Pregunta 1 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 1 • Intersección de Rectas</span>
+                            <p class="font-bold text-base mt-1">Halla el punto de intersección gráfico del sistema: <span class="math-expr">{ y = 2x + 1 ; y = -x + 7 }</span>.</p>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="btn-solucion" onclick="toggleSolucion('eval-1', this)">Mostrar solución</button>
+                                <button class="btn-graficar-directo" onclick="abrirEnGraficadora('y = 2x + 1', 'y = -x + 7', 'Evaluación • Reactivo 1')">📊 Comprobar en Graficadora</button>
+                            </div>
+                            <div id="eval-1" class="solucion-box">
+                                <p><strong>Igualando <span class="math-expr">y</span>:</strong> <span class="math-expr">2x + 1 = -x + 7 ➔ 3x = 6 ➔ x = 2</span>.<br>
+                                <strong>Hallando <span class="math-expr">y</span>:</strong> <span class="math-expr">y = 2(2) + 1 = 5</span>.</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: El punto de intersección es (2, 5).</p>
+                            </div>
+                        </div>
+
+                        <!-- Pregunta 2 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 2 • Interceptos con los Ejes</span>
+                            <p class="font-bold text-base mt-1">Determina los puntos de corte con los ejes X e Y de la recta <span class="math-expr">2x + 3y = 12</span>.</p>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="btn-solucion" onclick="toggleSolucion('eval-2', this)">Mostrar solución</button>
+                                <button class="btn-graficar-directo" onclick="abrirEnGraficadora('2x + 3y = 12', 'y = 0', 'Evaluación • Reactivo 2')">📊 Comprobar en Graficadora</button>
+                            </div>
+                            <div id="eval-2" class="solucion-box">
+                                <p><strong>Corte en eje X (<span class="math-expr">y = 0</span>):</strong> <span class="math-expr">2x = 12 ➔ x = 6</span> ➔ Punto <span class="math-expr">(6, 0)</span>.<br>
+                                <strong>Corte en eje Y (<span class="math-expr">x = 0</span>):</strong> <span class="math-expr">3y = 12 ➔ y = 4</span> ➔ Punto <span class="math-expr">(0, 4)</span>.</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: Interceptos en (6, 0) y (0, 4).</p>
+                            </div>
+                        </div>
+
+                        <!-- Pregunta 3 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 3 • Análisis de Rectas en el Plano</span>
+                            <p class="font-bold text-base mt-1">¿Cómo se comportan gráficamente las rectas <span class="math-expr">x + 2y = 6</span> y <span class="math-expr">2x + 4y = 12</span>?</p>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="btn-solucion" onclick="toggleSolucion('eval-3', this)">Mostrar solución</button>
+                                <button class="btn-graficar-directo" onclick="abrirEnGraficadora('x + 2y = 6', '2x + 4y = 12', 'Evaluación • Reactivo 3')">📊 Comprobar en Graficadora</button>
+                            </div>
+                            <div id="eval-3" class="solucion-box">
+                                <p><strong>Despejando <span class="math-expr">y</span> en ambas:</strong><br>
+                                Ec. 1: <span class="math-expr">y = -(1/2)x + 3</span>.<br>
+                                Ec. 2: <span class="math-expr">4y = -2x + 12 ➔ y = -(1/2)x + 3</span>.</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: Son rectas coincidentes (tienen infinitos puntos en común).</p>
+                            </div>
+                        </div>
+
+                        <!-- Pregunta 4 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 4 • Rectas Paralelas y Parámetro</span>
+                            <p class="font-bold text-base mt-1">Halla el valor de <span class="math-expr">k</span> para que la recta <span class="math-expr">y = kx + 5</span> sea paralela a <span class="math-expr">y = -4x + 1</span>.</p>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="btn-solucion" onclick="toggleSolucion('eval-4', this)">Mostrar solución</button>
+                                <button class="btn-graficar-directo" onclick="abrirEnGraficadora('y = -4x + 5', 'y = -4x + 1', 'Evaluación • Reactivo 4 (k = -4)')">📊 Comprobar en Graficadora</button>
+                            </div>
+                            <div id="eval-4" class="solucion-box">
+                                <p><strong>Condición de paralelismo:</strong> Deben tener la misma pendiente (<span class="math-expr">m₁ = m₂</span>) y distinto corte en Y (<span class="math-expr">5 ≠ 1</span>).<br>
+                                Por lo tanto, <span class="math-expr">k = -4</span>.</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: k = -4.</p>
+                            </div>
+                        </div>
+
+                        <!-- Pregunta 5 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 5 • Aplicación Gráfica</span>
+                            <p class="font-bold text-base mt-1">El costo de <span class="math-expr">x</span> horas de alquiler de un local es <span class="math-expr">C(x) = 50x + 100</span> y la ganancia por evento es <span class="math-expr">G(x) = 70x</span>. ¿En cuántas horas <span class="math-expr">x</span> se igualan ambos montos y cuál es ese valor?</p>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="btn-solucion" onclick="toggleSolucion('eval-5', this)">Mostrar solución</button>
+                                <button class="btn-graficar-directo" onclick="abrirEnGraficadora('y = 50x + 100', 'y = 70x', 'Evaluación • Reactivo 5')">📊 Comprobar en Graficadora</button>
+                            </div>
+                            <div id="eval-5" class="solucion-box">
+                                <p><strong>Igualando ambas funciones:</strong> <span class="math-expr">70x = 50x + 100 ➔ 20x = 100 ➔ x = 5</span>.<br>
+                                <strong>Valor común:</strong> <span class="math-expr">70(5) = 350</span>.</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: Se igualan a las 5 horas con un valor de 350 (punto (5, 350)).</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 6: GRAFICADORA INTERACTIVA         -->
+            <!-- ========================================== -->
+            <section id="sec-graficadora" class="seccion-contenido hidden">
+                <div class="card-montano">
+                    <!-- Encabezado y Selector Rápido (Presets) -->
+                    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b-2 border-[#F7D615] pb-4 mb-5">
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <span class="badge-nivel badge-avanzado">Herramienta de Pizarra Digital</span>
+                                <span id="preset-activo-badge" class="text-xs font-bold text-[#54887D] bg-[#F2F5E9] px-2.5 py-1 rounded-full border border-[#54887D]">Sistema Personalizado</span>
+                            </div>
+                            <h2 class="text-2xl font-bold text-[#1269A8] mt-1">📊 Graficadora Cartesiana Interactiva</h2>
+                            <p class="text-sm text-slate-600">Escribe dos ecuaciones (forma <span class="font-mono font-bold text-[#1269A8]">y = mx + b</span>, general <span class="font-mono font-bold text-[#1269A8]">Ax + By = C</span>, rectas <span class="font-mono font-bold text-[#1269A8]">x = k</span> o parábolas <span class="font-mono font-bold text-[#1269A8]">y = x^2</span>) o elige un sistema de la guía.</p>
+                        </div>
+
+                        <div class="w-full lg:w-80">
+                            <label for="preset-select" class="block text-xs font-bold uppercase text-[#54887D] mb-1">⚡ Cargar Sistema de la Guía (Presets):</label>
+                            <select id="preset-select" onchange="cargarPreset(this.value)" class="w-full p-2.5 rounded-lg border-2 border-[#1269A8] bg-[#F2F5E9] font-semibold text-sm text-[#0f172a] focus:outline-none focus:ring-2 focus:ring-[#F7D615]">
+                                <option value="">-- Seleccionar ejemplo o ejercicio --</option>
+                                <optgroup label="📘 Ejemplos Resueltos">
+                                    <option value="y = x + 2|y = -x + 6|Ejemplo Básico 1">Ej. Básico 1: y = x + 2 ; y = -x + 6</option>
+                                    <option value="x + y = 5|y - x = 1|Ejemplo Básico 2">Ej. Básico 2: x + y = 5 ; y - x = 1</option>
+                                    <option value="x = -3|y = 4|Ejemplo Básico 3">Ej. Básico 3: x = -3 ; y = 4</option>
+                                    <option value="y = x - 2|y = -x + 4|Ejemplo Básico 4">Ej. Básico 4: y = x - 2 ; y = -x + 4</option>
+                                    <option value="y = 2x|x + y = 6|Ejemplo Básico 5">Ej. Básico 5: y = 2x ; x + y = 6</option>
+                                    <option value="2x + y = 7|3x - 2y = 0|Ejemplo Intermedio 1">Ej. Intermedio 1: 2x + y = 7 ; 3x - 2y = 0</option>
+                                    <option value="2x - y = 3|4x - 2y = -2|Ejemplo Intermedio 2 (Paralelas)">Ej. Intermedio 2: Paralelas (Sin solución)</option>
+                                    <option value="3x + y = 6|6x + 2y = 12|Ejemplo Intermedio 3 (Coincidentes)">Ej. Intermedio 3: Coincidentes (Infinitas)</option>
+                                    <option value="x + 2y = -2|3x - y = 8|Ejemplo Intermedio 4">Ej. Intermedio 4: x + 2y = -2 ; 3x - y = 8</option>
+                                    <option value="y = x|x + y = 8|Ejemplo Intermedio 5">Ej. Intermedio 5: y = x ; x + y = 8</option>
+                                    <option value="x/2 + y/3 = 3|x/4 - y/2 = -1|Ejemplo Avanzado 1">Ej. Avanzado 1: x/2 + y/3 = 3 ; x/4 - y/2 = -1</option>
+                                    <option value="y = 4x + 60|y = 10x|Ejemplo Avanzado 3 (Equilibrio)">Ej. Avanzado 3: Punto de Equilibrio</option>
+                                    <option value="y = x^2|y = x + 2|Ejemplo Avanzado 4 (Parábola)">Ej. Avanzado 4: Parábola y = x² ; y = x + 2</option>
+                                    <option value="y = 60x|y = 40x + 20|Ejemplo Avanzado 5 (Móviles)">Ej. Avanzado 5: Encuentro de Móviles</option>
+                                </optgroup>
+                                <optgroup label="✍️ Ejercicios Prácticos">
+                                    <option value="y = x + 4|y = -x + 8|Ejercicio Básico 1">Ejerc. Básico 1: y = x + 4 ; y = -x + 8</option>
+                                    <option value="x + y = 7|y - x = 3|Ejercicio Básico 2">Ejerc. Básico 2: x + y = 7 ; y - x = 3</option>
+                                    <option value="x = 5|y = -2|Ejercicio Básico 3">Ejerc. Básico 3: x = 5 ; y = -2</option>
+                                    <option value="y = 2x - 1|x + y = 5|Ejercicio Básico 4">Ejerc. Básico 4: y = 2x - 1 ; x + y = 5</option>
+                                    <option value="y = 3x|y = x + 6|Ejercicio Básico 5">Ejerc. Básico 5: y = 3x ; y = x + 6</option>
+                                    <option value="2x + y = 8|x - y = 1|Ejercicio Intermedio 1">Ejerc. Intermedio 1: 2x + y = 8 ; x - y = 1</option>
+                                    <option value="3x + y = 5|6x + 2y = 4|Ejercicio Intermedio 2">Ejerc. Intermedio 2: Paralelas</option>
+                                    <option value="4x - 2y = 6|2x - y = 3|Ejercicio Intermedio 3">Ejerc. Intermedio 3: Coincidentes</option>
+                                    <option value="2x + 3y = 12|4x - 3y = 6|Ejercicio Intermedio 4">Ejerc. Intermedio 4: 2x + 3y = 12 ; 4x - 3y = 6</option>
+                                    <option value="x/3 + y/2 = 3|x/2 - y/4 = 1|Ejercicio Avanzado 1">Ejerc. Avanzado 1: Fraccionario</option>
+                                    <option value="y = 2x + 80|y = 6x|Ejercicio Avanzado 3">Ejerc. Avanzado 3: Equilibrio</option>
+                                    <option value="y = x^2|y = 2x + 3|Ejercicio Avanzado 4">Ejerc. Avanzado 4: Parábola y = x² ; y = 2x + 3</option>
+                                    <option value="y = 2x|y = -2x + 8|Ejercicio Avanzado 5">Ejerc. Avanzado 5: y = 2x ; y = -2x + 8</option>
+                                </optgroup>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Grid Principal: Controles a la Izquierda + Plano Cartesiano a la Derecha -->
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+                        
+                        <!-- Panel Izquierdo de Ecuaciones y Diagnóstico -->
+                        <div class="lg:col-span-5 space-y-4">
+                            
+                            <!-- Caja Ecuación 1 -->
+                            <div class="p-3.5 rounded-xl bg-sky-50 border-2 border-[#1269A8]">
+                                <div class="flex items-center justify-between mb-1.5">
+                                    <label for="input-ec1" class="font-bold text-sm text-[#1269A8] flex items-center gap-2">
+                                        <span class="w-4 h-4 rounded-full bg-[#1269A8] inline-block border border-white shadow-sm"></span>
+                                        Ecuación 1 (L₁)
+                                    </label>
+                                    <select id="formato-ec1" onchange="aplicarPlantillaFormato(1, this.value)" class="text-xs bg-white border border-[#1269A8] rounded px-2 py-0.5 font-semibold text-[#1269A8]">
+                                        <option value="libre">Entrada libre</option>
+                                        <option value="pendiente">Forma y = mx + b</option>
+                                        <option value="general">Forma Ax + By = C</option>
+                                        <option value="parabola">Parábola y = ax² + c</option>
+                                    </select>
+                                </div>
+                                <input id="input-ec1" type="text" value="y = x + 2" placeholder="Ej: y = 2x + 1 o 2x + y = 7"
+                                       class="w-full p-2.5 rounded-lg border-2 border-[#88B5C7] bg-white font-mono font-bold text-base text-[#0f172a] focus:border-[#1269A8] focus:outline-none"
+                                       onkeydown="if(event.key==='Enter') actualizarGraficadora()">
+                                <p id="info-ec1" class="text-xs text-[#1269A8] font-semibold mt-1.5"></p>
+                            </div>
+
+                            <!-- Caja Ecuación 2 -->
+                            <div class="p-3.5 rounded-xl bg-emerald-50 border-2 border-[#54887D]">
+                                <div class="flex items-center justify-between mb-1.5">
+                                    <label for="input-ec2" class="font-bold text-sm text-[#54887D] flex items-center gap-2">
+                                        <span class="w-4 h-4 rounded-full bg-[#54887D] inline-block border border-white shadow-sm"></span>
+                                        Ecuación 2 (L₂)
+                                    </label>
+                                    <select id="formato-ec2" onchange="aplicarPlantillaFormato(2, this.value)" class="text-xs bg-white border border-[#54887D] rounded px-2 py-0.5 font-semibold text-[#54887D]">
+                                        <option value="libre">Entrada libre</option>
+                                        <option value="pendiente">Forma y = mx + b</option>
+                                        <option value="general">Forma Ax + By = C</option>
+                                        <option value="parabola">Parábola y = ax² + c</option>
+                                    </select>
+                                </div>
+                                <input id="input-ec2" type="text" value="y = -x + 6" placeholder="Ej: y = -x + 6 o x - y = 1"
+                                       class="w-full p-2.5 rounded-lg border-2 border-[#A6B046] bg-white font-mono font-bold text-base text-[#0f172a] focus:border-[#54887D] focus:outline-none"
+                                       onkeydown="if(event.key==='Enter') actualizarGraficadora()">
+                                <p id="info-ec2" class="text-xs text-[#54887D] font-semibold mt-1.5"></p>
+                            </div>
+
+                            <!-- Botones de Acción -->
+                            <div class="flex flex-wrap gap-2">
+                                <button onclick="actualizarGraficadora()" class="flex-1 bg-[#1269A8] hover:bg-[#0d4f80] text-white font-bold py-2.5 px-4 rounded-lg shadow transition cursor-pointer">
+                                    📈 Graficar y Analizar
+                                </button>
+                                <button onclick="centrarEnSolucion()" class="bg-[#F7D615] hover:bg-[#ffe234] text-[#0f172a] font-bold py-2.5 px-3.5 rounded-lg border border-[#0f172a] shadow-sm transition cursor-pointer" title="Encuadrar vista en el punto de intersección">
+                                    🎯 Enfocar Corte
+                                </button>
+                            </div>
+
+                            <!-- Opciones Visuales -->
+                            <div class="flex flex-wrap items-center gap-4 bg-[#F2F5E9] p-3 rounded-lg border border-[#A6B046] text-xs font-bold text-slate-700">
+                                <label class="inline-flex items-center gap-1.5 cursor-pointer">
+                                    <input type="checkbox" id="chk-puntos-tabla" checked onchange="dibujarPlano()" class="accent-[#1269A8] w-4 h-4">
+                                    <span>Mostrar puntos tabulados</span>
+                                </label>
+                                <label class="inline-flex items-center gap-1.5 cursor-pointer">
+                                    <input type="checkbox" id="chk-interceptos" checked onchange="dibujarPlano()" class="accent-[#54887D] w-4 h-4">
+                                    <span>Mostrar interceptos ejes</span>
+                                </label>
+                            </div>
+
+                            <!-- Tarjeta de Resultado e Intersección Automática -->
+                            <div id="resultado-graficadora" class="p-4 rounded-xl bg-gradient-to-br from-[#1269A8] to-[#0d4f80] text-white border-2 border-[#F7D615] shadow-md">
+                                <span class="text-xs uppercase tracking-wider font-bold text-[#F7D615] block">Diagnóstico del Sistema</span>
+                                <h3 id="titulo-resultado" class="text-lg font-bold mt-0.5">Solución Única: (2, 4)</h3>
+                                <p id="detalle-resultado" class="text-xs sm:text-sm text-[#F2F5E9] mt-1 leading-relaxed">
+                                    Las rectas secantes se intersecan en un único punto.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Panel Derecho: Lienzo Cartesiano Interactivo -->
+                        <div class="lg:col-span-7 flex flex-col">
+                            <div id="canvas-wrapper" class="canvas-wrapper">
+                                <canvas id="plano-canvas"></canvas>
+                                
+                                <!-- Controles Flotantes de Zoom y Vista -->
+                                <div class="zoom-toolbar">
+                                    <button class="btn-zoom" onclick="cambiarZoom(1.25)" title="Acercar (+)">+</button>
+                                    <button class="btn-zoom" onclick="cambiarZoom(0.8)" title="Alejar (-)">−</button>
+                                    <button class="btn-zoom text-xs" onclick="restablecerVista()" title="Restablecer vista al origen (0,0)">⌂</button>
+                                </div>
+
+                                <!-- Coordenadas del Cursor en Tiempo Real -->
+                                <div id="coords-hud" class="coords-hud">Cursor: (0.0, 0.0) • Arrastra para mover • Rueda para zoom</div>
+                            </div>
+
+                            <!-- Leyenda Rápida debajo del Canvas -->
+                            <div class="flex flex-wrap items-center justify-between gap-2 mt-2.5 px-2 text-xs text-slate-600 font-semibold">
+                                <div class="flex flex-wrap items-center gap-4">
+                                    <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-[#1269A8] inline-block"></span> Ecuación 1</span>
+                                    <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-[#54887D] inline-block"></span> Ecuación 2</span>
+                                    <span class="flex items-center gap-1.5"><span class="w-3.5 h-3.5 rounded-full bg-[#F7D615] border-2 border-[#0f172a] inline-block"></span> Intersección</span>
+                                    <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rotate-45 bg-[#e11d48] inline-block"></span> Interceptos Ejes</span>
+                                </div>
+                                <span id="escala-hud" class="text-[#1269A8]">Escala: 1 unidad/cuadro</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tabla de Valores Automática (Tabulación) -->
+                    <div class="mt-6 bg-[#F2F5E9] border-2 border-[#54887D] rounded-xl p-4">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                            <div>
+                                <h3 class="text-lg font-bold text-[#1269A8]">📋 Tabla de Valores Automática (Tabulación de Puntos)</h3>
+                                <p class="text-xs text-slate-600">Valores evaluados para <span class="font-mono font-bold">x ∈ {-2, -1, 0, 1, 2, 3}</span> (y puntos clave de intersección). Los puntos marcados se dibujan en el plano.</p>
+                            </div>
+                            <span id="badge-tabla-coincidencia" class="text-xs font-bold px-3 py-1 rounded-full bg-white border border-[#1269A8] text-[#1269A8]"></span>
+                        </div>
+
+                        <div class="overflow-x-auto rounded-lg border border-[#88B5C7] bg-white">
+                            <table class="w-full text-center text-sm border-collapse">
+                                <thead>
+                                    <tr id="tabla-header-x" class="bg-[#1269A8] text-white font-bold">
+                                        <th class="p-2.5 text-left border-r border-[#88B5C7]">Valor de x</th>
+                                        <th class="p-2.5">x = -2</th>
+                                        <th class="p-2.5">x = -1</th>
+                                        <th class="p-2.5">x = 0</th>
+                                        <th class="p-2.5">x = 1</th>
+                                        <th class="p-2.5">x = 2</th>
+                                        <th class="p-2.5">x = 3</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabla-body-valores">
+                                    <!-- Generado dinámicamente por JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Pie de Pizarra -->
+        <footer class="bg-[#1269A8] text-white text-center py-3 px-4 text-xs sm:text-sm border-t-2 border-[#F7D615]">
+            <strong>Colegio Montano</strong> • Departamento de Matemática • Tercera Unidad • Pizarra Digital Interactiva
+        </footer>
+    </div>
+
+    <!-- Scripts de Interactividad y Motor Matemático de Graficación -->
+    <script>
+        /* =========================================================================
+           1. NAVEGACIÓN DE LA PIZARRA Y CONTROLES DE UI
+           ========================================================================= */
+
+        /**
+         * Cambia entre las pestañas principales de la pizarra.
+         */
+        function cambiarSeccion(seccionId, botonActivo) {
+            const secciones = document.querySelectorAll('.seccion-contenido');
+            secciones.forEach(sec => sec.classList.add('hidden'));
+
+            const target = document.getElementById('sec-' + seccionId);
+            if (target) {
+                target.classList.remove('hidden');
+            }
+
+            const botones = document.querySelectorAll('.tab-btn');
+            botones.forEach(btn => btn.classList.remove('active'));
+            if (botonActivo) {
+                botonActivo.classList.add('active');
+            }
+
+            // Si abrimos la pestaña de la graficadora, ajustamos el tamaño del canvas y redibujamos
+            if (seccionId === 'graficadora') {
+                setTimeout(() => {
+                    redimensionarCanvas();
+                    dibujarPlano();
+                }, 20);
+            }
+        }
+
+        /**
+         * Filtra los subniveles (Básico, Intermedio, Avanzado) dentro de Ejemplos o Ejercicios.
+         */
+        function filtrarSubnivel(grupo, nivel, botonActivo) {
+            const contenedores = document.querySelectorAll('.subcontenido-' + grupo);
+            contenedores.forEach(cont => cont.classList.add('hidden'));
+
+            const target = document.getElementById(grupo + '-' + nivel);
+            if (target) {
+                target.classList.remove('hidden');
+            }
+
+            const parent = botonActivo.parentElement;
+            const subBotones = parent.querySelectorAll('.subtab-btn');
+            subBotones.forEach(btn => btn.classList.remove('active'));
+            botonActivo.classList.add('active');
+        }
+
+        /**
+         * Alterna la visibilidad de las soluciones paso a paso y actualiza el texto del botón.
+         */
+        function toggleSolucion(solucionId, boton) {
+            const box = document.getElementById(solucionId);
+            if (!box) return;
+
+            if (box.style.display === 'block') {
+                box.style.display = 'none';
+                boton.textContent = boton.textContent.replace('Ocultar', 'Mostrar').replace('Ocultar análisis conceptual', 'Ver análisis conceptual');
+            } else {
+                box.style.display = 'block';
+                if (boton.textContent.includes('Ver análisis')) {
+                    boton.textContent = 'Ocultar análisis conceptual';
+                } else {
+                    boton.textContent = 'Ocultar solución';
+                }
+            }
+        }
+
+        /**
+         * Controla el modo de pantalla completa (Fullscreen API) para proyección en aula.
+         */
+        function toggleFullscreen() {
+            const btn = document.getElementById('fullscreen-btn');
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().then(() => {
+                    btn.innerHTML = '<span>✖ Salir de pantalla completa</span>';
+                }).catch(err => {
+                    console.warn('Error al intentar activar pantalla completa:', err);
+                });
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen().then(() => {
+                        btn.innerHTML = '<span>⛶ Pantalla completa</span>';
+                    });
+                }
+            }
+        }
+
+        document.addEventListener('fullscreenchange', () => {
+            const btn = document.getElementById('fullscreen-btn');
+            if (!document.fullscreenElement && btn) {
+                btn.innerHTML = '<span>⛶ Pantalla completa</span>';
+            }
+            if (!document.getElementById('sec-graficadora').classList.contains('hidden')) {
+                setTimeout(() => {
+                    redimensionarCanvas();
+                    dibujarPlano();
+                }, 50);
+            }
+        });
+
+        /* =========================================================================
+           2. PARSER ALGEBRAICO FLEXIBLE (LINEALES, GENERALES, VERTICALES, PARÁBOLAS)
+           ========================================================================= */
+
+        /**
+         * Evalúa de forma segura una expresión aritmética en x (ej. "2*x + 1", "x^2 - 3", "-0.5*x + 4").
+         */
+        function evaluarExpresionEnX(exprStr, xVal) {
+            try {
+                let s = exprStr.toLowerCase().replace(/\s+/g, '');
+                // Normalizar potencias x² o x^2 -> (x)**2
+                s = s.replace(/x²/g, 'x^2');
+                // Multiplicación implícita: número seguido de x o paréntesis: 2x -> 2*x, 2( -> 2*(
+                s = s.replace(/(\d)(x|\()/g, '$1*$2');
+                // Multiplicación implícita: ) seguido de x, número o (: )( -> )*(
+                s = s.replace(/(\))(x|\d|\()/g, '$1*$2');
+                // Potencias con ^ -> **
+                s = s.replace(/\^/g, '**');
+                // Reemplazar x por (xVal)
+                s = s.replace(/x/g, `(${xVal})`);
+
+                // Validar que solo contenga caracteres matemáticos seguros
+                if (!/^[0-9+\-*/().eE\s]+$/.test(s)) {
+                    return NaN;
+                }
+                const fn = new Function('return (' + s + ');');
+                const res = fn();
+                return typeof res === 'number' && isFinite(res) ? res : NaN;
+            } catch (e) {
+                return NaN;
+            }
+        }
+
+        /**
+         * Analiza una ecuación ingresada por el usuario y devuelve un objeto estructurado:
+         * - tipo: 'lineal' (y = mx + b), 'vertical' (x = k), 'cuadratica' (y = ax^2 + bx + c), o 'invalida'
+         * - m, b (para rectas no verticales)
+         * - xConst (para rectas verticales x = k)
+         * - a, bQuad, cQuad (para parábolas)
+         * - evalY(x): función evaluadora de Y
+         * - formaNormalizada: texto legible en forma despejada
+         */
+        function parsearEcuacion(rawInput) {
+            if (!rawInput || typeof rawInput !== 'string') {
+                return { tipo: 'invalida', error: 'Ingresa una ecuación válida.' };
+            }
+
+            // Limpiar espacios y símbolos especiales
+            let eq = rawInput.trim()
+                .replace(/−/g, '-')
+                .replace(/²/g, '^2')
+                .replace(/C\(x\)|I\(x\)|G\(x\)|f\(x\)|g\(x\)/gi, 'y')
+                .replace(/\bd\b/g, 'y')
+                .replace(/\bt\b/g, 'x');
+
+            // Si no tiene signo '=', asumimos que es el lado derecho de "y = ..."
+            if (!eq.includes('=')) {
+                eq = 'y = ' + eq;
+            }
+
+            const partes = eq.split('=');
+            if (partes.length !== 2 || !partes[0].trim() || !partes[1].trim()) {
+                return { tipo: 'invalida', error: 'Formato incorrecto. Usa un solo signo "=". Ej: y = 2x + 1' };
+            }
+
+            const lhs = partes[0].trim();
+            const rhs = partes[1].trim();
+
+            // Caso 1: Detectar si es una función cuadrática/parábola despejada o implícita en x^2
+            const tieneX2 = /x\s*\^\s*2/i.test(eq);
+            if (tieneX2) {
+                // Si está en forma y = expr(x)
+                if (/^y$/i.test(lhs)) {
+                    const y0 = evaluarExpresionEnX(rhs, 0);
+                    const y1 = evaluarExpresionEnX(rhs, 1);
+                    const ym1 = evaluarExpresionEnX(rhs, -1);
+                    if (isNaN(y0) || isNaN(y1) || isNaN(ym1)) {
+                        return { tipo: 'invalida', error: 'No se pudo evaluar la expresión cuadrática.' };
+                    }
+                    const cQuad = y0;
+                    const aQuad = (y1 + ym1 - 2 * y0) / 2;
+                    const bQuad = (y1 - ym1) / 2;
+                    return {
+                        tipo: 'cuadratica',
+                        a: aQuad,
+                        b: bQuad,
+                        c: cQuad,
+                        evalY: (x) => aQuad * x * x + bQuad * x + cQuad,
+                        formaNormalizada: `y = ${formatearPolinomioCuadratico(aQuad, bQuad, cQuad)}`,
+                        interceptos: calcularInterceptosCuadratica(aQuad, bQuad, cQuad)
+                    };
+                }
+            }
+
+            // Caso 2: Ecuación lineal general F(x, y) = lhs - (rhs) = Ax + By - C = 0
+            // Usamos evaluación numérica exacta en 3 puntos (0,0), (1,0), (0,1) para extraer A, B y C
+            const evalF = (xVal, yVal) => {
+                const subX = (str) => {
+                    let s = str.toLowerCase().replace(/\s+/g, '');
+                    s = s.replace(/(\d)(x|y|\()/g, '$1*$2');
+                    s = s.replace(/(x|y)(\d)/g, '$1*$2');
+                    s = s.replace(/(\))(x|y|\d|\()/g, '$1*$2');
+                    s = s.replace(/x/g, `(${xVal})`).replace(/y/g, `(${yVal})`);
+                    if (!/^[0-9+\-*/().eE\s]+$/.test(s)) return NaN;
+                    const fn = new Function('return (' + s + ');');
+                    return fn();
+                };
+                try {
+                    const vL = subX(lhs);
+                    const vR = subX(rhs);
+                    return vL - vR;
+                } catch (err) {
+                    return NaN;
+                }
+            };
+
+            const f00 = evalF(0, 0);
+            const f10 = evalF(1, 0);
+            const f01 = evalF(0, 1);
+            const f22 = evalF(2, 2);
+
+            if (isNaN(f00) || isNaN(f10) || isNaN(f01)) {
+                return { tipo: 'invalida', error: 'Revisa la sintaxis. Ejemplos: y = 2x + 3  ó  2x + 3y = 12' };
+            }
+
+            const A = f10 - f00;
+            const B = f01 - f00;
+            const C = -f00; // Ax + By = C
+
+            // Verificar linealidad comprobando en (2, 2)
+            const esperado22 = A * 2 + B * 2 - C;
+            if (Math.abs(f22 - esperado22) > 1e-6) {
+                return { tipo: 'invalida', error: 'Solo se admiten ecuaciones lineales o parábolas y = ax² + bx + c.' };
+            }
+
+            const EPS = 1e-9;
+
+            // Si A ≈ 0 y B ≈ 0 -> No es una ecuación de recta válida
+            if (Math.abs(A) < EPS && Math.abs(B) < EPS) {
+                return { tipo: 'invalida', error: 'La ecuación no contiene variables x ni y válidas.' };
+            }
+
+            // Recta Vertical: B ≈ 0 => Ax = C => x = C / A
+            if (Math.abs(B) < EPS) {
+                const xConst = C / A;
+                return {
+                    tipo: 'vertical',
+                    xConst: xConst,
+                    evalY: () => NaN,
+                    formaNormalizada: `x = ${fmtNum(xConst)} (Recta vertical)`,
+                    interceptos: [{ x: xConst, y: 0, label: `(${fmtNum(xConst)}, 0)` }]
+                };
+            }
+
+            // Recta No Vertical: By = -Ax + C => y = (-A/B)x + (C/B)
+            const m = -A / B;
+            const b = C / B;
+            const interceptos = [{ x: 0, y: b, label: `(0, ${fmtNum(b)})` }];
+            if (Math.abs(m) > EPS) {
+                const xInt = -b / m;
+                if (Math.abs(xInt) > EPS || Math.abs(b) > EPS) {
+                    interceptos.push({ x: xInt, y: 0, label: `(${fmtNum(xInt)}, 0)` });
+                }
+            }
+
+            return {
+                tipo: 'lineal',
+                m: m,
+                b: b,
+                A: A,
+                B: B,
+                C: C,
+                evalY: (x) => m * x + b,
+                formaNormalizada: `y = ${formatearRecta(m, b)}`,
+                interceptos: interceptos
+            };
+        }
+
+        function fmtNum(n) {
+            if (Math.abs(n) < 1e-9) return '0';
+            const redondeado = Math.round(n * 100) / 100;
+            return Number.isInteger(redondeado) ? redondeado.toString() : redondeado.toFixed(2).replace(/\.?0+$/, '');
+        }
+
+        function formatearRecta(m, b) {
+            const EPS = 1e-9;
+            if (Math.abs(m) < EPS) return fmtNum(b);
+            let parteX = '';
+            if (Math.abs(m - 1) < EPS) parteX = 'x';
+            else if (Math.abs(m + 1) < EPS) parteX = '-x';
+            else parteX = `${fmtNum(m)}x`;
+
+            if (Math.abs(b) < EPS) return parteX;
+            return b > 0 ? `${parteX} + ${fmtNum(b)}` : `${parteX} - ${fmtNum(Math.abs(b))}`;
+        }
+
+        function formatearPolinomioCuadratico(a, b, c) {
+            let str = Math.abs(a - 1) < 1e-9 ? 'x²' : (Math.abs(a + 1) < 1e-9 ? '-x²' : `${fmtNum(a)}x²`);
+            if (Math.abs(b) > 1e-9) {
+                str += b > 0 ? ` + ${fmtNum(b)}x` : ` - ${fmtNum(Math.abs(b))}x`;
+            }
+            if (Math.abs(c) > 1e-9) {
+                str += c > 0 ? ` + ${fmtNum(c)}` : ` - ${fmtNum(Math.abs(c))}`;
+            }
+            return str;
+        }
+
+        function calcularInterceptosCuadratica(a, b, c) {
+            const pts = [{ x: 0, y: c, label: `(0, ${fmtNum(c)})` }];
+            const disc = b * b - 4 * a * c;
+            if (disc >= 0 && Math.abs(a) > 1e-9) {
+                const x1 = (-b - Math.sqrt(disc)) / (2 * a);
+                const x2 = (-b + Math.sqrt(disc)) / (2 * a);
+                pts.push({ x: x1, y: 0, label: `(${fmtNum(x1)}, 0)` });
+                if (Math.abs(x2 - x1) > 1e-6) {
+                    pts.push({ x: x2, y: 0, label: `(${fmtNum(x2)}, 0)` });
+                }
+            }
+            return pts;
+        }
+
+        /* =========================================================================
+           3. RESOLUCIÓN AUTOMÁTICA DE INTERSECCIONES (LINEAL Y PARÁBOLA-RECTA)
+           ========================================================================= */
+
+        function resolverSistema(eq1, eq2) {
+            const EPS = 1e-7;
+            if (eq1.tipo === 'invalida' || eq2.tipo === 'invalida') {
+                return { estado: 'error', puntos: [], titulo: 'Revisa las ecuaciones', detalle: eq1.error || eq2.error };
+            }
+
+            // 1. Dos rectas verticales: x = k1 y x = k2
+            if (eq1.tipo === 'vertical' && eq2.tipo === 'vertical') {
+                if (Math.abs(eq1.xConst - eq2.xConst) < EPS) {
+                    return {
+                        estado: 'coincidentes',
+                        puntos: [],
+                        titulo: 'Infinitas Soluciones (Rectas Coincidentes)',
+                        detalle: `Ambas ecuaciones representan la misma recta vertical x = ${fmtNum(eq1.xConst)}.`
+                    };
+                } else {
+                    return {
+                        estado: 'paralelas',
+                        puntos: [],
+                        titulo: 'Sin Solución (Rectas Verticales Paralelas)',
+                        detalle: `Las rectas x = ${fmtNum(eq1.xConst)} y x = ${fmtNum(eq2.xConst)} nunca se cruzan.`
+                    };
+                }
+            }
+
+            // 2. Una vertical (x = k) y otra lineal (y = mx + b)
+            if (eq1.tipo === 'vertical' && eq2.tipo === 'lineal') {
+                const x = eq1.xConst;
+                const y = eq2.evalY(x);
+                return {
+                    estado: 'unica',
+                    puntos: [{ x, y }],
+                    titulo: `Solución Única: (${fmtNum(x)}, ${fmtNum(y)})`,
+                    detalle: `La recta vertical x = ${fmtNum(x)} corta a ${eq2.formaNormalizada} en x = ${fmtNum(x)}, y = ${fmtNum(y)}.`
+                };
+            }
+            if (eq2.tipo === 'vertical' && eq1.tipo === 'lineal') {
+                const x = eq2.xConst;
+                const y = eq1.evalY(x);
+                return {
+                    estado: 'unica',
+                    puntos: [{ x, y }],
+                    titulo: `Solución Única: (${fmtNum(x)}, ${fmtNum(y)})`,
+                    detalle: `La recta vertical x = ${fmtNum(x)} corta a ${eq1.formaNormalizada} en x = ${fmtNum(x)}, y = ${fmtNum(y)}.`
+                };
+            }
+
+            // 3. Dos rectas no verticales: y = m1*x + b1  y  y = m2*x + b2
+            if (eq1.tipo === 'lineal' && eq2.tipo === 'lineal') {
+                if (Math.abs(eq1.m - eq2.m) < EPS) {
+                    if (Math.abs(eq1.b - eq2.b) < EPS) {
+                        return {
+                            estado: 'coincidentes',
+                            puntos: [],
+                            titulo: 'Infinitas Soluciones (Rectas Coincidentes)',
+                            detalle: `Ambas ecuaciones tienen la misma pendiente (m = ${fmtNum(eq1.m)}) y el mismo intercepto (b = ${fmtNum(eq1.b)}). Una recta queda sobre la otra.`
+                        };
+                    } else {
+                        return {
+                            estado: 'paralelas',
+                            puntos: [],
+                            titulo: 'Sin Solución (Rectas Paralelas)',
+                            detalle: `Ambas rectas tienen la misma pendiente m = ${fmtNum(eq1.m)}, pero distinto corte en Y (${fmtNum(eq1.b)} ≠ ${fmtNum(eq2.b)}). Nunca se intersecan.`
+                        };
+                    }
+                }
+                const x = (eq2.b - eq1.b) / (eq1.m - eq2.m);
+                const y = eq1.m * x + eq1.b;
+                return {
+                    estado: 'unica',
+                    puntos: [{ x, y }],
+                    titulo: `Solución Única: (${fmtNum(x)}, ${fmtNum(y)})`,
+                    detalle: `Rectas secantes con pendientes m₁ = ${fmtNum(eq1.m)} y m₂ = ${fmtNum(eq2.m)}. Se cortan en x = ${fmtNum(x)}, y = ${fmtNum(y)}.`
+                };
+            }
+
+            // 4. Parábola y Recta (ax^2 + bx + c = mx + n => ax^2 + (b-m)x + (c-n) = 0)
+            if ((eq1.tipo === 'cuadratica' && eq2.tipo === 'lineal') || (eq2.tipo === 'cuadratica' && eq1.tipo === 'lineal')) {
+                const quad = eq1.tipo === 'cuadratica' ? eq1 : eq2;
+                const lin = eq1.tipo === 'lineal' ? eq1 : eq2;
+                const A = quad.a;
+                const B = quad.b - lin.m;
+                const C = quad.c - lin.b;
+                const disc = B * B - 4 * A * C;
+
+                if (disc < -EPS) {
+                    return {
+                        estado: 'paralelas',
+                        puntos: [],
+                        titulo: 'Sin Intersección Real',
+                        detalle: 'La recta no corta a la parábola en el plano real.'
+                    };
+                } else if (Math.abs(disc) <= EPS) {
+                    const x = -B / (2 * A);
+                    const y = lin.evalY(x);
+                    return {
+                        estado: 'unica',
+                        puntos: [{ x, y }],
+                        titulo: `Punto de Tangencia: (${fmtNum(x)}, ${fmtNum(y)})`,
+                        detalle: `La recta toca a la parábola en un único punto: (${fmtNum(x)}, ${fmtNum(y)}).`
+                    };
+                } else {
+                    const x1 = (-B - Math.sqrt(disc)) / (2 * A);
+                    const y1 = lin.evalY(x1);
+                    const x2 = (-B + Math.sqrt(disc)) / (2 * A);
+                    const y2 = lin.evalY(x2);
+                    return {
+                        estado: 'doble',
+                        puntos: [{ x: x1, y: y1 }, { x: x2, y: y2 }],
+                        titulo: `2 Puntos de Corte: (${fmtNum(x1)}, ${fmtNum(y1)}) y (${fmtNum(x2)}, ${fmtNum(y2)})`,
+                        detalle: `La recta secante corta a la parábola en dos puntos distintos.`
+                    };
+                }
+            }
+
+            return {
+                estado: 'error',
+                puntos: [],
+                titulo: 'Combinación no soportada',
+                detalle: 'Ingresa al menos una ecuación lineal.'
+            };
+        }
+
+        /* =========================================================================
+           4. ESTADO GLOBAL DE LA GRAFICADORA Y RENDERIZADO EN HTML5 CANVAS
+           ========================================================================= */
+
+        const estadoGrafica = {
+            eq1: null,
+            eq2: null,
+            solucion: null,
+            // Coordenadas del centro de la cámara en unidades matemáticas
+            centerX: 0,
+            centerY: 0,
+            // Píxeles por unidad matemática
+            scale: 38,
+            // Control de arrastre (paneo)
+            dragging: false,
+            lastMouseX: 0,
+            lastMouseY: 0
+        };
+
+        /**
+         * Abre directamente la pestaña 6 con un sistema cargado desde cualquier botón de la guía.
+         */
+        function abrirEnGraficadora(ec1Str, ec2Str, etiquetaPreset) {
+            document.getElementById('input-ec1').value = ec1Str;
+            document.getElementById('input-ec2').value = ec2Str;
+            document.getElementById('preset-activo-badge').textContent = etiquetaPreset || 'Sistema Cargado';
+
+            const btnTab6 = document.getElementById('tab-graficadora');
+            cambiarSeccion('graficadora', btnTab6);
+
+            actualizarGraficadora(true);
+        }
+
+        /**
+         * Carga un preset seleccionado desde el menú desplegable de la pestaña 6.
+         */
+        function cargarPreset(valor) {
+            if (!valor) return;
+            const [ec1, ec2, nombre] = valor.split('|');
+            document.getElementById('input-ec1').value = ec1;
+            document.getElementById('input-ec2').value = ec2;
+            document.getElementById('preset-activo-badge').textContent = nombre;
+            actualizarGraficadora(true);
+        }
+
+        /**
+         * Inserta una plantilla guía si el usuario cambia el selector de formato.
+         */
+        function aplicarPlantillaFormato(numEc, formato) {
+            const input = document.getElementById('input-ec' + numEc);
+            if (formato === 'pendiente') {
+                input.value = numEc === 1 ? 'y = 2x + 1' : 'y = -x + 4';
+            } else if (formato === 'general') {
+                input.value = numEc === 1 ? '2x + y = 7' : 'x - y = 2';
+            } else if (formato === 'parabola') {
+                input.value = 'y = x^2';
+            }
+            actualizarGraficadora(true);
+        }
+
+        /**
+         * Procesa las ecuaciones actuales, actualiza tabla y diagnóstico, y redibuja el plano.
+         */
+        function actualizarGraficadora(autoEncuadrar = false) {
+            const raw1 = document.getElementById('input-ec1').value;
+            const raw2 = document.getElementById('input-ec2').value;
+
+            estadoGrafica.eq1 = parsearEcuacion(raw1);
+            estadoGrafica.eq2 = parsearEcuacion(raw2);
+            estadoGrafica.solucion = resolverSistema(estadoGrafica.eq1, estadoGrafica.eq2);
+
+            // Actualizar etiquetas de forma despejada
+            const info1 = document.getElementById('info-ec1');
+            const info2 = document.getElementById('info-ec2');
+            info1.textContent = estadoGrafica.eq1.tipo !== 'invalida'
+                ? 'Forma despejada: ' + estadoGrafica.eq1.formaNormalizada
+                : '⚠️ ' + estadoGrafica.eq1.error;
+
+            info2.textContent = estadoGrafica.eq2.tipo !== 'invalida'
+                ? 'Forma despejada: ' + estadoGrafica.eq2.formaNormalizada
+                : '⚠️ ' + estadoGrafica.eq2.error;
+
+            // Actualizar tarjeta de diagnóstico
+            const resBox = document.getElementById('resultado-graficadora');
+            const titRes = document.getElementById('titulo-resultado');
+            const detRes = document.getElementById('detalle-resultado');
+
+            titRes.textContent = estadoGrafica.solucion.titulo;
+            detRes.textContent = estadoGrafica.solucion.detalle;
+
+            if (estadoGrafica.solucion.estado === 'error') {
+                resBox.style.background = 'linear-gradient(135deg, #b91c1c 0%, #7f1d1d 100%)';
+            } else if (estadoGrafica.solucion.estado === 'paralelas') {
+                resBox.style.background = 'linear-gradient(135deg, #b45309 0%, #78350f 100%)';
+            } else if (estadoGrafica.solucion.estado === 'coincidentes') {
+                resBox.style.background = 'linear-gradient(135deg, #54887D 0%, #375c54 100%)';
+            } else {
+                resBox.style.background = 'linear-gradient(135deg, #1269A8 0%, #0d4f80 100%)';
+            }
+
+            // Actualizar tabla de tabulación
+            actualizarTablaValores();
+
+            // Si se solicitó autoencuadre (por ejemplo, problemas con valores grandes como y = 10x o y = 60x)
+            if (autoEncuadrar) {
+                ajustarVistaInteligente();
+            }
+
+            redimensionarCanvas();
+            dibujarPlano();
+        }
+
+        /**
+         * Ajusta automáticamente el zoom y el centro si la intersección está fuera del rango estándar [-10, 10].
+         */
+        function ajustarVistaInteligente() {
+            const pts = estadoGrafica.solucion ? estadoGrafica.solucion.puntos : [];
+            if (pts.length > 0) {
+                const maxCoord = Math.max(...pts.map(p => Math.max(Math.abs(p.x), Math.abs(p.y))));
+                if (maxCoord > 12) {
+                    // Centrar entre el origen y el punto de intersección
+                    const p = pts[0];
+                    estadoGrafica.centerX = p.x * 0.5;
+                    estadoGrafica.centerY = p.y * 0.5;
+                    const canvas = document.getElementById('plano-canvas');
+                    const minDim = Math.min(canvas.width || 600, canvas.height || 460);
+                    estadoGrafica.scale = Math.max(1.5, Math.min(38, (minDim * 0.35) / maxCoord));
+                    return;
+                }
+            }
+            // Vista estándar centrada en el origen
+            estadoGrafica.centerX = 0;
+            estadoGrafica.centerY = 0;
+            estadoGrafica.scale = 38;
+        }
+
+        /**
+         * Enfoca la cámara directamente en el punto de intersección calculado.
+         */
+        function centrarEnSolucion() {
+            const pts = estadoGrafica.solucion ? estadoGrafica.solucion.puntos : [];
+            if (pts.length > 0) {
+                estadoGrafica.centerX = pts[0].x;
+                estadoGrafica.centerY = pts[0].y;
+                if (Math.abs(pts[0].x) <= 15 && Math.abs(pts[0].y) <= 15) {
+                    estadoGrafica.scale = 42;
+                }
+            } else {
+                estadoGrafica.centerX = 0;
+                estadoGrafica.centerY = 0;
+                estadoGrafica.scale = 38;
+            }
+            dibujarPlano();
+        }
+
+        function cambiarZoom(factor) {
+            estadoGrafica.scale = Math.max(1.2, Math.min(180, estadoGrafica.scale * factor));
+            dibujarPlano();
+        }
+
+        function restablecerVista() {
+            estadoGrafica.centerX = 0;
+            estadoGrafica.centerY = 0;
+            estadoGrafica.scale = 38;
+            dibujarPlano();
+        }
+
+        /**
+         * Construye la tabla de tabulación para x = -2, -1, 0, 1, 2, 3 (y destaca coincidencias).
+         */
+        function actualizarTablaValores() {
+            const xValores = [-2, -1, 0, 1, 2, 3];
+            const tbody = document.getElementById('tabla-body-valores');
+            const badge = document.getElementById('badge-tabla-coincidencia');
+            tbody.innerHTML = '';
+
+            const eq1 = estadoGrafica.eq1;
+            const eq2 = estadoGrafica.eq2;
+
+            let coincidenciaEnTabla = null;
+
+            const crearFila = (eq, nombre, colorHex, bgClass) => {
+                const tr = document.createElement('tr');
+                tr.className = 'border-t border-slate-200 ' + bgClass;
+
+                const th = document.createElement('td');
+                th.className = 'p-2.5 text-left font-bold border-r border-slate-300 whitespace-nowrap';
+                th.style.color = colorHex;
+                th.textContent = `${nombre}: ${eq.tipo !== 'invalida' ? eq.formaNormalizada : '—'}`;
+                tr.appendChild(th);
+
+                xValores.forEach(x => {
+                    const td = document.createElement('td');
+                    td.className = 'p-2.5 font-mono font-semibold';
+
+                    if (eq.tipo === 'invalida') {
+                        td.textContent = '—';
+                    } else if (eq.tipo === 'vertical') {
+                        td.textContent = Math.abs(x - eq.xConst) < 1e-6 ? `(${fmtNum(eq.xConst)}, ∀y)` : '—';
+                    } else {
+                        const y = eq.evalY(x);
+                        const y2 = (eq2.tipo === 'lineal' || eq2.tipo === 'cuadratica') ? eq2.evalY(x) : NaN;
+                        const y1 = (eq1.tipo === 'lineal' || eq1.tipo === 'cuadratica') ? eq1.evalY(x) : NaN;
+
+                        if (!isNaN(y1) && !isNaN(y2) && Math.abs(y1 - y2) < 1e-6) {
+                            td.className += ' bg-[#F7D615] text-[#0f172a] font-extrabold rounded';
+                            coincidenciaEnTabla = `(${x}, ${fmtNum(y)})`;
+                        }
+                        td.textContent = `(${x}, ${fmtNum(y)})`;
+                    }
+                    tr.appendChild(td);
+                });
+
+                return tr;
+            };
+
+            tbody.appendChild(crearFila(eq1, 'L₁', '#1269A8', 'bg-sky-50/40'));
+            tbody.appendChild(crearFila(eq2, 'L₂', '#54887D', 'bg-emerald-50/40'));
+
+            if (coincidenciaEnTabla) {
+                badge.textContent = `✨ Coincidencia directa en tabla: ${coincidenciaEnTabla}`;
+                badge.className = 'text-xs font-bold px-3 py-1 rounded-full bg-[#F7D615] border border-[#0f172a] text-[#0f172a]';
+            } else {
+                badge.textContent = 'Evaluación en x ∈ {-2, -1, 0, 1, 2, 3}';
+                badge.className = 'text-xs font-bold px-3 py-1 rounded-full bg-white border border-[#1269A8] text-[#1269A8]';
+            }
+        }
+
+        /**
+         * Ajusta la resolución interna del Canvas al tamaño de su contenedor responsivo (HiDPI).
+         */
+        function redimensionarCanvas() {
+            const wrapper = document.getElementById('canvas-wrapper');
+            const canvas = document.getElementById('plano-canvas');
+            if (!wrapper || !canvas) return;
+
+            const rect = wrapper.getBoundingClientRect();
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = Math.max(300, rect.width * dpr);
+            canvas.height = Math.max(300, rect.height * dpr);
+        }
+
+        /**
+         * Transformaciones entre coordenadas matemáticas (x, y) y píxeles en Canvas (px, py).
+         */
+        function mathToScreen(x, y, width, height) {
+            const px = width / 2 + (x - estadoGrafica.centerX) * estadoGrafica.scale;
+            const py = height / 2 - (y - estadoGrafica.centerY) * estadoGrafica.scale;
+            return { px, py };
+        }
+
+        function screenToMath(px, py, width, height) {
+            const x = estadoGrafica.centerX + (px - width / 2) / estadoGrafica.scale;
+            const y = estadoGrafica.centerY - (py - height / 2) / estadoGrafica.scale;
+            return { x, y };
+        }
+
+        /**
+         * Calcula un paso numérico limpio (1, 2, 5, 10, 20...) según el nivel de zoom actual.
+         */
+        function calcularPasoCuadricula(scale) {
+            const minPxPorLinea = 42;
+            const rawStep = minPxPorLinea / scale;
+            const mag = Math.pow(10, Math.floor(Math.log10(rawStep)));
+            const norm = rawStep / mag;
+            if (norm < 1.5) return 1 * mag;
+            if (norm < 3.5) return 2 * mag;
+            if (norm < 7.5) return 5 * mag;
+            return 10 * mag;
+        }
+
+        /**
+         * Dibuja todo el plano cartesiano: cuadrícula, ejes numerados, rectas/curvas,
+         * puntos tabulados, interceptos y el punto de intersección destacado.
+         */
+        function dibujarPlano() {
+            const canvas = document.getElementById('plano-canvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const dpr = window.devicePixelRatio || 1;
+            const width = canvas.width / dpr;
+            const height = canvas.height / dpr;
+
+            ctx.save();
+            ctx.scale(dpr, dpr);
+
+            // 1. Fondo blanco limpio
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, width, height);
+
+            const step = calcularPasoCuadricula(estadoGrafica.scale);
+            document.getElementById('escala-hud').textContent = `Escala: ${fmtNum(step)} u/cuadro`;
+
+            const topLeft = screenToMath(0, 0, width, height);
+            const bottomRight = screenToMath(width, height, width, height);
+
+            const startX = Math.floor(topLeft.x / step) * step;
+            const endX = Math.ceil(bottomRight.x / step) * step;
+            const startY = Math.floor(bottomRight.y / step) * step;
+            const endY = Math.ceil(topLeft.y / step) * step;
+
+            // 2. Cuadrícula secundaria y principal
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = '#e2e8f0';
+
+            for (let x = startX; x <= endX; x += step) {
+                const { px } = mathToScreen(x, 0, width, height);
+                ctx.beginPath();
+                ctx.moveTo(px, 0);
+                ctx.lineTo(px, height);
+                ctx.stroke();
+            }
+
+            for (let y = startY; y <= endY; y += step) {
+                const { py } = mathToScreen(0, y, width, height);
+                ctx.beginPath();
+                ctx.moveTo(0, py);
+                ctx.lineTo(width, py);
+                ctx.stroke();
+            }
+
+            // 3. Ejes Cartesianos X e Y con flechas y numeración clara
+            const origen = mathToScreen(0, 0, width, height);
+            ctx.strokeStyle = '#0f172a';
+            ctx.lineWidth = 2;
+
+            // Eje X
+            if (origen.py >= -20 && origen.py <= height + 20) {
+                const yEje = Math.max(16, Math.min(height - 16, origen.py));
+                ctx.beginPath();
+                ctx.moveTo(0, yEje);
+                ctx.lineTo(width, yEje);
+                ctx.stroke();
+
+                // Flecha eje X
+                ctx.fillStyle = '#0f172a';
+                ctx.beginPath();
+                ctx.moveTo(width - 4, yEje);
+                ctx.lineTo(width - 13, yEje - 5);
+                ctx.lineTo(width - 13, yEje + 5);
+                ctx.closePath();
+                ctx.fill();
+
+                ctx.font = 'bold 12px Segoe UI, sans-serif';
+                ctx.fillText('X', width - 16, yEje - 9);
+            }
+
+            // Eje Y
+            if (origen.px >= -20 && origen.px <= width + 20) {
+                const xEje = Math.max(22, Math.min(width - 22, origen.px));
+                ctx.beginPath();
+                ctx.moveTo(xEje, 0);
+                ctx.lineTo(xEje, height);
+                ctx.stroke();
+
+                // Flecha eje Y
+                ctx.fillStyle = '#0f172a';
+                ctx.beginPath();
+                ctx.moveTo(xEje, 4);
+                ctx.lineTo(xEje - 5, 13);
+                ctx.lineTo(xEje + 5, 13);
+                ctx.closePath();
+                ctx.fill();
+
+                ctx.font = 'bold 12px Segoe UI, sans-serif';
+                ctx.fillText('Y', xEje + 9, 15);
+            }
+
+            // Números sobre los ejes
+            ctx.fillStyle = '#475569';
+            ctx.font = '600 11px Segoe UI, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'top';
+
+            const labelYPos = Math.max(6, Math.min(height - 18, origen.py + 5));
+            for (let x = startX; x <= endX; x += step) {
+                if (Math.abs(x) < step * 0.01) continue;
+                const { px } = mathToScreen(x, 0, width, height);
+                ctx.fillText(fmtNum(x), px, labelYPos);
+            }
+
+            ctx.textAlign = 'right';
+            ctx.textBaseline = 'middle';
+            const labelXPos = Math.max(28, Math.min(width - 6, origen.px - 6));
+            for (let y = startY; y <= endY; y += step) {
+                if (Math.abs(y) < step * 0.01) continue;
+                const { py } = mathToScreen(0, y, width, height);
+                ctx.fillText(fmtNum(y), labelXPos, py);
+            }
+
+            // 4. Trazar Ecuación 1 y Ecuación 2
+            const trazarEcuacion = (eq, color, esSegunda) => {
+                if (!eq || eq.tipo === 'invalida') return;
+                ctx.save();
+                ctx.strokeStyle = color;
+                ctx.lineWidth = esSegunda ? 3 : 3.5;
+
+                // Si las rectas son coincidentes, hacemos la segunda punteada para que ambas sean visibles
+                if (esSegunda && estadoGrafica.solucion && estadoGrafica.solucion.estado === 'coincidentes') {
+                    ctx.setLineDash([10, 7]);
+                    ctx.lineWidth = 3.5;
+                }
+
+                if (eq.tipo === 'vertical') {
+                    const { px } = mathToScreen(eq.xConst, 0, width, height);
+                    ctx.beginPath();
+                    ctx.moveTo(px, 0);
+                    ctx.lineTo(px, height);
+                    ctx.stroke();
+                } else if (eq.tipo === 'lineal') {
+                    const p1 = mathToScreen(topLeft.x, eq.evalY(topLeft.x), width, height);
+                    const p2 = mathToScreen(bottomRight.x, eq.evalY(bottomRight.x), width, height);
+                    ctx.beginPath();
+                    ctx.moveTo(p1.px, p1.py);
+                    ctx.lineTo(p2.px, p2.py);
+                    ctx.stroke();
+                } else if (eq.tipo === 'cuadratica') {
+                    ctx.beginPath();
+                    const muestras = 240;
+                    const dx = (bottomRight.x - topLeft.x) / muestras;
+                    for (let i = 0; i <= muestras; i++) {
+                        const x = topLeft.x + i * dx;
+                        const y = eq.evalY(x);
+                        const { px, py } = mathToScreen(x, y, width, height);
+                        if (i === 0) ctx.moveTo(px, py);
+                        else ctx.lineTo(px, py);
+                    }
+                    ctx.stroke();
+                }
+                ctx.restore();
+            };
+
+            trazarEcuacion(estadoGrafica.eq1, '#1269A8', false);
+            trazarEcuacion(estadoGrafica.eq2, '#54887D', true);
+
+            // 5. Dibujar puntos tabulados (x = -2, -1, 0, 1, 2, 3) si está activado
+            if (document.getElementById('chk-puntos-tabla').checked) {
+                const xTab = [-2, -1, 0, 1, 2, 3];
+                const dibujarPuntosEq = (eq, color) => {
+                    if (!eq || eq.tipo === 'invalida' || eq.tipo === 'vertical') return;
+                    xTab.forEach(x => {
+                        const y = eq.evalY(x);
+                        if (isNaN(y)) return;
+                        const { px, py } = mathToScreen(x, y, width, height);
+                        if (px < -10 || px > width + 10 || py < -10 || py > height + 10) return;
+                        ctx.fillStyle = color;
+                        ctx.beginPath();
+                        ctx.arc(px, py, 4, 0, Math.PI * 2);
+                        ctx.fill();
+                        ctx.strokeStyle = '#ffffff';
+                        ctx.lineWidth = 1.2;
+                        ctx.stroke();
+                    });
+                };
+                dibujarPuntosEq(estadoGrafica.eq1, '#1269A8');
+                dibujarPuntosEq(estadoGrafica.eq2, '#54887D');
+            }
+
+            // 6. Dibujar interceptos con los ejes si está activado
+            if (document.getElementById('chk-interceptos').checked) {
+                const dibujarInterceptos = (eq) => {
+                    if (!eq || !eq.interceptos) return;
+                    eq.interceptos.forEach(pt => {
+                        const { px, py } = mathToScreen(pt.x, pt.y, width, height);
+                        if (px < -10 || px > width + 10 || py < -10 || py > height + 10) return;
+                        ctx.save();
+                        ctx.translate(px, py);
+                        ctx.rotate(Math.PI / 4);
+                        ctx.fillStyle = '#e11d48';
+                        ctx.fillRect(-4, -4, 8, 8);
+                        ctx.restore();
+                    });
+                };
+                dibujarInterceptos(estadoGrafica.eq1);
+                dibujarInterceptos(estadoGrafica.eq2);
+            }
+
+            // 7. Dibujar el punto (o puntos) de intersección del sistema
+            if (estadoGrafica.solucion && estadoGrafica.solucion.puntos.length > 0) {
+                estadoGrafica.solucion.puntos.forEach(pt => {
+                    const { px, py } = mathToScreen(pt.x, pt.y, width, height);
+
+                    // Líneas punteadas de proyección hacia los ejes X e Y
+                    ctx.save();
+                    ctx.setLineDash([4, 4]);
+                    ctx.strokeStyle = '#94a3b8';
+                    ctx.lineWidth = 1.2;
+                    ctx.beginPath();
+                    ctx.moveTo(px, py);
+                    ctx.lineTo(px, origen.py);
+                    ctx.moveTo(px, py);
+                    ctx.lineTo(origen.px, py);
+                    ctx.stroke();
+                    ctx.restore();
+
+                    // Halo amarillo institucional
+                    ctx.fillStyle = 'rgba(247, 214, 21, 0.35)';
+                    ctx.beginPath();
+                    ctx.arc(px, py, 13, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    // Punto central destacado
+                    ctx.fillStyle = '#F7D615';
+                    ctx.strokeStyle = '#0f172a';
+                    ctx.lineWidth = 2.5;
+                    ctx.beginPath();
+                    ctx.arc(px, py, 6.5, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.stroke();
+
+                    // Etiqueta flotante con coordenadas exactas
+                    const etiqueta = `(${fmtNum(pt.x)}, ${fmtNum(pt.y)})`;
+                    ctx.font = 'bold 12px Segoe UI, sans-serif';
+                    const textW = ctx.measureText(etiqueta).width;
+                    const boxX = Math.min(width - textW - 18, Math.max(8, px + 10));
+                    const boxY = Math.max(26, py - 12);
+
+                    ctx.fillStyle = '#0f172a';
+                    ctx.beginPath();
+                    ctx.roundRect(boxX, boxY - 16, textW + 12, 22, 6);
+                    ctx.fill();
+
+                    ctx.fillStyle = '#F7D615';
+                    ctx.textAlign = 'left';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(etiqueta, boxX + 6, boxY - 5);
+                });
+            }
+
+            ctx.restore();
+        }
+
+        /* =========================================================================
+           5. EVENTOS DE RATÓN Y PANTALLA TÁCTIL (PANEO Y ZOOM EN CANVAS)
+           ========================================================================= */
+
+        function inicializarEventosCanvas() {
+            const canvas = document.getElementById('plano-canvas');
+            const hud = document.getElementById('coords-hud');
+            if (!canvas) return;
+
+            // Mouse Down
+            canvas.addEventListener('mousedown', (e) => {
+                estadoGrafica.dragging = true;
+                estadoGrafica.lastMouseX = e.clientX;
+                estadoGrafica.lastMouseY = e.clientY;
+            });
+
+            // Mouse Move (Paneo + lectura de coordenadas en vivo)
+            window.addEventListener('mousemove', (e) => {
+                const rect = canvas.getBoundingClientRect();
+                const relX = e.clientX - rect.left;
+                const relY = e.clientY - rect.top;
+
+                if (relX >= 0 && relX <= rect.width && relY >= 0 && relY <= rect.height) {
+                    const m = screenToMath(relX, relY, rect.width, rect.height);
+                    hud.textContent = `Cursor: (${m.x.toFixed(1)}, ${m.y.toFixed(1)}) • Arrastra para mover • Rueda para zoom`;
+                }
+
+                if (!estadoGrafica.dragging) return;
+                const dx = e.clientX - estadoGrafica.lastMouseX;
+                const dy = e.clientY - estadoGrafica.lastMouseY;
+                estadoGrafica.lastMouseX = e.clientX;
+                estadoGrafica.lastMouseY = e.clientY;
+
+                estadoGrafica.centerX -= dx / estadoGrafica.scale;
+                estadoGrafica.centerY += dy / estadoGrafica.scale;
+                dibujarPlano();
+            });
+
+            // Mouse Up
+            window.addEventListener('mouseup', () => {
+                estadoGrafica.dragging = false;
+            });
+
+            // Rueda del ratón para Zoom
+            canvas.addEventListener('wheel', (e) => {
+                e.preventDefault();
+                const factor = e.deltaY < 0 ? 1.15 : 0.87;
+                cambiarZoom(factor);
+            }, { passive: false });
+
+            // Soporte Táctil (Pizarra Digital / Tablets / Móviles)
+            canvas.addEventListener('touchstart', (e) => {
+                if (e.touches.length === 1) {
+                    estadoGrafica.dragging = true;
+                    estadoGrafica.lastMouseX = e.touches[0].clientX;
+                    estadoGrafica.lastMouseY = e.touches[0].clientY;
+                }
+            }, { passive: true });
+
+            canvas.addEventListener('touchmove', (e) => {
+                if (!estadoGrafica.dragging || e.touches.length !== 1) return;
+                e.preventDefault();
+                const dx = e.touches[0].clientX - estadoGrafica.lastMouseX;
+                const dy = e.touches[0].clientY - estadoGrafica.lastMouseY;
+                estadoGrafica.lastMouseX = e.touches[0].clientX;
+                estadoGrafica.lastMouseY = e.touches[0].clientY;
+
+                estadoGrafica.centerX -= dx / estadoGrafica.scale;
+                estadoGrafica.centerY += dy / estadoGrafica.scale;
+                dibujarPlano();
+            }, { passive: false });
+
+            canvas.addEventListener('touchend', () => {
+                estadoGrafica.dragging = false;
+            });
+
+            // Redimensionar ventana
+            window.addEventListener('resize', () => {
+                if (!document.getElementById('sec-graficadora').classList.contains('hidden')) {
+                    redimensionarCanvas();
+                    dibujarPlano();
+                }
+            });
+        }
+
+        // Inicialización al cargar la página
+        window.onload = function () {
+            inicializarEventosCanvas();
+            actualizarGraficadora(false);
+        };
+    </script>
+</body>
+</html>
