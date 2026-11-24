@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vista Interactiva - Hoja de Trabajo No. 6: Cocientes Notables</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.13.5/cdn.min.js" defer></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .bg-azul-montano { background-color: #1269A8; }
+        .text-azul-montano { color: #1269A8; }
+        .border-azul-montano { border-color: #1269A8; }
+        .bg-gris-tabla { background-color: #E0E0E0; }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen py-8 px-4" x-data="hojaTrabajoApp()">
+
+    <div class="max-w-4xl mx-auto bg-white shadow-2xl rounded-xl overflow-hidden border border-gray-200">
+        
+        <!-- BARRA DE ACCIÓN SUPERIOR -->
+        <div class="bg-gray-800 text-white px-6 py-4 flex flex-wrap justify-between items-center gap-4">
+            <div>
+                <span class="text-xs uppercase tracking-wider text-gray-400 font-semibold">Colegio Montano | Plataforma Académica</span>
+                <h1 class="text-lg font-bold">Vista Interactiva de Estudiante</h1>
+            </div>
+            <div class="flex items-center gap-3">
+                <button @click="modoProfesor = !modoProfesor" 
+                        :class="modoProfesor ? 'bg-amber-500 text-gray-900' : 'bg-gray-700 text-white'"
+                        class="px-4 py-2 rounded-lg text-sm font-semibold transition shadow hover:opacity-90 flex items-center gap-2">
+                    <span x-text="modoProfesor ? '👁️ Ocultar Solucionario (Modo Docente)' : '🔑 Ver Solucionario (Modo Docente)'"></span>
+                </button>
+                <button onclick="window.print()" class="bg-azul-montano text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-blue-700 transition shadow">
+                    🖨️ Imprimir / Guardar PDF
+                </button>
+            </div>
+        </div>
+
+        <!-- CONTENIDO DE LA HOJA DE TRABAJO -->
+        <div class="p-8 md:p-12 space-y-8">
+            
+            <!-- ENCABEZADO INSTITUCIONAL -->
+            <div class="border-b-2 border-azul-montano pb-6">
+                <div class="grid grid-cols-1 md:grid-cols-3 items-center gap-4">
+                    <div class="text-center md:text-left">
+                        <div class="inline-block bg-azul-montano text-white text-xs font-bold px-3 py-1 rounded">TERCERO BÁSICO</div>
+                    </div>
+                    <div class="text-center">
+                        <h2 class="text-2xl font-black text-azul-montano tracking-tight">COLEGIO MONTANO</h2>
+                        <p class="text-sm font-bold text-gray-700 uppercase mt-1">HOJA DE TRABAJO GRUPAL NO. 6</p>
+                    </div>
+                    <div class="text-center md:text-right text-xs text-gray-500 font-medium">
+                        Unidad II — 2027
+                    </div>
+                </div>
+            </div>
+
+            <!-- TABLA 1: DATOS DE CONTROL -->
+            <div class="overflow-x-auto rounded-lg border border-gray-300">
+                <table class="w-full text-sm text-left text-gray-700">
+                    <tr class="bg-gris-tabla border-b border-gray-300">
+                        <th class="p-3 font-bold border-r border-gray-300">Materia: Matemática</th>
+                        <th class="p-3 font-bold border-r border-gray-300">Grado: Tercero Básico</th>
+                        <th class="p-3 font-bold">Unidad: II</th>
+                    </tr>
+                    <tr class="bg-gris-tabla">
+                        <td class="p-3 font-bold border-r border-gray-300">Tema: Cocientes Notables</td>
+                        <td class="p-3 font-bold border-r border-gray-300">Semana: 26 al 30 de abril, 2027</td>
+                        <td class="p-3 font-bold">Fecha: <span class="border-b border-gray-500 inline-block w-24"></span></td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- TABLA 2: IDENTIFICACIÓN Y PUNTEO -->
+            <div class="overflow-x-auto rounded-lg border border-gray-300">
+                <table class="w-full text-sm text-left text-gray-700">
+                    <tr class="bg-gris-tabla border-b border-gray-300">
+                        <th class="p-3 font-bold border-r border-gray-300 w-1/2">Nombres de los Integrantes:</th>
+                        <th class="p-3 font-bold border-r border-gray-300 text-center w-1/4">Modalidad:</th>
+                        <th class="p-3 font-bold text-center w-1/4">Punteo Total:</th>
+                    </tr>
+                    <tr class="border-b border-gray-300 align-top">
+                        <td class="p-3 border-r border-gray-300 space-y-2">
+                            <div class="flex items-center gap-2">1. <input type="text" class="w-full border-b border-gray-400 focus:outline-none focus:border-azul-montano px-1 text-sm bg-transparent" placeholder="Apellidos y Nombres"></div>
+                            <div class="flex items-center gap-2">2. <input type="text" class="w-full border-b border-gray-400 focus:outline-none focus:border-azul-montano px-1 text-sm bg-transparent" placeholder="Apellidos y Nombres"></div>
+                            <div class="flex items-center gap-2">3. <input type="text" class="w-full border-b border-gray-400 focus:outline-none focus:border-azul-montano px-1 text-sm bg-transparent" placeholder="Apellidos y Nombres"></div>
+                            <div class="flex items-center gap-2">4. <input type="text" class="w-full border-b border-gray-400 focus:outline-none focus:border-azul-montano px-1 text-sm bg-transparent" placeholder="Apellidos y Nombres"></div>
+                        </td>
+                        <td class="p-3 border-r border-gray-300 text-center font-medium bg-gray-50 flex items-center justify-center h-full pt-8">
+                            Grupal
+                        </td>
+                        <td class="p-3 text-center align-middle font-bold text-xl bg-gray-50">
+                            <div class="border-2 border-dashed border-gray-400 p-3 rounded-lg inline-block w-28">
+                                <span class="text-azul-montano text-lg">___</span> / <span class="text-sm">20 pts</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="bg-gris-tabla border-b border-gray-300">
+                        <th class="p-3 font-bold border-r border-gray-300">Sección / Clave:</th>
+                        <th colspan="2" class="p-3 font-bold text-center">Lugar de Resolución:</th>
+                    </tr>
+                    <tr>
+                        <td class="p-3 border-r border-gray-300"><input type="text" class="w-full border-b border-gray-400 focus:outline-none bg-transparent" placeholder="Sección y Clave"></td>
+                        <td colspan="2" class="p-3 text-center text-sm font-semibold text-azul-montano bg-gray-50">En la misma hoja (Espacio Expandido)</td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- TEMA DESTACADO -->
+            <div class="bg-blue-50 border-l-4 border-azul-montano p-4 rounded-r-lg">
+                <p class="text-xs uppercase font-bold text-azul-montano tracking-wider">Propósito de la Actividad</p>
+                <p class="text-gray-800 font-medium mt-1"><strong>TEMA:</strong> Reconocimiento de estructuras y resolución de cocientes notables por simple inspección.</p>
+            </div>
+
+            <!-- SERIE I -->
+            <div class="space-y-6">
+                <div class="border-b border-gray-300 pb-2">
+                    <h3 class="text-lg font-bold text-azul-montano">SERIE I: Clínica de Clasificación y Resolución</h3>
+                    <p class="text-sm text-gray-600 mt-1">
+                        <strong>Instrucciones:</strong> En equipos de 3 o 4 integrantes, resuelvan por simple inspección cada cociente notable. Indiquen la estructura algebraica, determinen las cantidades A y B, apliquen la regla correspondiente, escriban el cociente y anoten la restricción del divisor. <strong>(Valor: 12 puntos / 3 pts. c/u)</strong>
+                    </p>
+                </div>
+
+                <!-- Ejercicio 1 -->
+                <div class="bg-gray-50 p-5 rounded-xl border border-gray-200 space-y-4">
+                    <div class="flex justify-between items-center">
+                        <span class="font-bold text-gray-800 text-lg">1) $\frac{x^2 - 49}{x + 7}$</span>
+                        <span class="text-xs bg-azul-montano text-white px-2 py-1 rounded font-semibold">3 Pts</span>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-xs font-bold text-gray-600 uppercase">Espacio de Resolución en Equipo:</label>
+                        <textarea class="w-full h-24 p-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white" placeholder="Escriba aquí la estructura, cantidades A y B, desarrollo y restricción..."></textarea>
+                    </div>
+                    <div x-show="modoProfesor" x-transition class="bg-amber-50 border border-amber-300 p-4 rounded-lg text-sm space-y-1">
+                        <p class="font-bold text-amber-900">🔑 Clave / Solución:</p>
+                        <p class="text-gray-800"><strong>Estructura:</strong> Diferencia de cuadrados. $A = x$, $B = 7$.</p>
+                        <p class="text-gray-800"><strong>Regla aplicada:</strong> $\frac{A^2 - B^2}{A + B} = A - B$</p>
+                        <p class="text-azul-montano font-bold">Respuesta: $x - 7$, con la restricción $x + 7 \neq 0 \implies x \neq -7$.</p>
+                    </div>
+                </div>
+
+                <!-- Ejercicio 2 -->
+                <div class="bg-gray-50 p-5 rounded-xl border border-gray-200 space-y-4">
+                    <div class="flex justify-between items-center">
+                        <span class="font-bold text-gray-800 text-lg">2) $\frac{25a^2 - 4b^2}{5a - 2b}$</span>
+                        <span class="text-xs bg-azul-montano text-white px-2 py-1 rounded font-semibold">3 Pts</span>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-xs font-bold text-gray-600 uppercase">Espacio de Resolución en Equipo:</label>
+                        <textarea class="w-full h-24 p-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white" placeholder="Escriba aquí la estructura, cantidades A y B, desarrollo y restricción..."></textarea>
+                    </div>
+                    <div x-show="modoProfesor" x-transition class="bg-amber-50 border border-amber-300 p-4 rounded-lg text-sm space-y-1">
+                        <p class="font-bold text-amber-900">🔑 Clave / Solución:</p>
+                        <p class="text-gray-800"><strong>Estructura:</strong> Diferencia de cuadrados. $A = 5a$, $B = 2b$.</p>
+                        <p class="text-gray-800"><strong>Regla aplicada:</strong> $\frac{A^2 - B^2}{A - B} = A + B$</p>
+                        <p class="text-azul-montano font-bold">Respuesta: $5a + 2b$, con la restricción $5a - 2b \neq 0 \implies 5a \neq 2b$.</p>
+                    </div>
+                </div>
+
+                <!-- Ejercicio 3 -->
+                <div class="bg-gray-50 p-5 rounded-xl border border-gray-200 space-y-4">
+                    <div class="flex justify-between items-center">
+                        <span class="font-bold text-gray-800 text-lg">3) $\frac{x^3 + 64}{x + 4}$</span>
+                        <span class="text-xs bg-azul-montano text-white px-2 py-1 rounded font-semibold">3 Pts</span>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-xs font-bold text-gray-600 uppercase">Espacio de Resolución en Equipo:</label>
+                        <textarea class="w-full h-24 p-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white" placeholder="Escriba aquí la estructura, cantidades A y B, desarrollo y restricción..."></textarea>
+                    </div>
+                    <div x-show="modoProfesor" x-transition class="bg-amber-50 border border-amber-300 p-4 rounded-lg text-sm space-y-1">
+                        <p class="font-bold text-amber-900">🔑 Clave / Solución:</p>
+                        <p class="text-gray-800"><strong>Estructura:</strong> Suma de cubos. $A = x$, $B = 4$.</p>
+                        <p class="text-gray-800"><strong>Regla aplicada:</strong> $\frac{A^3 + B^3}{A + B} = A^2 - AB + B^2$</p>
+                        <p class="text-azul-montano font-bold">Respuesta: $x^2 - 4x + 16$, con la restricción $x + 4 \neq 0 \implies x \neq -4$.</p>
+                    </div>
+                </div>
+
+                <!-- Ejercicio 4 -->
+                <div class="bg-gray-50 p-5 rounded-xl border border-gray-200 space-y-4">
+                    <div class="flex justify-between items-center">
+                        <span class="font-bold text-gray-800 text-lg">4) $\frac{64m^3 - 27n^3}{4m - 3n}$</span>
+                        <span class="text-xs bg-azul-montano text-white px-2 py-1 rounded font-semibold">3 Pts</span>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-xs font-bold text-gray-600 uppercase">Espacio de Resolución en Equipo:</label>
+                        <textarea class="w-full h-24 p-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white" placeholder="Escriba aquí la estructura, cantidades A y B, desarrollo y restricción..."></textarea>
+                    </div>
+                    <div x-show="modoProfesor" x-transition class="bg

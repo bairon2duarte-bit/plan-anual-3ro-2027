@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pizarra Digital - Unidad II - Plan 1: Proporcionalidad (Avanzado)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- MathJax 3 para renderizado de expresiones LaTeX -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)']],
+                displayMath: [['\\[', '\\]']]
+            },
+            startup: {
+                pageReady: () => {
+                    return MathJax.startup.defaultPageReady().then(() => {
+                        console.log('MathJax initial advanced mockup ready.');
+                    });
+                }
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        montano: {
+                            blue: '#1269A8',
+                            yellow: '#F7D615',
+                            green: '#54887D',
+                            lightblue: '#88B5C7',
+                            olive: '#A6B046',
+                            bg: '#F2F5E9'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Segoe UI', 'Tahoma', 'Verdana', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Verdana, sans-serif; }
+        .fade-in { animation: fadeIn 0.4s ease-in-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .custom-scrollbar::-webkit-scrollbar { width: 8px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #F2F5E9; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #88B5C7; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #1269A8; }
+    </style>
+</head>
+<body class="bg-montano-bg text-gray-800 h-screen flex flex-col overflow-hidden custom-scrollbar">
+
+    <!-- Encabezado unificado estilo visual Montano (4 columnas exactas) -->
+    <header class="bg-montano-blue shadow-md relative z-10 flex-shrink-0">
+        <div class="container mx-auto px-4 py-3 flex justify-start items-center gap-12">    
+
+            <!-- 1. Izquierda: Escudo independiente -->
+            <div class="flex-shrink-0 flex items-center justify-center">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyEop0yf6lZ7Jk9MILZxF1rBj4Oqs5esyhIQ&s"
+                     alt="Escudo Colegio Montano"
+                     class="h-24 md:h-28 w-auto object-contain">
+            </div>
+
+            <!-- 2. Información académica -->
+            <div class="flex flex-col text-white justify-center flex-shrink-0">
+                <span class="text-xl md:text-2xl font-extrabold text-montano-yellow tracking-wider drop-shadow-sm whitespace-nowrap mb-0.5">
+                    COLEGIO MONTANO
+                </span>
+                <h1 class="text-base md:text-lg font-bold leading-tight text-gray-100">
+                    Matemática - 3ro Básico (Nivel Avanzado)
+                </h1>
+                <h2 class="text-xs md:text-sm font-medium mt-0.5 text-gray-200">
+                    Docente: PEM Bairon Duarte
+                </h2>
+                <h3 class="text-xs md:text-sm text-gray-200">
+                    Tema: Proporcionalidad Directa e Inversa (Profundización)
+                </h3>
+            </div>
+
+            <!-- 3. Centro: Identificación del plan -->
+            <div class="flex flex-col items-center justify-center bg-white border-l-4 border-montano-yellow px-4 md:px-6 py-1.5 rounded-r-md shadow-sm text-center flex-shrink-0">
+                <span class="text-base md:text-lg font-extrabold text-montano-blue tracking-wide">
+                    U2 - Plan 1 (Adv)
+                </span>
+                <span class="text-[11px] md:text-xs font-bold text-gray-700">
+                    Semana 9
+                </span>
+                <span class="text-[10px] md:text-[11px] text-gray-500">
+                    15 al 19 de mar 2027
+                </span>
+            </div>
+
+            <!-- 4. Derecha: Pantalla completa -->
+            <button onclick="toggleFullscreen()"
+                    class="bg-montano-yellow text-montano-blue font-bold px-3 py-1.5 md:px-4 md:py-2 text-xs md:text-sm rounded shadow hover:bg-yellow-400 transition-colors flex items-center gap-2 flex-shrink-0">
+                <i class="fas fa-expand"></i>
+                <span>Pantalla Completa</span>
+            </button>
+
+        </div>
+    </header>
+
+    <!-- Navegación de Pestañas -->
+    <nav class="container mx-auto px-4 mt-4 flex-shrink-0">
+        <ul class="flex flex-wrap gap-2 justify-center md:justify-start" id="tabs-nav">
+            <li>
+                <button onclick="switchTab('tab-info')" id="btn-tab-info" class="tab-btn active px-4 py-2 rounded-t-lg font-bold bg-montano-blue text-white transition-colors border-b-0">
+                    <i class="fas fa-info-circle mr-1"></i> Foco Pedagógico
+                </button>
+            </li>
+            <li>
+                <button onclick="switchTab('tab-1')" id="btn-tab-1" class="tab-btn px-4 py-2 rounded-t-lg font-bold bg-gray-200 text-gray-700 hover:bg-montano-lightblue hover:text-white transition-colors">
+                    <i class="fas fa-rocket mr-1"></i> I. Motivación Avanzada
+                </button>
+            </li>
+            <li>
+                <button onclick="switchTab('tab-2')" id="btn-tab-2" class="tab-btn px-4 py-2 rounded-t-lg font-bold bg-gray-200 text-gray-700 hover:bg-montano-lightblue hover:text-white transition-colors">
+                    <i class="fas fa-user-edit mr-1"></i> II. Exposición y Modelado
+                </button>
+            </li>
+            <li>
+                <button onclick="switchTab('tab-3')" id="btn-tab-3" class="tab-btn px-4 py-2 rounded-t-lg font-bold bg-gray-200 text-gray-700 hover:bg-montano-lightblue hover:text-white transition-colors">
+                    <i class="fas fa-users mr-1"></i> III. Retos Cooperativos
+                </button>
+            </li>
+            <li>
+                <button onclick="switchTab('tab-4')" id="btn-tab-4" class="tab-btn px-4 py-2 rounded-t-lg font-bold bg-gray-200 text-gray-700 hover:bg-montano-lightblue hover:text-white transition-colors">
+                    <i class="fas fa-chalkboard-teacher mr-1"></i> IV. Plenaria y Auditoría
+                </button>
+            </li>
+            <li>
+                <button onclick="switchTab('tab-eval')" id="btn-tab-eval" class="tab-btn px-4 py-2 rounded-t-lg font-bold bg-gray-200 text-gray-700 hover:bg-montano-olive hover:text-white transition-colors">
+                    <i class="fas fa-clipboard-check mr-1"></i> Evaluación
+                </button>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Contenedor Principal (Área de Pizarra) -->
+    <main class="container mx-auto px-4 pb-6 flex-grow overflow-auto custom-scrollbar">
+        <div class="bg-white shadow-lg rounded-b-lg rounded-tr-lg p-6 min-h-full border-t-4 border-montano-blue">
+            
+            <!-- PESTAÑA: Foco Pedagógico -->
+            <div id="tab-info" class="tab-content fade-in">
+                <h2 class="text-2xl font-bold text-montano-blue border-b-2 border-montano-yellow pb-2 mb-4">Enfoque de Nivel Avanzado: Proporcionalidad y Modelación Algebraica</h2>
+                
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-blue-50 p-4 rounded-xl border border-blue-100 shadow-sm">
+                        <h3 class="font-bold text-lg text-montano-blue mb-2"><i class="fas fa-bullseye"></i> Competencia Institucional de Referencia</h3>
+                        <p class="mb-3 text-sm text-gray-700">«Resuelve situaciones problema de carácter formal que demandan el dominio del pensamiento lógico matemático y las operaciones matemáticas de aritmética y álgebra en los conjuntos numéricos reales y complejos».</p>
+                        
+                        <h3 class="font-bold text-lg text-montano-blue mb-2"><i class="fas fa-chart-line"></i> Objetivo de Aprendizaje Avanzado</h3>
+                        <p class="text-sm text-gray-700">Modelar algebraicamente situaciones de variación compuesta, analizar tasas de cambio no lineales y resolver problemas de aplicación de alta complejidad con múltiples magnitudes, justificando rigurosamente cada paso mediante constantes de proporcionalidad.</p>
+                    </div>
+
+                    <div class="bg-green-50 p-4 rounded-xl border border-green-100 shadow-sm">
+                        <h3 class="font-bold text-lg text-montano-green mb-2"><i class="fas fa-seedling"></i> Modelo Formativo Montano</h3>
+                        <div class="flex items-center gap-3 mb-2">
+                            <span class="bg-montano-olive text-white px-3 py-1 rounded-full font-bold text-sm">Hábito 2</span>
+                            <span class="font-bold text-gray-700">Comenzar con un fin en mente (Planificación estratégica).</span>
+                        </div>
+                        <p class="text-sm text-gray-600 italic mb-4">Conducta observable: el estudiante anticipa la estructura algebraica del problema, define variables explícitas y determina si la variación involucra interacciones directas, inversas o mixtas antes de operar.</p>
+                        
+                        <h3 class="font-bold text-lg text-montano-green mb-2"><i class="fas fa-tools"></i> Recursos y Requisitos</h3>
+                        <ul class="list-disc list-inside text-sm text-gray-700 space-y-1">
+                            <li>Dominio previo de despeje de ecuaciones algebraicas y razones.</li>
+                            <li>Pizarra interactiva, cuaderno de trabajo y hojas de modelación grupal.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PESTAÑA I: Motivación -->
+            <div id="tab-1" class="tab-content fade-in hidden">
+                <div class="flex justify-between items-center mb-4 border-b-2 border-montano-yellow pb-2">
+                    <h2 class="text-2xl font-bold text-montano-blue">I. Motivación Inicial Avanzada (~10 min)</h2>
+                    <span class="bg-montano-lightblue text-white px-3 py-1 rounded-full text-sm font-bold"><i class="far fa-clock"></i> 10 min</span>
+                </div>
+
+                <div class="bg-yellow-50 p-5 rounded-xl border-l-4 border-montano-yellow mb-6 shadow-sm">
+                    <h3 class="text-xl font-bold text-gray-800 mb-3"><i class="fas fa-question-circle text-montano-yellow"></i> Desafío de Análisis No Lineal</h3>
+                    <p class="text-base mb-3">Se plantea el siguiente escenario de alta exigencia:</p>
+                    <div class="bg-white p-4 rounded-lg shadow-sm border text-sm space-y-2 mb-4">
+                        <p>«Si 6 bombas de agua idénticas llenan un depósito de 1200 litros en 4 horas, operando 8 horas diarias; ¿en cuántos días 4 bombas de mayor caudal (que llenan un 25% más rápido por hora) llenarán un depósito de 1800 litros, operando 6 horas diarias?»</p>
+                    </div>
+                    <button onclick="toggleSolution('sol-mot-adv')" class="bg-montano-yellow text-montano-blue font-bold text-xs px-3 py-2 rounded shadow hover:bg-yellow-400 transition">
+                        <i class="fas fa-eye mr-1"></i> Ver Preguntas Orientadoras de Desglose
+                    </button>
+                    <div id="sol-mot-adv" class="hidden mt-3 p-3 bg-white rounded border border-yellow-200 text-sm space-y-2">
+                        <p>• <strong>Magnitudes en juego:</strong> Bombas, caudal/rendimiento, capacidad del depósito, horas diarias y días totales.</p>
+                        <p>• <strong>Relaciones cruzadas:</strong> ¿Cuáles son directamente proporcionales al tiempo en días y cuáles inversamente proporcionales?</p>
+                    </div>
+                </div>
+
+                <div class="text-center bg-gray-50 p-4 rounded-lg border border-gray-200">
+                    <p class="font-bold text-montano-blue"><i class="fas fa-lightbulb text-montano-yellow"></i> Hábito 2 en acción:</p>
+                    <p class="text-sm text-gray-700">Desglosar un problema complejo en sub-relaciones de proporcionalidad antes de aplicar cualquier fórmula mecánica.</p>
+                </div>
+            </div>
+
+            <!-- PESTAÑA II: Exposición y Modelado -->
+            <div id="tab-2" class="tab-content fade-in hidden">
+                <div class="flex justify-between items-center mb-4 border-b-2 border-montano-yellow pb-2">
+                    <h2 class="text-2xl font-bold text-montano-blue">II. Exposición Magistral y Modelado Algebraico Avanzado (~20 min)</h2>
+                    <span class="bg-montano-lightblue text-white px-3 py-1 rounded-full text-sm font-bold"><i class="far fa-clock"></i> 20 min</span>
+                </div>
+
+                <!-- Modelado Avanzado -->
+                <div class="mb-6 space-y-4">
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="bg-gray-50 p-4 rounded-lg border">
+                            <h4 class="font-bold text-montano-blue mb-2"><i class="fas fa-cogs"></i> Proporcionalidad Compuesta (Múltiples Magnitudes)</h4>
+                            <p class="text-sm mb-2">Cuando una magnitud depende de dos o más magnitudes simultáneamente, se analiza el carácter de cada relación respecto a la incógnita:</p>
+                            <ul class="list-disc list-inside text-xs space-y-1 text-gray-700">
+                                <li><strong>Inversa:</strong> Con más operarios, menos tiempo (\(M \cdot T = \text{cte}\)).</li>
+                                <li><strong>Directa:</strong> Con más obra, más tiempo (\(\frac{O}{T} = \text{cte}\)).</li>
+                            </ul>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg border">
+                            <h4 class="font-bold text-montano-blue mb-2"><i class="fas fa-chart-line"></i> Método del Producto Constante / Reducción a la Unidad</h4>
+                            <p class="text-sm mb-2">Planteamiento formal mediante la ley de proporciones compuestas:</p>
+                            <p class="text-xs bg-white p-2 rounded border font-mono">\[\frac{\text{Obra}_1}{\text{Obreros}_1 \cdot \text{Tiempo}_1 \cdot \text{Rend}_1} = \frac{\text{Obra}_2}{\text{Obreros}_2 \cdot \text{Tiempo}_2 \cdot \text{Rend}_2}\]</p>
+                        </div>
+                    </div>
+
+                    <!-- Práctica Individual de Alta Exigencia -->
+                    <div class="bg-gray-50 p-4 rounded-lg border space-y-3">
+                        <h4 class="font-bold text-montano-blue">Verificación Individual Guiada (Nivel Avanzado)</h4>
+                        <p class="text-sm">1. Si 10 bombas consumen 400 kWh trabajando 5 horas diarias durante 6 días, ¿cuántos kWh consumirán 8 bombas trabajando 8 horas diarias durante 10 días, si la potencia de las nuevas bombas es un 20% mayor?</p>
+                        <button onclick="toggleSolution('sol-indiv-adv')" class="bg-montano-blue text-white text-xs px-3 py-1.5 rounded font-bold hover:bg-blue-700 transition">
+                            <i class="fas fa-eye mr-1"></i> Ver Resolución Paso a Paso
+                        </button>
+                        <div id="sol-indiv-adv" class="hidden mt-3 p-3 bg-white rounded border border-blue-200 text-sm space-y-2">
+                            <p>• <strong>Análisis de magnitudes con el consumo (\(C\)):</strong> Directa con número de bombas (\(B\)), horas diarias (\(H\)), días (\(D\)) y potencia (\(P\)).</p>
+                            <p>• <strong>Fórmula compuesta:</strong> \(\frac{C_1}{B_1 \cdot H_1 \cdot D_1 \cdot P_1} = \frac{C_2}{B_2 \cdot H_2 \cdot D_2 \cdot P_2}\)</p>
+                            <p>• <strong>Sustitución:</strong> \(\frac{400}{10 \times 5 \times 6 \times 1.0} = \frac{C_2}{8 \times 8 \times 10 \times 1.2}\) \(\implies \frac{400}{300} = \frac{C_2}{768}\) \(\implies C_2 = \frac{4 \times 768}{3} = \mathbf{1024\text{ kWh}}\).</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PESTAÑA III: Cooperativo -->
+            <div id="tab-3" class="tab-content fade-in hidden">
+                <div class="flex justify-between items-center mb-4 border-b-2 border-montano-yellow pb-2">
+                    <h2 class="text-2xl font-bold text-montano-blue">III. Retos Cooperativos: Modelación y Auditoría (~25 min)</h2>
+                    <span class="bg-montano-lightblue text-white px-3 py-1 rounded-full text-sm font-bold"><i class="far fa-clock"></i> 25 min</span>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="md:col-span-2 bg-yellow-50 p-5 rounded-xl border border-montano-yellow shadow-sm space-y-3">
+                        <h3 class="text-lg font-bold text-gray-800"><i class="fas fa-users text-montano-yellow"></i> Actividad: «Auditoría de Proporcionalidad Compuesta»</h3>
+                        <p class="text-sm">En equipos de 3 o 4 integrantes, resuelvan y argumenten los siguientes retos de nivel avanzado:</p>
+                        <ul class="list-disc list-inside text-sm space-y-1 text-gray-700">
+                            <li><strong>Reto A (Obra Compleja):</strong> 15 obreros trabajando 8 horas diarias pueden pavimentar una carretera de 300 metros en 12 días. ¿Cuántos días tardarán 20 obreros trabajando 6 horas diarias en pavimentar una carretera de 450 metros, sabiendo que el terreno actual es un 50% más difícil (requiere 50% más esfuerzo por metro)?</li>
+                            <li><strong>Reto B (Inversión y Tasas):</strong> Tres socios aportan capitales inversamente proporcionales a sus edades (15, 20 y 30 años) para repartirse una ganancia de Q13,500. ¿Cuánto le corresponde a cada uno?</li>
+                            <li><strong>Reto C (Análisis Crítico):</strong> Demuestre algebraicamente por qué si \(y\) es directamente proporcional a \(x^2\), al triplicar \(x\), el valor de \(y\) se multiplica por 9 y no por 3.</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-montano-blue text-white p-5 rounded-xl shadow-md flex flex-col justify-between">
+                        <div>
+                            <h4 class="font-bold text-montano-yellow mb-3 border-b border-white/20 pb-2"><i class="fas fa-tasks"></i> Producto Verificable</h4>
+                            <p class="text-sm mb-2">Expediente grupal con planteamiento algebraico estructurado, reducción de constantes y demostración formal.</p>
+                        </div>
+                        <div class="bg-white/10 p-3 rounded-lg text-xs mt-4">
+                            <strong>Hábito 2:</strong> Planificar la ecuación general antes de sustituir valores numéricos.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PESTAÑA IV: Plenaria -->
+            <div id="tab-4" class="tab-content fade-in hidden">
+                <div class="flex justify-between items-center mb-4 border-b-2 border-montano-yellow pb-2">
+                    <h2 class="text-2xl font-bold text-montano-blue">IV. Plenaria, Auditoría y Cierre (~15 min)</h2>
+                    <span class="bg-montano-lightblue text-white px-3 py-1 rounded-full text-sm font-bold"><i class="far fa-clock"></i> 15 min</span>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6 mb-6">
+                    <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
+                        <h3 class="text-lg font-bold text-montano-blue mb-3"><i class="fas fa-microphone-alt"></i> Debate y Defensa de Estrategias</h3>
+                        <p class="text-sm text-gray-700 mb-2">Los equipos exponen cómo resolvieron el Reto A y el Reto C. Se evalúa especialmente:</p>
+                        <ul class="list-disc list-inside text-sm text-gray-700 space-y-1">
+                            <li>La ubicación correcta de factores directos e inversos en el planteamiento de cocientes.</li>
+                            <li>La justificación de relaciones cuadráticas o no lineales.</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-gradient-to-br from-montano-blue to-montano-lightblue text-white p-5 rounded-xl shadow-sm flex flex-col justify-center items-center text-center">
+                        <i class="fas fa-brain text-4xl text-montano-yellow mb-3"></i>
+                        <h3 class="text-lg font-bold mb-2">Síntesis Metacognitiva</h3>
+                        <p class="text-sm mb-4">Reflexión sobre la modelación matemática frente a problemas con más de dos variables.</p>
+                    </div>
+                </div>
+
+                <!-- Ticket de Salida -->
+                <div class="bg-yellow-50 p-5 rounded-xl border border-montano-yellow shadow-sm">
+                    <h3 class="font-bold text-lg text-gray-800 mb-3"><i class="fas fa-ticket-alt text-montano-yellow"></i> Ticket de Salida de Alta Exigencia</h3>
+                    <p class="text-sm text-gray-700 mb-3">Si 8 impresoras imprimen 4000 hojas en 5 horas, ¿cuántas horas tardarán 12 impresoras (con un rendimiento 25% superior) en imprimir 9000 hojas? Justifica el planteamiento de cada magnitud.</p>
+                    <p class="text-xs text-gray-600 italic border-t border-yellow-200 pt-2"><strong>Metacognición:</strong> ¿Cómo garantizaste que las magnitudes inversas y directas estuvieran ubicadas correctamente en tu ecuación?</p>
+                </div>
+            </div>
+
+            <!-- PESTAÑA EVALUACIÓN -->
+            <div id="tab-eval" class="tab-content fade-in hidden">
+                <div class="flex justify-between items-center mb-4 border-b-2 border-montano-yellow pb-2">
+                    <h2 class="text-2xl font-bold text-montano-blue">Instrumentos de Evaluación (Nivel Avanzado)</h2>
+                </div>
+
+                <p class="mb-4 text-sm text-gray-700"><strong>Criterio de evaluación:</strong> Modela algebraicamente situaciones de variación compuesta y no lineal, justifica la ubicación de constantes en relaciones directas e inversas, y resuelve problemas complejos con rigor lógico.</p>
+
+                <div class="overflow-x-auto mb-6">
+                    <table class="w-full text-left border-collapse bg-white shadow-sm rounded-lg overflow-hidden">
+                        <thead class="bg-montano-green text-white">
+                            <tr>
+                                <th class="p-3">Criterio Avanzado</th>
+                                <th class="p-3">Evidencia Observable</th>
+                                <th class="p-3">Instrumento</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-sm">
+                            <tr class="border-b">
+                                <td class="p-3 font-bold text-montano-blue">Variación compuesta</td>
+                                <td class="p-3">Plantea correctamente proporciones con 3 o más variables.</td>
+                                <td class="p-3">Rúbrica de auditoría</td>
+                            </tr>
+                            <tr class="border-b bg-gray-50">
+                                <td class="p-3 font-bold text-montano-blue">Rigurosidad algebraica</td>
+                                <td class="p-3">Demuestra relaciones proporcionales no lineales.</td>
+                                <td class="p-3">Revisión de expedientes</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-bold text-montano-blue">Hábito 2 (Planificación)</td>
+                                <td class="p-3">Define variables y estructura el modelo antes de operar.</td>
+                                <td class="p-3">Observación directa</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Lista de Cotejo Interactiva Avanzada -->
+                <h3 class="font-bold text-lg text-montano-blue mb-3">Lista de Cotejo para Resolución Grupal Avanzada</h3>
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+                    <table class="w-full text-left border-collapse">
+                        <thead class="bg-gray-100">
+                            <tr>
+                                <th class="p-3 border-b text-sm">Indicador de Desempeño Avanzado</th>
+                                <th class="p-3 border-b text-sm text-center w-24">Sí Cumple</th>
+                                <th class="p-3 border-b text-sm text-center w-24">No Cumple</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-sm">
+                            <tr class="border-b hover:bg-gray-50">
+                                <td class="p-3">1. Identifica y modela correctamente relaciones de proporcionalidad compuesta.</td>
+                                <td class="p-3 text-center"><input type="radio" name="adv1" class="w-4 h-4 text-montano-blue"></td>
+                                <td class="p-3 text-center"><input type="radio" name="adv1" class="w-4 h-4"></td>
+                            </tr>
+                            <tr class="border-b hover:bg-gray-50">
+                                <td class="p-3">2. Incorpore factores de rendimiento o dificultad de manera coherente en la ecuación.</td>
+                                <td class="p-3 text-center"><input type="radio" name="adv2" class="w-4 h-4 text-montano-blue"></td>
+                                <td class="p-3 text-center"><input type="radio" name="adv2" class="w-4 h-4"></td>
+                            </tr>
+                            <tr class="border-b hover:bg-gray-50">
+                                <td class="p-3">3. Argumenta algebraicamente relaciones de variación no lineal (ej. \(y \propto x^2\)).</td>
+                                <td class="p-3 text-center"><input type="radio" name="adv3" class="w-4 h-4 text-montano-blue"></td>
+                                <td class="p-3 text-center"><input type="radio" name="adv3" class="w-4 h-4"></td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-3">4. Aplica el Hábito 2 estableciendo una estrategia clara previa al cálculo numérico.</td>
+                                <td class="p-3 text-center"><input type="radio" name="adv4" class="w-4 h-4 text-montano-blue"></td>
+                                <td class="p-3 text-center"><input type="radio" name="adv4" class="w-4 h-4"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        // Lógica de Pestañas
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(el => {
+                el.classList.remove('bg-montano-blue', 'text-white', 'active');
+                el.classList.add('bg-gray-200', 'text-gray-700');
+            });
+            
+            document.getElementById(tabId).classList.remove('hidden');
+            
+            const btn = document.getElementById('btn-' + tabId);
+            btn.classList.remove('bg-gray-200', 'text-gray-700');
+            btn.classList.add('bg-montano-blue', 'text-white', 'active');
+
+            // Renderizar LaTeX al cambiar de pestaña
+            if (window.MathJax) {
+                MathJax.typesetPromise();
+            }
+        }
+
+        // Lógica para solución oculta
+        function toggleSolution(solId) {
+            const el = document.getElementById(solId);
+            if (el.classList.contains('hidden')) {
+                el.classList.remove('hidden');
+                if (window.MathJax) {
+                    MathJax.typesetPromise([el]);
+                }
+            } else {
+                el.classList.add('hidden');
+            }
+        }
+
+        // Pantalla Completa
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    console.log(`Error al intentar pantalla completa: ${err.message}`);
+                });
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
+        }
+    </script>
+</body>
+</html>

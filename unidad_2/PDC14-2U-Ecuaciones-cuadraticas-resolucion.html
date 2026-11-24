@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pizarra Digital - Unidad II - Plan 14: Ecuaciones Cuadráticas (Métodos de Solución)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- MathJax 3 para renderizado de expresiones LaTeX -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)']],
+                displayMath: [['\\[', '\\]']]
+            },
+            startup: {
+                pageReady: () => {
+                    return MathJax.startup.defaultPageReady().then(() => {
+                        console.log('MathJax equations ready for Plan 14.');
+                    });
+                }
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        montano: {
+                            blue: '#1269A8',
+                            yellow: '#F7D615',
+                            green: '#54887D',
+                            lightblue: '#88B5C7',
+                            olive: '#A6B046',
+                            bg: '#F2F5E9'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Segoe UI', 'Tahoma', 'Verdana', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Verdana, sans-serif; }
+        .fade-in { animation: fadeIn 0.4s ease-in-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .custom-scrollbar::-webkit-scrollbar { width: 8px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #F2F5E9; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #88B5C7; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #1269A8; }
+    </style>
+</head>
+<body class="bg-montano-bg text-gray-800 h-screen flex flex-col overflow-hidden custom-scrollbar">
+
+    <!-- Encabezado unificado estilo visual Montano (4 columnas exactas) -->
+    <header class="bg-montano-blue shadow-md relative z-10 flex-shrink-0">
+        <div class="container mx-auto px-4 py-3 flex justify-start items-center gap-12">    
+
+            <!-- 1. Izquierda: Escudo independiente -->
+            <div class="flex-shrink-0 flex items-center justify-center">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyEop0yf6lZ7Jk9MILZxF1rBj4Oqs5esyhIQ&s"
+                     alt="Escudo Colegio Montano"
+                     class="h-24 md:h-28 w-auto object-contain">
+            </div>
+
+            <!-- 2. Información académica -->
+            <div class="flex flex-col text-white justify-center flex-shrink-0">
+                <span class="text-xl md:text-2xl font-extrabold text-montano-yellow tracking-wider drop-shadow-sm whitespace-nowrap mb-0.5">
+                    COLEGIO MONTANO
+                </span>
+                <h1 class="text-base md:text-lg font-bold leading-tight text-gray-100">
+                    Matemática - 3ro Básico (Nivel Alto)
+                </h1>
+                <h2 class="text-xs md:text-sm font-medium mt-0.5 text-gray-200">
+                    Docente: PEM Bairon Duarte
+                </h2>
+                <h3 class="text-xs md:text-sm text-gray-200">
+                    Tema: Resolución de Ecuaciones Cuadráticas
+                </h3>
+            </div>
+
+            <!-- 3. Centro: Identificación del plan -->
+            <div class="flex flex-col items-center justify-center bg-white border-l-4 border-montano-yellow px-4 md:px-6 py-1.5 rounded-r-md shadow-sm text-center flex-shrink-0">
+                <span class="text-base md:text-lg font-extrabold text-montano-blue tracking-wide">
+                    U2 - Plan 14
+                </span>
+                <span class="text-[11px] md:text-xs font-bold text-gray-700">
+                    Unidad II
+                </span>
+                <span class="text-[10px] md:text-[11px] text-gray-500">
+                    Álgebra de Baldor Cap. XXXIII
+                </span>
+            </div>
+
+            <!-- 4. Derecha: Pantalla completa -->
+            <button onclick="toggleFullscreen()"
+                    class="bg-montano-yellow text-montano-blue font-bold px-3 py-1.5 md:px-4 md:py-2 text-xs md:text-sm rounded shadow hover:bg-yellow-400 transition-colors flex items-center gap-2 flex-shrink-0">
+                <i class="fas fa-expand"></i>
+                <span>Pantalla Completa</span>
+            </button>
+
+        </div>
+    </header>
+
+    <!-- Navegación de Pestañas -->
+    <nav class="container mx-auto px-4 mt-4 flex-shrink-0">
+        <ul class="flex flex-wrap gap-2 justify-center md:justify-start" id="tabs-nav">
+            <li>
+                <button onclick="switchTab('tab-info')" id="btn-tab-info" class="tab-btn active px-4 py-2 rounded-t-lg font-bold bg-montano-blue text-white transition-colors border-b-0">
+                    <i class="fas fa-info-circle mr-1"></i> Foco Pedagógico
+                </button>
+            </li>
+            <li>
+                <button onclick="switchTab('tab-1')" id="btn-tab-1" class="tab-btn px-4 py-2 rounded-t-lg font-bold bg-gray-200 text-gray-700 hover:bg-montano-lightblue hover:text-white transition-colors">
+                    <i class="fas fa-rocket mr-1"></i> I. Motivación
+                </button>
+            </li>
+            <li>
+                <button onclick="switchTab('tab-2')" id="btn-tab-2" class="tab-btn px-4 py-2 rounded-t-lg font-bold bg-gray-200 text-gray-700 hover:bg-montano-lightblue hover:text-white transition-colors">
+                    <i class="fas fa-user-edit mr-1"></i> II. Exposición y Modelado
+                </button>
+            </li>
+            <li>
+                <button onclick="switchTab('tab-3')" id="btn-tab-3" class="tab-btn px-4 py-2 rounded-t-lg font-bold bg-gray-200 text-gray-700 hover:bg-montano-lightblue hover:text-white transition-colors">
+                    <i class="fas fa-users mr-1"></i> III. Trabajo Grupal
+                </button>
+            </li>
+            <li>
+                <button onclick="switchTab('tab-4')" id="btn-tab-4" class="tab-btn px-4 py-2 rounded-t-lg font-bold bg-gray-200 text-gray-700 hover:bg-montano-lightblue hover:text-white transition-colors">
+                    <i class="fas fa-chalkboard-teacher mr-1"></i> IV. Plenaria y Cierre
+                </button>
+            </li>
+            <li>
+                <button onclick="switchTab('tab-eval')" id="btn-tab-eval" class="tab-btn px-4 py-2 rounded-t-lg font-bold bg-gray-200 text-gray-700 hover:bg-montano-olive hover:text-white transition-colors">
+                    <i class="fas fa-clipboard-check mr-1"></i> Evaluación
+                </button>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Contenedor Principal (Área de Pizarra) -->
+    <main class="container mx-auto px-4 pb-6 flex-grow overflow-auto custom-scrollbar">
+        <div class="bg-white shadow-lg rounded-b-lg rounded-tr-lg p-6 min-h-full border-t-4 border-montano-blue">
+            
+            <!-- PESTAÑA: Foco Pedagógico -->
+            <div id="tab-info" class="tab-content fade-in">
+                <h2 class="text-2xl font-bold text-montano-blue border-b-2 border-montano-yellow pb-2 mb-4">Unidad II - Plan 14: Resolución de Ecuaciones Cuadráticas</h2>
+                
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-blue-50 p-4 rounded-xl border border-blue-100 shadow-sm">
+                        <h3 class="font-bold text-lg text-montano-blue mb-2"><i class="fas fa-bullseye"></i> Competencia Institucional de Referencia</h3>
+                        <p class="mb-3 text-sm text-gray-700">«Resuelve situaciones problema de carácter formal que demandan el dominio del pensamiento lógico matemático y las operaciones matemáticas de aritmética y álgebra en los conjuntos numéricos reales y complejos».</p>
+                        
+                        <h3 class="font-bold text-lg text-montano-blue mb-2"><i class="fas fa-chart-line"></i> Objetivo Observable</h3>
+                        <p class="text-sm text-gray-700">Resolver ecuaciones cuadráticas seleccionando entre factorización, extracción de raíz cuadrada y fórmula general; justificar el procedimiento elegido y comprobar las soluciones mediante sustitución.</p>
+                    </div>
+
+                    <div class="bg-green-50 p-4 rounded-xl border border-green-100 shadow-sm">
+                        <h3 class="font-bold text-lg text-montano-green mb-2"><i class="fas fa-seedling"></i> Modelo Formativo Montano</h3>
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="bg-montano-olive text-white px-3 py-1 rounded-full font-bold text-sm">Hábito 1</span>
+                            <span class="font-bold text-gray-700">Ser proactivo.</span>
+                        </div>
+                        <p class="text-sm text-gray-600 italic mb-4">Conducta observable: el estudiante decide qué estrategia utilizar, anticipa posibles errores de signo y comprueba por iniciativa propia las soluciones antes de entregar.</p>
+                        
+                        <h3 class="font-bold text-lg text-montano-green mb-2"><i class="fas fa-tools"></i> Recursos</h3>
+                        <ul class="list-disc list-inside text-sm text-gray-700 space-y-1">
+                            <li>Pizarra y marcadores.</li>
+                            <li>Guía impresa con los cuatro casos grupales.</li>
+                            <li>Álgebra de Aurelio Baldor (Cap. XXXIII).</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PESTAÑA I: Motivación -->
+            <div id="tab-1" class="tab-content fade-in hidden">
+                <div class="flex justify-between items-center mb-4 border-b-2 border-montano-yellow pb-2">
+                    <h2 class="text-2xl font-bold text-montano-blue">I. Motivación Inicial (~10 min)</h2>
+                    <span class="bg-montano-lightblue text-white px-3 py-1 rounded-full text-sm font-bold"><i class="far fa-clock"></i> 10 min</span>
+                </div>
+
+                <div class="bg-yellow-50 p-5 rounded-xl border-l-4 border-montano-yellow mb-6 shadow-sm">
+                    <h3 class="text-xl font-bold text-gray-800 mb-3"><i class="fas fa-question-circle text-montano-yellow"></i> Reto Detonante: Producto Nulo</h3>
+                    <p class="text-base mb-3">Considera la ecuación \(x^2 - 7x + 12 = 0\).</p>
+                    <p class="text-sm text-gray-700 mb-3"><strong>Preguntas orientadoras:</strong> ¿Cómo podemos encontrar dos números cuyo producto sea 12 y cuya suma sea \(-7\)? ¿Por qué se iguala cada factor a cero en la expresión \((x - 3)(x - 4) = 0\)? ¿Cómo verificamos que las respuestas funcionan?</p>
+                    <button onclick="toggleSolution('sol-mot')" class="bg-montano-yellow text-montano-blue font-bold text-xs px-3 py-2 rounded shadow hover:bg-yellow-400 transition">
+                        <i class="fas fa-eye mr-1"></i> Ver Reflexión Inicial
+                    </button>
+                    <div id="sol-mot" class="hidden mt-3 p-3 bg-white rounded border border-yellow-200 text-sm space-y-2">
+                        <p>Si el producto de dos factores es cero, al menos uno de ellos debe ser cero. Esto permite separar la ecuación en dos ecuaciones lineales sencillas: \(x - 3 = 0\) y \(x - 4 = 0\).</p>
+                    </div>
+                </div>
+
+                <div class="text-center bg-gray-50 p-4 rounded-lg border border-gray-200">
+                    <p class="font-bold text-montano-blue"><i class="fas fa-lightbulb text-montano-yellow"></i> Hábito 1 en acción:</p>
+                    <p class="text-sm text-gray-700">Tomar la iniciativa para buscar factores y comprobar las raíces de forma autónoma.</p>
+                </div>
+            </div>
+
+            <!-- PESTAÑA II: Exposición y Modelado -->
+            <div id="tab-2" class="tab-content fade-in hidden">
+                <div class="flex justify-between items-center mb-4 border-b-2 border-montano-yellow pb-2">
+                    <h2 class="text-2xl font-bold text-montano-blue">II. Exposición Magistral y Trabajo Individual Guiado (~20 min)</h2>
+                    <span class="bg-montano-lightblue text-white px-3 py-1 rounded-full text-sm font-bold"><i class="far fa-clock"></i> 20 min</span>
+                </div>
+
+                <div class="mb-6 space-y-4">
+                    <div class="grid md:grid-cols-3 gap-4">
+                        <div class="bg-blue-50 p-4 rounded-xl border border-blue-100">
+                            <h4 class="font-bold text-montano-blue mb-2"><i class="fas fa-th"></i> 1. Factorización</h4>
+                            <p class="text-xs mb-2">Se descompone el trinomio en factores y se aplica el producto nulo.</p>
+                            <p class="text-xs font-mono bg-white p-2 rounded">\(x^2 - 5x + 6 = 0\)<br>\((x - 2)(x - 3) = 0\)<br>\(x = 2, \; x = 3\)</p>
+                        </div>
+                        <div class="bg-blue-50 p-4 rounded-xl border border-blue-100">
+                            <h4 class="font-bold text-montano-blue mb-2"><i class="fas fa-square-root-alt"></i> 2. Raíz Cuadrada</h4>
+                            <p class="text-xs mb-2">Útil en ecuaciones incompletas del tipo \(ax^2 + c = 0\).</p>
+                            <p class="text-xs font-mono bg-white p-2 rounded">\(3x^2 - 27 = 0\)<br>\(x^2 = 9 \implies x = \pm 3\)</p>
+                        </div>
+                        <div class="bg-blue-50 p-4 rounded-xl border border-blue-100">
+                            <h4 class="font-bold text-montano-blue mb-2"><i class="fas fa-calculator"></i> 3. Fórmula General</h4>
+                            <p class="text-xs mb-2">Aplica para cualquier ecuación en forma \(ax^2 + bx + c = 0\).</p>
+                            <p class="text-xs font-mono bg-white p-2 rounded">\(x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}\)</p>
+                        </div>
+                    </div>
+
+                    <!-- Práctica Individual Guiada -->
+                    <div class="bg-gray-50 p-4 rounded-lg border space-y-3">
+                        <h4 class="font-bold text-montano-blue">Práctica Individual Guiada</h4>
+                        <p class="text-sm">Resuelve y comprueba: A) \(x^2 - 9x + 20 = 0\); B) \(5x^2 - 45 = 0\).</p>
+                        <button onclick="toggleSolution('sol-indiv')" class="bg-montano-blue text-white text-xs px-3 py-1.5 rounded font-bold hover:bg-blue-700 transition">
+                            <i class="fas fa-eye mr-1"></i> Ver Solución / Orientación
+                        </button>
+                        <div id="sol-indiv" class="hidden mt-3 p-3 bg-white rounded border border-blue-200 text-sm space-y-1">
+                            <p>• A) \((x - 4)(x - 5) = 0 \implies x = 4, \; x = 5\).</p>
+                            <p>• B) \(5x^2 = 45 \implies x^2 = 9 \implies x = \pm 3\).</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PESTAÑA III: Trabajo Grupal -->
+            <div id="tab-3" class="tab-content fade-in hidden">
+                <div class="flex justify-between items-center mb-4 border-b-2 border-montano-yellow pb-2">
+                    <h2 class="text-2xl font-bold text-montano-blue">III. Trabajo Grupal: Clínica de Métodos (~25 min)</h2>
+                    <span class="bg-montano-lightblue text-white px-3 py-1 rounded-full text-sm font-bold"><i class="far fa-clock"></i> 25 min</span>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="md:col-span-2 bg-yellow-50 p-5 rounded-xl border border-montano-yellow shadow-sm space-y-3">
+                        <h3 class="text-lg font-bold text-gray-800"><i class="fas fa-users text-montano-yellow"></i> Casos de Estudio</h3>
+                        <p class="text-sm text-gray-700">Para cada caso: (i) ordenen en forma general; (ii) elijan el método más eficiente justificándolo; (iii) resuelvan; (iv) comprueben por sustitución:</p>
+                        <div class="grid grid-cols-2 gap-2 text-xs font-mono bg-white p-3 rounded border">
+                            <div>Caso A: \(x^2 - 2x - 15 = 0\)</div>
+                            <div>Caso B: \(4x^2 - 100 = 0\)</div>
+                            <div>Caso C: \(3x^2 + x - 4 = 0\)</div>
+                            <div>Caso D: \(2x^2 + 3x - 7 = 0\)</div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-montano-blue text-white p-5 rounded-xl shadow-md flex flex-col justify-between">
+                        <div>
+                            <h4 class="font-bold text-montano-yellow mb-3 border-b border-white/20 pb-2"><i class="fas fa-tasks"></i> Producto Verificable</h4>
+                            <p class="text-sm mb-2">Hoja de resolución con método seleccionado, desarrollo, raíces y comprobación.</p>
+                        </div>
+                        <div class="bg-white/10 p-3 rounded-lg text-xs mt-4">
+                            <strong>Hábito 1:</strong> Tomar la iniciativa para anticipar errores de signo y verificar raíces.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PESTAÑA IV: Plenaria -->
+            <div id="tab-4" class="tab-content fade-in hidden">
+                <div class="flex justify-between items-center mb-4 border-b-2 border-montano-yellow pb-2">
+                    <h2 class="text-2xl font-bold text-montano-blue">IV. Plenaria y Cierre (~15 min)</h2>
+                    <span class="bg-montano-lightblue text-white px-3 py-1 rounded-full text-sm font-bold"><i class="far fa-clock"></i> 15 min</span>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6 mb-6">
+                    <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
+                        <h3 class="text-lg font-bold text-montano-blue mb-3"><i class="fas fa-microphone-alt"></i> Errores Frecuentes a Evitar</h3>
+                        <ul class="list-disc list-inside text-sm space-y-1 text-gray-700 mb-3">
+                            <li>Omitir el signo \(\pm\) al extraer raíz cuadrada.</li>
+                            <li>Cambiar incorrectamente el signo de \(b\) en la fórmula general.</li>
+                            <li>Olvidar dividir todo el numerador entre \(2a\).</li>
+                            <li>No comprobar las raíces en la ecuación original.</li>
+                        </ul>
+                        <div class="bg-blue-50 p-3 rounded-lg text-sm border-l-4 border-montano-blue">
+                            <strong class="block mb-1">Metacognición:</strong>
+                            <p class="text-xs text-gray-700">¿Qué característica de una ecuación te ayuda a elegir el método de resolución?</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-gradient-to-br from-montano-blue to-montano-lightblue text-white p-5 rounded-xl shadow-sm flex flex-col justify-center items-center text-center">
+                        <i class="fas fa-check-double text-4xl text-montano-yellow mb-3"></i>
+                        <h3 class="text-lg font-bold mb-2">Dominio Algebraico</h3>
+                        <p class="text-sm mb-4">Preparación lista para la aplicación de problemas del Plan 15.</p>
+                    </div>
+                </div>
+
+                <!-- Ticket de Salida -->
+                <div class="bg-yellow-50 p-5 rounded-xl border border-montano-yellow shadow-sm">
+                    <h3 class="font-bold text-lg text-gray-800 mb-3"><i class="fas fa-ticket-alt text-montano-yellow"></i> Ticket de Salida Individual</h3>
+                    <p class="text-sm text-gray-700 mb-3">Resuelve \(x^2 - 6x + 8 = 0\) por factorización y comprueba ambas raíces por sustitución.</p>
+                    <p class="text-xs text-gray-600 italic border-t border-yellow-200 pt-2"><strong>Respuesta esperada:</strong> \((x - 2)(x - 4) = 0 \implies x = 2, \; x = 4\).</p>
+                </div>
+            </div>
+
+            <!-- PESTAÑA EVALUACIÓN -->
+            <div id="tab-eval" class="tab-content fade-in hidden">
+                <div class="flex justify-between items-center mb-4 border-b-2 border-montano-yellow pb-2">
+                    <h2 class="text-2xl font-bold text-montano-blue">Instrumentos de Evaluación</h2>
+                </div>
+
+                <p class="mb-4 text-sm text-gray-700"><strong>Criterio de evaluación:</strong> Resuelve ecuaciones cuadráticas seleccionando métodos pertinentes (factorización, raíz cuadrada o fórmula general), desarrolla procedimientos algebraicos sin errores y comprueba las raíces mediante sustitución.</p>
+
+                <div class="overflow-x-auto mb-6">
+                    <table class="w-full text-left border-collapse bg-white shadow-sm rounded-lg overflow-hidden">
+                        <thead class="bg-montano-green text-white">
+                            <tr>
+                                <th class="p-3">Evidencia Observable</th>
+                                <th class="p-3">Instrumento</th>
+                                <th class="p-3">Aspectos por Verificar</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-sm">
+                            <tr class="border-b">
+                                <td class="p-3">Selecciona un método pertinente.</td>
+                                <td class="p-3 font-bold text-montano-blue">Lista de cotejo</td>
+                                <td class="p-3">Justifica la elección según la estructura de la ecuación.</td>
+                            </tr>
+                            <tr class="border-b bg-gray-50">
+                                <td class="p-3">Desarrolla el procedimiento correctamente.</td>
+                                <td class="p-3 font-bold text-montano-blue">Hoja de trabajo</td>
+                                <td class="p-3">Factoriza, despeja o sustituye coeficientes sin errores de signo.</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3">Comprueba las soluciones.</td>
+                                <td class="p-3 font-bold text-montano-blue">Ticket de salida</td>
+                                <td class="p-3">Sustituye cada raíz en la ecuación original y obtiene igualdad.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Lista de Cotejo Interactiva -->
+                <h3 class="font-bold text-lg text-montano-blue mb-3">Lista de Cotejo para Plenaria (Trabajo en Equipo)</h3>
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+                    <table class="w-full text-left border-collapse">
+                        <thead class="bg-gray-100">
+                            <tr>
+                                <th class="p-3 border-b text-sm">Criterio a Evaluar</th>
+                                <th class="p-3 border-b text-sm text-center w-24">Sí Cumple</th>
+                                <th class="p-3 border-b text-sm text-center w-24">No Cumple</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-sm">
+                            <tr class="border-b hover:bg-gray-50">
+                                <td class="p-3">1. Selecciona el método de resolución más eficiente según la ecuación.</td>
+                                <td class="p-3 text-center"><input type="radio" name="crit1" class="w-4 h-4 text-montano-blue"></td>
+                                <td class="p-3 text-center"><input type="radio" name="crit1" class="w-4 h-4"></td>
+                            </tr>
+                            <tr class="border-b hover:bg-gray-50">
+                                <td class="p-3">2. Ejecuta correctamente el procedimiento algebraico elegido.</td>
+                                <td class="p-3 text-center"><input type="radio" name="crit2" class="w-4 h-4 text-montano-blue"></td>
+                                <td class="p-3 text-center"><input type="radio" name="crit2" class="w-4 h-4"></td>
+                            </tr>
+                            <tr class="border-b hover:bg-gray-50">
+                                <td class="p-3">3. Determina todas las raíces reales posibles sin omitir soluciones.</td>
+                                <td class="p-3 text-center"><input type="radio" name="crit3" class="w-4 h-4 text-montano-blue"></td>
+                                <td class="p-3 text-center"><input type="radio" name="crit3" class="w-4 h-4"></td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-3">4. Comprueba las raíces mediante sustitución en la ecuación original.</td>
+                                <td class="p-3 text-center"><input type="radio" name="crit4" class="w-4 h-4 text-montano-blue"></td>
+                                <td class="p-3 text-center"><input type="radio" name="crit4" class="w-4 h-4"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        // Lógica de Pestañas
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(el => {
+                el.classList.remove('bg-montano-blue', 'text-white', 'active');
+                el.classList.add('bg-gray-200', 'text-gray-700');
+            });
+            
+            document.getElementById(tabId).classList.remove('hidden');
+            
+            const btn = document.getElementById('btn-' + tabId);
+            btn.classList.remove('bg-gray-200', 'text-gray-700');
+            btn.classList.add('bg-montano-blue', 'text-white', 'active');
+
+            // Renderizar LaTeX al cambiar de pestaña
+            if (window.MathJax) {
+                MathJax.typesetPromise();
+            }
+        }
+
+        // Lógica para solución oculta
+        function toggleSolution(solId) {
+            const el = document.getElementById(solId);
+            if (el.classList.contains('hidden')) {
+                el.classList.remove('hidden');
+                if (window.MathJax) {
+                    MathJax.typesetPromise([el]);
+                }
+            } else {
+                el.classList.add('hidden');
+            }
+        }
+
+        // Pantalla Completa
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    console.log(`Error al intentar pantalla completa: ${err.message}`);
+                });
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
+        }
+    </script>
+</body>
+</html>

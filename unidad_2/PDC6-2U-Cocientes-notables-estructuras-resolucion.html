@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pizarra Digital - Unidad II - Plan 6: Cocientes Notables</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- MathJax 3 para renderizado de expresiones LaTeX -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)']],
+                displayMath: [['\\[', '\\]']]
+            },
+            startup: {
+                pageReady: () => {
+                    return MathJax.startup.defaultPageReady().then(() => {
+                        console.log('MathJax initial quotients mockup ready.');
+                    });
+                }
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        montano: {
+                            blue: '#1269A8',
+                            yellow: '#F7D615',
+                            green: '#54887D',
+                            lightblue: '#88B5C7',
+                            olive: '#A6B046',
+                            bg: '#F2F5E9'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Segoe UI', 'Tahoma', 'Verdana', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Verdana, sans-serif; }
+        .fade-in { animation: fadeIn 0.4s ease-in-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .custom-scrollbar::-webkit-scrollbar { width: 8px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #F2F5E9; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #88B5C7; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #1269A8; }
+    </style>
+</head>
+<body class="bg-montano-bg text-gray-800 h-screen flex flex-col overflow-hidden custom-scrollbar">
+
+    <!-- Encabezado unificado estilo visual Montano (4 columnas exactas) -->
+    <header class="bg-montano-blue shadow-md relative z-10 flex-shrink-0">
+        <div class="container mx-auto px-4 py-3 flex justify-start items-center gap-12">    
+
+            <!-- 1. Izquierda: Escudo independiente -->
+            <div class="flex-shrink-0 flex items-center justify-center">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyEop0yf6lZ7Jk9MILZxF1rBj4Oqs5esyhIQ&s"
+                     alt="Escudo Colegio Montano"
+                     class="h-24 md:h-28 w-auto object-contain">
+            </div>
+
+            <!-- 2. Información académica -->
+            <div class="flex flex-col text-white justify-center flex-shrink-0">
+                <span class="text-xl md:text-2xl font-extrabold text-montano-yellow tracking-wider drop-shadow-sm whitespace-nowrap mb-0.5">
+                    COLEGIO MONTANO
+                </span>
+                <h1 class="text-base md:text-lg font-bold leading-tight text-gray-100">
+                    Matemática - 3ro Básico (Nivel Alto)
+                </h1>
+                <h2 class="text-xs md:text-sm font-medium mt-0.5 text-gray-200">
+                    Docente: PEM Bairon Duarte
+                </h2>
+                <h3 class="text-xs md:text-sm text-gray-200">
+                    Tema: Cocientes Notables: Estructuras y Resolución
+                </h3>
+            </div>
+
+            <!-- 3. Centro: Identificación del plan -->
+            <div class="flex flex-col items-center justify-center bg-white border-l-4 border-montano-yellow px-4 md:px-6 py-1.5 rounded-r-md shadow-sm text-center flex-shrink-0">
+                <span class="text-base md:text-lg font-extrabold text-montano-blue tracking-wide">
+                    U2 - Plan 6
+                </span>
+                <span class="text-[11px] md:text-xs font-bold text-gray-700">
+                    Semana 14
+                </span>
+                <span class="text-[10px] md:text-[11px] text-gray-500">
+                    26 - 30 abr 2027
+                </span>
+            </div>
+
+            <!-- 4. Derecha: Pantalla completa -->
+            <button onclick="toggleFullscreen()"
+                    class="bg-montano-yellow text-montano-blue font-bold px-3 py-1.5 md:px-4 md:py-2 text-xs md:text-sm rounded shadow hover:bg-yellow-400 transition-colors flex items-center gap-2 flex-shrink-0">
+                <i class="fas fa-expand"></i>
+                <span>Pantalla Completa</span>
+            </button>
+
+        </div>
+    </header>
+
+    <!-- Navegación de Pestañas -->
+    <nav class="container mx-auto px-4 mt-4 flex-shrink-0">
+        <ul class="flex flex-wrap gap-2 justify-center md:justify-start" id="tabs-nav">
+            <li>
+                <button onclick="switchTab('tab-info')" id="btn-tab-info" class="tab-btn active px-4 py-2 rounded-t-lg font-bold bg-montano-blue text-white transition-colors border-b-0">
+                    <i class="fas fa-info-circle mr-1"></i> Foco Pedagógico
+                </button>
+            </li>
+            <li>
+                <button onclick="switchTab('tab-1')" id="btn-tab-1" class="tab-btn px-4 py-2 rounded-t-lg font-bold bg-gray-200 text-gray-700 hover:bg-montano-lightblue hover:text-white transition-colors">
+                    <i class="fas fa-rocket mr-1"></i> I. Motivación
+                </button>
+            </li>
+            <li>
+                <button onclick="switchTab('tab-2')" id="btn-tab-2" class="tab-btn px-4 py-2 rounded-t-lg font-bold bg-gray-200 text-gray-700 hover:bg-montano-lightblue hover:text-white transition-colors">
+                    <i class="fas fa-user-edit mr-1"></i> II. Exposición y Modelado
+                </button>
+            </li>
+            <li>
+                <button onclick="switchTab('tab-3')" id="btn-tab-3" class="tab-btn px-4 py-2 rounded-t-lg font-bold bg-gray-200 text-gray-700 hover:bg-montano-lightblue hover:text-white transition-colors">
+                    <i class="fas fa-users mr-1"></i> III. Trabajo Grupal
+                </button>
+            </li>
+            <li>
+                <button onclick="switchTab('tab-4')" id="btn-tab-4" class="tab-btn px-4 py-2 rounded-t-lg font-bold bg-gray-200 text-gray-700 hover:bg-montano-lightblue hover:text-white transition-colors">
+                    <i class="fas fa-chalkboard-teacher mr-1"></i> IV. Plenaria y Cierre
+                </button>
+            </li>
+            <li>
+                <button onclick="switchTab('tab-eval')" id="btn-tab-eval" class="tab-btn px-4 py-2 rounded-t-lg font-bold bg-gray-200 text-gray-700 hover:bg-montano-olive hover:text-white transition-colors">
+                    <i class="fas fa-clipboard-check mr-1"></i> Evaluación
+                </button>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Contenedor Principal (Área de Pizarra) -->
+    <main class="container mx-auto px-4 pb-6 flex-grow overflow-auto custom-scrollbar">
+        <div class="bg-white shadow-lg rounded-b-lg rounded-tr-lg p-6 min-h-full border-t-4 border-montano-blue">
+            
+            <!-- PESTAÑA: Foco Pedagógico -->
+            <div id="tab-info" class="tab-content fade-in">
+                <h2 class="text-2xl font-bold text-montano-blue border-b-2 border-montano-yellow pb-2 mb-4">Unidad II - Plan 6: Cocientes Notables (Estructuras y Resolución)</h2>
+                
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-blue-50 p-4 rounded-xl border border-blue-100 shadow-sm">
+                        <h3 class="font-bold text-lg text-montano-blue mb-2"><i class="fas fa-bullseye"></i> Competencia Institucional de Referencia</h3>
+                        <p class="mb-3 text-sm text-gray-700">«Resuelve situaciones problema de carácter formal que demandan el dominio del pensamiento lógico matemático y las operaciones matemáticas de aritmética y álgebra en los conjuntos numéricos reales y complejos».</p>
+                        
+                        <h3 class="font-bold text-lg text-montano-blue mb-2"><i class="fas fa-chart-line"></i> Objetivo de Aprendizaje</h3>
+                        <p class="text-sm text-gray-700">Identificar la estructura de cocientes notables y determinar sus resultados por simple inspección, aplicando reglas de diferencia de cuadrados y suma/diferencia de cubos, respetando restricciones y comprobando mediante factorización.</p>
+                    </div>
+
+                    <div class="bg-green-50 p-4 rounded-xl border border-green-100 shadow-sm">
+                        <h3 class="font-bold text-lg text-montano-green mb-2"><i class="fas fa-seedling"></i> Modelo Formativo Montano</h3>
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="bg-montano-olive text-white px-3 py-1 rounded-full font-bold text-sm">Hábito 1</span>
+                            <span class="font-bold text-gray-700">Ser proactivo.</span>
+                        </div>
+                        <p class="text-sm text-gray-600 italic mb-4">Conducta observable: antes de resolver, el estudiante identifica la estructura y decide qué regla aplicar; verifica que el divisor no sea cero y comprueba el resultado sin esperar que el docente le señale posibles errores.</p>
+                        
+                        <h3 class="font-bold text-lg text-montano-green mb-2"><i class="fas fa-tools"></i> Recursos</h3>
+                        <ul class="list-disc list-inside text-sm text-gray-700 space-y-1">
+                            <li>Pizarra y marcadores.</li>
+                            <li>Cuaderno de Matemática y ficha de clínica de cocientes.</li>
+                            <li>Álgebra de Aurelio Baldor (Sección II: Cocientes notables).</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PESTAÑA I: Motivación -->
+            <div id="tab-1" class="tab-content fade-in hidden">
+                <div class="flex justify-between items-center mb-4 border-b-2 border-montano-yellow pb-2">
+                    <h2 class="text-2xl font-bold text-montano-blue">I. Motivación Inicial (~10 min)</h2>
+                    <span class="bg-montano-lightblue text-white px-3 py-1 rounded-full text-sm font-bold"><i class="far fa-clock"></i> 10 min</span>
+                </div>
+
+                <div class="bg-yellow-50 p-5 rounded-xl border-l-4 border-montano-yellow mb-6 shadow-sm">
+                    <h3 class="text-xl font-bold text-gray-800 mb-3"><i class="fas fa-question-circle text-montano-yellow"></i> Reto de Inspección Directa</h3>
+                    <p class="text-base mb-3">El docente escribe en la pizarra \(\frac{x^2 - 25}{x - 5}\) y \(\frac{x^3 + 8}{x + 2}\). Pregunta si es necesario realizar una división larga para encontrar cada cociente.</p>
+                    <div class="bg-white p-4 rounded-lg shadow-sm border text-sm space-y-2 mb-4">
+                        <p><strong>Preguntas orientadoras:</strong></p>
+                        <p>• ¿Qué relación existe entre el numerador y el divisor?</p>
+                        <p>• ¿Cómo reconocemos una diferencia de cuadrados o cubos?</p>
+                        <p>• ¿Por qué debemos comprobar que el divisor no sea cero?</p>
+                    </div>
+                    <button onclick="toggleSolution('sol-mot')" class="bg-montano-yellow text-montano-blue font-bold text-xs px-3 py-2 rounded shadow hover:bg-yellow-400 transition">
+                        <i class="fas fa-eye mr-1"></i> Ver Pistas de Inspección
+                    </button>
+                    <div id="sol-mot" class="hidden mt-3 p-3 bg-white rounded border border-yellow-200 text-sm space-y-2">
+                        <p>Observar los exponentes y verificar que las bases del divisor reconstruyan exactamente los términos del numerador al elevarlos al cuadrado o cubo.</p>
+                    </div>
+                </div>
+
+                <div class="text-center bg-gray-50 p-4 rounded-lg border border-gray-200">
+                    <p class="font-bold text-montano-blue"><i class="fas fa-lightbulb text-montano-yellow"></i> Hábito 1 en acción:</p>
+                    <p class="text-sm text-gray-700">Clasificar la expresión antes de operar y señalar qué condición de existencia debe verificar.</p>
+                </div>
+            </div>
+
+            <!-- PESTAÑA II: Exposición y Modelado -->
+            <div id="tab-2" class="tab-content fade-in hidden">
+                <div class="flex justify-between items-center mb-4 border-b-2 border-montano-yellow pb-2">
+                    <h2 class="text-2xl font-bold text-montano-blue">II. Exposición Magistral y Trabajo Individual Guiado (~20 min)</h2>
+                    <span class="bg-montano-lightblue text-white px-3 py-1 rounded-full text-sm font-bold"><i class="far fa-clock"></i> 20 min</span>
+                </div>
+
+                <div class="mb-6 space-y-4">
+                    <div class="grid md:grid-cols-3 gap-4">
+                        <div class="bg-blue-50 p-4 rounded-xl border border-blue-100">
+                            <h4 class="font-bold text-montano-blue mb-2"><i class="fas fa-divide"></i> Diferencia de Cuadrados</h4>
+                            <p class="text-xs mb-1">\(\frac{A^2 - B^2}{A + B} = A - B\)</p>
+                            <p class="text-xs mb-2">\(\frac{A^2 - B^2}{A - B} = A + B\)</p>
+                            <p class="text-xs text-gray-600">Restricción: Divisor \(\neq 0\).</p>
+                        </div>
+                        <div class="bg-blue-50 p-4 rounded-xl border border-blue-100">
+                            <h4 class="font-bold text-montano-blue mb-2"><i class="fas fa-cube"></i> Suma de Cubos</h4>
+                            <p class="text-xs mb-2">\(\frac{A^3 + B^3}{A + B} = A^2 - AB + B^2\)</p>
+                            <p class="text-xs text-gray-600">Restricción: \(A + B \neq 0\).</p>
+                        </div>
+                        <div class="bg-blue-50 p-4 rounded-xl border border-blue-100">
+                            <h4 class="font-bold text-montano-blue mb-2"><i class="fas fa-cubes"></i> Diferencia de Cubos</h4>
+                            <p class="text-xs mb-2">\(\frac{A^3 - B^3}{A - B} = A^2 + AB + B^2\)</p>
+                            <p class="text-xs text-gray-600">Restricción: \(A - B \neq 0\).</p>
+                        </div>
+                    </div>
+
+                    <!-- Procedimiento y Errores Frecuentes -->
+                    <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+                        <h4 class="font-bold text-amber-800 mb-2"><i class="fas fa-exclamation-triangle"></i> Errores Frecuentes a Prevenir</h4>
+                        <ul class="text-xs space-y-1 text-gray-700 list-disc list-inside">
+                            <li>Confundir suma de cubos con diferencia de cubos (recordar que cambia el signo del término medio \(AB\)).</li>
+                            <li>No identificar correctamente las cantidades base (\(8x^3 = (2x)^3\)).</li>
+                            <li>Omitir la restricción del divisor original.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Práctica Individual Guiada -->
+                    <div class="bg-gray-50 p-4 rounded-lg border space-y-3">
+                        <h4 class="font-bold text-montano-blue">Práctica Individual Guiada</h4>
+                        <p class="text-sm">Resuelve por inspección: a) \(\frac{x^2 - 16}{x + 4}\); b) \(\frac{a^3 + 27}{a + 3}\); c) \(\frac{8p^3 - 125q^3}{2p - 5q}\).</p>
+                        <button onclick="toggleSolution('sol-indiv')" class="bg-montano-blue text-white text-xs px-3 py-1.5 rounded font-bold hover:bg-blue-700 transition">
+                            <i class="fas fa-eye mr-1"></i> Ver Solución / Orientación
+                        </button>
+                        <div id="sol-indiv" class="hidden mt-3 p-3 bg-white rounded border border-blue-200 text-sm space-y-2">
+                            <p>• a) \(x - 4\), con \(x + 4 \neq 0\)</p>
+                            <p>• b) \(a^2 - 3a + 9\), con \(a + 3 \neq 0\)</p>
+                            <p>• c) \(4p^2 + 10pq + 25q^2\), con \(2p - 5q \neq 0\)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PESTAÑA III: Trabajo Grupal -->
+            <div id="tab-3" class="tab-content fade-in hidden">
+                <div class="flex justify-between items-center mb-4 border-b-2 border-montano-yellow pb-2">
+                    <h2 class="text-2xl font-bold text-montano-blue">III. Trabajo Grupal: Clínica de Cocientes Notables (~25 min)</h2>
+                    <span class="bg-montano-lightblue text-white px-3 py-1 rounded-full text-sm font-bold"><i class="far fa-clock"></i> 25 min</span>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="md:col-span-2 bg-yellow-50 p-5 rounded-xl border border-montano-yellow shadow-sm space-y-3">
+                        <h3 class="text-lg font-bold text-gray-800"><i class="fas fa-users text-montano-yellow"></i> Secciones de la Clínica</h3>
+                        <ul class="list-disc list-inside text-sm space-y-2 text-gray-700">
+                            <li><strong>Parte A (Resolución):</strong> \(\frac{x^2 - 49}{x + 7}\); \(\frac{25a^2 - 4b^2}{5a - 2b}\); \(\frac{x^3 + 64}{x + 4}\); \(\frac{64m^3 - 27n^3}{4m - 3n}\).</li>
+                            <li><strong>Parte B (Auditoría):</strong> Un estudiante afirma que \(\frac{a^3 + b^3}{a + b} = a^2 + ab + b^2\). Analicen la afirmación y demuestren el error.</li>
+                            <li><strong>Parte C (Comprobación):</strong> Elijan dos ejercicios de la Parte A, factoricen el numerador, verifiquen el divisor y escriban la restricción.</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-montano-blue text-white p-5 rounded-xl shadow-md flex flex-col justify-between">
+                        <div>
+                            <h4 class="font-bold text-montano-yellow mb-3 border-b border-white/20 pb-2"><i class="fas fa-tasks"></i> Producto Verificable</h4>
+                            <p class="text-sm mb-2">Hoja con cuatro cocientes resueltos, auditoría justificada y comprobaciones con restricciones.</p>
+                        </div>
+                        <div class="bg-white/10 p-3 rounded-lg text-xs mt-4">
+                            <strong>Hábito 1:</strong> Revisar respuestas y registrar al menos una comprobación autónoma.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PESTAÑA IV: Plenaria -->
+            <div id="tab-4" class="tab-content fade-in hidden">
+                <div class="flex justify-between items-center mb-4 border-b-2 border-montano-yellow pb-2">
+                    <h2 class="text-2xl font-bold text-montano-blue">IV. Plenaria y Cierre (~15 min)</h2>
+                    <span class="bg-montano-lightblue text-white px-3 py-1 rounded-full text-sm font-bold"><i class="far fa-clock"></i> 15 min</span>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6 mb-6">
+                    <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
+                        <h3 class="text-lg font-bold text-montano-blue mb-3"><i class="fas fa-microphone-alt"></i> Socialización y Síntesis</h3>
+                        <p class="text-sm text-gray-700 mb-2">Presentación de cocientes de cuadrados y cubos. Análisis de los signos en el término medio \(AB\).</p>
+                        <div class="bg-blue-50 p-3 rounded-lg text-sm border-l-4 border-montano-blue">
+                            <strong class="block mb-1">Metacognición:</strong>
+                            <p class="text-xs text-gray-700">¿Qué indicio te permitió elegir la regla? ¿Qué error sería más probable si no identificas primero \(A\) y \(B\)?</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-gradient-to-br from-montano-blue to-montano-lightblue text-white p-5 rounded-xl shadow-sm flex flex-col justify-center items-center text-center">
+                        <i class="fas fa-flag-checkered text-4xl text-montano-yellow mb-3"></i>
+                        <h3 class="text-lg font-bold mb-2">Cierre del Bloque de Identidades</h3>
+                        <p class="text-sm mb-4">Preparación para el inicio del bloque de ecuaciones en el siguiente plan.</p>
+                    </div>
+                </div>
+
+                <!-- Ticket de Salida -->
+                <div class="bg-yellow-50 p-5 rounded-xl border border-montano-yellow shadow-sm">
+                    <h3 class="font-bold text-lg text-gray-800 mb-3"><i class="fas fa-ticket-alt text-montano-yellow"></i> Ticket de Salida Individual</h3>
+                    <p class="text-sm text-gray-700 mb-3">Resuelve \(\frac{x^3 - 8}{x - 2}\), indica la regla utilizada y la restricción correspondiente.</p>
+                    <p class="text-xs text-gray-600 italic border-t border-yellow-200 pt-2"><strong>Respuesta esperada:</strong> \(x^2 + 2x + 4\), con \(x - 2 \neq 0\) (\(x \neq 2\)).</p>
+                </div>
+            </div>
+
+            <!-- PESTAÑA EVALUACIÓN -->
+            <div id="tab-eval" class="tab-content fade-in hidden">
+                <div class="flex justify-between items-center mb-4 border-b-2 border-montano-yellow pb-2">
+                    <h2 class="text-2xl font-bold text-montano-blue">Instrumentos de Evaluación</h2>
+                </div>
+
+                <p class="mb-4 text-sm text-gray-700"><strong>Criterio de evaluación:</strong> Identifica estructuras de cocientes notables, aplica reglas por simple inspección, respeta restricciones del divisor y comprueba mediante factorización.</p>
+
+                <div class="overflow-x-auto mb-6">
+                    <table class="w-full text-left border-collapse bg-white shadow-sm rounded-lg overflow-hidden">
+                        <thead class="bg-montano-green text-white">
+                            <tr>
+                                <th class="p-3">Evidencia Observable</th>
+                                <th class="p-3">Instrumento</th>
+                                <th class="p-3">Aspectos por Verificar</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-sm">
+                            <tr class="border-b">
+                                <td class="p-3">Reconocimiento de estructuras.</td>
+                                <td class="p-3 font-bold text-montano-blue">Revisión de ejercicios individuales</td>
+                                <td class="p-3">Identifica diferencia de cuadrados y suma/diferencia de cubos.</td>
+                            </tr>
+                            <tr class="border-b bg-gray-50">
+                                <td class="p-3">Aplicación de reglas y restricciones.</td>
+                                <td class="p-3 font-bold text-montano-blue">Clínica grupal</td>
+                                <td class="p-3">Obtiene el cociente correcto y establece el divisor no nulo.</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3">Comprobación y auditoría.</td>
+                                <td class="p-3 font-bold text-montano-blue">Ticket de salida y rúbrica</td>
+                                <td class="p-3">Comprueba por factorización y argumenta reglas.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Lista de Cotejo Interactiva -->
+                <h3 class="font-bold text-lg text-montano-blue mb-3">Lista de Cotejo para Plenaria (Trabajo en Equipo)</h3>
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+                    <table class="w-full text-left border-collapse">
+                        <thead class="bg-gray-100">
+                            <tr>
+                                <th class="p-3 border-b text-sm">Criterio a Evaluar</th>
+                                <th class="p-3 border-b text-sm text-center w-24">Sí Cumple</th>
+                                <th class="p-3 border-b text-sm text-center w-24">No Cumple</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-sm">
+                            <tr class="border-b hover:bg-gray-50">
+                                <td class="p-3">1. Reconoce con precisión las cantidades base A y B del numerador y divisor.</td>
+                                <td class="p-3 text-center"><input type="radio" name="crit1" class="w-4 h-4 text-montano-blue"></td>
+                                <td class="p-3 text-center"><input type="radio" name="crit1" class="w-4 h-4"></td>
+                            </tr>
+                            <tr class="border-b hover:bg-gray-50">
+                                <td class="p-3">2. Aplica la regla de cocientes notables con signos correctos en el término medio.</td>
+                                <td class="p-3 text-center"><input type="radio" name="crit2" class="w-4 h-4 text-montano-blue"></td>
+                                <td class="p-3 text-center"><input type="radio" name="crit2" class="w-4 h-4"></td>
+                            </tr>
+                            <tr class="border-b hover:bg-gray-50">
+                                <td class="p-3">3. Establece explícitamente la restricción de que el divisor original debe ser distinto de cero.</td>
+                                <td class="p-3 text-center"><input type="radio" name="crit3" class="w-4 h-4 text-montano-blue"></td>
+                                <td class="p-3 text-center"><input type="radio" name="crit3" class="w-4 h-4"></td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-3">4. Asume proactividad comprobando resultados por factorización y argumentando en equipo.</td>
+                                <td class="p-3 text-center"><input type="radio" name="crit4" class="w-4 h-4 text-montano-blue"></td>
+                                <td class="p-3 text-center"><input type="radio" name="crit4" class="w-4 h-4"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        // Lógica de Pestañas
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(el => {
+                el.classList.remove('bg-montano-blue', 'text-white', 'active');
+                el.classList.add('bg-gray-200', 'text-gray-700');
+            });
+            
+            document.getElementById(tabId).classList.remove('hidden');
+            
+            const btn = document.getElementById('btn-' + tabId);
+            btn.classList.remove('bg-gray-200', 'text-gray-700');
+            btn.classList.add('bg-montano-blue', 'text-white', 'active');
+
+            // Renderizar LaTeX al cambiar de pestaña
+            if (window.MathJax) {
+                MathJax.typesetPromise();
+            }
+        }
+
+        // Lógica para solución oculta
+        function toggleSolution(solId) {
+            const el = document.getElementById(solId);
+            if (el.classList.contains('hidden')) {
+                el.classList.remove('hidden');
+                if (window.MathJax) {
+                    MathJax.typesetPromise([el]);
+                }
+            } else {
+                el.classList.add('hidden');
+            }
+        }
+
+        // Pantalla Completa
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    console.log(`Error al intentar pantalla completa: ${err.message}`);
+                });
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
+        }
+    </script>
+</body>
+</html>

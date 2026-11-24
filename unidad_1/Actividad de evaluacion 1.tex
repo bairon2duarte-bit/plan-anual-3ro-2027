@@ -1,0 +1,320 @@
+\documentclass[11pt, letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish, es-tabla]{babel}
+\usepackage{amsmath, amsfonts, amssymb}
+\usepackage{graphicx}
+\usepackage[table]{xcolor}
+\usepackage[margin=1.5cm, top=1.2cm, bottom=1.5cm]{geometry}
+\usepackage{array, multirow, tabularx}
+\usepackage{enumitem}
+
+\definecolor{AzulMontano}{HTML}{1269A8}
+\definecolor{AmarilloMontano}{HTML}{F7D615}
+\definecolor{GrisTabla}{HTML}{E0E0E0}
+
+\pagestyle{empty}
+
+\begin{document}
+\renewcommand{\arraystretch}{1.25}
+
+% ================= ENCABEZADO INSTITUCIONAL =================
+\noindent
+\begin{minipage}[c]{0.20\textwidth}
+    \includegraphics[height=1.5cm, keepaspectratio]{logo_colegio.png}
+\end{minipage}%
+\begin{minipage}[c]{0.60\textwidth}
+    \centering
+    {\Large \textbf{\color{AzulMontano} COLEGIO MONTANO}}\\[2pt]
+    {\large \textbf{HOJA DE TRABAJO INDIVIDUAL NO. 1}}
+\end{minipage}%
+\begin{minipage}[c]{0.20\textwidth}
+    \hfill
+\end{minipage}
+
+\vspace{0.3cm}
+
+% ================= TABLA 1: DATOS DE CONTROL =================
+\noindent
+\begin{tabularx}{\textwidth}{|X|c|c|c|c|}
+\hline
+\rowcolor{GrisTabla}
+\textbf{Materia:} Matemática & \textbf{Grado:} Tercero Básico & \textbf{Unidad:} I & \textbf{Tiempo:} 2 semanas & \textbf{Entrega:} 25/01/2027 \\
+\hline
+\end{tabularx}
+
+\vspace{0.2cm}
+
+% ================= TABLA 2: IDENTIFICACIÓN Y PUNTEO =================
+\noindent
+\begin{tabularx}{\textwidth}{|X|c|c|}
+\hline
+\cellcolor{GrisTabla}\textbf{Nombre del Estudiante:} & \cellcolor{GrisTabla}\textbf{Modalidad:} & \cellcolor{GrisTabla}\textbf{Punteo Total:} \\
+\hline
+ & Individual & \multirow{3}{*}{\Large $\dfrac{\hspace{1.2cm}}{25\text{ pts}}$} \\
+\cline{1-2}
+\cellcolor{GrisTabla}\textbf{Sección / Clave:} & \cellcolor{GrisTabla}\textbf{Lugar de Resolución:} & \\
+\cline{1-2}
+ & Hojas tamaño oficio (Folder rojo) & \\
+\hline
+\end{tabularx}
+
+\vspace{0.3cm}
+
+% ================= TEMA, OBJETIVO E INSTRUCCIONES =================
+\noindent
+{\large \textbf{\color{AzulMontano} TEMA: LÓGICA PROPOSICIONAL, CONECTIVOS, TABLAS DE VERDAD Y LEYES OPERATIVAS}}
+
+\vspace{0.15cm}
+\noindent
+\textbf{Objetivo:} Analizar enunciados, determinar valores de verdad, traducir proposiciones al lenguaje simbólico, construir tablas de verdad y justificar equivalencias mediante leyes de la lógica.
+
+\vspace{0.1cm}
+\noindent
+\textbf{Instrucciones Generales:} Resuelva individualmente en hojas tamaño oficio. Identifique cada hoja con nombre, grado y sección. Presente procedimientos completos, tablas ordenadas y justificaciones. Use la simbología lógica indicada y entregue el trabajo en folder color rojo.
+
+\vspace{0.1cm}
+\noindent
+\textbf{Simbología:} $\neg$: negación; $\land$: conjunción (y); $\lor$: disyunción (o, inclusiva); $\rightarrow$: condicional (si\dots entonces); $\leftrightarrow$: bicondicional (si y solo si); $V$: verdadero; $F$: falso.
+
+\vspace{0.2cm}
+
+% ================= SERIE I =================
+\section*{\color{AzulMontano} SERIE I: ANÁLISIS Y CLASIFICACIÓN DE ENUNCIADOS (5 puntos)}
+\noindent \textbf{Instrucciones:} En cada enunciado indique si es proposición o no es proposición. Si es proposición, determine su valor de verdad y justifique brevemente. Si contiene una variable libre, explique por qué no puede asignársele un valor de verdad único sin conocer dicha variable.
+
+\begin{enumerate}[label=\textbf{\arabic*.}, itemsep=0.25cm]
+    \item Julio César fue presidente de la República Dominicana.
+    \item $2 + 2 = 4$.
+    \item Si la Tierra es plana, entonces $2 + 2 = 4$.
+    \item ¿En tu casa o en la mía?
+    \item ¡Ayúdeme, por favor!
+    \item La matemática es importante.
+    \item Existen dos soluciones enteras para la ecuación $x^2 + 4 = 20$.
+    \item Si $x$ es cualquier número entero, entonces $x^2$ es un número entero positivo.
+    \item Ve en su busca.
+    \item $x$ es mayor que $y$.
+    \item $15$ es un número primo.
+    \item $a + b = 1.7$.
+    \item La población de la República Dominicana es de siete millones.
+    \item Las mesas son cuadradas.
+    \item ¡Bello día!
+\end{enumerate}
+
+\vspace{0.3cm}
+
+% ================= SERIE II =================
+\section*{\color{AzulMontano} SERIE II: TRADUCCIÓN AL LENGUAJE SIMBÓLICO (6 puntos)}
+\noindent \textbf{A.} Defina una proposición simple para cada enunciado y escriba la expresión simbólica correspondiente.
+
+\begin{enumerate}[label=\textbf{\arabic*.}, itemsep=0.25cm]
+    \item «Luis es estudiante y Juan es zapatero».
+    \item «El domingo es un día feriado o José ha sido expulsado».
+    \item «Si $2 + 2 = 4$, entonces $3 + 3 = 8$».
+    \item «$3 + 4 = 7$ o la Tierra es plana».
+    \item «Antonio es hijo de Luis si y solo si Luis es el padre de Antonio».
+\end{enumerate}
+
+\vspace{0.2cm}
+\noindent \textbf{B.} Considere las proposiciones simples:
+\begin{itemize}[itemsep=0.1cm]
+    \item $p$: Sus ángulos internos son congruentes entre sí.
+    \item $q$: Es un triángulo equilátero.
+    \item $r$: Es un cuadrado.
+    \item $s$: Tiene cinco lados.
+\end{itemize}
+Simbolice cada proposición compuesta:
+
+\begin{enumerate}[label=\textbf{\arabic*.}, start=6, itemsep=0.25cm]
+    \item Tiene cinco lados y sus ángulos internos son congruentes entre sí.
+    \item Es un triángulo equilátero o es un cuadrado.
+    \item Si tiene cinco lados, entonces no es un cuadrado.
+    \item Si sus ángulos internos son congruentes entre sí, entonces es un cuadrado o un triángulo equilátero.
+    \item Es un cuadrado si y solo si sus ángulos internos son congruentes entre sí y no tiene cinco lados.
+\end{enumerate}
+
+\vspace{0.3cm}
+
+% ================= SERIE III =================
+\section*{\color{AzulMontano} SERIE III: TABLAS DE VERDAD Y CLASIFICACIÓN (6 puntos)}
+\noindent \textbf{Instrucciones:} Construya las tablas de verdad completas. Incluya todas las columnas intermedias y clasifique cada expresión como tautología, contradicción o contingencia. Justifique la clasificación a partir de la columna final. (En el ejercicio 1 trabaje con dos variables proposicionales; en el ejercicio 2, con tres. No omita ninguna combinación de valores de verdad).
+
+\begin{enumerate}[label=\textbf{\arabic*.}, itemsep=0.35cm]
+    \item $\neg p \lor (p \land q)$
+    \item $[(p \rightarrow q) \land (q \rightarrow r)] \rightarrow (p \rightarrow r)$
+\end{enumerate}
+
+\vspace{0.3cm}
+
+% ================= SERIE IV =================
+\section*{\color{AzulMontano} SERIE IV: LEYES OPERATIVAS, EQUIVALENCIAS Y NEGACIÓN (8 puntos)}
+\noindent \textbf{A.} Simplifique cada expresión hasta obtener una forma equivalente más sencilla. Escriba la ley lógica utilizada en cada transformación.
+
+\begin{enumerate}[label=\textbf{\arabic*.}, itemsep=0.25cm]
+    \item $\neg\neg p \land (p \lor F)$
+    \item $(p \land V) \lor (q \land F)$
+    \item $[(p \lor q) \lor r] \land V$
+    \item $(p \land q) \lor (q \land p)$
+    \item $\neg(\neg p \land \neg q)$
+\end{enumerate}
+
+\vspace{0.2cm}
+\noindent \textbf{B.} Desarrolle las siguientes demostraciones o análisis:
+
+\begin{enumerate}[label=\textbf{\arabic*.}, start=6, itemsep=0.25cm]
+    \item Aplique la ley distributiva para demostrar la equivalencia entre $p \land (q \lor r)$ y $(p \land q) \lor (p \land r)$.
+    \item Aplique las leyes de De Morgan para expresar sin negar la expresión completa: $\neg(p \land q \land r)$ y $\neg(p \lor q \lor r)$.
+    \item Construya una tabla de verdad para demostrar que $\neg(p \land q) \equiv \neg p \lor \neg q$.
+    \item Un estudiante afirma que $\neg(p \lor q) \equiv \neg p \lor \neg q$. Determine si la afirmación es correcta. Use una tabla de verdad o las leyes de De Morgan para justificar y escriba la equivalencia correcta.
+\end{enumerate}
+
+\vspace{0.2cm}
+\noindent \textbf{C. Negación de proposiciones categóricas.} Escriba la negación de cada enunciado sin limitarse a anteponer la palabra «no». Luego determine el valor de verdad de la proposición original y de su negación.
+
+\begin{enumerate}[label=\textbf{\arabic*.}, start=10, itemsep=0.25cm]
+    \item Todo polígono es convexo.
+    \item Algunos polígonos son cóncavos.
+    \item Todo polígono regular es convexo.
+    \item Todo polígono convexo es cóncavo.
+    \item Algunos polígonos no son regulares.
+\end{enumerate}
+
+\vspace{0.4cm}
+
+% ================= ANÁLISIS METACOGNITIVO =================
+\noindent
+\begin{tabularx}{\textwidth}{|X|}
+\hline
+\rowcolor{GrisTabla}
+\textbf{\color{AzulMontano} ANÁLISIS METACOGNITIVO (Reflexión del Aprendizaje)} \\
+\hline
+Responda brevemente en su hoja de trabajo: \\
+1. ¿Cuál de las leyes lógicas o conectivos presentó mayor reto al momento de justificar equivalencias y cómo lograste comprenderlo? \\
+2. ¿De qué manera la traducción del lenguaje común al lenguaje simbólico evita ambigüedades en la resolución de problemas matemáticos? \\
+\hline
+\end{tabularx}
+
+\vspace{0.6cm}
+
+% ================= TABLA FINAL DE RESPONSABILIDAD =================
+\noindent
+\begin{tabularx}{\textwidth}{|X|X|}
+\hline
+\cellcolor{GrisTabla}\textbf{Elaborado por:} & \cellcolor{GrisTabla}\textbf{Revisado por:} \\
+\hline
+\vspace{0.8cm} & \vspace{0.8cm} \\
+Docente de Matemática & Coordinación Académica \\
+\hline
+\end{tabularx}
+
+\newpage
+
+% ==============================================================================
+% RÚBRICA DE EVALUACIÓN ANALÍTICA (DOCUMENTO INDEPENDIENTE EN NUEVA PÁGINA)
+% ==============================================================================
+
+\noindent
+\begin{minipage}[c]{0.20\textwidth}
+    \includegraphics[height=1.5cm, keepaspectratio]{logo_colegio.png}
+\end{minipage}%
+\begin{minipage}[c]{0.60\textwidth}
+    \centering
+    {\Large \textbf{\color{AzulMontano} COLEGIO MONTANO}}\\[2pt]
+    {\large \textbf{RÚBRICA DE CALIFICACIÓN — ACTIVIDAD NO. 1}}
+\end{minipage}%
+\begin{minipage}[c]{0.20\textwidth}
+    \hfill
+\end{minipage}
+
+\vspace{0.3cm}
+
+\noindent
+\begin{tabularx}{\textwidth}{|X|c|c|c|}
+\hline
+\rowcolor{GrisTabla}
+\textbf{Materia:} Matemática & \textbf{Grado:} Tercero Básico & \textbf{Unidad:} I & \textbf{Valor Neto:} 25 puntos \\
+\hline
+\multicolumn{4}{|l|}{\textbf{Tema:} Lógica Proposicional, Conectivos, Tablas de Verdad y Leyes Operativas} \\
+\hline
+\end{tabularx}
+
+\vspace{0.3cm}
+
+\noindent
+\begin{tabularx}{\textwidth}{|p{3.1cm}|X|X|X|X|c|}
+\hline
+\rowcolor{AzulMontano}
+\textbf{\color{white} Criterio / Serie} & 
+\textbf{\color{white} Excelente (100\%)} & 
+\textbf{\color{white} Satisfactorio (75\%)} & 
+\textbf{\color{white} En Proceso (50\%)} & 
+\textbf{\color{white} Necesita Mejorar (25\%)} & 
+\textbf{\color{white} Pts.} \\
+\hline
+
+\textbf{Serie I: Análisis y Clasificación de Enunciados} \newline \textit{(5 puntos)} & 
+Clasifica correctamente los 15 enunciados, asigna valores de verdad exactos y justifica con precisión las variables libres. \newline \textbf{(5.0 pts)} & 
+Clasifica correctamente entre 12 y 14 enunciados; presenta justificaciones válidas aunque breves en variables libres. \newline \textbf{(3.75 pts)} & 
+Clasifica correctamente entre 8 y 11 enunciados; omite justificaciones o confunde proposiciones abiertas. \newline \textbf{(2.5 pts)} & 
+Clasifica menos de 8 enunciados correctamente o carece de justificaciones lógicas fundamentadas. \newline \textbf{(1.25 pts)} & 
+\hspace{0.7cm} \\
+\hline
+
+\textbf{Serie II: Traducción al Lenguaje Simbólico} \newline \textit{(6 puntos)} & 
+Define variables simples con claridad y traduce las 10 proposiciones usando conectivos y signos de agrupación exactos. \newline \textbf{(6.0 pts)} & 
+Define variables correctamente y traduce de 8 a 9 proposiciones con errores mínimos en paréntesis o conectivos. \newline \textbf{(4.5 pts)} & 
+Traduce de 5 a 7 proposiciones; omite la definición explícita de variables o presenta ambigüedad en conectivos. \newline \textbf{(3.0 pts)} & 
+Traduce menos de 5 proposiciones correctamente o utiliza simbología lógica inadecuada. \newline \textbf{(1.5 pts)} & 
+\hspace{0.7cm} \\
+\hline
+
+\textbf{Serie III: Tablas de Verdad y Clasificación} \newline \textit{(6 puntos)} & 
+Construye ambas tablas ($2^2$ y $2^3$ filas) sin errores, incluye todas las columnas intermedias y justifica su clasificación. \newline \textbf{(6.0 pts)} & 
+Construye las tablas con todas sus filas, pero comete 1 o 2 errores de cálculo en columnas intermedias o finales. \newline \textbf{(4.5 pts)} & 
+Omite combinaciones de valores de verdad, salta columnas intermedias o clasifica incorrectamente una tabla. \newline \textbf{(3.0 pts)} & 
+Tablas incompletas, desordenadas o con errores conceptuales graves en las reglas de los conectivos. \newline \textbf{(1.5 pts)} & 
+\hspace{0.7cm} \\
+\hline
+
+\textbf{Serie IV: Leyes Operativas, Equivalencias y Negación} \newline \textit{(6 puntos)} & 
+Simplifica las 5 expresiones nombrando cada ley, demuestra con rigor (De Morgan/Distributiva) y niega las 5 categóricas con su valor de verdad. \newline \textbf{(6.0 pts)} & 
+Resuelve correctamente entre 11 y 13 ítems de la serie; identifica la mayoría de leyes y negaciones categóricas. \newline \textbf{(4.5 pts)} & 
+Resuelve entre 7 y 10 ítems; simplifica sin citar las leyes utilizadas o niega anteponiendo únicamente «no». \newline \textbf{(3.0 pts)} & 
+Resuelve menos de 7 ítems correctamente o presenta procedimientos incompletos sin fundamento lógico. \newline \textbf{(1.5 pts)} & 
+\hspace{0.7cm} \\
+\hline
+
+\textbf{Presentación, Orden y Metacognición} \newline \textit{(2 puntos)} & 
+Entrega en hojas tamaño oficio dentro de folder rojo, con identificación completa, caligrafía legible y reflexión metacognitiva. \newline \textbf{(2.0 pts)} & 
+Cumple con el formato y orden general, pero omite algún dato de identificación o la reflexión es superficial. \newline \textbf{(1.5 pts)} & 
+Presenta tachones, desorden en el desarrollo de tablas o incumple el formato de entrega solicitado. \newline \textbf{(1.0 pt)} & 
+Trabajo desordenado, incompleto en su estructura formal y sin respuesta metacognitiva. \newline \textbf{(0.5 pts)} & 
+\hspace{0.7cm} \\
+\hline
+
+\multicolumn{5}{|r|}{\cellcolor{GrisTabla}\textbf{PUNTEO TOTAL OBTENIDO:}} & \cellcolor{GrisTabla}\textbf{/ 25} \\
+\hline
+\end{tabularx}
+
+\vspace{0.4cm}
+
+\noindent
+\begin{tabularx}{\textwidth}{|X|}
+\hline
+\cellcolor{GrisTabla}\textbf{Observaciones y Retroalimentación del Docente:} \\
+\hline
+\vspace{1.8cm} \\
+\hline
+\end{tabularx}
+
+\vspace{0.5cm}
+
+\noindent
+\begin{tabularx}{\textwidth}{|X|X|}
+\hline
+\cellcolor{GrisTabla}\textbf{Firma del Docente:} & \cellcolor{GrisTabla}\textbf{Firma del Padre de Familia / Encargado:} \\
+\hline
+\vspace{0.8cm} & \vspace{0.8cm} \\
+\hline
+\end{tabularx}
+
+\end{document}
