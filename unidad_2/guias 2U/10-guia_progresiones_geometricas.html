@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pizarra Digital - Progresiones Geométricas | Colegio Montano</title>
+    <!-- Carga de Tailwind CSS para utilidades de diseño responsivo y layout -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Configuración de Variables Institucionales Colegio Montano */
+        :root {
+            --azul-principal: #1269A8;
+            --amarillo-brillante: #F7D615;
+            --verde-grisaceo: #54887D;
+            --azul-claro: #88B5C7;
+            --verde-oliva: #A6B046;
+            --blanco-suave: #F2F5E9;
+        }
+
+        /* Tipografía Institucional */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e2e8f0;
+            color: #1e293b;
+            margin: 0;
+            padding: 12px;
+        }
+
+        /* Marco Principal de Pizarra Digital */
+        #pizarra-container {
+            background-color: var(--blanco-suave);
+            border: 5px solid var(--amarillo-brillante);
+            border-radius: 12px;
+            box-shadow: 0 12px 30px rgba(18, 105, 168, 0.25);
+            max-width: 1200px;
+            margin: 0 auto;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 85vh;
+        }
+
+        /* Encabezado de la Pizarra */
+        .pizarra-header {
+            background: linear-gradient(135deg, var(--azul-principal) 0%, #0d4f80 100%);
+            color: white;
+            padding: 16px 24px;
+            border-bottom: 4px solid var(--amarillo-brillante);
+        }
+
+        /* Botón Fullscreen */
+        .btn-fullscreen {
+            background-color: var(--amarillo-brillante);
+            color: #0f172a;
+            font-weight: 700;
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: 2px solid #ffffff;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+        .btn-fullscreen:hover {
+            background-color: #ffe234;
+            transform: translateY(-1px);
+        }
+
+        /* Navegación de Pestañas */
+        .nav-tabs {
+            background-color: #ffffff;
+            border-bottom: 2px solid var(--azul-claro);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            padding: 10px 20px;
+        }
+
+        .tab-btn {
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: var(--azul-principal);
+            background-color: transparent;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .tab-btn:hover {
+            background-color: rgba(136, 181, 199, 0.25);
+            border-color: var(--azul-claro);
+        }
+
+        .tab-btn.active {
+            background-color: var(--azul-principal);
+            color: #ffffff;
+            border-color: var(--amarillo-brillante);
+            box-shadow: 0 3px 8px rgba(18, 105, 168, 0.3);
+        }
+
+        /* Tarjetas de Contenido */
+        .card-montano {
+            background-color: #ffffff;
+            border: 2px solid var(--verde-grisaceo);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 18px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .card-formula {
+            background: linear-gradient(135deg, rgba(136, 181, 199, 0.25) 0%, rgba(242, 245, 233, 0.8) 100%);
+            border-left: 6px solid var(--azul-principal);
+            border-radius: 8px;
+            padding: 16px;
+            margin: 12px 0;
+        }
+
+        /* Etiquetas de Nivel */
+        .badge-nivel {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .badge-basico {
+            background-color: var(--verde-oliva);
+            color: #ffffff;
+        }
+        .badge-intermedio {
+            background-color: var(--verde-grisaceo);
+            color: #ffffff;
+        }
+        .badge-avanzado {
+            background-color: var(--azul-principal);
+            color: #ffffff;
+            border: 1px solid var(--amarillo-brillante);
+        }
+
+        /* Contenedor de Soluciones Ocultas */
+        .solucion-box {
+            background-color: rgba(136, 181, 199, 0.25);
+            border: 1.5px dashed var(--azul-principal);
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin-top: 12px;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .btn-solucion {
+            background-color: var(--azul-principal);
+            color: white;
+            font-weight: 600;
+            padding: 7px 14px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.2s;
+            margin-top: 10px;
+        }
+        .btn-solucion:hover {
+            background-color: var(--verde-grisaceo);
+        }
+
+        /* Bloques Matemáticos Visuales */
+        .math-expr {
+            font-family: 'Cambria Math', 'Times New Roman', serif;
+            font-size: 1.15rem;
+            font-weight: bold;
+            color: var(--azul-principal);
+            background-color: #f8fafc;
+            padding: 3px 8px;
+            border-radius: 4px;
+            border: 1px solid #cbd5e1;
+            display: inline-block;
+        }
+
+        /* Sub-pestañas de Nivel */
+        .subtab-btn {
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 0.88rem;
+            cursor: pointer;
+            border: 2px solid var(--verde-grisaceo);
+            background-color: #ffffff;
+            color: var(--verde-grisaceo);
+            transition: all 0.2s;
+        }
+        .subtab-btn.active {
+            background-color: var(--verde-grisaceo);
+            color: #ffffff;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Modo Fullscreen */
+        :fullscreen #pizarra-container {
+            max-width: 100%;
+            width: 100vw;
+            height: 100vh;
+            border-radius: 0;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Marco Principal de la Pizarra Digital -->
+    <div id="pizarra-container">
+        
+        <!-- Encabezado Institucional -->
+        <header class="pizarra-header flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-4">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyEop0yf6lZ7Jk9MILZxF1rBj4Oqs5esyhIQ&s" 
+                     alt="Logo Colegio Montano" 
+                     class="w-14 h-14 rounded-lg bg-white p-1 object-contain border-2 border-[#F7D615]"
+                     onerror="this.src='https://placehold.co/60x60/1269A8/F7D615?text=CM'">
+                <div>
+                    <span class="text-xs uppercase tracking-widest font-bold text-[#F7D615] block">Colegio Montano • Matemática</span>
+                    <h1 class="text-xl sm:text-2xl font-bold leading-tight">Progresiones Geométricas (P.G.)</h1>
+                    <p class="text-sm text-[#88B5C7] font-semibold">Nivel: Tercero Básico (Enfoque Avanzado) • Guía Interactiva</p>
+                </div>
+            </div>
+            <button id="fullscreen-btn" class="btn-fullscreen flex items-center gap-2" onclick="toggleFullscreen()">
+                <span>⛶ Pantalla completa</span>
+            </button>
+        </header>
+
+        <!-- Barra de Navegación Horizontal -->
+        <nav class="nav-tabs" role="tablist">
+            <button class="tab-btn active" onclick="cambiarSeccion('teoria', this)">📘 1. Teoría</button>
+            <button class="tab-btn" onclick="cambiarSeccion('ejemplos', this)">💡 2. Ejemplos Resueltos (15)</button>
+            <button class="tab-btn" onclick="cambiarSeccion('ejercicios', this)">✍️ 3. Ejercicios Prácticos (15)</button>
+            <button class="tab-btn" onclick="cambiarSeccion('reflexion', this)">🧠 4. Reflexión Crítica</button>
+            <button class="tab-btn" onclick="cambiarSeccion('evaluacion', this)">✅ 5. Evaluación Formativa</button>
+        </nav>
+
+        <!-- Lienzo Principal de Contenido -->
+        <main class="p-4 sm:p-6 flex-1">
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 1: EXPLICACIÓN TEÓRICA             -->
+            <!-- ========================================== -->
+            <section id="sec-teoria" class="seccion-contenido">
+                <div class="card-montano">
+                    <h2 class="text-2xl font-bold text-[#1269A8] mb-3 border-b-2 border-[#F7D615] pb-2">¿Qué es una Progresión Geométrica?</h2>
+                    <p class="text-base leading-relaxed mb-4">
+                        Una <strong>Progresión Geométrica (P.G.)</strong> es una sucesión ordenada de números no nulos en la cual cada término, después del primero, se obtiene <strong>multiplicando el término anterior por una cantidad constante</strong>. A este factor constante se le denomina <strong>razón común</strong> y se simboliza con la letra <span class="math-expr">r</span>.
+                    </p>
+
+                    <!-- Ejemplo Visual Rápido -->
+                    <div class="bg-[#F2F5E9] border-2 border-[#A6B046] rounded-xl p-4 my-4">
+                        <h3 class="font-bold text-[#54887D] mb-2">🔍 Ejemplo Visual:</h3>
+                        <div class="flex flex-wrap items-center justify-center gap-2 text-lg font-bold">
+                            <span class="bg-[#1269A8] text-white px-4 py-2 rounded-lg">3</span>
+                            <span class="text-[#A6B046] text-sm">×2 ➔</span>
+                            <span class="bg-[#1269A8] text-white px-4 py-2 rounded-lg">6</span>
+                            <span class="text-[#A6B046] text-sm">×2 ➔</span>
+                            <span class="bg-[#1269A8] text-white px-4 py-2 rounded-lg">12</span>
+                            <span class="text-[#A6B046] text-sm">×2 ➔</span>
+                            <span class="bg-[#1269A8] text-white px-4 py-2 rounded-lg">24</span>
+                            <span class="text-[#A6B046] text-sm">×2 ➔</span>
+                            <span class="bg-[#1269A8] text-white px-4 py-2 rounded-lg">48</span>
+                        </div>
+                        <p class="text-center text-sm mt-3 text-slate-700">
+                            Primer término (<span class="math-expr">a₁ = 3</span>) • Razón común (<span class="math-expr">r = 2</span>)
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Elementos y Clasificación -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="card-montano">
+                        <h3 class="text-xl font-bold text-[#54887D] mb-3">📌 Elementos Fundamentales</h3>
+                        <ul class="space-y-2 text-sm sm:text-base">
+                            <li><span class="math-expr">a₁</span> : <strong>Primer término</strong> de la sucesión (<span class="math-expr">a₁ ≠ 0</span>).</li>
+                            <li><span class="math-expr">aₙ</span> : <strong>Término n-ésimo</strong> (término que ocupa la posición <span class="math-expr">n</span>).</li>
+                            <li><span class="math-expr">n</span> : <strong>Número de términos</strong> o índice de posición (<span class="math-expr">n ∈ ℤ⁺</span>).</li>
+                            <li><span class="math-expr">r</span> : <strong>Razón común</strong> (<span class="math-expr">r ≠ 0</span>). Se obtiene dividiendo un término entre su anterior: <span class="math-expr">r = a₂ / a₁ = aₙ / aₙ₋₁</span>.</li>
+                            <li><span class="math-expr">Sₙ</span> / <span class="math-expr">S∞</span> : <strong>Suma finita</strong> de <span class="math-expr">n</span> términos y <strong>Suma infinita</strong> (si <span class="math-expr">|r| &lt; 1</span>).</li>
+                        </ul>
+                    </div>
+
+                    <div class="card-montano">
+                        <h3 class="text-xl font-bold text-[#54887D] mb-3">📊 Clasificación según la Razón (<span class="math-expr">r</span>)</h3>
+                        <div class="space-y-2 text-sm sm:text-base">
+                            <div class="p-2.5 bg-emerald-50 border-l-4 border-[#A6B046] rounded">
+                                <strong class="text-[#1269A8]">1. Creciente (si <span class="math-expr">a₁ &gt; 0</span> y <span class="math-expr">r &gt; 1</span>):</strong> Los valores crecen exponencialmente. <em>Ej: 2, 6, 18, 54... (<span class="math-expr">r = 3</span>)</em>
+                            </div>
+                            <div class="p-2.5 bg-amber-50 border-l-4 border-[#F7D615] rounded">
+                                <strong class="text-[#1269A8]">2. Decreciente / Convergente (<span class="math-expr">0 &lt; r &lt; 1</span>):</strong> Los términos se acercan a cero. <em>Ej: 80, 40, 20, 10... (<span class="math-expr">r = 1/2</span>)</em>
+                            </div>
+                            <div class="p-2.5 bg-rose-50 border-l-4 border-[#54887D] rounded">
+                                <strong class="text-[#1269A8]">3. Alternante (<span class="math-expr">r &lt; 0</span>):</strong> Los signos se alternan (+, -, +, -). <em>Ej: 4, -12, 36, -108... (<span class="math-expr">r = -3</span>)</em>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fórmulas Principales -->
+                <div class="card-montano">
+                    <h3 class="text-xl font-bold text-[#1269A8] mb-3">🧮 Formulario Esencial de Progresiones Geométricas</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div class="card-formula">
+                            <h4 class="font-bold text-[#54887D] mb-1">1. Término General</h4>
+                            <p class="text-center my-2"><span class="math-expr text-base">aₙ = a₁ · rⁿ⁻¹</span></p>
+                            <p class="text-xs text-slate-600">Calcula cualquier término desde <span class="math-expr text-xs">a₁</span>.</p>
+                        </div>
+                        <div class="card-formula">
+                            <h4 class="font-bold text-[#54887D] mb-1">2. Relación entre Términos</h4>
+                            <p class="text-center my-2"><span class="math-expr text-base">aₙ = aₖ · rⁿ⁻ᵏ</span></p>
+                            <p class="text-xs text-slate-600">Permite hallar <span class="math-expr text-xs">r</span> usando raíces: <span class="math-expr text-xs">r = ⁿ⁻ᵏ√(aₙ/aₖ)</span>.</p>
+                        </div>
+                        <div class="card-formula">
+                            <h4 class="font-bold text-[#54887D] mb-1">3. Suma Finita (<span class="math-expr text-xs">r ≠ 1</span>)</h4>
+                            <p class="text-center my-2"><span class="math-expr text-base">Sₙ = a₁(rⁿ - 1) / (r - 1)</span></p>
+                            <p class="text-xs text-slate-600">También equivale a: <span class="math-expr text-xs">(aₙ·r - a₁) / (r - 1)</span>.</p>
+                        </div>
+                        <div class="card-formula">
+                            <h4 class="font-bold text-[#54887D] mb-1">4. Serie Infinita (<span class="math-expr text-xs">|r| &lt; 1</span>)</h4>
+                            <p class="text-center my-2"><span class="math-expr text-base">S∞ = a₁ / (1 - r)</span></p>
+                            <p class="text-xs text-slate-600">Suma convergente de infinitos términos.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 2: EJEMPLOS RESUELTOS (15)         -->
+            <!-- ========================================== -->
+            <section id="sec-ejemplos" class="seccion-contenido hidden">
+                <div class="flex flex-wrap items-center justify-between gap-3 mb-4 bg-white p-4 rounded-xl border-2 border-[#54887D]">
+                    <div>
+                        <h2 class="text-xl font-bold text-[#1269A8]">Ejemplos Resueltos Paso a Paso (Nivel Exigente)</h2>
+                        <p class="text-sm text-slate-600">Incluye potencias negativas, razones alternantes, ecuaciones exponenciales, series infinitas y aplicaciones.</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button class="subtab-btn active" onclick="filtrarSubnivel('ejemplos', 'basico', this)">Nivel Básico (5)</button>
+                        <button class="subtab-btn" onclick="filtrarSubnivel('ejemplos', 'intermedio', this)">Nivel Intermedio (5)</button>
+                        <button class="subtab-btn" onclick="filtrarSubnivel('ejemplos', 'avanzado', this)">Nivel Avanzado (5)</button>
+                    </div>
+                </div>
+
+                <!-- EJEMPLOS BÁSICOS -->
+                <div id="ejemplos-basico" class="subcontenido-ejemplos space-y-4">
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Básico • Ejemplo 1</span>
+                        <p class="font-bold text-lg text-[#1269A8]">Determinar la razón común (<span class="math-expr">r</span>) y los dos términos siguientes en la P.G. alternante: <span class="math-expr">3/4, -1/2, 1/3, ...</span></p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Cociente de fracciones):</strong> <span class="math-expr">r = (-1/2) ÷ (3/4) = (-1/2) · (4/3) = -4/6 = -2/3</span>.</p>
+                            <p><strong>Paso 2 (Verificación):</strong> <span class="math-expr">(-1/2) · (-2/3) = +2/6 = 1/3</span> (Confirmado).</p>
+                            <p><strong>Paso 3 (Siguientes términos):</strong> <span class="math-expr">a₄ = (1/3) · (-2/3) = -2/9</span>; &nbsp; <span class="math-expr">a₅ = (-2/9) · (-2/3) = 4/27</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: r = -2/3; los términos siguientes son -2/9 y 4/27.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Básico • Ejemplo 2</span>
+                        <p class="font-bold text-lg text-[#1269A8]">Calcular el octavo término (<span class="math-expr">a₈</span>) de una P.G. donde <span class="math-expr">a₁ = 192</span> y <span class="math-expr">r = 1/2</span>.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>Fórmula:</strong> <span class="math-expr">aₙ = a₁ · rⁿ⁻¹</span></p>
+                            <p><strong>Sustitución:</strong> <span class="math-expr">a₈ = 192 · (1/2)⁸⁻¹ = 192 · (1/2)⁷ = 192 · (1/128)</span>.</p>
+                            <p><strong>Simplificación (dividiendo entre 64):</strong> <span class="math-expr">192 / 128 = 3 / 2 = 1.5</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: a₈ = 3/2 (o 1.5).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Básico • Ejemplo 3</span>
+                        <p class="font-bold text-lg text-[#1269A8]">Hallar el primer término (<span class="math-expr">a₁</span>) de una P.G. sabiendo que <span class="math-expr">a₆ = 486</span> y <span class="math-expr">r = -3</span>.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>Planteamiento:</strong> <span class="math-expr">486 = a₁ · (-3)⁶⁻¹ ➔ 486 = a₁ · (-3)⁵</span>.</p>
+                            <p><strong>Potencia impar negativa:</strong> <span class="math-expr">(-3)⁵ = -243 ➔ 486 = a₁ · (-243)</span>.</p>
+                            <p><strong>Despeje:</strong> <span class="math-expr">a₁ = 486 / (-243) = -2</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: El primer término es a₁ = -2.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Básico • Ejemplo 4</span>
+                        <p class="font-bold text-lg text-[#1269A8]">Determinar cuántos términos tiene la progresión geométrica: <span class="math-expr">5, 15, 45, ..., 3645</span>.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Razón):</strong> <span class="math-expr">r = 15 / 5 = 3</span>.</p>
+                            <p><strong>Paso 2 (Ecuación exponencial):</strong> <span class="math-expr">3645 = 5 · 3ⁿ⁻¹ ➔ 3645 / 5 = 3ⁿ⁻¹ ➔ 729 = 3ⁿ⁻¹</span>.</p>
+                            <p><strong>Paso 3 (Igualación de bases):</strong> Como <span class="math-expr">729 = 3⁶</span>, entonces <span class="math-expr">3⁶ = 3ⁿ⁻¹ ➔ n - 1 = 6 ➔ n = 7</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: La progresión tiene 7 términos.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Básico • Ejemplo 5</span>
+                        <p class="font-bold text-lg text-[#1269A8]">Calcular la suma de los primeros 7 términos (<span class="math-expr">S₇</span>) de la P.G.: <span class="math-expr">4, 8, 16, 32, ...</span></p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>Datos:</strong> <span class="math-expr">a₁ = 4</span>, <span class="math-expr">r = 2</span>, <span class="math-expr">n = 7</span>.</p>
+                            <p><strong>Fórmula de Suma:</strong> <span class="math-expr">S₇ = 4 · (2⁷ - 1) / (2 - 1) = 4 · (128 - 1) / 1</span>.</p>
+                            <p><strong>Operación:</strong> <span class="math-expr">S₇ = 4 · 127 = 508</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: S₇ = 508.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EJEMPLOS INTERMEDIOS -->
+                <div id="ejemplos-intermedio" class="subcontenido-ejemplos hidden space-y-4">
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Intermedio • Ejemplo 1 (Dos Términos Cualesquiera)</span>
+                        <p class="font-bold text-lg text-[#1269A8]">En una P.G. creciente (<span class="math-expr">r &gt; 0</span>), el tercer término es <span class="math-expr">12</span> y el séptimo término es <span class="math-expr">192</span>. Hallar <span class="math-expr">a₁</span> y <span class="math-expr">a₁₀</span>.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Relación <span class="math-expr">aₙ = aₖ · rⁿ⁻ᵏ</span>):</strong> <span class="math-expr">192 = 12 · r⁷⁻³ ➔ 192 / 12 = r⁴ ➔ r⁴ = 16</span>.</p>
+                            <p><strong>Paso 2 (Raíz cuarta positiva):</strong> <span class="math-expr">r = ⁴√16 = 2</span>.</p>
+                            <p><strong>Paso 3 (Hallar <span class="math-expr">a₁</span> y <span class="math-expr">a₁₀</span>):</strong> <span class="math-expr">12 = a₁ · 2² ➔ a₁ = 3</span>. Luego, <span class="math-expr">a₁₀ = 3 · 2⁹ = 3 · 512 = 1536</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: a₁ = 3 y a₁₀ = 1,536.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Intermedio • Ejemplo 2 (Interpolación Geométrica)</span>
+                        <p class="font-bold text-lg text-[#1269A8]">Interpolar 4 medios geométricos entre <span class="math-expr">3</span> y <span class="math-expr">96</span>.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Total de términos):</strong> <span class="math-expr">n = 4 + 2 = 6</span> términos, con <span class="math-expr">a₁ = 3</span> y <span class="math-expr">a₆ = 96</span>.</p>
+                            <p><strong>Paso 2 (Cálculo de <span class="math-expr">r</span>):</strong> <span class="math-expr">96 = 3 · r⁶⁻¹ ➔ r⁵ = 32 ➔ r = ⁵√32 = 2</span>.</p>
+                            <p><strong>Paso 3 (Medios interpolados):</strong> <span class="math-expr">3 · 2 = 6</span> | <span class="math-expr">6 · 2 = 12</span> | <span class="math-expr">12 · 2 = 24</span> | <span class="math-expr">24 · 2 = 48</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: Los medios geométricos son 6, 12, 24 y 48.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Intermedio • Ejemplo 3 (Suma con Razón Negativa / Alternante)</span>
+                        <p class="font-bold text-lg text-[#1269A8]">Calcular la suma de los primeros 6 términos (<span class="math-expr">S₆</span>) de la P.G.: <span class="math-expr">5, -10, 20, -40, ...</span></p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Datos:</strong> <span class="math-expr">a₁ = 5</span>, <span class="math-expr">r = -10 / 5 = -2</span>, <span class="math-expr">n = 6</span>.</p>
+                            <p><strong>Fórmula:</strong> <span class="math-expr">S₆ = 5 · [ (-2)⁶ - 1 ] / (-2 - 1)</span>.</p>
+                            <p><strong>Potencia par positiva:</strong> <span class="math-expr">(-2)⁶ = +64 ➔ S₆ = 5 · (64 - 1) / (-3) = 5 · 63 / (-3) = 5 · (-21) = -105</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: S₆ = -105.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Intermedio • Ejemplo 4 (Despeje de <span class="math-expr">n</span> en Suma Finita)</span>
+                        <p class="font-bold text-lg text-[#1269A8]">¿Cuántos términos de la P.G. <span class="math-expr">2, 6, 18, ...</span> deben sumarse para obtener un total de <span class="math-expr">728</span>?</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Datos:</strong> <span class="math-expr">a₁ = 2</span>, <span class="math-expr">r = 3</span>, <span class="math-expr">Sₙ = 728</span>.</p>
+                            <p><strong>Planteamiento:</strong> <span class="math-expr">728 = 2 · (3ⁿ - 1) / (3 - 1) ➔ 728 = 2 · (3ⁿ - 1) / 2</span>.</p>
+                            <p><strong>Simplificación:</strong> <span class="math-expr">728 = 3ⁿ - 1 ➔ 3ⁿ = 729</span>.</p>
+                            <p><strong>Exponente:</strong> Como <span class="math-expr">729 = 3⁶</span>, entonces <span class="math-expr">n = 6</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: Se deben sumar 6 términos.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Intermedio • Ejemplo 5 (Serie Infinita Convergente)</span>
+                        <p class="font-bold text-lg text-[#1269A8]">Calcular la suma de los infinitos términos (<span class="math-expr">S∞</span>) de la P.G. decreciente: <span class="math-expr">36, 12, 4, 4/3, ...</span></p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Verificar convergencia):</strong> <span class="math-expr">r = 12 / 36 = 1/3</span>. Como <span class="math-expr">|1/3| &lt; 1</span>, la serie converge.</p>
+                            <p><strong>Paso 2 (Fórmula <span class="math-expr">S∞</span>):</strong> <span class="math-expr">S∞ = a₁ / (1 - r) = 36 / (1 - 1/3) = 36 / (2/3)</span>.</p>
+                            <p><strong>Operación:</strong> <span class="math-expr">S∞ = 36 · (3/2) = 18 · 3 = 54</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: La suma infinita converge exactamente a 54.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EJEMPLOS AVANZADOS -->
+                <div id="ejemplos-avanzado" class="subcontenido-ejemplos hidden space-y-4">
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Avanzado • Ejemplo 1 (Sistema con Producto y Suma de 3 Términos)</span>
+                        <p class="font-bold text-lg text-[#1269A8]">El producto de tres números en progresión geométrica es <span class="math-expr">216</span> y su suma es <span class="math-expr">21</span>. Determinar los tres números.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Estrategia Simétrica:</strong> Representamos los términos como <span class="math-expr">(x / r), x, (x · r)</span>.</p>
+                            <p><strong>Paso 1 (Usar el producto):</strong> <span class="math-expr">(x / r) · x · (x · r) = 216 ➔ x³ = 216 ➔ x = ³√216 = 6</span>.</p>
+                            <p><strong>Paso 2 (Usar la suma):</strong> <span class="math-expr">(6 / r) + 6 + 6r = 21 ➔ (6 / r) + 6r = 15</span>.</p>
+                            <p><strong>Paso 3 (Ecuación cuadrática multiplicando por <span class="math-expr">r</span>):</strong> <span class="math-expr">6 + 6r² = 15r ➔ 6r² - 15r + 6 = 0</span>. Dividiendo entre 3: <span class="math-expr">2r² - 5r + 2 = 0</span>.</p>
+                            <p><strong>Factorización:</strong> <span class="math-expr">(2r - 1)(r - 2) = 0 ➔ r₁ = 2</span> o <span class="math-expr">r₂ = 1/2</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Los números son 3, 6 y 12 (o 12, 6 y 3).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Avanzado • Ejemplo 2 (Parámetro Algebraico en P.G.)</span>
+                        <p class="font-bold text-lg text-[#1269A8]">Hallar el valor de <span class="math-expr">x</span> para que las expresiones <span class="math-expr">(x - 2), (x + 2), (3x + 2)</span> formen una progresión geométrica, y determinar los términos.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Propiedad del término medio geométrico:</strong> <span class="math-expr">(a₂)² = a₁ · a₃</span>.</p>
+                            <p><strong>Planteamiento:</strong> <span class="math-expr">(x + 2)² = (x - 2)(3x + 2)</span></p>
+                            <p><strong>Desarrollo:</strong> <span class="math-expr">x² + 4x + 4 = 3x² - 4x - 4 ➔ 2x² - 8x - 8 = 0 ➔ x² - 4x - 4 = 0</span>... <em>Revisemos con <span class="math-expr">(x - 2), (x + 1), (x + 7)</span> para raíces enteras:</em> <span class="math-expr">(x+1)² = (x-2)(x+7) ➔ x² + 2x + 1 = x² + 5x - 14 ➔ 3x = 15 ➔ x = 5</span>. (Para el original: <span class="math-expr">x = 2 ± 2√2</span>).</p>
+                            <p><strong>Con <span class="math-expr">x = 5</span> en <span class="math-expr">(x - 2), (x + 1), (x + 7)</span>:</strong> Los términos son <span class="math-expr">3, 6, 12</span> (<span class="math-expr">r = 2</span>).</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Para el problema planteado, x = 2 ± 2√2.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Avanzado • Ejemplo 3 (Física: Rebote Infinito de una Esfera)</span>
+                        <p class="font-bold text-lg text-[#1269A8]">Se deja caer una pelota desde una altura de <span class="math-expr">24 metros</span>. En cada rebote alcanza <span class="math-expr">3/5</span> de la altura anterior. Calcular la distancia vertical total recorrida hasta detenerse por completo.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Análisis del movimiento:</strong> Baja <span class="math-expr">24 m</span> inicialmente. Luego, cada rebote implica <strong>subir y bajar</strong> la misma altura: <span class="math-expr">h₁ = 24(3/5) = 14.4 m</span>, <span class="math-expr">h₂ = 14.4(3/5)</span>, etc.</p>
+                            <p><strong>Distancia total:</strong> <span class="math-expr">D = 24 + 2 · [ 14.4 + 14.4(3/5) + 14.4(3/5)² + ... ]</span>.</p>
+                            <p><strong>Suma infinita de los rebotes (<span class="math-expr">a₁ = 14.4, r = 3/5</span>):</strong> <span class="math-expr">S∞ = 14.4 / (1 - 3/5) = 14.4 / (2/5) = 36 metros</span>.</p>
+                            <p><strong>Cálculo final:</strong> <span class="math-expr">D = 24 + 2(36) = 24 + 72 = 96 metros</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: La pelota recorre 96 metros en total.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Avanzado • Ejemplo 4 (Razón de Sumas Parciales)</span>
+                        <p class="font-bold text-lg text-[#1269A8]">En una P.G. de términos positivos, la suma de los primeros 4 términos es <span class="math-expr">30</span> y la suma de los primeros 8 términos es <span class="math-expr">510</span>. Hallar la razón <span class="math-expr">r</span> y <span class="math-expr">a₁</span>.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Ecuaciones:</strong> <span class="math-expr">S₄ = a₁(r⁴ - 1)/(r - 1) = 30</span> &nbsp; y &nbsp; <span class="math-expr">S₈ = a₁(r⁸ - 1)/(r - 1) = 510</span>.</p>
+                            <p><strong>División (<span class="math-expr">S₈ / S₄</span>) y Diferencia de Cuadrados:</strong> <span class="math-expr">(r⁸ - 1) / (r⁴ - 1) = 510 / 30 ➔ (r⁴ - 1)(r⁴ + 1) / (r⁴ - 1) = 17</span>.</p>
+                            <p><strong>Despeje de <span class="math-expr">r</span>:</strong> <span class="math-expr">r⁴ + 1 = 17 ➔ r⁴ = 16 ➔ r = 2</span> (términos positivos).</p>
+                            <p><strong>Hallar <span class="math-expr">a₁</span>:</strong> <span class="math-expr">a₁(2⁴ - 1)/(2 - 1) = 30 ➔ 15a₁ = 30 ➔ a₁ = 2</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: r = 2 y a₁ = 2.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Avanzado • Ejemplo 5 (Progresión Mixta: P.A. y P.G.)</span>
+                        <p class="font-bold text-lg text-[#1269A8]">Tres números distintos forman una progresión aritmética con diferencia <span class="math-expr">d = 4</span>. Si al tercer número se le suma <span class="math-expr">4</span>, los tres números resultantes forman una progresión geométrica. Hallar los números originales.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Términos en P.A.:</strong> <span class="math-expr">a, (a + 4), (a + 8)</span>.</p>
+                            <p><strong>Términos en P.G. tras sumar 4 al tercero:</strong> <span class="math-expr">a, (a + 4), (a + 12)</span>.</p>
+                            <p><strong>Propiedad de P.G. (<span class="math-expr">a₂² = a₁ · a₃</span>):</strong> <span class="math-expr">(a + 4)² = a(a + 12)</span>.</p>
+                            <p><strong>Resolución:</strong> <span class="math-expr">a² + 8a + 16 = a² + 12a ➔ 16 = 4a ➔ a = 4</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Los números originales son 4, 8 y 12 (al sumar 4 al tercero: 4, 8, 16 con r = 2).</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 3: EJERCICIOS PRÁCTICOS (15)       -->
+            <!-- ========================================== -->
+            <section id="sec-ejercicios" class="seccion-contenido hidden">
+                <div class="flex flex-wrap items-center justify-between gap-3 mb-4 bg-white p-4 rounded-xl border-2 border-[#54887D]">
+                    <div>
+                        <h2 class="text-xl font-bold text-[#1269A8]">Práctica Guiada en Pizarra (Nivel Avanzado)</h2>
+                        <p class="text-sm text-slate-600">Domina potencias, radicales, interpolación y series infinitas antes de revisar la solución.</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button class="subtab-btn active" onclick="filtrarSubnivel('ejercicios', 'basico', this)">Básico (5)</button>
+                        <button class="subtab-btn" onclick="filtrarSubnivel('ejercicios', 'intermedio', this)">Intermedio (5)</button>
+                        <button class="subtab-btn" onclick="filtrarSubnivel('ejercicios', 'avanzado', this)">Avanzado (5)</button>
+                    </div>
+                </div>
+
+                <!-- EJERCICIOS BÁSICOS -->
+                <div id="ejercicios-basico" class="subcontenido-ejercicios space-y-4">
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 1</span>
+                        <p class="font-semibold text-base">Determina la razón común (<span class="math-expr">r</span>) y el sexto término (<span class="math-expr">a₆</span>) en la P.G.: <span class="math-expr">2/3, -1, 3/2, ...</span></p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-eb1', this)">Mostrar solución</button>
+                        <div id="sol-eb1" class="solucion-box">
+                            <p><strong>Procedimiento:</strong> <span class="math-expr">r = (-1) ÷ (2/3) = -3/2</span>.<br>
+                            <span class="math-expr">a₆ = (2/3) · (-3/2)⁵ = (2/3) · (-243/32) = -81/16</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: r = -3/2; a₆ = -81/16.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 2</span>
+                        <p class="font-semibold text-base">Calcula el noveno término (<span class="math-expr">a₉</span>) de una P.G. donde <span class="math-expr">a₁ = 384</span> y <span class="math-expr">r = 1/2</span>.</p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-eb2', this)">Mostrar solución</button>
+                        <div id="sol-eb2" class="solucion-box">
+                            <p><strong>Procedimiento:</strong> <span class="math-expr">a₉ = 384 · (1/2)⁸ = 384 / 256 = 3 / 2 = 1.5</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: a₉ = 3/2 (1.5).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 3</span>
+                        <p class="font-semibold text-base">Halla el primer término (<span class="math-expr">a₁</span>) de una P.G. sabiendo que <span class="math-expr">a₅ = 405</span> y <span class="math-expr">r = 3</span>.</p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-eb3', this)">Mostrar solución</button>
+                        <div id="sol-eb3" class="solucion-box">
+                            <p><strong>Procedimiento:</strong> <span class="math-expr">405 = a₁ · 3⁴ ➔ 405 = 81 · a₁ ➔ a₁ = 405 / 81 = 5</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: a₁ = 5.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 4</span>
+                        <p class="font-semibold text-base">Determina el número de términos (<span class="math-expr">n</span>) de la progresión geométrica: <span class="math-expr">3, 6, 12, ..., 1536</span>.</p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-eb4', this)">Mostrar solución</button>
+                        <div id="sol-eb4" class="solucion-box">
+                            <p><strong>Procedimiento:</strong> <span class="math-expr">1536 = 3 · 2ⁿ⁻¹ ➔ 512 = 2ⁿ⁻¹</span>.<br>
+                            Como <span class="math-expr">512 = 2⁹</span>, entonces <span class="math-expr">n - 1 = 9 ➔ n = 10</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: n = 10 términos.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 5</span>
+                        <p class="font-semibold text-base">Calcula la suma de los primeros 5 términos (<span class="math-expr">S₅</span>) de la P.G.: <span class="math-expr">2, 6, 18, 54, ...</span></p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-eb5', this)">Mostrar solución</button>
+                        <div id="sol-eb5" class="solucion-box">
+                            <p><strong>Procedimiento:</strong> <span class="math-expr">S₅ = 2 · (3⁵ - 1) / (3 - 1) = 2 · (243 - 1) / 2 = 242</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: S₅ = 242.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EJERCICIOS INTERMEDIOS -->
+                <div id="ejercicios-intermedio" class="subcontenido-ejercicios hidden space-y-4">
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 1</span>
+                        <p class="font-semibold text-base">En una P.G. de términos positivos, el segundo término es <span class="math-expr">10</span> y el quinto término es <span class="math-expr">1250</span>. Halla <span class="math-expr">a₁</span> y <span class="math-expr">a₇</span>.</p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-ei1', this)">Mostrar solución</button>
+                        <div id="sol-ei1" class="solucion-box">
+                            <p><strong>Paso 1:</strong> <span class="math-expr">1250 = 10 · r⁵⁻² ➔ r³ = 125 ➔ r = 5</span>.<br>
+                            <strong>Paso 2:</strong> <span class="math-expr">10 = a₁ · 5¹ ➔ a₁ = 2</span>. Luego <span class="math-expr">a₇ = 2 · 5⁶ = 2 · 15625 = 31250</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: a₁ = 2; a₇ = 31,250.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 2</span>
+                        <p class="font-semibold text-base">Interpola 3 medios geométricos positivos entre <span class="math-expr">4</span> y <span class="math-expr">324</span>.</p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-ei2', this)">Mostrar solución</button>
+                        <div id="sol-ei2" class="solucion-box">
+                            <p><strong>Paso 1:</strong> <span class="math-expr">n = 3 + 2 = 5</span>. <span class="math-expr">324 = 4 · r⁴ ➔ r⁴ = 81 ➔ r = 3</span>.<br>
+                            <strong>Paso 2:</strong> Medios: <span class="math-expr">4·3 = 12</span>, <span class="math-expr">12·3 = 36</span>, <span class="math-expr">36·3 = 108</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Los medios geométricos son 12, 36 y 108.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 3</span>
+                        <p class="font-semibold text-base">¿Cuántos términos de la P.G. <span class="math-expr">5, 10, 20, ...</span> se deben sumar para obtener <span class="math-expr">1275</span>?</p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-ei3', this)">Mostrar solución</button>
+                        <div id="sol-ei3" class="solucion-box">
+                            <p><strong>Paso 1:</strong> <span class="math-expr">1275 = 5 · (2ⁿ - 1) / (2 - 1) ➔ 1275 / 5 = 2ⁿ - 1</span>.<br>
+                            <strong>Paso 2:</strong> <span class="math-expr">255 = 2ⁿ - 1 ➔ 2ⁿ = 256 = 2⁸ ➔ n = 8</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Se deben sumar 8 términos.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 4</span>
+                        <p class="font-semibold text-base">Calcula la suma de los infinitos términos (<span class="math-expr">S∞</span>) de la serie: <span class="math-expr">45, 15, 5, 5/3, ...</span></p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-ei4', this)">Mostrar solución</button>
+                        <div id="sol-ei4" class="solucion-box">
+                            <p><strong>Paso 1:</strong> <span class="math-expr">r = 15 / 45 = 1/3</span> (<span class="math-expr">|r| &lt; 1</span>).<br>
+                            <strong>Paso 2:</strong> <span class="math-expr">S∞ = 45 / (1 - 1/3) = 45 / (2/3) = 135 / 2 = 67.5</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: S∞ = 67.5 (o 135/2).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 5</span>
+                        <p class="font-semibold text-base">Un cultivo de 200 bacterias se triplica cada hora. ¿Cuántas bacterias habrá al cabo de 6 horas?</p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-ei5', this)">Mostrar solución</button>
+                        <div id="sol-ei5" class="solucion-box">
+                            <p><strong>Cuidado con el índice:</strong> Al inicio (<span class="math-expr">t = 0</span>) hay 200 (<span class="math-expr">a₁</span>). Tras 1 hora (<span class="math-expr">a₂</span>) hay 600. Tras 6 horas corresponde al término <span class="math-expr">a₇</span>:<br>
+                            <span class="math-expr">N = 200 · 3⁶ = 200 · 729 = 145,800</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Habrá 145,800 bacterias.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EJERCICIOS AVANZADOS -->
+                <div id="ejercicios-avanzado" class="subcontenido-ejercicios hidden space-y-4">
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 1</span>
+                        <p class="font-semibold text-base">El producto de tres números en P.G. es <span class="math-expr">64</span> y su suma es <span class="math-expr">14</span>. Determina los tres números.</p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-ea1', this)">Mostrar solución</button>
+                        <div id="sol-ea1" class="solucion-box">
+                            <p><strong>Paso 1:</strong> Sean <span class="math-expr">(x/r), x, (x·r)</span>. Producto: <span class="math-expr">x³ = 64 ➔ x = 4</span>.<br>
+                            <strong>Paso 2:</strong> Suma: <span class="math-expr">(4/r) + 4 + 4r = 14 ➔ 4r² - 10r + 4 = 0 ➔ 2r² - 5r + 2 = 0</span>.<br>
+                            <strong>Paso 3:</strong> <span class="math-expr">r = 2</span> o <span class="math-expr">r = 1/2</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Los números son 2, 4 y 8 (o 8, 4 y 2).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 2</span>
+                        <p class="font-semibold text-base">Determina el valor de <span class="math-expr">x</span> para que <span class="math-expr">(x - 3), (x + 1), (2x + 8)</span> formen una P.G. de términos positivos.</p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-ea2', this)">Mostrar solución</button>
+                        <div id="sol-ea2" class="solucion-box">
+                            <p><strong>Paso 1:</strong> <span class="math-expr">(x + 1)² = (x - 3)(2x + 8)</span>.<br>
+                            <strong>Paso 2:</strong> <span class="math-expr">x² + 2x + 1 = 2x² + 2x - 24 ➔ x² = 25 ➔ x = ±5</span>.<br>
+                            <strong>Paso 3:</strong> Para términos positivos elegimos <span class="math-expr">x = 5</span> (términos: <span class="math-expr">2, 6, 18</span>).</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: x = 5.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 3</span>
+                        <p class="font-semibold text-base">Se deja caer una esfera desde <span class="math-expr">18 metros</span> y en cada rebote sube <span class="math-expr">2/3</span> de la altura anterior. Halla la distancia vertical total recorrida hasta detenerse.</p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-ea3', this)">Mostrar solución</button>
+                        <div id="sol-ea3" class="solucion-box">
+                            <p><strong>Paso 1:</strong> Primer rebote: <span class="math-expr">a₁ = 18(2/3) = 12 m</span>.<br>
+                            <strong>Paso 2:</strong> Suma infinita de rebotes: <span class="math-expr">S∞ = 12 / (1 - 2/3) = 12 / (1/3) = 36 m</span>.<br>
+                            <strong>Paso 3:</strong> Distancia total (caída inicial + subida y bajada de rebotes): <span class="math-expr">18 + 2(36) = 90 m</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: 90 metros.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 4</span>
+                        <p class="font-semibold text-base">En una P.G. creciente, la suma de los primeros 3 términos es <span class="math-expr">21</span> y la suma de los primeros 6 términos es <span class="math-expr">189</span>. Determina <span class="math-expr">r</span> y <span class="math-expr">a₁</span>.</p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-ea4', this)">Mostrar solución</button>
+                        <div id="sol-ea4" class="solucion-box">
+                            <p><strong>Paso 1:</strong> <span class="math-expr">S₆ / S₃ = (r⁶ - 1)/(r³ - 1) = 189 / 21 ➔ r³ + 1 = 9 ➔ r³ = 8 ➔ r = 2</span>.<br>
+                            <strong>Paso 2:</strong> <span class="math-expr">S₃ = a₁(2³ - 1)/(2 - 1) = 21 ➔ 7a₁ = 21 ➔ a₁ = 3</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: r = 2 y a₁ = 3.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 5</span>
+                        <p class="font-semibold text-base">Convierte el número decimal periódico puro <span class="math-expr">0.727272...</span> a fracción irreducible utilizando la fórmula de la suma infinita de una P.G.</p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-ea5', this)">Mostrar solución</button>
+                        <div id="sol-ea5" class="solucion-box">
+                            <p><strong>Paso 1:</strong> Descomponemos: <span class="math-expr">0.72 + 0.0072 + 0.000072 + ...</span> donde <span class="math-expr">a₁ = 72/100</span> y <span class="math-expr">r = 1/100</span>.<br>
+                            <strong>Paso 2:</strong> <span class="math-expr">S∞ = (72/100) / (1 - 1/100) = (72/100) / (99/100) = 72/99 = 8/11</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: La fracción irreducible es 8/11.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 4: PREGUNTAS DE REFLEXIÓN CRÍTICA  -->
+            <!-- ========================================== -->
+            <section id="sec-reflexion" class="seccion-contenido hidden">
+                <div class="card-montano">
+                    <h2 class="text-2xl font-bold text-[#1269A8] mb-2">🧠 Análisis Conceptual y Pensamiento Crítico</h2>
+                    <p class="text-sm text-slate-600 mb-4">Analiza las propiedades estructurales de las progresiones geométricas antes de desplegar la explicación.</p>
+
+                    <div class="space-y-4">
+                        <div class="p-4 bg-[#F2F5E9] rounded-xl border-2 border-[#54887D]">
+                            <h3 class="font-bold text-lg text-[#1269A8]">1. ¿Por qué ni <span class="math-expr">a₁</span> ni <span class="math-expr">r</span> pueden ser cero?</h3>
+                            <p class="mt-1">En la definición formal de una Progresión Geométrica se exige que <span class="math-expr">a₁ ≠ 0</span> y <span class="math-expr">r ≠ 0</span>. ¿Qué ocurriría con la sucesión y con la fórmula de la razón (<span class="math-expr">r = a₂ / a₁</span>) si alguno fuera cero?</p>
+                            <button class="btn-solucion" onclick="toggleSolucion('ref-1', this)">Ver análisis conceptual</button>
+                            <div id="ref-1" class="solucion-box">
+                                <p><strong>Análisis:</strong> Si <span class="math-expr">a₁ = 0</span> o <span class="math-expr">r = 0</span>, todos los términos siguientes colapsarían a <span class="math-expr">0</span> (<span class="math-expr">a₁, 0, 0, 0...</span>), provocando una división indeterminada (<span class="math-expr">0 / 0</span>) al intentar calcular la razón común entre términos consecutivos.</p>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-[#F2F5E9] rounded-xl border-2 border-[#54887D]">
+                            <h3 class="font-bold text-lg text-[#1269A8]">2. La paradoja de la suma infinita (<span class="math-expr">S∞</span>)</h3>
+                            <p class="mt-1">¿Cómo es posible que al sumar <strong>infinitos</strong> números positivos (como <span class="math-expr">1 + 1/2 + 1/4 + 1/8 + ...</span>) el resultado no sea infinito, sino un número finito exacto (<span class="math-expr">2</span>)?</p>
+                            <button class="btn-solucion" onclick="toggleSolucion('ref-2', this)">Ver análisis conceptual</button>
+                            <div id="ref-2" class="solucion-box">
+                                <p><strong>Análisis:</strong> Cuando <span class="math-expr">|r| &lt; 1</span>, los términos disminuyen tan rápido que <span class="math-expr">rⁿ</span> tiende a <span class="math-expr">0</span> conforme <span class="math-expr">n</span> crece hacia el infinito. En la fórmula <span class="math-expr">Sₙ = a₁(1 - rⁿ)/(1 - r)</span>, al hacerse <span class="math-expr">rⁿ ≈ 0</span>, la suma se estabiliza en el límite exacto <span class="math-expr">a₁ / (1 - r)</span>.</p>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-[#F2F5E9] rounded-xl border-2 border-[#54887D]">
+                            <h3 class="font-bold text-lg text-[#1269A8]">3. Crecimiento Lineal (P.A.) vs. Crecimiento Exponencial (P.G.)</h3>
+                            <p class="mt-1">Si comparamos una P.A. con <span class="math-expr">a₁ = 2, d = 100</span> frente a una P.G. con <span class="math-expr">a₁ = 2, r = 2</span>, ¿cuál crecerá más rápido a largo plazo y qué forma tendría su gráfica en el plano cartesiano?</p>
+                            <button class="btn-solucion" onclick="toggleSolucion('ref-3', this)">Ver análisis conceptual</button>
+                            <div id="ref-3" class="solucion-box">
+                                <p><strong>Análisis:</strong> Aunque inicialmente la P.A. parece mucho mayor (<span class="math-expr">102 vs 4</span>), la P.G. describe una <strong>curva exponencial</strong> (<span class="math-expr">y = a₁ · rˣ⁻¹</span>) que inevitablemente supera a cualquier crecimiento lineal (en <span class="math-expr">n = 11</span> la P.G. ya vale <span class="math-expr">2048</span> frente a <span class="math-expr">1002</span> de la P.A.).</p>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-[#F2F5E9] rounded-xl border-2 border-[#54887D]">
+                            <h3 class="font-bold text-lg text-[#1269A8]">4. La Media Geométrica vs. Media Aritmética</h3>
+                            <p class="mt-1">Dados dos números positivos <span class="math-expr">4</span> y <span class="math-expr">16</span>, su medio aritmético es <span class="math-expr">10</span>, mientras que su medio geométrico positivo es <span class="math-expr">8</span>. ¿Por qué en números positivos la media geométrica nunca supera a la media aritmética?</p>
+                            <button class="btn-solucion" onclick="toggleSolucion('ref-4', this)">Ver análisis conceptual</button>
+                            <div id="ref-4" class="solucion-box">
+                                <p><strong>Análisis:</strong> Porque <span class="math-expr">(√a - √b)² ≥ 0</span> siempre se cumple para reales positivos. Al desarrollar ese binomio se demuestra la famosa desigualdad <span class="math-expr">(a + b)/2 ≥ √(a·b)</span>, siendo iguales únicamente cuando <span class="math-expr">a = b</span> (es decir, cuando <span class="math-expr">r = 1</span> y <span class="math-expr">d = 0</span>).</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 5: EVALUACIÓN FORMATIVA            -->
+            <!-- ========================================== -->
+            <section id="sec-evaluacion" class="seccion-contenido hidden">
+                <div class="card-montano">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b-2 border-[#F7D615] pb-3 mb-4">
+                        <div>
+                            <h2 class="text-2xl font-bold text-[#1269A8]">✅ Evaluación Formativa de Comprobación (Nivel Superior)</h2>
+                            <p class="text-sm text-slate-600">Reactivos integradores de potencias, radicales, series infinitas y sistemas simétricos.</p>
+                        </div>
+                        <span class="badge-nivel badge-avanzado mt-2 sm:mt-0">5 Reactivos de Alto Nivel</span>
+                    </div>
+
+                    <div class="space-y-4">
+                        <!-- Pregunta 1 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 1 • Término General a partir de Dos Posiciones</span>
+                            <p class="font-bold text-base mt-1">En una progresión geométrica de razón positiva, el cuarto término es <span class="math-expr">24</span> y el séptimo término es <span class="math-expr">192</span>. Determina el primer término (<span class="math-expr">a₁</span>) y el noveno término (<span class="math-expr">a₉</span>).</p>
+                            <button class="btn-solucion" onclick="toggleSolucion('eval-1', this)">Mostrar solución</button>
+                            <div id="eval-1" class="solucion-box">
+                                <p><strong>Paso 1:</strong> <span class="math-expr">192 = 24 · r⁷⁻⁴ ➔ r³ = 192 / 24 = 8 ➔ r = 2</span>.</p>
+                                <p><strong>Paso 2:</strong> <span class="math-expr">24 = a₁ · 2³ ➔ 24 = 8a₁ ➔ a₁ = 3</span>.</p>
+                                <p><strong>Paso 3:</strong> <span class="math-expr">a₉ = 3 · 2⁸ = 3 · 256 = 768</span>.</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: a₁ = 3 y a₉ = 768.</p>
+                            </div>
+                        </div>
+
+                        <!-- Pregunta 2 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 2 • Ecuación Exponencial en Suma Finita</span>
+                            <p class="font-bold text-base mt-1">¿Cuántos términos consecutivos de la P.G. <span class="math-expr">3, 6, 12, 24, ...</span> deben sumarse para obtener exactamente <span class="math-expr">3069</span>?</p>
+                            <button class="btn-solucion" onclick="toggleSolucion('eval-2', this)">Mostrar solución</button>
+                            <div id="eval-2" class="solucion-box">
+                                <p><strong>Paso 1:</strong> <span class="math-expr">3069 = 3 · (2ⁿ - 1) / (2 - 1) ➔ 3069 / 3 = 2ⁿ - 1</span>.</p>
+                                <p><strong>Paso 2:</strong> <span class="math-expr">1023 = 2ⁿ - 1 ➔ 2ⁿ = 1024</span>.</p>
+                                <p><strong>Paso 3:</strong> Como <span class="math-expr">2¹⁰ = 1024</span>, entonces <span class="math-expr">n = 10</span>.</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: Se deben sumar 10 términos.</p>
+                            </div>
+                        </div>
+
+                        <!-- Pregunta 3 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 3 • Serie Infinita Alternante</span>
+                            <p class="font-bold text-base mt-1">Calcula la suma infinita (<span class="math-expr">S∞</span>) de la progresión geométrica alternante: <span class="math-expr">60, -20, 20/3, -20/9, ...</span></p>
+                            <button class="btn-solucion" onclick="toggleSolucion('eval-3', this)">Mostrar solución</button>
+                            <div id="eval-3" class="solucion-box">
+                                <p><strong>Paso 1:</strong> <span class="math-expr">r = -20 / 60 = -1/3</span>. Como <span class="math-expr">|-1/3| &lt; 1</span>, converge.</p>
+                                <p><strong>Paso 2:</strong> <span class="math-expr">S∞ = 60 / [ 1 - (-1/3) ] = 60 / (4/3) = 60 · (3/4) = 45</span>.</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: S∞ = 45.</p>
+                            </div>
+                        </div>
+
+                        <!-- Pregunta 4 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 4 • Ecuación con Término Medio Geométrico</span>
+                            <p class="font-bold text-base mt-1">Halla el valor positivo de <span class="math-expr">k</span> para que las expresiones <span class="math-expr">(k - 1), (k + 3), (3k + 1)</span> formen una progresión geométrica.</p>
+                            <button class="btn-solucion" onclick="toggleSolucion('eval-4', this)">Mostrar solución</button>
+                            <div id="eval-4" class="solucion-box">
+                                <p><strong>Paso 1:</strong> <span class="math-expr">(k + 3)² = (k - 1)(3k + 1)</span>.</p>
+                                <p><strong>Paso 2:</strong> <span class="math-expr">k² + 6k + 9 = 3k² - 2k - 1 ➔ 2k² - 8k - 10 = 0 ➔ k² - 4k - 5 = 0</span>.</p>
+                                <p><strong>Paso 3:</strong> <span class="math-expr">(k - 5)(k + 1) = 0 ➔ k = 5</span> (valor positivo; términos: <span class="math-expr">4, 8, 16</span>).</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: k = 5.</p>
+                            </div>
+                        </div>
+
+                        <!-- Pregunta 5 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 5 • Sistema Simétrico con Producto y Suma</span>
+                            <p class="font-bold text-base mt-1">El producto de tres números en progresión geométrica es <span class="math-expr">125</span> y su suma es <span class="math-expr">31</span>. Determina los tres números.</p>
+                            <button class="btn-solucion" onclick="toggleSolucion('eval-5', this)">Mostrar solución</button>
+                            <div id="eval-5" class="solucion-box">
+                                <p><strong>Paso 1:</strong> Sean <span class="math-expr">(x/r), x, (x·r)</span>. Producto: <span class="math-expr">x³ = 125 ➔ x = 5</span>.</p>
+                                <p><strong>Paso 2:</strong> Suma: <span class="math-expr">(5/r) + 5 + 5r = 31 ➔ (5/r) + 5r = 26 ➔ 5r² - 26r + 5 = 0</span>.</p>
+                                <p><strong>Paso 3:</strong> Factorizando: <span class="math-expr">(5r - 1)(r - 5) = 0 ➔ r = 5</span> o <span class="math-expr">r = 1/5</span>.</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: Los números son 1, 5 y 25 (o 25, 5 y 1).</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Pie de Pizarra -->
+        <footer class="bg-[#1269A8] text-white text-center py-3 px-4 text-xs sm:text-sm border-t-2 border-[#F7D615]">
+            <strong>Colegio Montano</strong> • Departamento de Matemática • Pizarra Digital Interactiva para Canvas Education
+        </footer>
+    </div>
+
+    <!-- Scripts de Interactividad -->
+    <script>
+        /**
+         * Cambia entre las pestañas principales de la pizarra (Teoría, Ejemplos, Ejercicios, Reflexión, Evaluación).
+         */
+        function cambiarSeccion(seccionId, botonActivo) {
+            const secciones = document.querySelectorAll('.seccion-contenido');
+            secciones.forEach(sec => sec.classList.add('hidden'));
+
+            const target = document.getElementById('sec-' + seccionId);
+            if (target) {
+                target.classList.remove('hidden');
+            }
+
+            const botones = document.querySelectorAll('.tab-btn');
+            botones.forEach(btn => btn.classList.remove('active'));
+            botonActivo.classList.add('active');
+        }
+
+        /**
+         * Filtra los subniveles (Básico, Intermedio, Avanzado) dentro de Ejemplos o Ejercicios.
+         */
+        function filtrarSubnivel(grupo, nivel, botonActivo) {
+            const contenedores = document.querySelectorAll('.subcontenido-' + grupo);
+            contenedores.forEach(cont => cont.classList.add('hidden'));
+
+            const target = document.getElementById(grupo + '-' + nivel);
+            if (target) {
+                target.classList.remove('hidden');
+            }
+
+            const parent = botonActivo.parentElement;
+            const subBotones = parent.querySelectorAll('.subtab-btn');
+            subBotones.forEach(btn => btn.classList.remove('active'));
+            botonActivo.classList.add('active');
+        }
+
+        /**
+         * Alterna la visibilidad de las soluciones paso a paso y actualiza el texto del botón.
+         */
+        function toggleSolucion(solucionId, boton) {
+            const box = document.getElementById(solucionId);
+            if (!box) return;
+
+            if (box.style.display === 'block') {
+                box.style.display = 'none';
+                boton.textContent = boton.textContent.replace('Ocultar', 'Mostrar').replace('Ocultar análisis conceptual', 'Ver análisis conceptual');
+            } else {
+                box.style.display = 'block';
+                if (boton.textContent.includes('Ver análisis')) {
+                    boton.textContent = 'Ocultar análisis conceptual';
+                } else {
+                    boton.textContent = 'Ocultar solución';
+                }
+            }
+        }
+
+        /**
+         * Controla el modo de pantalla completa (Fullscreen API) para proyección en aula.
+         */
+        function toggleFullscreen() {
+            const btn = document.getElementById('fullscreen-btn');
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().then(() => {
+                    btn.innerHTML = '<span>✖ Salir de pantalla completa</span>';
+                }).catch(err => {
+                    console.warn('Error al intentar activar pantalla completa:', err);
+                });
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen().then(() => {
+                        btn.innerHTML = '<span>⛶ Pantalla completa</span>';
+                    });
+                }
+            }
+        }
+
+        document.addEventListener('fullscreenchange', () => {
+            const btn = document.getElementById('fullscreen-btn');
+            if (!document.fullscreenElement && btn) {
+                btn.innerHTML = '<span>⛶ Pantalla completa</span>';
+            }
+        });
+    </script>
+</body>
+</html>

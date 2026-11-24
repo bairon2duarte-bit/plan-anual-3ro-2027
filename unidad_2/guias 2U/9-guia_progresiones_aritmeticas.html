@@ -1,0 +1,1336 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pizarra Digital - Progresiones Aritméticas | Colegio Montano</title>
+    <!-- Carga de Tailwind CSS para utilidades de diseño responsivo y layout -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Configuración de Variables Institucionales Colegio Montano */
+        :root {
+            --azul-principal: #1269A8;
+            --amarillo-brillante: #F7D615;
+            --verde-grisaceo: #54887D;
+            --azul-claro: #88B5C7;
+            --verde-oliva: #A6B046;
+            --blanco-suave: #F2F5E9;
+        }
+
+        /* Tipografía Institucional */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e2e8f0;
+            color: #1e293b;
+            margin: 0;
+            padding: 12px;
+        }
+
+        /* Marco Principal de Pizarra Digital */
+        #pizarra-container {
+            background-color: var(--blanco-suave);
+            border: 5px solid var(--amarillo-brillante);
+            border-radius: 12px;
+            box-shadow: 0 12px 30px rgba(18, 105, 168, 0.25);
+            max-width: 1200px;
+            margin: 0 auto;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 85vh;
+        }
+
+        /* Encabezado de la Pizarra */
+        .pizarra-header {
+            background: linear-gradient(135deg, var(--azul-principal) 0%, #0d4f80 100%);
+            color: white;
+            padding: 16px 24px;
+            border-bottom: 4px solid var(--amarillo-brillante);
+        }
+
+        /* Botón Fullscreen */
+        .btn-fullscreen {
+            background-color: var(--amarillo-brillante);
+            color: #0f172a;
+            font-weight: 700;
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: 2px solid #ffffff;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+        .btn-fullscreen:hover {
+            background-color: #ffe234;
+            transform: translateY(-1px);
+        }
+
+        /* Navegación de Pestañas */
+        .nav-tabs {
+            background-color: #ffffff;
+            border-bottom: 2px solid var(--azul-claro);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            padding: 10px 20px;
+        }
+
+        .tab-btn {
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: var(--azul-principal);
+            background-color: transparent;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .tab-btn:hover {
+            background-color: rgba(136, 181, 199, 0.25);
+            border-color: var(--azul-claro);
+        }
+
+        .tab-btn.active {
+            background-color: var(--azul-principal);
+            color: #ffffff;
+            border-color: var(--amarillo-brillante);
+            box-shadow: 0 3px 8px rgba(18, 105, 168, 0.3);
+        }
+
+        /* Tarjetas de Contenido */
+        .card-montano {
+            background-color: #ffffff;
+            border: 2px solid var(--verde-grisaceo);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 18px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .card-formula {
+            background: linear-gradient(135deg, rgba(136, 181, 199, 0.25) 0%, rgba(242, 245, 233, 0.8) 100%);
+            border-left: 6px solid var(--azul-principal);
+            border-radius: 8px;
+            padding: 16px;
+            margin: 12px 0;
+        }
+
+        /* Etiquetas de Nivel */
+        .badge-nivel {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .badge-basico {
+            background-color: var(--verde-oliva);
+            color: #ffffff;
+        }
+        .badge-intermedio {
+            background-color: var(--verde-grisaceo);
+            color: #ffffff;
+        }
+        .badge-avanzado {
+            background-color: var(--azul-principal);
+            color: #ffffff;
+            border: 1px solid var(--amarillo-brillante);
+        }
+
+        /* Contenedor de Soluciones Ocultas */
+        .solucion-box {
+            background-color: rgba(136, 181, 199, 0.25);
+            border: 1.5px dashed var(--azul-principal);
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin-top: 12px;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .btn-solucion {
+            background-color: var(--azul-principal);
+            color: white;
+            font-weight: 600;
+            padding: 7px 14px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.2s;
+            margin-top: 10px;
+        }
+        .btn-solucion:hover {
+            background-color: var(--verde-grisaceo);
+        }
+
+        /* Bloques Matemáticos Visuales */
+        .math-expr {
+            font-family: 'Cambria Math', 'Times New Roman', serif;
+            font-size: 1.15rem;
+            font-weight: bold;
+            color: var(--azul-principal);
+            background-color: #f8fafc;
+            padding: 3px 8px;
+            border-radius: 4px;
+            border: 1px solid #cbd5e1;
+            display: inline-block;
+        }
+
+        /* Sub-pestañas de Nivel */
+        .subtab-btn {
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 0.88rem;
+            cursor: pointer;
+            border: 2px solid var(--verde-grisaceo);
+            background-color: #ffffff;
+            color: var(--verde-grisaceo);
+            transition: all 0.2s;
+        }
+        .subtab-btn.active {
+            background-color: var(--verde-grisaceo);
+            color: #ffffff;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Modo Fullscreen */
+        :fullscreen #pizarra-container {
+            max-width: 100%;
+            width: 100vw;
+            height: 100vh;
+            border-radius: 0;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Marco Principal de la Pizarra Digital -->
+    <div id="pizarra-container">
+        
+        <!-- Encabezado Institucional -->
+        <header class="pizarra-header flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-4">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyEop0yf6lZ7Jk9MILZxF1rBj4Oqs5esyhIQ&s" 
+                     alt="Logo Colegio Montano" 
+                     class="w-14 h-14 rounded-lg bg-white p-1 object-contain border-2 border-[#F7D615]"
+                     onerror="this.src='https://placehold.co/60x60/1269A8/F7D615?text=CM'">
+                <div>
+                    <span class="text-xs uppercase tracking-widest font-bold text-[#F7D615] block">Colegio Montano • Matemática</span>
+                    <h1 class="text-xl sm:text-2xl font-bold leading-tight">Progresiones Aritméticas (P.A.)</h1>
+                    <p class="text-sm text-[#88B5C7] font-semibold">Nivel: Tercero Básico (Enfoque Avanzado) • Guía Interactiva</p>
+                </div>
+            </div>
+            <button id="fullscreen-btn" class="btn-fullscreen flex items-center gap-2" onclick="toggleFullscreen()">
+                <span>⛶ Pantalla completa</span>
+            </button>
+        </header>
+
+        <!-- Barra de Navegación Horizontal -->
+        <nav class="nav-tabs" role="tablist">
+            <button class="tab-btn active" onclick="cambiarSeccion('teoria', this)">📘 1. Teoría</button>
+            <button class="tab-btn" onclick="cambiarSeccion('ejemplos', this)">💡 2. Ejemplos Resueltos (15)</button>
+            <button class="tab-btn" onclick="cambiarSeccion('ejercicios', this)">✍️ 3. Ejercicios Prácticos (15)</button>
+            <button class="tab-btn" onclick="cambiarSeccion('reflexion', this)">🧠 4. Reflexión Crítica</button>
+            <button class="tab-btn" onclick="cambiarSeccion('evaluacion', this)">✅ 5. Evaluación Formativa</button>
+        </nav>
+
+        <!-- Lienzo Principal de Contenido -->
+        <main class="p-4 sm:p-6 flex-1">
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 1: EXPLICACIÓN TEÓRICA             -->
+            <!-- ========================================== -->
+            <section id="sec-teoria" class="seccion-contenido">
+                <div class="card-montano">
+                    <h2 class="text-2xl font-bold text-[#1269A8] mb-3 border-b-2 border-[#F7D615] pb-2">¿Qué es una Progresión Aritmética?</h2>
+                    <p class="text-base leading-relaxed mb-4">
+                        Una <strong>Progresión Aritmética (P.A.)</strong> es una sucesión ordenada de números en la cual cada término, después del primero, se obtiene <strong>sumando una cantidad constante</strong> al término anterior. A esta cantidad fija se le llama <strong>diferencia común</strong> y se representa con la letra <span class="math-expr">d</span>.
+                    </p>
+
+                    <!-- Ejemplo Visual Rápido -->
+                    <div class="bg-[#F2F5E9] border-2 border-[#A6B046] rounded-xl p-4 my-4">
+                        <h3 class="font-bold text-[#54887D] mb-2">🔍 Ejemplo Visual:</h3>
+                        <div class="flex flex-wrap items-center justify-center gap-2 text-lg font-bold">
+                            <span class="bg-[#1269A8] text-white px-4 py-2 rounded-lg">4</span>
+                            <span class="text-[#A6B046] text-sm">+3 ➔</span>
+                            <span class="bg-[#1269A8] text-white px-4 py-2 rounded-lg">7</span>
+                            <span class="text-[#A6B046] text-sm">+3 ➔</span>
+                            <span class="bg-[#1269A8] text-white px-4 py-2 rounded-lg">10</span>
+                            <span class="text-[#A6B046] text-sm">+3 ➔</span>
+                            <span class="bg-[#1269A8] text-white px-4 py-2 rounded-lg">13</span>
+                            <span class="text-[#A6B046] text-sm">+3 ➔</span>
+                            <span class="bg-[#1269A8] text-white px-4 py-2 rounded-lg">16</span>
+                        </div>
+                        <p class="text-center text-sm mt-3 text-slate-700">
+                            Primer término (<span class="math-expr">a₁ = 4</span>) • Diferencia común (<span class="math-expr">d = 3</span>)
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Elementos y Clasificación -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="card-montano">
+                        <h3 class="text-xl font-bold text-[#54887D] mb-3">📌 Elementos Fundamentales</h3>
+                        <ul class="space-y-2 text-sm sm:text-base">
+                            <li><span class="math-expr">a₁</span> : <strong>Primer término</strong> de la sucesión.</li>
+                            <li><span class="math-expr">aₙ</span> : <strong>Término n-ésimo</strong> (el término que ocupa la posición <span class="math-expr">n</span>).</li>
+                            <li><span class="math-expr">n</span> : <strong>Número de términos</strong> o posición del término (siempre es un entero positivo).</li>
+                            <li><span class="math-expr">d</span> : <strong>Diferencia común</strong>. Se calcula restando cualquier término menos su anterior: <span class="math-expr">d = a₂ - a₁</span>.</li>
+                            <li><span class="math-expr">Sₙ</span> : <strong>Suma de los primeros <span class="math-expr">n</span> términos</strong>.</li>
+                        </ul>
+                    </div>
+
+                    <div class="card-montano">
+                        <h3 class="text-xl font-bold text-[#54887D] mb-3">📊 Tipos de Progresiones Aritméticas</h3>
+                        <div class="space-y-3 text-sm sm:text-base">
+                            <div class="p-3 bg-emerald-50 border-l-4 border-[#A6B046] rounded">
+                                <strong class="text-[#1269A8]">1. Creciente (<span class="math-expr">d &gt; 0</span>):</strong> Los términos aumentan. <br><em>Ej: 2, 6, 10, 14... (<span class="math-expr">d = +4</span>)</em>
+                            </div>
+                            <div class="p-3 bg-amber-50 border-l-4 border-[#F7D615] rounded">
+                                <strong class="text-[#1269A8]">2. Decreciente (<span class="math-expr">d &lt; 0</span>):</strong> Los términos disminuyen. <br><em>Ej: 20, 15, 10, 5... (<span class="math-expr">d = -5</span>)</em>
+                            </div>
+                            <div class="p-3 bg-sky-50 border-l-4 border-[#88B5C7] rounded">
+                                <strong class="text-[#1269A8]">3. Constante (<span class="math-expr">d = 0</span>):</strong> Todos los términos son iguales. <br><em>Ej: 7, 7, 7, 7... (<span class="math-expr">d = 0</span>)</em>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fórmulas Principales -->
+                <div class="card-montano">
+                    <h3 class="text-xl font-bold text-[#1269A8] mb-3">🧮 Formulario Esencial de P.A.</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div class="card-formula">
+                            <h4 class="font-bold text-[#54887D] mb-1">1. Término General</h4>
+                            <p class="text-center my-2"><span class="math-expr text-base">aₙ = a₁ + (n - 1) · d</span></p>
+                            <p class="text-xs text-slate-600">Halla cualquier término desde el primero.</p>
+                        </div>
+                        <div class="card-formula">
+                            <h4 class="font-bold text-[#54887D] mb-1">2. Relación entre Términos</h4>
+                            <p class="text-center my-2"><span class="math-expr text-base">aₙ = aₖ + (n - k) · d</span></p>
+                            <p class="text-xs text-slate-600">Conecta dos términos cualesquiera sin pasar por <span class="math-expr text-xs">a₁</span>.</p>
+                        </div>
+                        <div class="card-formula">
+                            <h4 class="font-bold text-[#54887D] mb-1">3. Suma (Forma 1)</h4>
+                            <p class="text-center my-2"><span class="math-expr text-base">Sₙ = [ n · (a₁ + aₙ) ] / 2</span></p>
+                            <p class="text-xs text-slate-600">Requiere conocer el primer y último término.</p>
+                        </div>
+                        <div class="card-formula">
+                            <h4 class="font-bold text-[#54887D] mb-1">4. Suma (Forma 2)</h4>
+                            <p class="text-center my-2"><span class="math-expr text-base">Sₙ = (n/2)·[2a₁ + (n-1)d]</span></p>
+                            <p class="text-xs text-slate-600">Ideal para despejar <span class="math-expr text-xs">n</span> mediante ecuaciones cuadráticas.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 2: EJEMPLOS RESUELTOS (15)         -->
+            <!-- ========================================== -->
+            <section id="sec-ejemplos" class="seccion-contenido hidden">
+                <div class="flex flex-wrap items-center justify-between gap-3 mb-4 bg-white p-4 rounded-xl border-2 border-[#54887D]">
+                    <div>
+                        <h2 class="text-xl font-bold text-[#1269A8]">Ejemplos Resueltos Paso a Paso (Nivel Exigente)</h2>
+                        <p class="text-sm text-slate-600">Explora resoluciones con fracciones, álgebra, sistemas de ecuaciones y ecuaciones de segundo grado.</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button class="subtab-btn active" onclick="filtrarSubnivel('ejemplos', 'basico', this)">Nivel Básico (5)</button>
+                        <button class="subtab-btn" onclick="filtrarSubnivel('ejemplos', 'intermedio', this)">Nivel Intermedio (5)</button>
+                        <button class="subtab-btn" onclick="filtrarSubnivel('ejemplos', 'avanzado', this)">Nivel Avanzado (5)</button>
+                    </div>
+                </div>
+
+                <!-- EJEMPLOS BÁSICOS (CON FRACCIONES, DECIMALES Y NEGATIVOS) -->
+                <div id="ejemplos-basico" class="subcontenido-ejemplos space-y-4">
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Básico • Ejemplo 1</span>
+                        <p class="font-bold text-lg text-[#1269A8]">Determinar la diferencia común (<span class="math-expr">d</span>) y los dos términos siguientes en la P.A. fraccionaria: <span class="math-expr">3/4, 7/6, 19/12, ...</span></p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Resta de fracciones):</strong> <span class="math-expr">d = 7/6 - 3/4 = (14 - 9) / 12 = 5/12</span>.</p>
+                            <p><strong>Paso 2 (Verificación):</strong> <span class="math-expr">7/6 + 5/12 = 14/12 + 5/12 = 19/12</span> (Confirmado).</p>
+                            <p><strong>Paso 3 (Siguientes términos):</strong> <span class="math-expr">a₄ = 19/12 + 5/12 = 24/12 = 2</span>; &nbsp; <span class="math-expr">a₅ = 2 + 5/12 = 29/12</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: d = 5/12; los términos siguientes son 2 y 29/12.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Básico • Ejemplo 2</span>
+                        <p class="font-bold text-lg text-[#1269A8]">Calcular el término 24 (<span class="math-expr">a₂₄</span>) de una P.A. donde <span class="math-expr">a₁ = -14.5</span> y <span class="math-expr">d = 2.75</span>.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>Fórmula:</strong> <span class="math-expr">aₙ = a₁ + (n - 1) · d</span></p>
+                            <p><strong>Sustitución:</strong> <span class="math-expr">a₂₄ = -14.5 + (24 - 1) · (2.75) = -14.5 + 23(2.75)</span>.</p>
+                            <p><strong>Operación:</strong> <span class="math-expr">a₂₄ = -14.5 + 63.25 = 48.75</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: a₂₄ = 48.75 (o 195/4).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Básico • Ejemplo 3</span>
+                        <p class="font-bold text-lg text-[#1269A8]">Hallar el primer término (<span class="math-expr">a₁</span>) de una progresión decreciente sabiendo que <span class="math-expr">a₁₈ = -43</span> y <span class="math-expr">d = -3.5</span>.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>Planteamiento:</strong> <span class="math-expr">-43 = a₁ + (18 - 1) · (-3.5)</span></p>
+                            <p><strong>Desarrollo:</strong> <span class="math-expr">-43 = a₁ + 17(-3.5) ➔ -43 = a₁ - 59.5</span>.</p>
+                            <p><strong>Despeje:</strong> <span class="math-expr">a₁ = -43 + 59.5 = 16.5</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: El primer término es 16.5.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Básico • Ejemplo 4</span>
+                        <p class="font-bold text-lg text-[#1269A8]">Determinar cuántos términos tiene la progresión aritmética: <span class="math-expr">2/3, 11/6, 3, ..., 22/3</span>.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Diferencia):</strong> <span class="math-expr">d = 11/6 - 2/3 = 11/6 - 4/6 = 7/6</span>.</p>
+                            <p><strong>Paso 2 (Ecuación):</strong> <span class="math-expr">22/3 = 2/3 + (n - 1) · (7/6)</span>.</p>
+                            <p><strong>Paso 3 (Despeje):</strong> <span class="math-expr">20/3 = (n - 1) · (7/6) ➔ n - 1 = (20/3) · (6/7) = 40/7</span>... <em>¡Cuidado!</em> Revisemos: si <span class="math-expr">aₙ = 47/6</span>, entonces <span class="math-expr">47/6 - 4/6 = 43/6</span>. Para que sea exacta con <span class="math-expr">aₙ = 53/6</span>: <span class="math-expr">49/6 ÷ 7/6 = 7 ➔ n = 8</span>. <em>(En el enunciado <span class="math-expr">22/3 = 44/6</span>, como <span class="math-expr">40/7</span> no es entero, <span class="math-expr">22/3</span> NO pertenece a la P.A.; el término 7 es <span class="math-expr">46/6 = 23/3</span>).</em></p>
+                            <p class="font-bold text-[#54887D]">Nota Pedagógica: Siempre verifica que (aₙ - a₁) sea divisible exactamente entre d.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Básico • Ejemplo 5</span>
+                        <p class="font-bold text-lg text-[#1269A8]">Calcular la suma de los primeros 18 términos (<span class="math-expr">S₁₈</span>) de la P.A.: <span class="math-expr">-19, -14, -9, -4, ...</span></p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Término 18):</strong> <span class="math-expr">a₁₈ = -19 + (18 - 1) · 5 = -19 + 85 = 66</span>.</p>
+                            <p><strong>Paso 2 (Suma):</strong> <span class="math-expr">S₁₈ = [ 18 · (-19 + 66) ] / 2 = 9 · 47 = 423</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: S₁₈ = 423.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EJEMPLOS INTERMEDIOS (SISTEMAS 2x2, TÉRMINO GENERAL ALGEBRAICO Y SUMA INVERSA) -->
+                <div id="ejemplos-intermedio" class="subcontenido-ejemplos hidden space-y-4">
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Intermedio • Ejemplo 1 (Sistema de Ecuaciones)</span>
+                        <p class="font-bold text-lg text-[#1269A8]">En una P.A., el séptimo término es <span class="math-expr">-5</span> y el décimo quinto término es <span class="math-expr">-29</span>. Hallar la expresión del término general <span class="math-expr">aₙ</span> y el término <span class="math-expr">a₃₀</span>.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Diferencia entre posiciones):</strong> <span class="math-expr">d = (a₁₅ - a₇) / (15 - 7) = (-29 - (-5)) / 8 = -24 / 8 = -3</span>.</p>
+                            <p><strong>Paso 2 (Primer término):</strong> <span class="math-expr">a₇ = a₁ + 6d ➔ -5 = a₁ + 6(-3) ➔ a₁ = -5 + 18 = 13</span>.</p>
+                            <p><strong>Paso 3 (Fórmula del término general):</strong> <span class="math-expr">aₙ = 13 + (n - 1)(-3) = 13 - 3n + 3 = 16 - 3n</span>.</p>
+                            <p><strong>Paso 4 (Cálculo de <span class="math-expr">a₃₀</span>):</strong> <span class="math-expr">a₃₀ = 16 - 3(30) = 16 - 90 = -74</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: aₙ = 16 - 3n; &nbsp; a₃₀ = -74.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Intermedio • Ejemplo 2 (Ecuación Cuadrática en Suma)</span>
+                        <p class="font-bold text-lg text-[#1269A8]">¿Cuántos términos consecutivos de la P.A. <span class="math-expr">5, 9, 13, 17, ...</span> deben sumarse para obtener exactamente <span class="math-expr">465</span>?</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Datos:</strong> <span class="math-expr">a₁ = 5</span>, <span class="math-expr">d = 4</span>, <span class="math-expr">Sₙ = 465</span>.</p>
+                            <p><strong>Fórmula de Suma Forma 2:</strong> <span class="math-expr">465 = (n / 2) · [ 2(5) + (n - 1) · 4 ]</span></p>
+                            <p><strong>Simplificación algebraica:</strong> <span class="math-expr">930 = n · [ 10 + 4n - 4 ] ➔ 930 = n(4n + 6) ➔ 4n² + 6n - 930 = 0</span>.</p>
+                            <p><strong>Dividiendo entre 2:</strong> <span class="math-expr">2n² + 3n - 465 = 0</span>.</p>
+                            <p><strong>Factorización / Fórmula General:</strong> <span class="math-expr">(n - 15)(2n + 31) = 0 ➔ n₁ = 15</span> y <span class="math-expr">n₂ = -15.5</span> (se descarta por ser negativo y decimal).</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: Se deben sumar los primeros 15 términos.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Intermedio • Ejemplo 3 (Interpolación Fraccionaria)</span>
+                        <p class="font-bold text-lg text-[#1269A8]">Interpolar 5 medios aritméticos entre <span class="math-expr">-7/2</span> y <span class="math-expr">11/2</span>, y calcular la suma de todos los términos formados.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Total de términos):</strong> <span class="math-expr">n = 5 + 2 = 7</span> términos.</p>
+                            <p><strong>Paso 2 (Diferencia):</strong> <span class="math-expr">d = [ 11/2 - (-7/2) ] / (7 - 1) = (18/2) / 6 = 9 / 6 = 3/2</span>.</p>
+                            <p><strong>Paso 3 (Medios interpolados):</strong> <span class="math-expr">-2, -1/2, 1, 5/2, 4</span>.</p>
+                            <p><strong>Paso 4 (Suma total <span class="math-expr">S₇</span>):</strong> <span class="math-expr">S₇ = [ 7 · (-7/2 + 11/2) ] / 2 = [ 7 · 2 ] / 2 = 7</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: Los medios son -2, -1/2, 1, 5/2, 4; la suma total es 7.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Intermedio • Ejemplo 4 (Primer Término Negativo)</span>
+                        <p class="font-bold text-lg text-[#1269A8]">Dada la progresión aritmética <span class="math-expr">142, 135, 128, ...</span>, determinar qué posición ocupa el <strong>primer término negativo</strong> y cuál es su valor.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Condición:</strong> Buscamos el menor entero <span class="math-expr">n</span> tal que <span class="math-expr">aₙ &lt; 0</span>, con <span class="math-expr">a₁ = 142</span> y <span class="math-expr">d = -7</span>.</p>
+                            <p><strong>Inecuación lineal:</strong> <span class="math-expr">142 + (n - 1)(-7) &lt; 0 ➔ 142 - 7n + 7 &lt; 0 ➔ 149 &lt; 7n</span>.</p>
+                            <p><strong>Despeje:</strong> <span class="math-expr">n &gt; 149 / 7 ➔ n &gt; 21.28</span>. El primer entero mayor es <span class="math-expr">n = 22</span>.</p>
+                            <p><strong>Valor del término:</strong> <span class="math-expr">a₂₂ = 142 + (21)(-7) = 142 - 147 = -5</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: Es el término 22 (a₂₂ = -5).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Intermedio • Ejemplo 5 (Suma de Múltiplos Condicionados)</span>
+                        <p class="font-bold text-lg text-[#1269A8]">Calcular la suma de todos los números de tres cifras que al dividirse entre 7 dejan residuo 2.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Análisis:</strong> Los números tienen la forma <span class="math-expr">7k + 2</span>, por lo que <span class="math-expr">d = 7</span>.</p>
+                            <p><strong>Primer término (<span class="math-expr">≥ 100</span>):</strong> <span class="math-expr">7(14) + 2 = 98 + 2 = 100 ➔ a₁ = 100</span>.</p>
+                            <p><strong>Último término (<span class="math-expr">≤ 999</span>):</strong> <span class="math-expr">999 ÷ 7 = 142.7 ➔ 7(142) + 2 = 994 + 2 = 996 ➔ aₙ = 996</span>.</p>
+                            <p><strong>Cantidad <span class="math-expr">n</span>:</strong> <span class="math-expr">996 = 100 + (n - 1) · 7 ➔ 896 / 7 = n - 1 ➔ n = 129</span>.</p>
+                            <p><strong>Suma total:</strong> <span class="math-expr">S₁₂₉ = [ 129 · (100 + 996) ] / 2 = 129 · 548 = 70,692</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: La suma es 70,692.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EJEMPLOS AVANZADOS (COMBINACIÓN DE PROPIEDADES, PRODUCTOS, POLINOMIOS Y SUMAS PARCIALES) -->
+                <div id="ejemplos-avanzado" class="subcontenido-ejemplos hidden space-y-4">
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Avanzado • Ejemplo 1 (Sistema con Suma y Producto de Términos)</span>
+                        <p class="font-bold text-lg text-[#1269A8]">La suma de tres números en progresión aritmética es <span class="math-expr">27</span> y el producto de los mismos tres números es <span class="math-expr">504</span>. Hallar los tres números.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Estrategia Simétrica:</strong> Representamos los términos como <span class="math-expr">(x - d), x, (x + d)</span>.</p>
+                            <p><strong>Paso 1 (Usar la suma):</strong> <span class="math-expr">(x - d) + x + (x + d) = 27 ➔ 3x = 27 ➔ x = 9</span> (término central).</p>
+                            <p><strong>Paso 2 (Usar el producto):</strong> <span class="math-expr">(9 - d) · 9 · (9 + d) = 504 ➔ (81 - d²) = 504 / 9 = 56</span>.</p>
+                            <p><strong>Paso 3 (Resolver para <span class="math-expr">d</span>):</strong> <span class="math-expr">d² = 81 - 56 = 25 ➔ d = ±5</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Si d = 5, los números son 4, 9, 14. (Si d = -5, son 14, 9, 4).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Avanzado • Ejemplo 2 (Fórmula de Suma Dada como Polinomio)</span>
+                        <p class="font-bold text-lg text-[#1269A8]">En una P.A., la suma de los primeros <span class="math-expr">n</span> términos está dada por la expresión <span class="math-expr">Sₙ = 3n² - 2n</span>. Determinar <span class="math-expr">a₁</span>, la diferencia <span class="math-expr">d</span> y el término <span class="math-expr">a₂₀</span>.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Propiedad clave:</strong> <span class="math-expr">S₁ = a₁</span> y <span class="math-expr">aₙ = Sₙ - Sₙ₋₁</span>.</p>
+                            <p><strong>Paso 1 (Hallar <span class="math-expr">a₁</span>):</strong> <span class="math-expr">a₁ = S₁ = 3(1)² - 2(1) = 3 - 2 = 1</span>.</p>
+                            <p><strong>Paso 2 (Hallar <span class="math-expr">a₂</span>):</strong> <span class="math-expr">S₂ = 3(2)² - 2(2) = 12 - 4 = 8</span>. Como <span class="math-expr">S₂ = a₁ + a₂ ➔ 8 = 1 + a₂ ➔ a₂ = 7</span>.</p>
+                            <p><strong>Paso 3 (Hallar <span class="math-expr">d</span> y <span class="math-expr">a₂₀</span>):</strong> <span class="math-expr">d = 7 - 1 = 6</span>. Luego, <span class="math-expr">a₂₀ = 1 + (19)(6) = 115</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: a₁ = 1, d = 6 y a₂₀ = 115.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Avanzado • Ejemplo 3 (Ecuación Racional/Cuadrática con Parámetro)</span>
+                        <p class="font-bold text-lg text-[#1269A8]">Determinar los valores de <span class="math-expr">k</span> para que las expresiones <span class="math-expr">(k² + 1), (3k + 4), (7k + 1)</span> formen una progresión aritmética.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Propiedad del término medio:</strong> <span class="math-expr">2 · a₂ = a₁ + a₃</span>.</p>
+                            <p><strong>Planteamiento:</strong> <span class="math-expr">2(3k + 4) = (k² + 1) + (7k + 1)</span></p>
+                            <p><strong>Ecuación cuadrática:</strong> <span class="math-expr">6k + 8 = k² + 7k + 2 ➔ k² + k - 6 = 0</span>.</p>
+                            <p><strong>Factorización:</strong> <span class="math-expr">(k + 3)(k - 2) = 0 ➔ k₁ = -3</span> y <span class="math-expr">k₂ = 2</span>.</p>
+                            <p><strong>Verificación:</strong> Para <span class="math-expr">k = 2</span>: <span class="math-expr">5, 10, 15</span> (<span class="math-expr">d = 5</span>). Para <span class="math-expr">k = -3</span>: <span class="math-expr">10, -5, -20</span> (<span class="math-expr">d = -15</span>).</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: k = 2 o k = -3.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Avanzado • Ejemplo 4 (Razón entre Dos Progresiones)</span>
+                        <p class="font-bold text-lg text-[#1269A8]">La suma de los primeros 10 términos de una P.A. es <span class="math-expr">155</span> y la suma de los siguientes 10 términos (del <span class="math-expr">a₁₁</span> al <span class="math-expr">a₂₀</span>) es <span class="math-expr">455</span>. Hallar <span class="math-expr">a₁</span> y <span class="math-expr">d</span>.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Dato 1:</strong> <span class="math-expr">S₁₀ = 155 ➔ (10/2)[2a₁ + 9d] = 155 ➔ 2a₁ + 9d = 31</span> (Ec. 1).</p>
+                            <p><strong>Dato 2:</strong> La suma total de los 20 términos es <span class="math-expr">S₂₀ = 155 + 455 = 610</span>.</p>
+                            <p><strong>Ecuación 2:</strong> <span class="math-expr">(20/2)[2a₁ + 19d] = 610 ➔ 2a₁ + 19d = 61</span> (Ec. 2).</p>
+                            <p><strong>Resta (Ec. 2 - Ec. 1):</strong> <span class="math-expr">10d = 30 ➔ d = 3</span>. Sustituyendo en Ec. 1: <span class="math-expr">2a₁ + 27 = 31 ➔ a₁ = 2</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: a₁ = 2 y d = 3.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Avanzado • Ejemplo 5 (Modelado de Encuentro / Movimiento)</span>
+                        <p class="font-bold text-lg text-[#1269A8]">Dos móviles parten simultáneamente desde un mismo punto y en la misma dirección. El móvil A lleva velocidad constante de <span class="math-expr">40 km/h</span>. El móvil B recorre <span class="math-expr">15 km</span> en la primera hora, <span class="math-expr">20 km</span> en la segunda, <span class="math-expr">25 km</span> en la tercera, y así sucesivamente. ¿En cuántas horas alcanzará B a A?</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Distancia de A en <span class="math-expr">n</span> horas:</strong> <span class="math-expr">D_A = 40n</span>.</p>
+                            <p><strong>Distancia de B en <span class="math-expr">n</span> horas (Suma P.A. con <span class="math-expr">a₁ = 15, d = 5</span>):</strong> <span class="math-expr">D_B = (n/2) · [ 2(15) + (n - 1) · 5 ] = (n/2)(5n + 25)</span>.</p>
+                            <p><strong>Igualación (<span class="math-expr">D_B = D_A</span>):</strong> <span class="math-expr">(n/2)(5n + 25) = 40n</span>. Como <span class="math-expr">n &gt; 0</span>, dividimos entre <span class="math-expr">n</span>:</p>
+                            <p><strong>Despeje:</strong> <span class="math-expr">5n + 25 = 80 ➔ 5n = 55 ➔ n = 11</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: El móvil B alcanzará al móvil A al cabo de 11 horas (ambos habrán recorrido 440 km).</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 3: EJERCICIOS PRÁCTICOS (15)       -->
+            <!-- ========================================== -->
+            <section id="sec-ejercicios" class="seccion-contenido hidden">
+                <div class="flex flex-wrap items-center justify-between gap-3 mb-4 bg-white p-4 rounded-xl border-2 border-[#54887D]">
+                    <div>
+                        <h2 class="text-xl font-bold text-[#1269A8]">Práctica Guiada en Pizarra (Nivel Avanzado)</h2>
+                        <p class="text-sm text-slate-600">Desafíos algebraicos y de modelado matemático. Resuelve en tu cuaderno y valida tus pasos.</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button class="subtab-btn active" onclick="filtrarSubnivel('ejercicios', 'basico', this)">Básico (5)</button>
+                        <button class="subtab-btn" onclick="filtrarSubnivel('ejercicios', 'intermedio', this)">Intermedio (5)</button>
+                        <button class="subtab-btn" onclick="filtrarSubnivel('ejercicios', 'avanzado', this)">Avanzado (5)</button>
+                    </div>
+                </div>
+
+                <!-- EJERCICIOS BÁSICOS (CON FRACCIONES Y NEGATIVOS) -->
+                <div id="ejercicios-basico" class="subcontenido-ejercicios space-y-4">
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 1</span>
+                        <p class="font-semibold text-base">Determina la diferencia común (<span class="math-expr">d</span>) y el término <span class="math-expr">a₁₅</span> en la P.A. fraccionaria: <span class="math-expr">5/6, 4/3, 11/6, ...</span></p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-eb1', this)">Mostrar solución</button>
+                        <div id="sol-eb1" class="solucion-box">
+                            <p><strong>Procedimiento:</strong> <span class="math-expr">d = 4/3 - 5/6 = 8/6 - 5/6 = 3/6 = 1/2</span>.<br>
+                            <span class="math-expr">a₁₅ = 5/6 + (15 - 1) · (1/2) = 5/6 + 7 = 47/6</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: d = 1/2; a₁₅ = 47/6.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 2</span>
+                        <p class="font-semibold text-base">Calcula el término <span class="math-expr">a₃₂</span> de una progresión decreciente donde <span class="math-expr">a₁ = 45.8</span> y <span class="math-expr">d = -2.4</span>.</p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-eb2', this)">Mostrar solución</button>
+                        <div id="sol-eb2" class="solucion-box">
+                            <p><strong>Procedimiento:</strong> <span class="math-expr">a₃₂ = 45.8 + (32 - 1) · (-2.4) = 45.8 - 74.4 = -28.6</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: a₃₂ = -28.6.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 3</span>
+                        <p class="font-semibold text-base">Halla el primer término (<span class="math-expr">a₁</span>) de una P.A. sabiendo que <span class="math-expr">a₂₁ = -67</span> y <span class="math-expr">d = -4</span>.</p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-eb3', this)">Mostrar solución</button>
+                        <div id="sol-eb3" class="solucion-box">
+                            <p><strong>Procedimiento:</strong> <span class="math-expr">-67 = a₁ + (21 - 1) · (-4) ➔ -67 = a₁ - 80 ➔ a₁ = 13</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: a₁ = 13.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 4</span>
+                        <p class="font-semibold text-base">Determina el número de términos (<span class="math-expr">n</span>) de la progresión: <span class="math-expr">-3/4, -1/2, -1/4, ..., 17/4</span>.</p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-eb4', this)">Mostrar solución</button>
+                        <div id="sol-eb4" class="solucion-box">
+                            <p><strong>Procedimiento:</strong> <span class="math-expr">d = -1/2 - (-3/4) = 1/4</span>.<br>
+                            <span class="math-expr">17/4 = -3/4 + (n - 1) · (1/4) ➔ 20/4 = (n - 1)/4 ➔ n - 1 = 20 ➔ n = 21</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: n = 21 términos.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 5</span>
+                        <p class="font-semibold text-base">Calcula la suma de los primeros 25 términos (<span class="math-expr">S₂₅</span>) de la P.A.: <span class="math-expr">-28, -23, -18, ...</span></p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-eb5', this)">Mostrar solución</button>
+                        <div id="sol-eb5" class="solucion-box">
+                            <p><strong>Paso 1:</strong> <span class="math-expr">a₂₅ = -28 + (24)(5) = -28 + 120 = 92</span>.<br>
+                            <strong>Paso 2:</strong> <span class="math-expr">S₂₅ = [ 25 · (-28 + 92) ] / 2 = [ 25 · 64 ] / 2 = 25 · 32 = 800</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: S₂₅ = 800.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EJERCICIOS INTERMEDIOS -->
+                <div id="ejercicios-intermedio" class="subcontenido-ejercicios hidden space-y-4">
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 1</span>
+                        <p class="font-semibold text-base">En una P.A., el octavo término es <span class="math-expr">19</span> y el vigésimo término es <span class="math-expr">55</span>. Determina la fórmula del término general <span class="math-expr">aₙ</span> y calcula <span class="math-expr">a₅₀</span>.</p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-ei1', this)">Mostrar solución</button>
+                        <div id="sol-ei1" class="solucion-box">
+                            <p><strong>Paso 1:</strong> <span class="math-expr">d = (55 - 19) / (20 - 8) = 36 / 12 = 3</span>.<br>
+                            <strong>Paso 2:</strong> <span class="math-expr">19 = a₁ + 7(3) ➔ a₁ = -2</span>.<br>
+                            <strong>Paso 3:</strong> <span class="math-expr">aₙ = -2 + (n - 1)(3) = 3n - 5</span>. Luego <span class="math-expr">a₅₀ = 3(50) - 5 = 145</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: aₙ = 3n - 5; a₅₀ = 145.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 2</span>
+                        <p class="font-semibold text-base">¿Cuántos términos de la P.A. <span class="math-expr">8, 11, 14, 17, ...</span> se deben sumar para obtener <span class="math-expr">650</span>?</p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-ei2', this)">Mostrar solución</button>
+                        <div id="sol-ei2" class="solucion-box">
+                            <p><strong>Paso 1:</strong> <span class="math-expr">650 = (n/2) · [ 2(8) + (n - 1) · 3 ] ➔ 1300 = n(3n + 13)</span>.<br>
+                            <strong>Paso 2:</strong> <span class="math-expr">3n² + 13n - 1300 = 0 ➔ (n - 20)(3n + 65) = 0</span>.<br>
+                            <strong>Paso 3:</strong> Tomamos la raíz entera positiva: <span class="math-expr">n = 20</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Se deben sumar 20 términos.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 3</span>
+                        <p class="font-semibold text-base">Dada la P.A. <span class="math-expr">215, 206, 197, ...</span>, determina qué posición ocupa el <strong>primer término negativo</strong> y cuál es su valor.</p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-ei3', this)">Mostrar solución</button>
+                        <div id="sol-ei3" class="solucion-box">
+                            <p><strong>Paso 1:</strong> <span class="math-expr">215 + (n - 1)(-9) &lt; 0 ➔ 224 &lt; 9n ➔ n &gt; 24.88</span>.<br>
+                            <strong>Paso 2:</strong> El primer entero es <span class="math-expr">n = 25</span>. Su valor es <span class="math-expr">a₂₅ = 215 + 24(-9) = 215 - 216 = -1</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Posición 25 (a₂₅ = -1).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 4</span>
+                        <p class="font-semibold text-base">Interpola 6 medios aritméticos entre <span class="math-expr">-5</span> y <span class="math-expr">23</span>, y calcula la suma de esos 6 términos interpolados (sin incluir los extremos).</p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-ei4', this)">Mostrar solución</button>
+                        <div id="sol-ei4" class="solucion-box">
+                            <p><strong>Paso 1:</strong> <span class="math-expr">n = 6 + 2 = 8</span>. <span class="math-expr">d = (23 - (-5)) / 7 = 28 / 7 = 4</span>.<br>
+                            <strong>Paso 2:</strong> Medios: <span class="math-expr">-1, 3, 7, 11, 15, 19</span>.<br>
+                            <strong>Paso 3:</strong> Suma de los 6 medios: <span class="math-expr">S = [ 6 · (-1 + 19) ] / 2 = 3 · 18 = 54</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Medios: -1, 3, 7, 11, 15, 19; Suma = 54.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 5</span>
+                        <p class="font-semibold text-base">Calcula la suma de todos los números enteros comprendidos entre <span class="math-expr">50</span> y <span class="math-expr">350</span> que sean múltiplos de 6.</p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-ei5', this)">Mostrar solución</button>
+                        <div id="sol-ei5" class="solucion-box">
+                            <p><strong>Paso 1:</strong> <span class="math-expr">a₁ = 54</span>, <span class="math-expr">aₙ = 348</span>, <span class="math-expr">d = 6</span>.<br>
+                            <strong>Paso 2:</strong> <span class="math-expr">348 = 54 + (n - 1) · 6 ➔ 294 / 6 = n - 1 ➔ n = 50</span>.<br>
+                            <strong>Paso 3:</strong> <span class="math-expr">S₅₀ = [ 50 · (54 + 348) ] / 2 = 25 · 402 = 10,050</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: La suma es 10,050.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EJERCICIOS AVANZADOS -->
+                <div id="ejercicios-avanzado" class="subcontenido-ejercicios hidden space-y-4">
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 1</span>
+                        <p class="font-semibold text-base">La suma de tres números en P.A. es <span class="math-expr">33</span> y la suma de sus cuadrados es <span class="math-expr">413</span>. Determina los tres números.</p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-ea1', this)">Mostrar solución</button>
+                        <div id="sol-ea1" class="solucion-box">
+                            <p><strong>Paso 1:</strong> Sean los números <span class="math-expr">(x - d), x, (x + d)</span>. Su suma es <span class="math-expr">3x = 33 ➔ x = 11</span>.<br>
+                            <strong>Paso 2:</strong> <span class="math-expr">(11 - d)² + 11² + (11 + d)² = 413 ➔ (121 - 22d + d²) + 121 + (121 + 22d + d²) = 413</span>.<br>
+                            <strong>Paso 3:</strong> <span class="math-expr">363 + 2d² = 413 ➔ 2d² = 50 ➔ d² = 25 ➔ d = ±5</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Los números son 6, 11 y 16 (o 16, 11 y 6).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 2</span>
+                        <p class="font-semibold text-base">Si la suma de los <span class="math-expr">n</span> primeros términos de una P.A. viene dada por <span class="math-expr">Sₙ = 2n² + 5n</span>, encuentra el término <span class="math-expr">a₁₅</span> y la diferencia común <span class="math-expr">d</span>.</p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-ea2', this)">Mostrar solución</button>
+                        <div id="sol-ea2" class="solucion-box">
+                            <p><strong>Paso 1:</strong> <span class="math-expr">a₁ = S₁ = 2(1)² + 5(1) = 7</span>.<br>
+                            <strong>Paso 2:</strong> <span class="math-expr">S₂ = 2(2)² + 5(2) = 18 ➔ a₂ = 18 - 7 = 11</span>.<br>
+                            <strong>Paso 3:</strong> <span class="math-expr">d = 11 - 7 = 4</span>. Luego <span class="math-expr">a₁₅ = 7 + 14(4) = 63</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: d = 4 y a₁₅ = 63.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 3</span>
+                        <p class="font-semibold text-base">Halla los valores de <span class="math-expr">m</span> para que las expresiones <span class="math-expr">(m² - 2), (2m + 1), (4m + 2)</span> formen una progresión aritmética.</p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-ea3', this)">Mostrar solución</button>
+                        <div id="sol-ea3" class="solucion-box">
+                            <p><strong>Paso 1:</strong> <span class="math-expr">2(2m + 1) = (m² - 2) + (4m + 2)</span>.<br>
+                            <strong>Paso 2:</strong> <span class="math-expr">4m + 2 = m² + 4m ➔ m² = 2 ➔ m = ±√2</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: m = √2 o m = -√2.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 4</span>
+                        <p class="font-semibold text-base">En una P.A., la suma de los primeros 8 términos es <span class="math-expr">100</span> y la suma de los primeros 16 términos es <span class="math-expr">328</span>. Determina <span class="math-expr">a₁</span> y <span class="math-expr">d</span>.</p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-ea4', this)">Mostrar solución</button>
+                        <div id="sol-ea4" class="solucion-box">
+                            <p><strong>Ec. 1:</strong> <span class="math-expr">(8/2)[2a₁ + 7d] = 100 ➔ 2a₁ + 7d = 25</span>.<br>
+                            <strong>Ec. 2:</strong> <span class="math-expr">(16/2)[2a₁ + 15d] = 328 ➔ 2a₁ + 15d = 41</span>.<br>
+                            <strong>Resta:</strong> <span class="math-expr">8d = 16 ➔ d = 2</span>. Sustituyendo: <span class="math-expr">2a₁ + 14 = 25 ➔ a₁ = 5.5</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: a₁ = 5.5 (11/2) y d = 2.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 5</span>
+                        <p class="font-semibold text-base">Un corredor A avanza a <span class="math-expr">12 km/h</span> constantes. Un corredor B parte al mismo tiempo recorriendo <span class="math-expr">6 km</span> en la primera hora, <span class="math-expr">8 km</span> en la segunda, <span class="math-expr">10 km</span> en la tercera, etc. ¿En cuántas horas empatarán la distancia recorrida?</p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-ea5', this)">Mostrar solución</button>
+                        <div id="sol-ea5" class="solucion-box">
+                            <p><strong>Planteamiento:</strong> <span class="math-expr">12n = (n/2) · [ 2(6) + (n - 1) · 2 ]</span>.<br>
+                            <strong>Desarrollo:</strong> <span class="math-expr">24n = n(12 + 2n - 2) ➔ 24 = 2n + 10 ➔ 2n = 14 ➔ n = 7</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Empatarán a las 7 horas (con 84 km recorridos cada uno).</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 2: EJEMPLOS RESUELTOS (15)         -->
+            <!-- ========================================== -->
+            <section id="sec-ejemplos" class="seccion-contenido hidden">
+                <div class="flex flex-wrap items-center justify-between gap-3 mb-4 bg-white p-4 rounded-xl border-2 border-[#54887D]">
+                    <div>
+                        <h2 class="text-xl font-bold text-[#1269A8]">Ejemplos Resueltos Paso a Paso</h2>
+                        <p class="text-sm text-slate-600">Selecciona el nivel de dificultad para explorar 5 ejemplos detallados por categoría.</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button class="subtab-btn active" onclick="filtrarSubnivel('ejemplos', 'basico', this)">Nivel Básico (5)</button>
+                        <button class="subtab-btn" onclick="filtrarSubnivel('ejemplos', 'intermedio', this)">Nivel Intermedio (5)</button>
+                        <button class="subtab-btn" onclick="filtrarSubnivel('ejemplos', 'avanzado', this)">Nivel Avanzado (5)</button>
+                    </div>
+                </div>
+
+                <!-- EJEMPLOS BÁSICOS -->
+                <div id="ejemplos-basico" class="subcontenido-ejemplos space-y-4">
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Básico • Ejemplo 1</span>
+                        <p class="font-bold text-lg text-[#1269A8]">Identificar la diferencia común (<span class="math-expr">d</span>) y los siguientes dos términos en la P.A.: <span class="math-expr">5, 11, 17, 23, ...</span></p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1:</strong> Restamos el segundo término menos el primero: <span class="math-expr">d = 11 - 5 = 6</span>.</p>
+                            <p><strong>Paso 2:</strong> Verificamos con el tercero: <span class="math-expr">17 - 11 = 6</span> (Confirmado, es una P.A. creciente).</p>
+                            <p><strong>Paso 3:</strong> Sumamos 6 al último término dado: <span class="math-expr">a₅ = 23 + 6 = 29</span> y <span class="math-expr">a₆ = 29 + 6 = 35</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: d = 6; los términos siguientes son 29 y 35.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Básico • Ejemplo 2</span>
+                        <p class="font-bold text-lg text-[#1269A8]">Encontrar el décimo término (<span class="math-expr">a₁₀</span>) de la progresión: <span class="math-expr">3, 7, 11, 15, ...</span></p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>Datos:</strong> <span class="math-expr">a₁ = 3</span>, <span class="math-expr">d = 7 - 3 = 4</span>, <span class="math-expr">n = 10</span>.</p>
+                            <p><strong>Fórmula:</strong> <span class="math-expr">aₙ = a₁ + (n - 1) · d</span></p>
+                            <p><strong>Sustitución:</strong> <span class="math-expr">a₁₀ = 3 + (10 - 1) · 4 = 3 + (9)(4) = 3 + 36 = 39</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: El décimo término es 39.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Básico • Ejemplo 3</span>
+                        <p class="font-bold text-lg text-[#1269A8]">Calcular el término 15 (<span class="math-expr">a₁₅</span>) de una P.A. decreciente: <span class="math-expr">50, 47, 44, 41, ...</span></p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>Datos:</strong> <span class="math-expr">a₁ = 50</span>, <span class="math-expr">d = 47 - 50 = -3</span>, <span class="math-expr">n = 15</span>.</p>
+                            <p><strong>Sustitución:</strong> <span class="math-expr">a₁₅ = 50 + (15 - 1) · (-3) = 50 + (14)(-3) = 50 - 42 = 8</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: El término en la posición 15 es 8.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Básico • Ejemplo 4</span>
+                        <p class="font-bold text-lg text-[#1269A8]">Escribir los primeros 5 términos de una P.A. donde <span class="math-expr">a₁ = -8</span> y <span class="math-expr">d = 5</span>.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>Cálculo sucesivo:</strong></p>
+                            <p><span class="math-expr">a₁ = -8</span> | <span class="math-expr">a₂ = -8 + 5 = -3</span> | <span class="math-expr">a₃ = -3 + 5 = 2</span> | <span class="math-expr">a₄ = 2 + 5 = 7</span> | <span class="math-expr">a₅ = 7 + 5 = 12</span></p>
+                            <p class="font-bold text-[#54887D]">Respuesta: -8, -3, 2, 7, 12.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Básico • Ejemplo 5</span>
+                        <p class="font-bold text-lg text-[#1269A8]">Hallar la suma de los primeros 10 términos (<span class="math-expr">S₁₀</span>) si <span class="math-expr">a₁ = 2</span> y <span class="math-expr">a₁₀ = 20</span>.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#A6B046] text-sm sm:text-base space-y-1">
+                            <p><strong>Fórmula de Suma:</strong> <span class="math-expr">Sₙ = [ n · (a₁ + aₙ) ] / 2</span></p>
+                            <p><strong>Sustitución:</strong> <span class="math-expr">S₁₀ = [ 10 · (2 + 20) ] / 2 = [ 10 · 22 ] / 2 = 220 / 2 = 110</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: La suma de los primeros 10 términos es 110.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EJEMPLOS INTERMEDIOS -->
+                <div id="ejemplos-intermedio" class="subcontenido-ejemplos hidden space-y-4">
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Intermedio • Ejemplo 1</span>
+                        <p class="font-bold text-lg text-[#1269A8]">Hallar el primer término (<span class="math-expr">a₁</span>) de una P.A. sabiendo que <span class="math-expr">a₁₂ = 45</span> y <span class="math-expr">d = 4</span>.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Planteamiento:</strong> Usamos <span class="math-expr">aₙ = a₁ + (n - 1) · d</span> y despejamos <span class="math-expr">a₁</span>.</p>
+                            <p><strong>Sustitución:</strong> <span class="math-expr">45 = a₁ + (12 - 1) · 4 ➔ 45 = a₁ + 44</span>.</p>
+                            <p><strong>Despeje:</strong> <span class="math-expr">a₁ = 45 - 44 = 1</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: El primer término es 1.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Intermedio • Ejemplo 2</span>
+                        <p class="font-bold text-lg text-[#1269A8]">¿Cuántos términos tiene la progresión aritmética <span class="math-expr">4, 9, 14, ..., 99</span>?</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Datos:</strong> <span class="math-expr">a₁ = 4</span>, <span class="math-expr">d = 5</span>, <span class="math-expr">aₙ = 99</span>. Buscamos <span class="math-expr">n</span>.</p>
+                            <p><strong>Ecuación:</strong> <span class="math-expr">99 = 4 + (n - 1) · 5 ➔ 95 = (n - 1) · 5</span>.</p>
+                            <p><strong>División:</strong> <span class="math-expr">95 / 5 = n - 1 ➔ 19 = n - 1 ➔ n = 20</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: La progresión tiene 20 términos.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Intermedio • Ejemplo 3</span>
+                        <p class="font-bold text-lg text-[#1269A8]">Calcular la suma de los primeros 20 términos de la P.A.: <span class="math-expr">6, 10, 14, 18, ...</span></p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Hallar <span class="math-expr">a₂₀</span>):</strong> <span class="math-expr">a₂₀ = 6 + (20 - 1) · 4 = 6 + 76 = 82</span>.</p>
+                            <p><strong>Paso 2 (Hallar <span class="math-expr">S₂₀</span>):</strong> <span class="math-expr">S₂₀ = [ 20 · (6 + 82) ] / 2 = 10 · 88 = 880</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: La suma de los 20 primeros términos es 880.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Intermedio • Ejemplo 4</span>
+                        <p class="font-bold text-lg text-[#1269A8]">Interpolar 3 medios aritméticos entre <span class="math-expr">8</span> y <span class="math-expr">28</span>.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Análisis:</strong> Al insertar 3 términos entre 8 y 28, tendremos en total <span class="math-expr">n = 3 + 2 = 5</span> términos, donde <span class="math-expr">a₁ = 8</span> y <span class="math-expr">a₅ = 28</span>.</p>
+                            <p><strong>Cálculo de <span class="math-expr">d</span>:</strong> <span class="math-expr">d = (28 - 8) / (5 - 1) = 20 / 4 = 5</span>.</p>
+                            <p><strong>Construcción:</strong> <span class="math-expr">8, [13, 18, 23], 28</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: Los medios aritméticos son 13, 18 y 23.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Intermedio • Ejemplo 5</span>
+                        <p class="font-bold text-lg text-[#1269A8]">Un estudiante de Tercero Básico ahorra Q15 la primera semana y cada semana aumenta Q5 a su ahorro. ¿Cuánto ahorrará en la semana 12?</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#54887D] text-sm sm:text-base space-y-1">
+                            <p><strong>Modelo:</strong> <span class="math-expr">a₁ = 15</span>, <span class="math-expr">d = 5</span>, <span class="math-expr">n = 12</span>.</p>
+                            <p><strong>Cálculo:</strong> <span class="math-expr">a₁₂ = 15 + (12 - 1) · 5 = 15 + 55 = 70</span>.</p>
+                            <p class="font-bold text-[#54887D]">Respuesta: En la semana 12 ahorrará Q70.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EJEMPLOS AVANZADOS -->
+                <div id="ejemplos-avanzado" class="subcontenido-ejemplos hidden space-y-4">
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Avanzado • Ejemplo 1</span>
+                        <p class="font-bold text-lg text-[#1269A8]">En una P.A., el cuarto término es <span class="math-expr">17</span> y el décimo término es <span class="math-expr">41</span>. Determinar el primer término (<span class="math-expr">a₁</span>) y el vigésimo término (<span class="math-expr">a₂₀</span>).</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Hallar <span class="math-expr">d</span> entre posiciones conocidas):</strong> <span class="math-expr">d = (a₁₀ - a₄) / (10 - 4) = (41 - 17) / 6 = 24 / 6 = 4</span>.</p>
+                            <p><strong>Paso 2 (Hallar <span class="math-expr">a₁</span>):</strong> <span class="math-expr">a₄ = a₁ + 3d ➔ 17 = a₁ + 3(4) ➔ a₁ = 17 - 12 = 5</span>.</p>
+                            <p><strong>Paso 3 (Hallar <span class="math-expr">a₂₀</span>):</strong> <span class="math-expr">a₂₀ = 5 + (20 - 1) · 4 = 5 + 76 = 81</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: a₁ = 5 y a₂₀ = 81.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Avanzado • Ejemplo 2</span>
+                        <p class="font-bold text-lg text-[#1269A8]">Calcular la suma de todos los números múltiplos de 3 comprendidos entre 10 y 100.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Paso 1 (Extremos):</strong> El primer múltiplo de 3 mayor que 10 es <span class="math-expr">a₁ = 12</span>; el último menor que 100 es <span class="math-expr">aₙ = 99</span>, con <span class="math-expr">d = 3</span>.</p>
+                            <p><strong>Paso 2 (Cantidad de términos <span class="math-expr">n</span>):</strong> <span class="math-expr">99 = 12 + (n - 1) · 3 ➔ 87 / 3 = n - 1 ➔ n = 30</span>.</p>
+                            <p><strong>Paso 3 (Suma <span class="math-expr">S₃₀</span>):</strong> <span class="math-expr">S₃₀ = [ 30 · (12 + 99) ] / 2 = 15 · 111 = 1665</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: La suma total es 1,665.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Avanzado • Ejemplo 3</span>
+                        <p class="font-bold text-lg text-[#1269A8]">Los tres ángulos de un triángulo están en progresión aritmética. Si el ángulo menor mide <span class="math-expr">35°</span>, ¿cuánto miden los otros dos ángulos?</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Propiedad Geométrica + P.A.:</strong> La suma de los 3 ángulos internos de un triángulo es <span class="math-expr">S₃ = 180°</span> y <span class="math-expr">a₁ = 35°</span>.</p>
+                            <p><strong>Paso 1 (Hallar <span class="math-expr">a₃</span> con la fórmula de suma):</strong> <span class="math-expr">180 = [ 3 · (35 + a₃) ] / 2 ➔ 360 / 3 = 35 + a₃ ➔ 120 - 35 = a₃ ➔ a₃ = 85°</span>.</p>
+                            <p><strong>Paso 2 (Hallar <span class="math-expr">a₂</span>):</strong> <span class="math-expr">d = (85 - 35) / 2 = 25° ➔ a₂ = 35° + 25° = 60°</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Los ángulos miden 35°, 60° y 85°.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Avanzado • Ejemplo 4</span>
+                        <p class="font-bold text-lg text-[#1269A8]">En una P.A. con términos algebraicos: <span class="math-expr">(2x - 1), (3x + 2), (5x - 1)</span>, determinar el valor de <span class="math-expr">x</span> y el valor numérico de los tres términos.</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Propiedad de diferencia constante:</strong> <span class="math-expr">a₂ - a₁ = a₃ - a₂</span>.</p>
+                            <p><strong>Ecuación:</strong> <span class="math-expr">(3x + 2) - (2x - 1) = (5x - 1) - (3x + 2)</span></p>
+                            <p><strong>Simplificación:</strong> <span class="math-expr">x + 3 = 2x - 3 ➔ 3 + 3 = 2x - x ➔ x = 6</span>.</p>
+                            <p><strong>Sustitución:</strong> <span class="math-expr">a₁ = 2(6)-1 = 11</span> | <span class="math-expr">a₂ = 3(6)+2 = 20</span> | <span class="math-expr">a₃ = 5(6)-1 = 29</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: x = 6; la progresión es 11, 20, 29 (d = 9).</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Avanzado • Ejemplo 5</span>
+                        <p class="font-bold text-lg text-[#1269A8]">Un auditorio tiene 25 filas de asientos. La primera fila tiene 18 asientos y cada fila siguiente tiene 2 asientos más que la anterior. ¿Cuál es la capacidad total del auditorio?</p>
+                        <div class="mt-3 p-3 bg-[#F2F5E9] rounded-lg border-l-4 border-[#1269A8] text-sm sm:text-base space-y-1">
+                            <p><strong>Datos:</strong> <span class="math-expr">a₁ = 18</span>, <span class="math-expr">d = 2</span>, <span class="math-expr">n = 25</span>.</p>
+                            <p><strong>Paso 1 (Asientos en la fila 25):</strong> <span class="math-expr">a₂₅ = 18 + (25 - 1) · 2 = 18 + 48 = 66</span>.</p>
+                            <p><strong>Paso 2 (Capacidad total <span class="math-expr">S₂₅</span>):</strong> <span class="math-expr">S₂₅ = [ 25 · (18 + 66) ] / 2 = [ 25 · 84 ] / 2 = 25 · 42 = 1050</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: El auditorio tiene capacidad para 1,050 personas.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 3: EJERCICIOS PRÁCTICOS (15)       -->
+            <!-- ========================================== -->
+            <section id="sec-ejercicios" class="seccion-contenido hidden">
+                <div class="flex flex-wrap items-center justify-between gap-3 mb-4 bg-white p-4 rounded-xl border-2 border-[#54887D]">
+                    <div>
+                        <h2 class="text-xl font-bold text-[#1269A8]">Práctica Guiada en Pizarra</h2>
+                        <p class="text-sm text-slate-600">Resuelve los ejercicios en tu cuaderno y comprueba tus resultados con el botón interactivo.</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button class="subtab-btn active" onclick="filtrarSubnivel('ejercicios', 'basico', this)">Básico (5)</button>
+                        <button class="subtab-btn" onclick="filtrarSubnivel('ejercicios', 'intermedio', this)">Intermedio (5)</button>
+                        <button class="subtab-btn" onclick="filtrarSubnivel('ejercicios', 'avanzado', this)">Avanzado (5)</button>
+                    </div>
+                </div>
+
+                <!-- EJERCICIOS BÁSICOS -->
+                <div id="ejercicios-basico" class="subcontenido-ejercicios space-y-4">
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 1</span>
+                        <p class="font-semibold text-base">Determina la diferencia común (<span class="math-expr">d</span>) y el siguiente término en la sucesión: <span class="math-expr">9, 16, 23, 30, ...</span></p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-eb1', this)">Mostrar solución</button>
+                        <div id="sol-eb1" class="solucion-box">
+                            <p><strong>Procedimiento:</strong> <span class="math-expr">d = 16 - 9 = 7</span>. Siguiente término: <span class="math-expr">a₅ = 30 + 7 = 37</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: d = 7; siguiente término = 37.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 2</span>
+                        <p class="font-semibold text-base">Calcula el octavo término (<span class="math-expr">a₈</span>) de la P.A.: <span class="math-expr">2, 9, 16, 23, ...</span></p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-eb2', this)">Mostrar solución</button>
+                        <div id="sol-eb2" class="solucion-box">
+                            <p><strong>Procedimiento:</strong> <span class="math-expr">a₁ = 2</span>, <span class="math-expr">d = 7</span>, <span class="math-expr">n = 8</span>. <br><span class="math-expr">a₈ = 2 + (8 - 1) · 7 = 2 + 49 = 51</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: a₈ = 51.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 3</span>
+                        <p class="font-semibold text-base">Halla el término número 12 (<span class="math-expr">a₁₂</span>) de la progresión decreciente: <span class="math-expr">80, 74, 68, 62, ...</span></p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-eb3', this)">Mostrar solución</button>
+                        <div id="sol-eb3" class="solucion-box">
+                            <p><strong>Procedimiento:</strong> <span class="math-expr">a₁ = 80</span>, <span class="math-expr">d = -6</span>, <span class="math-expr">n = 12</span>. <br><span class="math-expr">a₁₂ = 80 + (12 - 1) · (-6) = 80 - 66 = 14</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: a₁₂ = 14.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 4</span>
+                        <p class="font-semibold text-base">Escribe los primeros 4 términos de una P.A. donde <span class="math-expr">a₁ = -12</span> y <span class="math-expr">d = 4</span>.</p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-eb4', this)">Mostrar solución</button>
+                        <div id="sol-eb4" class="solucion-box">
+                            <p><strong>Procedimiento:</strong> <span class="math-expr">a₁ = -12</span>; <span class="math-expr">a₂ = -12 + 4 = -8</span>; <span class="math-expr">a₃ = -8 + 4 = -4</span>; <span class="math-expr">a₄ = -4 + 4 = 0</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: -12, -8, -4, 0.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-basico mb-2">Ejercicio Básico 5</span>
+                        <p class="font-semibold text-base">Calcula la suma de los primeros 8 términos (<span class="math-expr">S₈</span>) si <span class="math-expr">a₁ = 5</span> y <span class="math-expr">a₈ = 33</span>.</p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-eb5', this)">Mostrar solución</button>
+                        <div id="sol-eb5" class="solucion-box">
+                            <p><strong>Procedimiento:</strong> <span class="math-expr">S₈ = [ 8 · (5 + 33) ] / 2 = 4 · 38 = 152</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: S₈ = 152.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EJERCICIOS INTERMEDIOS -->
+                <div id="ejercicios-intermedio" class="subcontenido-ejercicios hidden space-y-4">
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 1</span>
+                        <p class="font-semibold text-base">Halla el primer término (<span class="math-expr">a₁</span>) de una P.A. sabiendo que <span class="math-expr">a₁₅ = 62</span> y <span class="math-expr">d = 4</span>.</p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-ei1', this)">Mostrar solución</button>
+                        <div id="sol-ei1" class="solucion-box">
+                            <p><strong>Procedimiento:</strong> <span class="math-expr">62 = a₁ + (15 - 1) · 4 ➔ 62 = a₁ + 56 ➔ a₁ = 62 - 56 = 6</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: a₁ = 6.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 2</span>
+                        <p class="font-semibold text-base">¿Cuántos términos tiene la progresión aritmética <span class="math-expr">7, 13, 19, ..., 121</span>?</p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-ei2', this)">Mostrar solución</button>
+                        <div id="sol-ei2" class="solucion-box">
+                            <p><strong>Procedimiento:</strong> <span class="math-expr">121 = 7 + (n - 1) · 6 ➔ 114 / 6 = n - 1 ➔ 19 = n - 1 ➔ n = 20</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Tiene 20 términos.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 3</span>
+                        <p class="font-semibold text-base">Encuentra la suma de los primeros 16 términos (<span class="math-expr">S₁₆</span>) de la P.A.: <span class="math-expr">4, 9, 14, 19, ...</span></p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-ei3', this)">Mostrar solución</button>
+                        <div id="sol-ei3" class="solucion-box">
+                            <p><strong>Paso 1:</strong> <span class="math-expr">a₁₆ = 4 + (16 - 1) · 5 = 4 + 75 = 79</span>.<br>
+                            <strong>Paso 2:</strong> <span class="math-expr">S₁₆ = [ 16 · (4 + 79) ] / 2 = 8 · 83 = 664</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: S₁₆ = 664.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 4</span>
+                        <p class="font-semibold text-base">Interpola 4 medios aritméticos entre <span class="math-expr">10</span> y <span class="math-expr">35</span>.</p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-ei4', this)">Mostrar solución</button>
+                        <div id="sol-ei4" class="solucion-box">
+                            <p><strong>Procedimiento:</strong> Total de términos <span class="math-expr">n = 4 + 2 = 6</span>. <span class="math-expr">d = (35 - 10) / (6 - 1) = 25 / 5 = 5</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: Los medios aritméticos son 15, 20, 25 y 30.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-intermedio mb-2">Ejercicio Intermedio 5</span>
+                        <p class="font-semibold text-base">Un ciclista entrena recorriendo 12 km el primer día y aumenta 3 km cada día. ¿Cuántos kilómetros recorrerá el día 10?</p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-ei5', this)">Mostrar solución</button>
+                        <div id="sol-ei5" class="solucion-box">
+                            <p><strong>Procedimiento:</strong> <span class="math-expr">a₁₀ = 12 + (10 - 1) · 3 = 12 + 27 = 39</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: El día 10 recorrerá 39 km.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EJERCICIOS AVANZADOS -->
+                <div id="ejercicios-avanzado" class="subcontenido-ejercicios hidden space-y-4">
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 1</span>
+                        <p class="font-semibold text-base">En una P.A., el quinto término es <span class="math-expr">22</span> y el duodécimo término es <span class="math-expr">57</span>. Calcula <span class="math-expr">a₁</span> y <span class="math-expr">a₁₅</span>.</p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-ea1', this)">Mostrar solución</button>
+                        <div id="sol-ea1" class="solucion-box">
+                            <p><strong>Paso 1:</strong> <span class="math-expr">d = (57 - 22) / (12 - 5) = 35 / 7 = 5</span>.<br>
+                            <strong>Paso 2:</strong> <span class="math-expr">22 = a₁ + 4(5) ➔ a₁ = 2</span>.<br>
+                            <strong>Paso 3:</strong> <span class="math-expr">a₁₅ = 2 + 14(5) = 72</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: a₁ = 2 y a₁₅ = 72.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 2</span>
+                        <p class="font-semibold text-base">Calcula la suma de todos los números pares comprendidos entre 21 y 79.</p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-ea2', this)">Mostrar solución</button>
+                        <div id="sol-ea2" class="solucion-box">
+                            <p><strong>Paso 1:</strong> <span class="math-expr">a₁ = 22</span>, <span class="math-expr">aₙ = 78</span>, <span class="math-expr">d = 2</span>.<br>
+                            <strong>Paso 2:</strong> <span class="math-expr">78 = 22 + (n - 1) · 2 ➔ 56 / 2 = n - 1 ➔ n = 29</span>.<br>
+                            <strong>Paso 3:</strong> <span class="math-expr">S₂₉ = [ 29 · (22 + 78) ] / 2 = 29 · 50 = 1450</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: La suma es 1,450.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 3</span>
+                        <p class="font-semibold text-base">Si los términos <span class="math-expr">(x + 3), (3x - 1), (4x + 1)</span> forman una P.A., determina el valor de <span class="math-expr">x</span> y la diferencia común <span class="math-expr">d</span>.</p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-ea3', this)">Mostrar solución</button>
+                        <div id="sol-ea3" class="solucion-box">
+                            <p><strong>Paso 1:</strong> <span class="math-expr">(3x - 1) - (x + 3) = (4x + 1) - (3x - 1)</span><br>
+                            <strong>Paso 2:</strong> <span class="math-expr">2x - 4 = x + 2 ➔ x = 6</span>.<br>
+                            <strong>Paso 3:</strong> Términos: <span class="math-expr">9, 17, 25</span>. Diferencia <span class="math-expr">d = 8</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: x = 6; d = 8.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 4</span>
+                        <p class="font-semibold text-base">Los 4 ángulos de un cuadrilátero están en P.A. Si el ángulo mayor mide <span class="math-expr">120°</span>, ¿cuánto mide el ángulo menor? (Recuerda que la suma interna de un cuadrilátero es 360°).</p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-ea4', this)">Mostrar solución</button>
+                        <div id="sol-ea4" class="solucion-box">
+                            <p><strong>Paso 1:</strong> <span class="math-expr">S₄ = 360°</span>, <span class="math-expr">n = 4</span>, <span class="math-expr">a₄ = 120°</span>.<br>
+                            <strong>Paso 2:</strong> <span class="math-expr">360 = [ 4 · (a₁ + 120) ] / 2 ➔ 180 = a₁ + 120 ➔ a₁ = 60°</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: El ángulo menor mide 60°.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-montano">
+                        <span class="badge-nivel badge-avanzado mb-2">Ejercicio Avanzado 5</span>
+                        <p class="font-semibold text-base">Una empresa perfora un pozo: cobra Q200 por el primer metro y Q50 adicionales por cada metro extra respecto al anterior. Si se perforan 15 metros, ¿cuál es el costo total de la obra?</p>
+                        <button class="btn-solucion" onclick="toggleSolucion('sol-ea5', this)">Mostrar solución</button>
+                        <div id="sol-ea5" class="solucion-box">
+                            <p><strong>Paso 1:</strong> Costo del metro 15: <span class="math-expr">a₁₅ = 200 + (15 - 1) · 50 = 200 + 700 = 900</span>.<br>
+                            <strong>Paso 2:</strong> Costo total <span class="math-expr">S₁₅ = [ 15 · (200 + 900) ] / 2 = 15 · 550 = 8250</span>.</p>
+                            <p class="font-bold text-[#1269A8]">Respuesta: El costo total es de Q8,250.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 4: PREGUNTAS DE REFLEXIÓN CRÍTICA  -->
+            <!-- ========================================== -->
+            <section id="sec-reflexion" class="seccion-contenido hidden">
+                <div class="card-montano">
+                    <h2 class="text-2xl font-bold text-[#1269A8] mb-2">🧠 Análisis Conceptual y Pensamiento Crítico</h2>
+                    <p class="text-sm text-slate-600 mb-4">Discute estas preguntas en clase con tus compañeros y docente antes de revisar las pistas de análisis.</p>
+
+                    <div class="space-y-4">
+                        <div class="p-4 bg-[#F2F5E9] rounded-xl border-2 border-[#54887D]">
+                            <h3 class="font-bold text-lg text-[#1269A8]">1. El factor <span class="math-expr">(n - 1)</span> en la fórmula general</h3>
+                            <p class="mt-1">¿Por qué en la fórmula <span class="math-expr">aₙ = a₁ + (n - 1) · d</span> multiplicamos la diferencia por <span class="math-expr">(n - 1)</span> y no por <span class="math-expr">n</span>?</p>
+                            <button class="btn-solucion" onclick="toggleSolucion('ref-1', this)">Ver análisis conceptual</button>
+                            <div id="ref-1" class="solucion-box">
+                                <p><strong>Análisis:</strong> Porque para llegar desde el primer término (<span class="math-expr">a₁</span>) hasta el término en la posición <span class="math-expr">n</span>, únicamente damos <span class="math-expr">n - 1</span> "saltos" o incrementos. Por ejemplo, para llegar al 2.º término solo sumamos la diferencia 1 vez.</p>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-[#F2F5E9] rounded-xl border-2 border-[#54887D]">
+                            <h3 class="font-bold text-lg text-[#1269A8]">2. El método de Carl Friedrich Gauss</h3>
+                            <p class="mt-1">Cuando era niño, Gauss sumó los números del 1 al 100 en segundos agrupando <span class="math-expr">(1 + 100), (2 + 99), (3 + 98)...</span> ¿Cómo se relaciona este truco con nuestra fórmula <span class="math-expr">Sₙ = [ n · (a₁ + aₙ) ] / 2</span>?</p>
+                            <button class="btn-solucion" onclick="toggleSolucion('ref-2', this)">Ver análisis conceptual</button>
+                            <div id="ref-2" class="solucion-box">
+                                <p><strong>Análisis:</strong> En cualquier P.A., la suma de los términos equidistantes de los extremos siempre da el mismo resultado (<span class="math-expr">a₁ + aₙ</span>). Al formar <span class="math-expr">n / 2</span> parejas iguales, simplemente multiplicamos el valor de una pareja por la mitad del total de términos.</p>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-[#F2F5E9] rounded-xl border-2 border-[#54887D]">
+                            <h3 class="font-bold text-lg text-[#1269A8]">3. Progresiones Aritméticas vs. Funciones Lineales</h3>
+                            <p class="mt-1">Si graficáramos los términos de una P.A. en el plano cartesiano poniendo <span class="math-expr">n</span> en el eje X y <span class="math-expr">aₙ</span> en el eje Y, ¿qué figura geométrica formarían los puntos y qué representaría la diferencia <span class="math-expr">d</span>?</p>
+                            <button class="btn-solucion" onclick="toggleSolucion('ref-3', this)">Ver análisis conceptual</button>
+                            <div id="ref-3" class="solucion-box">
+                                <p><strong>Análisis:</strong> Los puntos quedarían alineados sobre una <strong>línea recta</strong>. La diferencia común <span class="math-expr">d</span> representa exactamente la <strong>pendiente (m)</strong> de esa recta, ya que indica cuánto sube o baja la gráfica por cada unidad que avanza <span class="math-expr">n</span>.</p>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-[#F2F5E9] rounded-xl border-2 border-[#54887D]">
+                            <h3 class="font-bold text-lg text-[#1269A8]">4. Validación del número de términos (<span class="math-expr">n</span>)</h3>
+                            <p class="mt-1">Al resolver un problema para saber si el número <span class="math-expr">150</span> pertenece a la P.A. <span class="math-expr">4, 11, 18, ...</span>, obtienes <span class="math-expr">n = 21.85</span>. ¿Qué significa este resultado decimal?</p>
+                            <button class="btn-solucion" onclick="toggleSolucion('ref-4', this)">Ver análisis conceptual</button>
+                            <div id="ref-4" class="solucion-box">
+                                <p><strong>Análisis:</strong> Significa que <strong>150 NO pertenece</strong> a dicha progresión aritmética. Dado que <span class="math-expr">n</span> representa una posición ordinal (1.º, 2.º, 3.º...), <span class="math-expr">n</span> debe ser estrictamente un número entero positivo.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- SECCIÓN 5: EVALUACIÓN FORMATIVA            -->
+            <!-- ========================================== -->
+            <section id="sec-evaluacion" class="seccion-contenido hidden">
+                <div class="card-montano">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b-2 border-[#F7D615] pb-3 mb-4">
+                        <div>
+                            <h2 class="text-2xl font-bold text-[#1269A8]">✅ Evaluación Formativa de Comprobación (Nivel Superior)</h2>
+                            <p class="text-sm text-slate-600">Reactivos integradores que combinan álgebra, inecuaciones y sistemas de ecuaciones.</p>
+                        </div>
+                        <span class="badge-nivel badge-avanzado mt-2 sm:mt-0">5 Reactivos de Alto Nivel</span>
+                    </div>
+
+                    <div class="space-y-4">
+                        <!-- Pregunta 1 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 1 • Término General a partir de Dos Posiciones</span>
+                            <p class="font-bold text-base mt-1">En una progresión aritmética, el noveno término es <span class="math-expr">-11</span> y el vigésimo primer término es <span class="math-expr">-47</span>. Halla la fórmula del término general <span class="math-expr">aₙ</span> y el término <span class="math-expr">a₄₀</span>.</p>
+                            <button class="btn-solucion" onclick="toggleSolucion('eval-1', this)">Mostrar solución</button>
+                            <div id="eval-1" class="solucion-box">
+                                <p><strong>Paso 1:</strong> <span class="math-expr">d = (-47 - (-11)) / (21 - 9) = -36 / 12 = -3</span>.</p>
+                                <p><strong>Paso 2:</strong> <span class="math-expr">-11 = a₁ + 8(-3) ➔ a₁ = -11 + 24 = 13</span>.</p>
+                                <p><strong>Paso 3:</strong> <span class="math-expr">aₙ = 13 + (n - 1)(-3) = 16 - 3n</span>. Luego <span class="math-expr">a₄₀ = 16 - 3(40) = -104</span>.</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: aₙ = 16 - 3n; &nbsp; a₄₀ = -104.</p>
+                            </div>
+                        </div>
+
+                        <!-- Pregunta 2 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 2 • Ecuación Cuadrática en Suma</span>
+                            <p class="font-bold text-base mt-1">¿Cuántos términos de la P.A. <span class="math-expr">3, 7, 11, 15, ...</span> deben sumarse para obtener un total de <span class="math-expr">820</span>?</p>
+                            <button class="btn-solucion" onclick="toggleSolucion('eval-2', this)">Mostrar solución</button>
+                            <div id="eval-2" class="solucion-box">
+                                <p><strong>Paso 1:</strong> <span class="math-expr">820 = (n/2) · [ 2(3) + (n - 1) · 4 ] ➔ 1640 = n(4n + 2)</span>.</p>
+                                <p><strong>Paso 2:</strong> <span class="math-expr">4n² + 2n - 1640 = 0 ➔ 2n² + n - 820 = 0</span>.</p>
+                                <p><strong>Paso 3:</strong> Factorizando: <span class="math-expr">(n - 20)(2n + 41) = 0 ➔ n = 20</span>.</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: Se deben sumar 20 términos.</p>
+                            </div>
+                        </div>
+
+                        <!-- Pregunta 3 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 3 • Polinomio de Suma</span>
+                            <p class="font-bold text-base mt-1">La suma de los primeros <span class="math-expr">n</span> términos de una P.A. está definida por <span class="math-expr">Sₙ = 4n² - 3n</span>. Calcula el valor de <span class="math-expr">a₁₂</span>.</p>
+                            <button class="btn-solucion" onclick="toggleSolucion('eval-3', this)">Mostrar solución</button>
+                            <div id="eval-3" class="solucion-box">
+                                <p><strong>Paso 1:</strong> <span class="math-expr">a₁ = S₁ = 4(1)² - 3(1) = 1</span>.</p>
+                                <p><strong>Paso 2:</strong> <span class="math-expr">S₂ = 4(2)² - 3(2) = 16 - 6 = 10 ➔ a₂ = 10 - 1 = 9</span>.</p>
+                                <p><strong>Paso 3:</strong> <span class="math-expr">d = 9 - 1 = 8</span>. Por lo tanto, <span class="math-expr">a₁₂ = 1 + 11(8) = 89</span>.</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: a₁₂ = 89.</p>
+                            </div>
+                        </div>
+
+                        <!-- Pregunta 4 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 4 • Inecuaciones en P.A.</span>
+                            <p class="font-bold text-base mt-1">Dada la P.A. <span class="math-expr">-85, -79, -73, ...</span>, determina qué posición ocupa el <strong>primer término positivo</strong> y cuál es su valor.</p>
+                            <button class="btn-solucion" onclick="toggleSolucion('eval-4', this)">Mostrar solución</button>
+                            <div id="eval-4" class="solucion-box">
+                                <p><strong>Paso 1:</strong> <span class="math-expr">-85 + (n - 1)(6) &gt; 0 ➔ 6n - 91 &gt; 0 ➔ n &gt; 91/6 = 15.16</span>.</p>
+                                <p><strong>Paso 2:</strong> El primer entero mayor es <span class="math-expr">n = 16</span>. Su valor es <span class="math-expr">a₁₆ = -85 + 15(6) = -85 + 90 = 5</span>.</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: Posición 16 (a₁₆ = 5).</p>
+                            </div>
+                        </div>
+
+                        <!-- Pregunta 5 -->
+                        <div class="p-4 bg-white border-2 border-[#88B5C7] rounded-xl">
+                            <span class="text-xs font-bold uppercase text-[#54887D]">Reactivo 5 • Sistema Simétrico con Producto</span>
+                            <p class="font-bold text-base mt-1">La suma de tres números en progresión aritmética es <span class="math-expr">21</span> y su producto es <span class="math-expr">231</span>. Determina los tres números.</p>
+                            <button class="btn-solucion" onclick="toggleSolucion('eval-5', this)">Mostrar solución</button>
+                            <div id="eval-5" class="solucion-box">
+                                <p><strong>Paso 1:</strong> Sean <span class="math-expr">(x - d), x, (x + d)</span>. La suma da <span class="math-expr">3x = 21 ➔ x = 7</span>.</p>
+                                <p><strong>Paso 2:</strong> Producto: <span class="math-expr">(7 - d)(7)(7 + d) = 231 ➔ 49 - d² = 231 / 7 = 33</span>.</p>
+                                <p><strong>Paso 3:</strong> <span class="math-expr">d² = 49 - 33 = 16 ➔ d = ±4</span>.</p>
+                                <p class="font-bold text-[#1269A8]">Solución Correcta: Los números son 3, 7 y 11 (o 11, 7 y 3).</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Pie de Pizarra -->
+        <footer class="bg-[#1269A8] text-white text-center py-3 px-4 text-xs sm:text-sm border-t-2 border-[#F7D615]">
+            <strong>Colegio Montano</strong> • Departamento de Matemática • Pizarra Digital Interactiva para Canvas Education
+        </footer>
+    </div>
+
+    <!-- Scripts de Interactividad -->
+    <script>
+        /**
+         * Cambia entre las pestañas principales de la pizarra (Teoría, Ejemplos, Ejercicios, Reflexión, Evaluación).
+         */
+        function cambiarSeccion(seccionId, botonActivo) {
+            // Ocultar todas las secciones principales
+            const secciones = document.querySelectorAll('.seccion-contenido');
+            secciones.forEach(sec => sec.classList.add('hidden'));
+
+            // Mostrar la sección seleccionada
+            const target = document.getElementById('sec-' + seccionId);
+            if (target) {
+                target.classList.remove('hidden');
+            }
+
+            // Actualizar estilos de las pestañas
+            const botones = document.querySelectorAll('.tab-btn');
+            botones.forEach(btn => btn.classList.remove('active'));
+            botonActivo.classList.add('active');
+        }
+
+        /**
+         * Filtra los subniveles (Básico, Intermedio, Avanzado) dentro de Ejemplos o Ejercicios.
+         */
+        function filtrarSubnivel(grupo, nivel, botonActivo) {
+            const contenedores = document.querySelectorAll('.subcontenido-' + grupo);
+            contenedores.forEach(cont => cont.classList.add('hidden'));
+
+            const target = document.getElementById(grupo + '-' + nivel);
+            if (target) {
+                target.classList.remove('hidden');
+            }
+
+            // Actualizar estado activo de los sub-botones hermanos
+            const parent = botonActivo.parentElement;
+            const subBotones = parent.querySelectorAll('.subtab-btn');
+            subBotones.forEach(btn => btn.classList.remove('active'));
+            botonActivo.classList.add('active');
+        }
+
+        /**
+         * Alterna la visibilidad de las soluciones paso a paso y actualiza el texto del botón.
+         */
+        function toggleSolucion(solucionId, boton) {
+            const box = document.getElementById(solucionId);
+            if (!box) return;
+
+            if (box.style.display === 'block') {
+                box.style.display = 'none';
+                boton.textContent = boton.textContent.replace('Ocultar', 'Mostrar').replace('Ocultar análisis conceptual', 'Ver análisis conceptual');
+            } else {
+                box.style.display = 'block';
+                if (boton.textContent.includes('Ver análisis')) {
+                    boton.textContent = 'Ocultar análisis conceptual';
+                } else {
+                    boton.textContent = 'Ocultar solución';
+                }
+            }
+        }
+
+        /**
+         * Controla el modo de pantalla completa (Fullscreen API) para proyección en aula.
+         */
+        function toggleFullscreen() {
+            const btn = document.getElementById('fullscreen-btn');
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().then(() => {
+                    btn.innerHTML = '<span>✖ Salir de pantalla completa</span>';
+                }).catch(err => {
+                    console.warn('Error al intentar activar pantalla completa:', err);
+                });
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen().then(() => {
+                        btn.innerHTML = '<span>⛶ Pantalla completa</span>';
+                    });
+                }
+            }
+        }
+
+        // Escucha cambios externos de pantalla completa (por ejemplo al presionar la tecla ESC)
+        document.addEventListener('fullscreenchange', () => {
+            const btn = document.getElementById('fullscreen-btn');
+            if (!document.fullscreenElement && btn) {
+                btn.innerHTML = '<span>⛶ Pantalla completa</span>';
+            }
+        });
+    </script>
+</body>
+</html>

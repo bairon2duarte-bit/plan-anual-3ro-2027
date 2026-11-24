@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía Interactiva: Magnitudes Proporcionales - Colegio Montano</title>
+    <!-- Tailwind CSS para diseño moderno y responsivo -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- MathJax para renderizado impecable de expresiones matemáticas -->
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #F2F5E9;
+        }
+        /* Marco de pizarra digital con identidad Colegio Montano */
+        .whiteboard-container {
+            background-color: #ffffff;
+            border: 5px solid #F7D615;
+            border-radius: 12px;
+            box-shadow: 0 12px 30px rgba(18, 105, 168, 0.18);
+        }
+        .header-bg {
+            background: linear-gradient(135deg, #1269A8 0%, #0e5285 100%);
+        }
+        .tab-active {
+            background-color: #1269A8;
+            color: #ffffff;
+            border-bottom: 4px solid #F7D615;
+        }
+        .tab-inactive {
+            background-color: #88B5C7;
+            color: #0d4b7a;
+        }
+        .tab-inactive:hover {
+            background-color: #54887D;
+            color: #ffffff;
+        }
+        .card-theory {
+            background-color: #F2F5E9;
+            border-left: 5px solid #54887D;
+            border-radius: 8px;
+        }
+        .card-exercise {
+            background-color: rgba(136, 181, 199, 0.16);
+            border: 1px solid #54887D;
+            border-left: 5px solid #1269A8;
+            border-radius: 8px;
+        }
+        .solution-box {
+            background-color: rgba(136, 181, 199, 0.30);
+            border-left: 4px solid #54887D;
+            border-radius: 6px;
+        }
+        .badge-level {
+            background-color: #A6B046;
+            color: #ffffff;
+        }
+        .btn-action {
+            background-color: #1269A8;
+            color: #ffffff;
+            transition: all 0.2s ease;
+        }
+        .btn-action:hover {
+            background-color: #54887D;
+        }
+    </style>
+</head>
+<body class="p-3 md:p-6 min-h-screen flex flex-col items-center">
+
+    <!-- Contenedor Principal de la Pizarra Digital -->
+    <div id="whiteboard" class="whiteboard-container w-full max-w-6xl flex flex-col overflow-hidden">
+        
+        <!-- Barra Superior / Encabezado Institucional -->
+        <header class="header-bg p-4 flex flex-col sm:flex-row justify-between items-center text-white gap-4">
+            <div class="flex items-center space-x-4">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyEop0yf6lZ7Jk9MILZxF1rBj4Oqs5esyhIQ&s" alt="Logo Colegio Montano" class="h-14 w-14 object-contain bg-white rounded-full p-1 shadow-md">
+                <div>
+                    <h1 class="text-xl md:text-2xl font-bold tracking-wide">Colegio Montano</h1>
+                    <p class="text-xs md:text-sm text-[#F7D615] font-bold">Pizarra Digital Interactiva — Proporcionalidad Conjunta y Combinada</p>
+                </div>
+            </div>
+            <div>
+                <button id="fullscreen-btn" onclick="toggleFullScreen()" class="bg-[#F7D615] text-[#1269A8] font-bold px-4 py-2 rounded-lg shadow hover:bg-yellow-300 transition flex items-center gap-2 text-sm cursor-pointer">
+                    <span>[ ⛶ Pantalla completa ]</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Menú de Pestañas Horizontales Interactivas -->
+        <nav class="flex flex-wrap bg-[#88B5C7] border-b-2 border-[#54887D]">
+            <button onclick="switchTab('teoria')" id="btn-teoria" class="flex-1 py-3 px-3 text-center font-bold text-xs md:text-sm tab-active transition cursor-pointer">Teoría</button>
+            <button onclick="switchTab('ejemplos')" id="btn-ejemplos" class="flex-1 py-3 px-3 text-center font-bold text-xs md:text-sm tab-inactive transition cursor-pointer">Ejemplos</button>
+            <button onclick="switchTab('ejercicios')" id="btn-ejercicios" class="flex-1 py-3 px-3 text-center font-bold text-xs md:text-sm tab-inactive transition cursor-pointer">Ejercicios</button>
+            <button onclick="switchTab('reflexion')" id="btn-reflexion" class="flex-1 py-3 px-3 text-center font-bold text-xs md:text-sm tab-inactive transition cursor-pointer">Reflexión</button>
+            <button onclick="switchTab('evaluacion')" id="btn-evaluacion" class="flex-1 py-3 px-3 text-center font-bold text-xs md:text-sm tab-inactive transition cursor-pointer">Evaluación</button>
+        </nav>
+
+        <!-- Lienzo de Contenido Principal -->
+        <main class="p-5 md:p-8 flex-1 overflow-y-auto max-h-[78vh] bg-[#F2F5E9]/40">
+
+            <!-- ========================================== -->
+            <!-- PESTAÑA 1: EXPLICACIÓN TEÓRICA             -->
+            <!-- ========================================== -->
+            <section id="tab-teoria" class="space-y-6">
+                <div class="border-b-2 border-[#1269A8] pb-2">
+                    <h2 class="text-2xl font-bold text-[#1269A8]">1. Proporcionalidad Conjunta y Combinada</h2>
+                    <p class="text-sm text-[#54887D] font-semibold">Cómo relacionar tres o más magnitudes de forma sencilla y ordenada.</p>
+                </div>
+
+                <!-- Concepto Base -->
+                <div class="card-theory p-5 shadow-sm space-y-3">
+                    <h3 class="font-bold text-lg text-[#1269A8]">¿Qué ocurre cuando intervienen más de dos magnitudes?</h3>
+                    <p class="text-sm text-gray-800 leading-relaxed">
+                        En la vida diaria, un resultado suele depender de <strong>varios factores al mismo tiempo</strong>. Por ejemplo, el dinero que gana un trabajador depende de cuántos <em>días</em> trabaja y de cuántas <em>horas</em> trabaja cada día.
+                    </p>
+                    <p class="text-sm text-gray-800 leading-relaxed">
+                        Para resolver este tipo de situaciones sin confundirnos, comparamos la <strong>magnitud principal (\(Z\))</strong> con cada una de las demás magnitudes por separado (para saber si es Directa o Inversa) y luego las reunimos en una sola fórmula con una constante \(k\).
+                    </p>
+                </div>
+
+                <!-- Tarjetas Conjunta vs Combinada -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    
+                    <!-- Tarjeta Proporcionalidad Conjunta -->
+                    <div class="card-theory p-5 shadow-sm space-y-4 flex flex-col justify-between">
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between">
+                                <h3 class="font-bold text-lg text-[#1269A8]">1. Proporcionalidad Conjunta</h3>
+                                <span class="badge-level text-xs px-2.5 py-1 rounded-full font-bold">Todo es D.P.</span>
+                            </div>
+                            <p class="text-sm text-gray-800 leading-relaxed">
+                                <strong>Definición:</strong> Una magnitud \(Z\) es <strong>conjuntamente proporcional</strong> a dos o más magnitudes (\(X\) e \(Y\)) cuando es <strong>Directamente Proporcional (D.P.)</strong> a cada una de ellas por separado. Si \(X\) o \(Y\) aumentan, \(Z\) también aumenta.
+                            </p>
+                            <div class="bg-white p-3 rounded border border-[#54887D] text-center">
+                                <p class="text-xs text-[#54887D] font-bold uppercase mb-1">Fórmula de la Proporcionalidad Conjunta</p>
+                                <p class="text-base font-bold text-[#1269A8]">\[Z = k \cdot X \cdot Y \quad \Longleftrightarrow \quad \frac{Z}{X \cdot Y} = k\]</p>
+                            </div>
+                            <div class="text-sm text-gray-800 space-y-1">
+                                <p class="font-bold text-[#54887D]">Ejemplos cotidianos fáciles:</p>
+                                <ul class="list-disc pl-5 space-y-1">
+                                    <li><strong>Área de un rectángulo:</strong> El área (\(A\)) es conjuntamente proporcional a su base (\(b\)) y a su altura (\(h\)): \(A = b \cdot h\).</li>
+                                    <li><strong>Costo de hospedaje:</strong> El pago total es D.P. al número de huéspedes y D.P. a los días de estadía.</li>
+                                    <li><strong>Producción de panes:</strong> La cantidad de panes horneados es D.P. al número de hornos y D.P. a las horas encendidos.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Esquema Visual SVG Conjunta -->
+                        <div class="bg-white p-3 rounded border border-[#54887D] flex flex-col items-center">
+                            <p class="text-xs font-bold text-[#1269A8] mb-2">Esquema de armado: Variables D.P. pasan a dividir a \(Z\)</p>
+                            <svg viewBox="0 0 280 120" class="w-full max-w-xs h-auto">
+                                <rect x="105" y="10" width="70" height="32" rx="6" fill="#1269A8"/>
+                                <text x="140" y="30" font-size="13" fill="#ffffff" font-weight="bold" text-anchor="middle">Z (Total)</text>
+                                
+                                <line x1="120" y1="42" x2="70" y2="75" stroke="#54887D" stroke-width="2"/>
+                                <line x1="160" y1="42" x2="210" y2="75" stroke="#54887D" stroke-width="2"/>
+                                
+                                <rect x="25" y="75" width="90" height="32" rx="6" fill="#F2F5E9" stroke="#54887D" stroke-width="1.5"/>
+                                <text x="70" y="95" font-size="11" fill="#1269A8" font-weight="bold" text-anchor="middle">X (D.P. a Z)</text>
+
+                                <rect x="165" y="75" width="90" height="32" rx="6" fill="#F2F5E9" stroke="#54887D" stroke-width="1.5"/>
+                                <text x="210" y="95" font-size="11" fill="#1269A8" font-weight="bold" text-anchor="middle">Y (D.P. a Z)</text>
+
+                                <text x="75" y="58" font-size="10" fill="#A6B046" font-weight="bold">Divide</text>
+                                <text x="195" y="58" font-size="10" fill="#A6B046" font-weight="bold">Divide</text>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Tarjeta Proporcionalidad Combinada -->
+                    <div class="card-theory p-5 shadow-sm space-y-4 flex flex-col justify-between">
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between">
+                                <h3 class="font-bold text-lg text-[#1269A8]">2. Proporcionalidad Combinada</h3>
+                                <span class="badge-level text-xs px-2.5 py-1 rounded-full font-bold">D.P. e I.P. juntas</span>
+                            </div>
+                            <p class="text-sm text-gray-800 leading-relaxed">
+                                <strong>Definición:</strong> Una magnitud \(Z\) tiene <strong>proporcionalidad combinada</strong> cuando es <strong>Directamente Proporcional (D.P.)</strong> a una magnitud \(X\) y, al mismo tiempo, <strong>Inversamente Proporcional (I.P.)</strong> a otra magnitud \(Y\).
+                            </p>
+                            <div class="bg-white p-3 rounded border border-[#54887D] text-center">
+                                <p class="text-xs text-[#54887D] font-bold uppercase mb-1">Fórmula de la Proporcionalidad Combinada</p>
+                                <p class="text-base font-bold text-[#1269A8]">\[Z = k \cdot \frac{X}{Y} \quad \Longleftrightarrow \quad \frac{Z \cdot Y}{X} = k\]</p>
+                            </div>
+                            <div class="text-sm text-gray-800 space-y-1">
+                                <p class="font-bold text-[#54887D]">Ejemplos cotidianos fáciles:</p>
+                                <ul class="list-disc pl-5 space-y-1">
+                                    <li><strong>Tiempo de viaje:</strong> El tiempo (\(t\)) es D.P. a la distancia (\(d\)) e I.P. a la velocidad (\(v\)): \(t = \frac{d}{v}\).</li>
+                                    <li><strong>Días de obra:</strong> Los días necesarios son D.P. al tamaño de la obra e I.P. al número de obreros.</li>
+                                    <li><strong>Reparto de comida:</strong> Los días que duran los víveres son D.P. a la cantidad de comida e I.P. al número de personas.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Esquema Visual SVG Combinada -->
+                        <div class="bg-white p-3 rounded border border-[#54887D] flex flex-col items-center">
+                            <p class="text-xs font-bold text-[#1269A8] mb-2">Regla práctica: I.P. multiplica arriba, D.P. divide abajo</p>
+                            <svg viewBox="0 0 280 120" class="w-full max-w-xs h-auto">
+                                <rect x="105" y="10" width="70" height="32" rx="6" fill="#1269A8"/>
+                                <text x="140" y="30" font-size="13" fill="#ffffff" font-weight="bold" text-anchor="middle">Z (Total)</text>
+                                
+                                <line x1="120" y1="42" x2="70" y2="75" stroke="#54887D" stroke-width="2"/>
+                                <line x1="160" y1="42" x2="210" y2="75" stroke="#54887D" stroke-width="2"/>
+                                
+                                <rect x="25" y="75" width="90" height="32" rx="6" fill="#F2F5E9" stroke="#54887D" stroke-width="1.5"/>
+                                <text x="70" y="95" font-size="11" fill="#1269A8" font-weight="bold" text-anchor="middle">X (D.P. a Z)</text>
+
+                                <rect x="165" y="75" width="90" height="32" rx="6" fill="#F7D615" stroke="#1269A8" stroke-width="1.5"/>
+                                <text x="210" y="95" font-size="11" fill="#1269A8" font-weight="bold" text-anchor="middle">Y (I.P. a Z)</text>
+
+                                <text x="65" y="58" font-size="10" fill="#A6B046" font-weight="bold">Divide (÷)</text>
+                                <text x="190" y="58" font-size="10" fill="#1269A8" font-weight="bold">Multiplica (×)</text>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Guía de 3 Pasos para Resolver -->
+                <div class="card-theory p-5 shadow-sm space-y-3">
+                    <h3 class="font-bold text-lg text-[#1269A8]">Método de los 3 Pasos para Resolver Cualquier Problema</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-gray-800">
+                        <div class="bg-white p-4 rounded border border-[#54887D]">
+                            <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Paso 1</span>
+                            <p class="font-bold text-[#1269A8] mt-1">Armar la fórmula con \(k\)</p>
+                            <p class="mt-1">Escribe la magnitud principal \(Z\). Coloca en el <strong>denominador</strong> (dividiendo) las magnitudes que sean <strong>D.P.</strong> y en el <strong>numerador</strong> (multiplicando) las que sean <strong>I.P.</strong></p>
+                        </div>
+                        <div class="bg-white p-4 rounded border border-[#54887D]">
+                            <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Paso 2</span>
+                            <p class="font-bold text-[#1269A8] mt-1">Calcular la constante \(k\)</p>
+                            <p class="mt-1">Sustituye los datos del <strong>caso conocido</strong> (donde te dan todos los números completos) para encontrar el valor numérico de \(k\).</p>
+                        </div>
+                        <div class="bg-white p-4 rounded border border-[#54887D]">
+                            <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Paso 3</span>
+                            <p class="font-bold text-[#1269A8] mt-1">Hallar el valor pedido</p>
+                            <p class="mt-1">Iguala la fórmula con el valor de \(k\) encontrado, reemplaza los datos del <strong>segundo caso</strong> y despeja la incógnita.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- PESTAÑA 2: EJEMPLOS RESUELTOS (5 POR NIVEL)-->
+            <!-- ========================================== -->
+            <section id="tab-ejemplos" class="hidden space-y-8">
+                <div class="border-b-2 border-[#1269A8] pb-2">
+                    <h2 class="text-2xl font-bold text-[#1269A8]">2. Ejemplos Resueltos Paso a Paso</h2>
+                    <p class="text-sm text-[#54887D] font-semibold">15 ejemplos guiados (5 Básico, 5 Intermedio, 5 Avanzado) con niveles progresivos y accesibles.</p>
+                </div>
+
+                <!-- NIVEL BÁSICO -->
+                <div class="space-y-4">
+                    <h3 class="text-xl font-bold text-[#54887D] flex items-center gap-2">
+                        <span class="badge-level text-xs px-3 py-1 rounded-full">NIVEL BÁSICO</span> Proporcionalidad Conjunta Directa (\(Z = k \cdot X \cdot Y\))
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="card-theory p-4 shadow-sm">
+                            <p class="font-bold text-[#1269A8]">Ejemplo Básico 1 — Salario por días y horas trabajadas</p>
+                            <p class="text-sm font-semibold mt-1">El pago \(P\) de un empleado varía conjuntamente con los días \(d\) y las horas diarias \(h\) trabajadas. Si gana \(\text{Q } 600\) por trabajar \(5\text{ días}\) a \(6\text{ horas/día}\), ¿cuánto ganará por \(8\text{ días}\) a \(5\text{ horas/día}\)?</p>
+                            <div class="mt-2 bg-white p-3 rounded border text-sm text-gray-800">
+                                <strong>Resolución:</strong><br>
+                                1. Fórmula conjunta: \(\frac{P}{d \cdot h} = k\).<br>
+                                2. Hallamos \(k\): \(k = \frac{600}{5 \times 6} = \frac{600}{30} = 20\) (gana \(\text{Q } 20\) por hora).<br>
+                                3. Segundo caso: \(\frac{P_2}{8 \times 5} = 20 \implies P_2 = 20 \times 40 = \mathbf{\text{Q } 800}\).
+                            </div>
+                        </div>
+
+                        <div class="card-theory p-4 shadow-sm">
+                            <p class="font-bold text-[#1269A8]">Ejemplo Básico 2 — Costo de hospedaje en un hotel</p>
+                            <p class="text-sm font-semibold mt-1">El costo \(C\) de estadía es conjuntamente proporcional al número de personas \(p\) y a los días \(d\). Si \(3\) personas pagan \(\text{Q } 900\) por \(2\text{ días}\), ¿cuánto pagarán \(4\) personas por \(5\text{ días}\)?</p>
+                            <div class="mt-2 bg-white p-3 rounded border text-sm text-gray-800">
+                                <strong>Resolución:</strong><br>
+                                1. Fórmula: \(\frac{C}{p \cdot d} = k\).<br>
+                                2. Calculamos \(k\): \(k = \frac{900}{3 \times 2} = \frac{900}{6} = 150\).<br>
+                                3. Para \(4\) personas y \(5\text{ días}\): \(C_2 = 150 \times 4 \times 5 = \mathbf{\text{Q } 3\,000}\).
+                            </div>
+                        </div>
+
+                        <div class="card-theory p-4 shadow-sm">
+                            <p class="font-bold text-[#1269A8]">Ejemplo Básico 3 — Producción de una panadería</p>
+                            <p class="text-sm font-semibold mt-1">La cantidad de pan \(M\) varía conjuntamente con los panaderos \(p\) y las horas \(t\). Si \(2\) panaderos hacen \(120\) panes en \(3\text{ horas}\), ¿cuántos panes harán \(5\) panaderos en \(4\text{ horas}\)?</p>
+                            <div class="mt-2 bg-white p-3 rounded border text-sm text-gray-800">
+                                <strong>Resolución:</strong><br>
+                                1. Fórmula: \(\frac{M}{p \cdot t} = k\).<br>
+                                2. Hallamos \(k\): \(k = \frac{120}{2 \times 3} = \frac{120}{6} = 20\).<br>
+                                3. Segundo caso: \(M_2 = 20 \times 5 \times 4 = \mathbf{400\text{ panes}}\).
+                            </div>
+                        </div>
+
+                        <div class="card-theory p-4 shadow-sm">
+                            <p class="font-bold text-[#1269A8]">Ejemplo Básico 4 — Pintura según ancho y largo del muro</p>
+                            <p class="text-sm font-semibold mt-1">Los litros de pintura \(L\) necesarios son conjuntamente proporcionales al largo \(x\) y alto \(y\) de una pared. Si un muro de \(4\text{ m}\) por \(3\text{ m}\) usa \(2\text{ litros}\), ¿cuántos litros usará un muro de \(6\text{ m}\) por \(5\text{ m}\)?</p>
+                            <div class="mt-2 bg-white p-3 rounded border text-sm text-gray-800">
+                                <strong>Resolución:</strong><br>
+                                1. Fórmula: \(\frac{L}{x \cdot y} = k\).<br>
+                                2. Hallamos \(k\): \(k = \frac{2}{4 \times 3} = \frac{2}{12} = \frac{1}{6}\).<br>
+                                3. Segundo caso: \(L_2 = \frac{1}{6} \times 6 \times 5 = \mathbf{5\text{ litros}}\).
+                            </div>
+                        </div>
+
+                        <div class="card-theory p-4 shadow-sm md:col-span-2">
+                            <p class="font-bold text-[#1269A8]">Ejemplo Básico 5 — Relación numérica directa \(Z\) conjunta con \(X\) e \(Y\)</p>
+                            <p class="text-sm font-semibold mt-1">Sabiendo que \(Z\) varía conjuntamente con \(X\) e \(Y\), y que \(Z = 48\) cuando \(X = 4\) y \(Y = 3\), halle el valor de \(Z\) cuando \(X = 7\) y \(Y = 5\).</p>
+                            <div class="mt-2 bg-white p-3 rounded border text-sm text-gray-800">
+                                <strong>Resolución:</strong><br>
+                                1. Fórmula: \(Z = k \cdot X \cdot Y \implies k = \frac{48}{4 \times 3} = \frac{48}{12} = 4\).<br>
+                                2. Sustituimos \(X = 7\) y \(Y = 5\): \(Z = 4 \times 7 \times 5 = \mathbf{140}\).
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- NIVEL INTERMEDIO -->
+                <div class="space-y-4">
+                    <h3 class="text-xl font-bold text-[#54887D] flex items-center gap-2">
+                        <span class="badge-level text-xs px-3 py-1 rounded-full">NIVEL INTERMEDIO</span> Proporcionalidad Combinada Simple (Una D.P. y una I.P.)
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="card-theory p-4 shadow-sm">
+                            <p class="font-bold text-[#1269A8]">Ejemplo Intermedio 1 — Modelo numérico \(Z\) D.P. a \(X\) e I.P. a \(Y\)</p>
+                            <p class="text-sm font-semibold mt-1">Si \(Z\) es D.P. a \(X\) e I.P. a \(Y\), y cuando \(X = 10\) y \(Y = 4\) se tiene \(Z = 15\), calcule \(Z\) cuando \(X = 18\) y \(Y = 6\).</p>
+                            <div class="mt-2 bg-white p-3 rounded border text-sm text-gray-800">
+                                <strong>Resolución:</strong><br>
+                                1. \(X\) divide (D.P.) e \(Y\) multiplica (I.P.): \(\frac{Z \cdot Y}{X} = k\).<br>
+                                2. Hallamos \(k\): \(k = \frac{15 \times 4}{10} = \frac{60}{10} = 6\).<br>
+                                3. Segundo caso: \(\frac{Z \cdot 6}{18} = 6 \implies \frac{Z}{3} = 6 \implies Z = \mathbf{18}\).
+                            </div>
+                        </div>
+
+                        <div class="card-theory p-4 shadow-sm">
+                            <p class="font-bold text-[#1269A8]">Ejemplo Intermedio 2 — Obreros, obra y días</p>
+                            <p class="text-sm font-semibold mt-1">Si \(6\) obreros construyen \(30\text{ m}\) de cerca en \(4\text{ días}\), ¿cuántos días tardarán \(8\) obreros en construir \(60\text{ m}\) de cerca al mismo ritmo?</p>
+                            <div class="mt-2 bg-white p-3 rounded border text-sm text-gray-800">
+                                <strong>Resolución:</strong><br>
+                                1. Respecto a <strong>Días (\(D\))</strong>: es D.P. a la Obra (\(O\)) e I.P. a los Obreros (\(N\)): \(\frac{D \cdot N}{O} = k\).<br>
+                                2. Caso 1: \(\frac{4 \times 6}{30} = \frac{24}{30} = 0.8\).<br>
+                                3. Caso 2: \(\frac{D_2 \times 8}{60} = 0.8 \implies 8D_2 = 48 \implies D_2 = \mathbf{6\text{ días}}\).
+                            </div>
+                        </div>
+
+                        <div class="card-theory p-4 shadow-sm">
+                            <p class="font-bold text-[#1269A8]">Ejemplo Intermedio 3 — Tiempo, distancia y velocidad</p>
+                            <p class="text-sm font-semibold mt-1">El tiempo \(t\) de viaje es D.P. a la distancia \(d\) e I.P. a la velocidad \(v\). Si un auto recorre \(180\text{ km}\) a \(60\text{ km/h}\) en \(3\text{ horas}\), ¿cuánto tardará en recorrer \(300\text{ km}\) a \(75\text{ km/h}\)?</p>
+                            <div class="mt-2 bg-white p-3 rounded border text-sm text-gray-800">
+                                <strong>Resolución:</strong><br>
+                                1. Fórmula: \(\frac{t \cdot v}{d} = k\).<br>
+                                2. Caso 1: \(\frac{3 \times 60}{180} = 1\).<br>
+                                3. Caso 2: \(\frac{t_2 \times 75}{300} = 1 \implies t_2 = \frac{300}{75} = \mathbf{4\text{ horas}}\).
+                            </div>
+                        </div>
+
+                        <div class="card-theory p-4 shadow-sm">
+                            <p class="font-bold text-[#1269A8]">Ejemplo Intermedio 4 — Grifos, litros y tiempo de llenado</p>
+                            <p class="text-sm font-semibold mt-1">El tiempo \(T\) para llenar un depósito es D.P. a su capacidad \(C\) e I.P. al número de grifos \(G\) abiertos. Si \(2\) grifos llenan \(400\text{ litros}\) en \(10\text{ minutos}\), ¿en cuánto tiempo llenarán \(5\) grifos un tanque de \(1\,000\text{ litros}\)?</p>
+                            <div class="mt-2 bg-white p-3 rounded border text-sm text-gray-800">
+                                <strong>Resolución:</strong><br>
+                                1. Fórmula: \(\frac{T \cdot G}{C} = k\).<br>
+                                2. Igualamos ambos casos: \(\frac{10 \times 2}{400} = \frac{T_2 \times 5}{1\,000}\).<br>
+                                3. \(\frac{20}{400} = \frac{5T_2}{1\,000} \implies 0.05 = \frac{T_2}{200} \implies T_2 = \mathbf{10\text{ minutos}}\).
+                            </div>
+                        </div>
+
+                        <div class="card-theory p-4 shadow-sm md:col-span-2">
+                            <p class="font-bold text-[#1269A8]">Ejemplo Intermedio 5 — Despejando una variable del denominador</p>
+                            <p class="text-sm font-semibold mt-1">Se sabe que \(M\) es D.P. a \(A\) e I.P. a \(B\). Cuando \(M = 12\) y \(B = 5\), se cumple que \(A = 15\). Calcule el valor de \(A\) cuando \(M = 20\) y \(B = 6\).</p>
+                            <div class="mt-2 bg-white p-3 rounded border text-sm text-gray-800">
+                                <strong>Resolución:</strong><br>
+                                1. Fórmula: \(\frac{M \cdot B}{A} = k\).<br>
+                                2. Hallamos \(k\): \(k = \frac{12 \times 5}{15} = \frac{60}{15} = 4\).<br>
+                                3. Segundo caso: \(\frac{20 \times 6}{A_2} = 4 \implies \frac{120}{A_2} = 4 \implies A_2 = \frac{120}{4} = \mathbf{30}\).
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- NIVEL AVANZADO -->
+                <div class="space-y-4">
+                    <h3 class="text-xl font-bold text-[#54887D] flex items-center gap-2">
+                        <span class="badge-level text-xs px-3 py-1 rounded-full">NIVEL AVANZADO</span> Tres o Cuatro Variables Combinadas y Potencias Sencillas
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="card-theory p-4 shadow-sm">
+                            <p class="font-bold text-[#1269A8]">Ejemplo Avanzado 1 — Taller de costura con 4 magnitudes</p>
+                            <p class="text-sm font-semibold mt-1">En un taller, \(4\) costureras confeccionan \(32\) camisas en \(2\text{ días}\) trabajando \(6\text{ horas/día}\). ¿Cuántas camisas confeccionarán \(6\) costureras en \(3\text{ días}\) trabajando \(4\text{ horas/día}\)?</p>
+                            <div class="mt-2 bg-white p-3 rounded border text-sm text-gray-800">
+                                <strong>Resolución:</strong><br>
+                                1. Las <strong>Camisas (\(C\))</strong> son D.P. a costureras (\(N\)), días (\(D\)) y horas (\(H\)): \(\frac{C}{N \cdot D \cdot H} = k\).<br>
+                                2. Caso 1: \(k = \frac{32}{4 \times 2 \times 6} = \frac{32}{48} = \frac{2}{3}\).<br>
+                                3. Caso 2: \(C_2 = \frac{2}{3} \times (6 \times 3 \times 4) = \frac{2}{3} \times 72 = \mathbf{48\text{ camisas}}\).
+                            </div>
+                        </div>
+
+                        <div class="card-theory p-4 shadow-sm">
+                            <p class="font-bold text-[#1269A8]">Ejemplo Avanzado 2 — Raciones de víveres en un campamento</p>
+                            <p class="text-sm font-semibold mt-1">Un campamento de \(20\) jóvenes tiene comida para \(12\text{ días}\) comiendo \(3\text{ raciones diarias}\). Si llegan \(10\) jóvenes más y reducen a \(2\text{ raciones diarias}\), ¿para cuántos días alcanzará la comida?</p>
+                            <div class="mt-2 bg-white p-3 rounded border text-sm text-gray-800">
+                                <strong>Resolución:</strong><br>
+                                1. Los <strong>Días (\(D\))</strong> son I.P. a los jóvenes (\(J\)) e I.P. a las raciones diarias (\(R\)): \(D \cdot J \cdot R = k\).<br>
+                                2. Total jóvenes ahora: \(20 + 10 = 30\).<br>
+                                3. Igualamos: \(12 \times 20 \times 3 = D_2 \times 30 \times 2 \implies 720 = 60D_2 \implies D_2 = \mathbf{12\text{ días}}\).
+                            </div>
+                        </div>
+
+                        <div class="card-theory p-4 shadow-sm">
+                            <p class="font-bold text-[#1269A8]">Ejemplo Avanzado 3 — Volumen de un cilindro (conjunta con cuadrado)</p>
+                            <p class="text-sm font-semibold mt-1">El volumen \(V\) de un cilindro varía conjuntamente con su altura \(h\) y el cuadrado de su radio \(r\). Si con \(r = 2\text{ cm}\) y \(h = 5\text{ cm}\) su volumen es \(62.8\text{ cm}^3\), halle el volumen si \(r = 3\text{ cm}\) y \(h = 4\text{ cm}\).</p>
+                            <div class="mt-2 bg-white p-3 rounded border text-sm text-gray-800">
+                                <strong>Resolución:</strong><br>
+                                1. Fórmula: \(\frac{V}{r^2 \cdot h} = k\).<br>
+                                2. Hallamos \(k\): \(k = \frac{62.8}{2^2 \times 5} = \frac{62.8}{20} = 3.14\).<br>
+                                3. Segundo caso: \(V_2 = 3.14 \times 3^2 \times 4 = 3.14 \times 36 = \mathbf{113.04\text{ cm}^3}\).
+                            </div>
+                        </div>
+
+                        <div class="card-theory p-4 shadow-sm">
+                            <p class="font-bold text-[#1269A8]">Ejemplo Avanzado 4 — Resistencia eléctrica de un cable</p>
+                            <p class="text-sm font-semibold mt-1">La resistencia \(R\) de un cable es D.P. a su longitud \(L\) e I.P. al área de su sección \(A\). Si un cable de \(40\text{ m}\) y área \(2\text{ mm}^2\) tiene \(R = 10\ \Omega\), ¿qué resistencia tendrá un cable de \(60\text{ m}\) y área \(3\text{ mm}^2\)?</p>
+                            <div class="mt-2 bg-white p-3 rounded border text-sm text-gray-800">
+                                <strong>Resolución:</strong><br>
+                                1. Fórmula combinada: \(\frac{R \cdot A}{L} = k\).<br>
+                                2. Hallamos \(k\): \(k = \frac{10 \times 2}{40} = \frac{20}{40} = 0.5\).<br>
+                                3. Segundo caso: \(\frac{R_2 \times 3}{60} = 0.5 \implies 3R_2 = 30 \implies R_2 = \mathbf{10\ \Omega}\).
+                            </div>
+                        </div>
+
+                        <div class="card-theory p-4 shadow-sm md:col-span-2">
+                            <p class="font-bold text-[#1269A8]">Ejemplo Avanzado 5 — Producción de una fábrica con 4 variables</p>
+                            <p class="text-sm font-semibold mt-1">Si \(5\) máquinas funcionando \(4\text{ horas}\) producen \(200\) botellas, ¿cuántas horas deberán funcionar \(8\) máquinas para producir \(480\) botellas?</p>
+                            <div class="mt-2 bg-white p-3 rounded border text-sm text-gray-800">
+                                <strong>Resolución:</strong><br>
+                                1. Las <strong>Horas (\(H\))</strong> son D.P. a las Botellas (\(B\)) e I.P. a las Máquinas (\(M\)): \(\frac{H \cdot M}{B} = k\).<br>
+                                2. Igualamos: \(\frac{4 \times 5}{200} = \frac{H_2 \times 8}{480} \implies \frac{20}{200} = \frac{8H_2}{480} \implies \frac{1}{10} = \frac{H_2}{60} \implies H_2 = \mathbf{6\text{ horas}}\).
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- PESTAÑA 3: EJERCICIOS PRÁCTICOS (5 X NIVEL)-->
+            <!-- ========================================== -->
+            <section id="tab-ejercicios" class="hidden space-y-8">
+                <div class="border-b-2 border-[#1269A8] pb-2">
+                    <h2 class="text-2xl font-bold text-[#1269A8]">3. Ejercicios Prácticos</h2>
+                    <p class="text-sm text-[#54887D] font-semibold">Practica paso a paso identificando si cada variable multiplica (I.P.) o divide (D.P.).</p>
+                </div>
+
+                <!-- 5 EJERCICIOS BÁSICOS -->
+                <div class="space-y-3">
+                    <h3 class="text-lg font-bold text-[#54887D]">Nivel Básico (Proporcionalidad Conjunta: \(Z = k \cdot X \cdot Y\))</h3>
+                    
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Básico 1</span>
+                        <p class="font-semibold text-gray-800 mt-1">Sabiendo que \(A\) varía conjuntamente con \(B\) y \(C\), y que \(A = 36\) cuando \(B = 3\) y \(C = 4\), halle el valor de \(A\) cuando \(B = 5\) y \(C = 6\).</p>
+                        <button onclick="toggleSol('sol-b1', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-b1" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong><br>
+                            1. Constante: \(k = \frac{A}{B \cdot C} = \frac{36}{3 \times 4} = \frac{36}{12} = 3\).<br>
+                            2. Para \(B = 5\) y \(C = 6\): \(A = 3 \times 5 \times 6 = \mathbf{90}\).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Básico 2</span>
+                        <p class="font-semibold text-gray-800 mt-1">El interés simple \(I\) ganado en un banco es conjuntamente proporcional al capital \(C\) y al tiempo \(t\) en años. Si \(\text{Q } 2\,000\) producen \(\text{Q } 300\) en \(3\text{ años}\), ¿cuánto producirán \(\text{Q } 5\,000\) en \(4\text{ años}\)?</p>
+                        <button onclick="toggleSol('sol-b2', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-b2" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong><br>
+                            1. Fórmula: \(\frac{I}{C \cdot t} = k \implies k = \frac{300}{2\,000 \times 3} = \frac{300}{6\,000} = 0.05\) (\(5\%\) anual).<br>
+                            2. Segundo caso: \(I_2 = 0.05 \times 5\,000 \times 4 = \mathbf{\text{Q } 1\,000}\).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Básico 3</span>
+                        <p class="font-semibold text-gray-800 mt-1">El consumo eléctrico \(E\) (en kWh) de una oficina es conjuntamente proporcional al número de computadoras \(N\) y a las horas de uso \(H\). Si \(10\) computadoras usadas \(4\text{ horas}\) consumen \(8\text{ kWh}\), ¿cuántos kWh consumirán \(15\) computadoras usadas \(6\text{ horas}\)?</p>
+                        <button onclick="toggleSol('sol-b3', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-b3" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong><br>
+                            1. Hallamos \(k\): \(k = \frac{8}{10 \times 4} = \frac{8}{40} = 0.2\).<br>
+                            2. Segundo caso: \(E_2 = 0.2 \times 15 \times 6 = \mathbf{18\text{ kWh}}\).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Básico 4</span>
+                        <p class="font-semibold text-gray-800 mt-1">La cantidad de agua \(W\) que bebe un grupo de excursionistas varía conjuntamente con el número de personas \(P\) y los días de caminata \(D\). Si \(4\) personas beben \(24\text{ litros}\) en \(3\text{ días}\), ¿cuántos litros beberán \(7\) personas en \(5\text{ días}\)?</p>
+                        <button onclick="toggleSol('sol-b4', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-b4" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong><br>
+                            1. Hallamos \(k\): \(k = \frac{24}{4 \times 3} = 2\text{ litros por persona/día}\).<br>
+                            2. Segundo caso: \(W_2 = 2 \times 7 \times 5 = \mathbf{70\text{ litros}}\).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Básico 5</span>
+                        <p class="font-semibold text-gray-800 mt-1">El costo de transporte \(T\) de mercancía es conjuntamente proporcional al peso \(P\) (en kg) y a la distancia \(d\) (en km). Si llevar \(50\text{ kg}\) a \(20\text{ km}\) cuesta \(\text{Q } 200\), ¿cuánto costará llevar \(80\text{ kg}\) a \(35\text{ km}\)?</p>
+                        <button onclick="toggleSol('sol-b5', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-b5" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong><br>
+                            1. Hallamos \(k\): \(k = \frac{200}{50 \times 20} = \frac{200}{1\,000} = 0.2\).<br>
+                            2. Segundo caso: \(T_2 = 0.2 \times 80 \times 35 = \mathbf{\text{Q } 560}\).
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5 EJERCICIOS INTERMEDIOS -->
+                <div class="space-y-3">
+                    <h3 class="text-lg font-bold text-[#54887D]">Nivel Intermedio (Proporcionalidad Combinada: Una D.P. y una I.P.)</h3>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Intermedio 1</span>
+                        <p class="font-semibold text-gray-800 mt-1">Se sabe que \(P\) es D.P. a \(Q\) e I.P. a \(R\). Cuando \(Q = 8\) y \(R = 3\), se tiene \(P = 16\). Halle \(P\) cuando \(Q = 15\) y \(R = 5\).</p>
+                        <button onclick="toggleSol('sol-i1', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-i1" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong><br>
+                            1. Fórmula combinada: \(\frac{P \cdot R}{Q} = k \implies k = \frac{16 \times 3}{8} = 6\).<br>
+                            2. Segundo caso: \(\frac{P_2 \times 5}{15} = 6 \implies \frac{P_2}{3} = 6 \implies P_2 = \mathbf{18}\).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Intermedio 2</span>
+                        <p class="font-semibold text-gray-800 mt-1">Si \(4\) jardineros podan \(120\text{ m}^2\) de césped en \(3\text{ horas}\), ¿cuántas horas tardarán \(6\) jardineros en podar \(360\text{ m}^2\) de césped?</p>
+                        <button onclick="toggleSol('sol-i2', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-i2" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong><br>
+                            1. Las <strong>Horas (\(H\))</strong> son D.P. al Área (\(A\)) e I.P. a los Jardineros (\(J\)): \(\frac{H \cdot J}{A} = k\).<br>
+                            2. Igualamos: \(\frac{3 \times 4}{120} = \frac{H_2 \times 6}{360} \implies \frac{12}{120} = \frac{H_2}{60} \implies \frac{1}{10} = \frac{H_2}{60} \implies H_2 = \mathbf{6\text{ horas}}\).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Intermedio 3</span>
+                        <p class="font-semibold text-gray-800 mt-1">La presión \(P\) de un gas en un recipiente es D.P. a su temperatura \(T\) e I.P. a su volumen \(V\). Si \(P = 20\) cuando \(T = 300\) y \(V = 15\), calcule \(P\) cuando \(T = 360\) y \(V = 12\).</p>
+                        <button onclick="toggleSol('sol-i3', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-i3" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong><br>
+                            1. Fórmula combinada: \(\frac{P \cdot V}{T} = k \implies k = \frac{20 \times 15}{300} = \frac{300}{300} = 1\).<br>
+                            2. Segundo caso: \(\frac{P_2 \times 12}{360} = 1 \implies P_2 = \frac{360}{12} = \mathbf{30}\).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Intermedio 4</span>
+                        <p class="font-semibold text-gray-800 mt-1">Si \(10\) impresoras imprimen \(5\,000\) folletos en \(2\text{ horas}\), ¿cuántas impresoras iguales se necesitan para imprimir \(15\,000\) folletos en \(3\text{ horas}\)?</p>
+                        <button onclick="toggleSol('sol-i4', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-i4" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong><br>
+                            1. Las <strong>Impresoras (\(I\))</strong> son D.P. a los Folletos (\(F\)) e I.P. a las Horas (\(H\)): \(\frac{I \cdot H}{F} = k\).<br>
+                            2. Igualamos: \(\frac{10 \times 2}{5\,000} = \frac{I_2 \times 3}{15\,000} \implies \frac{20}{5\,000} = \frac{I_2}{5\,000} \implies I_2 = \mathbf{20\text{ impresoras}}\).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Intermedio 5</span>
+                        <p class="font-semibold text-gray-800 mt-1">Sabiendo que \(A\) es D.P. a \(B\) e I.P. a \(C\). Cuando \(A = 9\) y \(B = 12\), el valor de \(C\) es \(8\). Halle \(C\) cuando \(A = 15\) y \(B = 25\).</p>
+                        <button onclick="toggleSol('sol-i5', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-i5" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong><br>
+                            1. Fórmula: \(\frac{A \cdot C}{B} = k \implies k = \frac{9 \times 8}{12} = \frac{72}{12} = 6\).<br>
+                            2. Segundo caso: \(\frac{15 \cdot C_2}{25} = 6 \implies \frac{3C_2}{5} = 6 \implies 3C_2 = 30 \implies C_2 = \mathbf{10}\).
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5 EJERCICIOS AVANZADOS -->
+                <div class="space-y-3">
+                    <h3 class="text-lg font-bold text-[#54887D]">Nivel Avanzado (Varias Magnitudes Combinadas y Exponentes Sencillos)</h3>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Avanzado 1</span>
+                        <p class="font-semibold text-gray-800 mt-1">En una panadería, \(3\) hornos funcionando \(4\text{ horas}\) durante \(2\text{ días}\) producen \(480\) pasteles. ¿Cuántos pasteles producirán \(5\) hornos funcionando \(3\text{ horas}\) durante \(4\text{ días}\)?</p>
+                        <button onclick="toggleSol('sol-a1', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-a1" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong><br>
+                            1. Los <strong>Pasteles (\(P\))</strong> son D.P. a hornos (\(O\)), horas (\(H\)) y días (\(D\)): \(\frac{P}{O \cdot H \cdot D} = k\).<br>
+                            2. Caso 1: \(k = \frac{480}{3 \times 4 \times 2} = \frac{480}{24} = 20\).<br>
+                            3. Caso 2: \(P_2 = 20 \times (5 \times 3 \times 4) = 20 \times 60 = \mathbf{1\,200\text{ pasteles}}\).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Avanzado 2</span>
+                        <p class="font-semibold text-gray-800 mt-1">Una cuadrilla de \(8\) obreros trabajando \(6\text{ horas/día}\) termina una obra en \(10\text{ días}\). ¿Cuántos días necesitarán \(12\) obreros trabajando \(8\text{ horas/día}\) para hacer la misma obra?</p>
+                        <button onclick="toggleSol('sol-a2', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-a2" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong><br>
+                            1. Para una misma obra, los <strong>Días (\(D\))</strong> son I.P. a Obreros (\(N\)) e I.P. a Horas diarias (\(H\)): \(D \cdot N \cdot H = k\).<br>
+                            2. Igualamos: \(10 \times 8 \times 6 = D_2 \times 12 \times 8 \implies 480 = 96D_2 \implies D_2 = \mathbf{5\text{ días}}\).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Avanzado 3</span>
+                        <p class="font-semibold text-gray-800 mt-1">Si \(Z\) es D.P. a \(X^2\) e I.P. a \(Y\). Cuando \(X = 3\) y \(Y = 5\), se tiene \(Z = 18\). Calcule \(Z\) cuando \(X = 4\) y \(Y = 8\).</p>
+                        <button onclick="toggleSol('sol-a3', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-a3" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong><br>
+                            1. Fórmula combinada: \(\frac{Z \cdot Y}{X^2} = k \implies k = \frac{18 \times 5}{3^2} = \frac{90}{9} = 10\).<br>
+                            2. Segundo caso: \(\frac{Z_2 \times 8}{4^2} = 10 \implies \frac{8Z_2}{16} = 10 \implies \frac{Z_2}{2} = 10 \implies Z_2 = \mathbf{20}\).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Avanzado 4</span>
+                        <p class="font-semibold text-gray-800 mt-1">En un taller mecánico, \(6\) técnicos reparan \(18\) autos en \(4\text{ días}\) trabajando \(6\text{ horas/día}\). ¿Cuántos días tardarán \(8\) técnicos en reparar \(32\) autos trabajando \(8\text{ horas/día}\)?</p>
+                        <button onclick="toggleSol('sol-a4', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-a4" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong><br>
+                            1. Los <strong>Días (\(D\))</strong> son D.P. a Autos (\(A\)) e I.P. a Técnicos (\(T\)) y Horas (\(H\)): \(\frac{D \cdot T \cdot H}{A} = k\).<br>
+                            2. Caso 1: \(k = \frac{4 \times 6 \times 6}{18} = \frac{144}{18} = 8\).<br>
+                            3. Caso 2: \(\frac{D_2 \times 8 \times 8}{32} = 8 \implies \frac{64D_2}{32} = 8 \implies 2D_2 = 8 \implies D_2 = \mathbf{4\text{ días}}\).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Avanzado 5</span>
+                        <p class="font-semibold text-gray-800 mt-1">El volumen \(V\) de un cono varía conjuntamente con su altura \(h\) y el cuadrado de su radio \(r\). Si con \(r = 3\text{ cm}\) y \(h = 7\text{ cm}\) el volumen es \(66\text{ cm}^3\), halle \(V\) cuando \(r = 6\text{ cm}\) y \(h = 5\text{ cm}\).</p>
+                        <button onclick="toggleSol('sol-a5', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-a5" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong><br>
+                            1. Fórmula: \(\frac{V}{r^2 \cdot h} = k \implies k = \frac{66}{3^2 \times 7} = \frac{66}{63} = \frac{22}{21}\).<br>
+                            2. Segundo caso: \(V_2 = \frac{22}{21} \times 6^2 \times 5 = \frac{22}{21} \times 180 = \frac{3\,960}{21} = \mathbf{\frac{1\,320}{7} \approx 188.57\text{ cm}^3}\).
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- PESTAÑA 4: REFLEXIÓN CRÍTICA               -->
+            <!-- ========================================== -->
+            <section id="tab-reflexion" class="hidden space-y-6">
+                <div class="border-b-2 border-[#1269A8] pb-2">
+                    <h2 class="text-2xl font-bold text-[#1269A8]">4. Preguntas de Reflexión Crítica</h2>
+                    <p class="text-sm text-[#54887D] font-semibold">Análisis lógico para plantear correctamente problemas de varias variables.</p>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="card-theory p-5 shadow-sm">
+                        <h3 class="font-bold text-lg text-[#1269A8] mb-2">1. ¿Cómo evitar confundir cuándo una variable va arriba (numerador) o abajo (denominador)?</h3>
+                        <p class="text-sm text-gray-800 leading-relaxed">
+                            Supón que quieres calcular los <strong>Días (\(D\))</strong> de una obra que depende de los <strong>Obreros (\(O\))</strong> y de los <strong>Metros de pared (\(M\))</strong>. Explica con tus propias palabras qué pregunta lógica debes hacerle a cada variable (manteniendo la otra fija) para decidir si multiplica a \(D\) o divide a \(D\).
+                        </p>
+                    </div>
+
+                    <div class="card-theory p-5 shadow-sm">
+                        <h3 class="font-bold text-lg text-[#1269A8] mb-2">2. ¿Qué representa la constante \(k\) en la vida real?</h3>
+                        <p class="text-sm text-gray-800 leading-relaxed">
+                            En el Ejemplo Básico 1, \(k = 20\) representaba el pago por cada hora trabajada (\(\text{Q } 20/\text{hora}\)). En el Ejemplo Básico 4, \(k = 2\) representaba los litros de agua por persona al día. Analiza por qué \(k\) siempre funciona como una <strong>tasa unitaria</strong> o <strong>rendimiento base</strong> que no cambia entre el primer caso y el segundo.
+                        </p>
+                    </div>
+
+                    <div class="card-theory p-5 shadow-sm">
+                        <h3 class="font-bold text-lg text-[#1269A8] mb-2">3. Proporcionalidad Conjunta vs. Regla de Tres Compuesta</h3>
+                        <p class="text-sm text-gray-800 leading-relaxed">
+                            Muchos estudiantes resuelven problemas de 3 o 4 variables usando "Regla de Tres Compuesta" con signos \((+)\) y \((-)\), mientras que el método de proporcionalidad combinada iguala dos fracciones con \(k\). ¿Qué ventajas tiene escribir la fórmula algebraica \(\frac{Z \cdot Y}{X} = k\) cuando un mismo problema te pide calcular tres casos distintos?
+                        </p>
+                    </div>
+
+                    <div class="card-theory p-5 shadow-sm">
+                        <h3 class="font-bold text-lg text-[#1269A8] mb-2">4. Efecto de duplicar ambas variables en una relación conjunta</h3>
+                        <p class="text-sm text-gray-800 leading-relaxed">
+                            Si \(Z\) es conjuntamente proporcional a \(X\) e \(Y\) (\(Z = k \cdot X \cdot Y\)), y tanto \(X\) como \(Y\) se duplican al mismo tiempo, ¿se duplica también el valor de \(Z\) o se cuadruplica? Justifica tu respuesta con un ejemplo numérico sencillo (por ejemplo, el área de un rectángulo).
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- PESTAÑA 5: EVALUACIÓN FORMATIVA            -->
+            <!-- ========================================== -->
+            <section id="tab-evaluacion" class="hidden space-y-6">
+                <div class="border-b-2 border-[#1269A8] pb-2">
+                    <h2 class="text-2xl font-bold text-[#1269A8]">5. Evaluación Formativa</h2>
+                    <p class="text-sm text-[#54887D] font-semibold">Comprobación de armado de fórmulas y resolución de problemas aplicados.</p>
+                </div>
+
+                <div class="space-y-4">
+                    <!-- Pregunta 1 -->
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Pregunta 1 — Armado de Ecuaciones</span>
+                        <p class="font-semibold text-gray-800 mt-1">Escriba la ecuación de proporcionalidad (despejando la constante \(k\)) para cada enunciado:</p>
+                        <ul class="text-sm text-gray-800 list-disc pl-5 mt-1 space-y-1">
+                            <li><strong>a)</strong> \(M\) varía conjuntamente con \(A\) y \(B\).</li>
+                            <li><strong>b)</strong> \(P\) es directamente proporcional a \(Q\) e inversamente proporcional a \(R\).</li>
+                            <li><strong>c)</strong> \(T\) es directamente proporcional a \(D\) e inversamente proporcional a \(V\) y a \(N\).</li>
+                            <li><strong>d)</strong> \(W\) varía conjuntamente con \(X^2\) y \(Y\), y es inversamente proporcional a \(Z\).</li>
+                        </ul>
+                        <button onclick="toggleSol('sol-ev1', this)" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-ev1" class="hidden solution-box mt-3 p-3 text-sm text-gray-800 space-y-1">
+                            <p>• <strong>a)</strong> \(\dfrac{M}{A \cdot B} = k\)</p>
+                            <p>• <strong>b)</strong> \(\dfrac{P \cdot R}{Q} = k\)</p>
+                            <p>• <strong>c)</strong> \(\dfrac{T \cdot V \cdot N}{D} = k\)</p>
+                            <p>• <strong>d)</strong> \(\dfrac{W \cdot Z}{X^2 \cdot Y} = k\)</p>
+                        </div>
+                    </div>
+
+                    <!-- Pregunta 2 -->
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Pregunta 2 — Proporcionalidad Conjunta</span>
+                        <p class="font-semibold text-gray-800 mt-1">
+                            El salario \(S\) de un grupo de tutores varía conjuntamente con el número de tutores \(T\) y las horas impartidas \(H\). Si \(3\) tutores ganan \(\text{Q } 720\) en \(4\text{ horas}\), ¿cuánto ganarán \(5\) tutores en \(6\text{ horas}\)?
+                        </p>
+                        <button onclick="toggleSol('sol-ev2', this)" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-ev2" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong><br>
+                            1. Hallamos \(k\): \(k = \frac{S}{T \cdot H} = \frac{720}{3 \times 4} = \frac{720}{12} = 60\).<br>
+                            2. Segundo caso: \(S_2 = 60 \times 5 \times 6 = \mathbf{\text{Q } 1\,800}\).
+                        </div>
+                    </div>
+
+                    <!-- Pregunta 3 -->
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Pregunta 3 — Proporcionalidad Combinada</span>
+                        <p class="font-semibold text-gray-800 mt-1">
+                            Una variable \(Y\) es D.P. a \(X\) e I.P. a \(W\). Si \(Y = 14\) cuando \(X = 6\) y \(W = 9\), halle el valor de \(Y\) cuando \(X = 10\) y \(W = 15\).
+                        </p>
+                        <button onclick="toggleSol('sol-ev3', this)" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-ev3" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong><br>
+                            1. Fórmula: \(\frac{Y \cdot W}{X} = k \implies k = \frac{14 \times 9}{6} = \frac{126}{6} = 21\).<br>
+                            2. Segundo caso: \(\frac{Y_2 \times 15}{10} = 21 \implies 1.5Y_2 = 21 \implies Y_2 = \mathbf{14}\).
+                        </div>
+                    </div>
+
+                    <!-- Pregunta 4 -->
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Pregunta 4 — Aplicación: Construcción</span>
+                        <p class="font-semibold text-gray-800 mt-1">
+                            Si \(5\) albañiles levantan \(40\text{ m}^2\) de pared en \(4\text{ días}\), ¿cuántos albañiles se necesitarán para levantar \(60\text{ m}^2\) de pared en \(3\text{ días}\)?
+                        </p>
+                        <button onclick="toggleSol('sol-ev4', this)" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-ev4" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong><br>
+                            1. Los <strong>Albañiles (\(A\))</strong> son D.P. a la Pared (\(P\)) e I.P. a los Días (\(D\)): \(\frac{A \cdot D}{P} = k\).<br>
+                            2. Igualamos: \(\frac{5 \times 4}{40} = \frac{A_2 \times 3}{60} \implies \frac{20}{40} = \frac{A_2}{20} \implies \frac{1}{2} = \frac{A_2}{20} \implies A_2 = \mathbf{10\text{ albañiles}}\).
+                        </div>
+                    </div>
+
+                    <!-- Pregunta 5 -->
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Pregunta 5 — Problema Integrador de 4 Magnitudes</span>
+                        <p class="font-semibold text-gray-800 mt-1">
+                            En una imprenta, \(4\) máquinas encuadernan \(800\) libros en \(2\text{ días}\) trabajando \(5\text{ horas/día}\). ¿Cuántos libros encuadernarán \(6\) máquinas en \(3\text{ días}\) trabajando \(4\text{ horas/día}\)?
+                        </p>
+                        <button onclick="toggleSol('sol-ev5', this)" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-ev5" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución paso a paso:</strong><br>
+                            1. Los <strong>Libros (\(L\))</strong> son D.P. a Máquinas (\(M\)), Días (\(D\)) y Horas (\(H\)): \(\frac{L}{M \cdot D \cdot H} = k\).<br>
+                            2. Hallamos \(k\): \(k = \frac{800}{4 \times 2 \times 5} = \frac{800}{40} = 20\).<br>
+                            3. Calculamos \(L_2\): \(L_2 = 20 \times (6 \times 3 \times 4) = 20 \times 72 = \mathbf{1\,440\text{ libros}}\).
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Pie de Página Institucional -->
+        <footer class="bg-[#F2F5E9] border-t-2 border-[#54887D] p-3 text-center text-xs text-[#1269A8] font-semibold">
+            Colegio Montano — Departamento de Matemática • Pizarra Digital Interactiva (Canvas Education)
+        </footer>
+    </div>
+
+    <!-- Lógica de Interactividad -->
+    <script>
+        // Cambio dinámico entre las pestañas de la pizarra
+        function switchTab(tabName) {
+            const tabs = ['teoria', 'ejemplos', 'ejercicios', 'reflexion', 'evaluacion'];
+            tabs.forEach(t => {
+                const section = document.getElementById('tab-' + t);
+                const btn = document.getElementById('btn-' + t);
+                if (t === tabName) {
+                    section.classList.remove('hidden');
+                    btn.className = "flex-1 py-3 px-3 text-center font-bold text-xs md:text-sm tab-active transition cursor-pointer";
+                } else {
+                    section.classList.add('hidden');
+                    btn.className = "flex-1 py-3 px-3 text-center font-bold text-xs md:text-sm tab-inactive transition cursor-pointer";
+                }
+            });
+        }
+
+        // Alternar visibilidad de las soluciones ocultas
+        function toggleSol(solId, btnElement) {
+            const solDiv = document.getElementById(solId);
+            if (solDiv.classList.contains('hidden')) {
+                solDiv.classList.remove('hidden');
+                btnElement.textContent = "Ocultar solución";
+            } else {
+                solDiv.classList.add('hidden');
+                btnElement.textContent = "Mostrar solución";
+            }
+        }
+
+        // Control de Pantalla Completa mediante Fullscreen API
+        function toggleFullScreen() {
+            const elem = document.documentElement;
+            const btn = document.getElementById('fullscreen-btn');
+            if (!document.fullscreenElement) {
+                if (elem.requestFullscreen) {
+                    elem.requestFullscreen().catch(() => {});
+                } else if (elem.webkitRequestFullscreen) {
+                    elem.webkitRequestFullscreen();
+                } else if (elem.msRequestFullscreen) {
+                    elem.msRequestFullscreen();
+                }
+                btn.innerHTML = "<span>[ ✕ Salir pantalla completa ]</span>";
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen().catch(() => {});
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                }
+                btn.innerHTML = "<span>[ ⛶ Pantalla completa ]</span>";
+            }
+        }
+
+        document.addEventListener('fullscreenchange', () => {
+            const btn = document.getElementById('fullscreen-btn');
+            if (!document.fullscreenElement) {
+                btn.innerHTML = "<span>[ ⛶ Pantalla completa ]</span>";
+            }
+        });
+    </script>
+</body>
+</html>

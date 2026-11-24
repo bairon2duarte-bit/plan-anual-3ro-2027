@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía Interactiva: Magnitudes Proporcionales - Colegio Montano</title>
+    <!-- Tailwind CSS para diseño moderno y responsivo -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- MathJax para renderizado impecable de expresiones matemáticas -->
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #F2F5E9;
+        }
+        /* Marco de pizarra digital con identidad Colegio Montano */
+        .whiteboard-container {
+            background-color: #ffffff;
+            border: 5px solid #F7D615;
+            border-radius: 12px;
+            box-shadow: 0 12px 30px rgba(18, 105, 168, 0.18);
+        }
+        .header-bg {
+            background: linear-gradient(135deg, #1269A8 0%, #0e5285 100%);
+        }
+        .tab-active {
+            background-color: #1269A8;
+            color: #ffffff;
+            border-bottom: 4px solid #F7D615;
+        }
+        .tab-inactive {
+            background-color: #88B5C7;
+            color: #0d4b7a;
+        }
+        .tab-inactive:hover {
+            background-color: #54887D;
+            color: #ffffff;
+        }
+        .card-theory {
+            background-color: #F2F5E9;
+            border-left: 5px solid #54887D;
+            border-radius: 8px;
+        }
+        .card-exercise {
+            background-color: rgba(136, 181, 199, 0.16);
+            border: 1px solid #54887D;
+            border-left: 5px solid #1269A8;
+            border-radius: 8px;
+        }
+        .solution-box {
+            background-color: rgba(136, 181, 199, 0.30);
+            border-left: 4px solid #54887D;
+            border-radius: 6px;
+        }
+        .badge-level {
+            background-color: #A6B046;
+            color: #ffffff;
+        }
+        .btn-action {
+            background-color: #1269A8;
+            color: #ffffff;
+            transition: all 0.2s ease;
+        }
+        .btn-action:hover {
+            background-color: #54887D;
+        }
+    </style>
+</head>
+<body class="p-3 md:p-6 min-h-screen flex flex-col items-center">
+
+    <!-- Contenedor Principal de la Pizarra Digital -->
+    <div id="whiteboard" class="whiteboard-container w-full max-w-6xl flex flex-col overflow-hidden">
+        
+        <!-- Barra Superior / Encabezado Institucional -->
+        <header class="header-bg p-4 flex flex-col sm:flex-row justify-between items-center text-white gap-4">
+            <div class="flex items-center space-x-4">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyEop0yf6lZ7Jk9MILZxF1rBj4Oqs5esyhIQ&s" alt="Logo Colegio Montano" class="h-14 w-14 object-contain bg-white rounded-full p-1 shadow-md">
+                <div>
+                    <h1 class="text-xl md:text-2xl font-bold tracking-wide">Colegio Montano</h1>
+                    <p class="text-xs md:text-sm text-[#F7D615] font-bold">Pizarra Digital Interactiva — Unidad 2: Magnitudes Proporcionales (Teoría y Gráficas)</p>
+                </div>
+            </div>
+            <div>
+                <button id="fullscreen-btn" onclick="toggleFullScreen()" class="bg-[#F7D615] text-[#1269A8] font-bold px-4 py-2 rounded-lg shadow hover:bg-yellow-300 transition flex items-center gap-2 text-sm cursor-pointer">
+                    <span>[ ⛶ Pantalla completa ]</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Menú de Pestañas Horizontales Interactivas -->
+        <nav class="flex flex-wrap bg-[#88B5C7] border-b-2 border-[#54887D]">
+            <button onclick="switchTab('teoria')" id="btn-teoria" class="flex-1 py-3 px-3 text-center font-bold text-xs md:text-sm tab-active transition cursor-pointer">Teoría</button>
+            <button onclick="switchTab('ejemplos')" id="btn-ejemplos" class="flex-1 py-3 px-3 text-center font-bold text-xs md:text-sm tab-inactive transition cursor-pointer">Ejemplos</button>
+            <button onclick="switchTab('ejercicios')" id="btn-ejercicios" class="flex-1 py-3 px-3 text-center font-bold text-xs md:text-sm tab-inactive transition cursor-pointer">Ejercicios</button>
+            <button onclick="switchTab('reflexion')" id="btn-reflexion" class="flex-1 py-3 px-3 text-center font-bold text-xs md:text-sm tab-inactive transition cursor-pointer">Reflexión</button>
+            <button onclick="switchTab('evaluacion')" id="btn-evaluacion" class="flex-1 py-3 px-3 text-center font-bold text-xs md:text-sm tab-inactive transition cursor-pointer">Evaluación</button>
+        </nav>
+
+        <!-- Lienzo de Contenido Principal -->
+        <main class="p-5 md:p-8 flex-1 overflow-y-auto max-h-[78vh] bg-[#F2F5E9]/40">
+
+            <!-- ========================================== -->
+            <!-- PESTAÑA 1: EXPLICACIÓN TEÓRICA             -->
+            <!-- ========================================== -->
+            <section id="tab-teoria" class="space-y-6">
+                <div class="border-b-2 border-[#1269A8] pb-2">
+                    <h2 class="text-2xl font-bold text-[#1269A8]">1. Concepto de Magnitud y Variación Proporcional</h2>
+                    <p class="text-sm text-[#54887D] font-semibold">Análisis conceptual, propiedades algebraicas y representación gráfica en el plano cartesiano.</p>
+                </div>
+
+                <!-- Concepto Base de Magnitud y Variación -->
+                <div class="card-theory p-5 shadow-sm space-y-3">
+                    <h3 class="font-bold text-lg text-[#1269A8]">¿Qué es una Magnitud y cómo se relacionan?</h3>
+                    <p class="text-sm text-gray-800 leading-relaxed">
+                        Una <strong>magnitud</strong> es toda propiedad o cualidad de los cuerpos o fenómenos que es susceptible de ser medida y expresada cuantitativamente mediante un número y una unidad de medida (por ejemplo: longitud, tiempo, masa, costo, número de obreros, volumen de obra, velocidad).
+                    </p>
+                    <p class="text-sm text-gray-800 leading-relaxed">
+                        Cuando dos magnitudes están vinculadas entre sí de modo que al variar el valor de una de ellas, la otra experimenta una variación correspondiente en la misma proporción, decimos que existe una <strong>variación proporcional</strong>. Según el sentido en que cambian, se clasifican en <strong>Directamente Proporcionales (D.P.)</strong> e <strong>Inversamente Proporcionales (I.P.)</strong>.
+                    </p>
+                </div>
+
+                <!-- Comparativa D.P. vs I.P. con Gráficas SVG -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    
+                    <!-- Tarjeta Magnitudes Directamente Proporcionales (D.P.) -->
+                    <div class="card-theory p-5 shadow-sm space-y-4 flex flex-col justify-between">
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between">
+                                <h3 class="font-bold text-lg text-[#1269A8]">Magnitudes Directamente Proporcionales (D.P.)</h3>
+                                <span class="badge-level text-xs px-2.5 py-1 rounded-full font-bold">A D.P. B</span>
+                            </div>
+                            <p class="text-sm text-gray-800 leading-relaxed">
+                                <strong>Definición:</strong> Dos magnitudes \(A\) y \(B\) son directamente proporcionales cuando varían en la <strong>misma proporción</strong>; es decir, si una aumenta (se duplica, triplica, etc.), la otra también aumenta en la misma proporción, y si una disminuye, la otra disminuye en igual proporción.
+                            </p>
+                            <div class="bg-white p-3 rounded border border-[#54887D] text-center">
+                                <p class="text-xs text-[#54887D] font-bold uppercase mb-1">Propiedad Fundamental (Cociente Constante)</p>
+                                <p class="text-base font-bold text-[#1269A8]">\[\frac{A}{B} = k \quad \Longleftrightarrow \quad \frac{a_1}{b_1} = \frac{a_2}{b_2} = \frac{a_3}{b_3} = \dots = k\]</p>
+                            </div>
+                            <div class="text-sm text-gray-800 space-y-1">
+                                <p class="font-bold text-[#54887D]">Ejemplos prácticos cotidianos:</p>
+                                <ul class="list-disc pl-5 space-y-1">
+                                    <li><strong>Cantidad de artículos y costo total:</strong> A mayor cantidad de cuadernos iguales comprados, mayor será el monto a pagar.</li>
+                                    <li><strong>Distancia recorrida y tiempo (a velocidad constante):</strong> Si un vehículo mantiene rapidez constante, en el doble de tiempo recorrerá el doble de distancia.</li>
+                                    <li><strong>Número de obreros y dimensión de la obra:</strong> En un mismo tiempo y con igual eficiencia, más obreros construyen más metros cuadrados de pared.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Gráfica SVG D.P. -->
+                        <div class="bg-white p-3 rounded border border-[#54887D] flex flex-col items-center">
+                            <p class="text-xs font-bold text-[#1269A8] mb-2">Representación Gráfica: Línea recta en el I cuadrante que pasa por el origen \((0,0)\)</p>
+                            <svg viewBox="0 0 280 185" class="w-full max-w-xs h-auto">
+                                <!-- Cuadrícula suave -->
+                                <line x1="40" y1="30" x2="250" y2="30" stroke="#e5e7eb" stroke-dasharray="3,3"/>
+                                <line x1="40" y1="70" x2="250" y2="70" stroke="#e5e7eb" stroke-dasharray="3,3"/>
+                                <line x1="40" y1="110" x2="250" y2="110" stroke="#e5e7eb" stroke-dasharray="3,3"/>
+                                <line x1="100" y1="20" x2="100" y2="150" stroke="#e5e7eb" stroke-dasharray="3,3"/>
+                                <line x1="160" y1="20" x2="160" y2="150" stroke="#e5e7eb" stroke-dasharray="3,3"/>
+                                <line x1="220" y1="20" x2="220" y2="150" stroke="#e5e7eb" stroke-dasharray="3,3"/>
+                                <!-- Ejes -->
+                                <line x1="40" y1="150" x2="260" y2="150" stroke="#1269A8" stroke-width="2"/>
+                                <line x1="40" y1="150" x2="40" y2="15" stroke="#1269A8" stroke-width="2"/>
+                                <!-- Recta D.P. -->
+                                <line x1="40" y1="150" x2="235" y2="20" stroke="#A6B046" stroke-width="3"/>
+                                <!-- Proyecciones y puntos -->
+                                <line x1="100" y1="110" x2="100" y2="150" stroke="#54887D" stroke-dasharray="4,3"/>
+                                <line x1="40" y1="110" x2="100" y2="110" stroke="#54887D" stroke-dasharray="4,3"/>
+                                <circle cx="100" cy="110" r="4.5" fill="#1269A8"/>
+
+                                <line x1="160" y1="70" x2="160" y2="150" stroke="#54887D" stroke-dasharray="4,3"/>
+                                <line x1="40" y1="70" x2="160" y2="70" stroke="#54887D" stroke-dasharray="4,3"/>
+                                <circle cx="160" cy="70" r="4.5" fill="#1269A8"/>
+
+                                <line x1="220" y1="30" x2="220" y2="150" stroke="#54887D" stroke-dasharray="4,3"/>
+                                <line x1="40" y1="30" x2="220" y2="30" stroke="#54887D" stroke-dasharray="4,3"/>
+                                <circle cx="220" cy="30" r="4.5" fill="#1269A8"/>
+
+                                <!-- Etiquetas -->
+                                <text x="25" y="164" font-size="11" fill="#1269A8" font-weight="bold">0</text>
+                                <text x="95" y="165" font-size="10" fill="#374151">b₁</text>
+                                <text x="155" y="165" font-size="10" fill="#374151">b₂</text>
+                                <text x="215" y="165" font-size="10" fill="#374151">b₃</text>
+                                <text x="248" y="165" font-size="11" fill="#1269A8" font-weight="bold">B</text>
+
+                                <text x="20" y="114" font-size="10" fill="#374151">a₁</text>
+                                <text x="20" y="74" font-size="10" fill="#374151">a₂</text>
+                                <text x="20" y="34" font-size="10" fill="#374151">a₃</text>
+                                <text x="22" y="18" font-size="11" fill="#1269A8" font-weight="bold">A</text>
+                                <text x="135" y="45" font-size="11" fill="#54887D" font-weight="bold">a₁/b₁ = a₂/b₂ = k</text>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Tarjeta Magnitudes Inversamente Proporcionales (I.P.) -->
+                    <div class="card-theory p-5 shadow-sm space-y-4 flex flex-col justify-between">
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between">
+                                <h3 class="font-bold text-lg text-[#1269A8]">Magnitudes Inversamente Proporcionales (I.P.)</h3>
+                                <span class="badge-level text-xs px-2.5 py-1 rounded-full font-bold">A I.P. B</span>
+                            </div>
+                            <p class="text-sm text-gray-800 leading-relaxed">
+                                <strong>Definición:</strong> Dos magnitudes \(A\) y \(B\) son inversamente proporcionales cuando al aumentar una de ellas, la otra <strong>disminuye en la misma proporción</strong> (y viceversa: si una se divide entre \(n\), la otra se multiplica por \(n\)).
+                            </p>
+                            <div class="bg-white p-3 rounded border border-[#54887D] text-center">
+                                <p class="text-xs text-[#54887D] font-bold uppercase mb-1">Propiedad Fundamental (Producto Constante)</p>
+                                <p class="text-base font-bold text-[#1269A8]">\[A \cdot B = k \quad \Longleftrightarrow \quad a_1 \cdot b_1 = a_2 \cdot b_2 = a_3 \cdot b_3 = \dots = k\]</p>
+                            </div>
+                            <div class="text-sm text-gray-800 space-y-1">
+                                <p class="font-bold text-[#54887D]">Ejemplos prácticos cotidianos:</p>
+                                <ul class="list-disc pl-5 space-y-1">
+                                    <li><strong>Número de trabajadores y tiempo de ejecución:</strong> Para una misma obra, al duplicar el número de trabajadores (de igual rendimiento), el tiempo de entrega se reduce a la mitad.</li>
+                                    <li><strong>Cantidad de soldados y días de duración de víveres:</strong> Con una provisión fija de alimentos, si llegan más soldados, los víveres alcanzarán para menos días.</li>
+                                    <li><strong>Velocidad de un móvil y tiempo de viaje:</strong> Para recorrer una misma distancia, a mayor rapidez menor será el tiempo empleado.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Gráfica SVG I.P. -->
+                        <div class="bg-white p-3 rounded border border-[#54887D] flex flex-col items-center">
+                            <p class="text-xs font-bold text-[#1269A8] mb-2">Representación Gráfica: Rama de hipérbola equilátera en el I cuadrante</p>
+                            <svg viewBox="0 0 280 185" class="w-full max-w-xs h-auto">
+                                <!-- Cuadrícula suave -->
+                                <line x1="40" y1="30" x2="250" y2="30" stroke="#e5e7eb" stroke-dasharray="3,3"/>
+                                <line x1="40" y1="90" x2="250" y2="90" stroke="#e5e7eb" stroke-dasharray="3,3"/>
+                                <line x1="40" y1="120" x2="250" y2="120" stroke="#e5e7eb" stroke-dasharray="3,3"/>
+                                <line x1="80" y1="20" x2="80" y2="150" stroke="#e5e7eb" stroke-dasharray="3,3"/>
+                                <line x1="120" y1="20" x2="120" y2="150" stroke="#e5e7eb" stroke-dasharray="3,3"/>
+                                <line x1="200" y1="20" x2="200" y2="150" stroke="#e5e7eb" stroke-dasharray="3,3"/>
+                                <!-- Ejes -->
+                                <line x1="40" y1="150" x2="260" y2="150" stroke="#1269A8" stroke-width="2"/>
+                                <line x1="40" y1="150" x2="40" y2="15" stroke="#1269A8" stroke-width="2"/>
+                                <!-- Curva Hipérbola Equilátera (y = k/x) -->
+                                <path d="M 65 18 Q 95 95, 120 110 T 240 135" fill="none" stroke="#F7D615" stroke-width="3.5"/>
+                                <path d="M 65 18 Q 95 95, 120 110 T 240 135" fill="none" stroke="#54887D" stroke-width="1.5"/>
+                                <!-- Proyecciones y puntos -->
+                                <line x1="72" y1="36" x2="72" y2="150" stroke="#54887D" stroke-dasharray="4,3"/>
+                                <line x1="40" y1="36" x2="72" y2="36" stroke="#54887D" stroke-dasharray="4,3"/>
+                                <circle cx="72" cy="36" r="4.5" fill="#1269A8"/>
+
+                                <line x1="115" y1="106" x2="115" y2="150" stroke="#54887D" stroke-dasharray="4,3"/>
+                                <line x1="40" y1="106" x2="115" y2="106" stroke="#54887D" stroke-dasharray="4,3"/>
+                                <circle cx="115" cy="106" r="4.5" fill="#1269A8"/>
+
+                                <line x1="195" y1="128" x2="195" y2="150" stroke="#54887D" stroke-dasharray="4,3"/>
+                                <line x1="40" y1="128" x2="195" y2="128" stroke="#54887D" stroke-dasharray="4,3"/>
+                                <circle cx="195" cy="128" r="4.5" fill="#1269A8"/>
+
+                                <!-- Etiquetas -->
+                                <text x="25" y="164" font-size="11" fill="#1269A8" font-weight="bold">0</text>
+                                <text x="67" y="165" font-size="10" fill="#374151">b₁</text>
+                                <text x="110" y="165" font-size="10" fill="#374151">b₂</text>
+                                <text x="190" y="165" font-size="10" fill="#374151">b₃</text>
+                                <text x="248" y="165" font-size="11" fill="#1269A8" font-weight="bold">B</text>
+
+                                <text x="20" y="40" font-size="10" fill="#374151">a₁</text>
+                                <text x="20" y="110" font-size="10" fill="#374151">a₂</text>
+                                <text x="20" y="132" font-size="10" fill="#374151">a₃</text>
+                                <text x="22" y="18" font-size="11" fill="#1269A8" font-weight="bold">A</text>
+                                <text x="125" y="75" font-size="11" fill="#54887D" font-weight="bold">a₁·b₁ = a₂·b₂ = k</text>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- PESTAÑA 2: EJEMPLOS RESUELTOS (5 POR NIVEL)-->
+            <!-- ========================================== -->
+            <section id="tab-ejemplos" class="hidden space-y-8">
+                <div class="border-b-2 border-[#1269A8] pb-2">
+                    <h2 class="text-2xl font-bold text-[#1269A8]">2. Ejemplos Resueltos Paso a Paso</h2>
+                    <p class="text-sm text-[#54887D] font-semibold">15 ejemplos progresivos (5 Básico, 5 Intermedio, 5 Avanzado) con análisis algebraico y gráfico.</p>
+                </div>
+
+                <!-- NIVEL BÁSICO -->
+                <div class="space-y-4">
+                    <h3 class="text-xl font-bold text-[#54887D] flex items-center gap-2">
+                        <span class="badge-level text-xs px-3 py-1 rounded-full">NIVEL BÁSICO</span> Identificación de Proporcionalidad y Constante \(k\)
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="card-theory p-4 shadow-sm">
+                            <p class="font-bold text-[#1269A8]">Ejemplo Básico 1 — Cantidad de artículos y costo (D.P.)</p>
+                            <p class="text-sm font-semibold mt-1">Si \(4\) libros de texto cuestan \(\text{Q } 260\), ¿cuál es la constante de proporcionalidad \(k\) y cuánto costarán \(9\) libros idénticos?</p>
+                            <div class="mt-2 bg-white p-3 rounded border text-sm text-gray-800">
+                                <strong>Resolución:</strong><br>
+                                1. A mayor cantidad de libros, mayor costo \(\implies\) son <strong>D.P.</strong> (\(\frac{\text{Costo}}{\text{Libros}} = k\)).<br>
+                                2. Hallamos \(k\): \(k = \frac{260}{4} = \mathbf{65}\) (costo unitario en quetzales).<br>
+                                3. Para \(9\) libros: \(\frac{C}{9} = 65 \implies C = 9 \times 65 = \mathbf{\text{Q } 585}\).
+                            </div>
+                        </div>
+
+                        <div class="card-theory p-4 shadow-sm">
+                            <p class="font-bold text-[#1269A8]">Ejemplo Básico 2 — Distancia y tiempo a velocidad constante (D.P.)</p>
+                            <p class="text-sm font-semibold mt-1">Un automóvil viaja a velocidad constante recorriendo \(180\text{ km}\) en \(2.5\text{ horas}\). ¿Qué distancia recorrerá en \(4\text{ horas}\)?</p>
+                            <div class="mt-2 bg-white p-3 rounded border text-sm text-gray-800">
+                                <strong>Resolución:</strong><br>
+                                1. Distancia y tiempo son <strong>D.P.</strong> a velocidad constante: \(\frac{d}{t} = k\).<br>
+                                2. Planteamos la proporción: \(\frac{180}{2.5} = \frac{d}{4}\).<br>
+                                3. Despejamos \(d\): \(d = \frac{180 \times 4}{2.5} = 72 \times 4 = \mathbf{288\text{ km}}\).
+                            </div>
+                        </div>
+
+                        <div class="card-theory p-4 shadow-sm">
+                            <p class="font-bold text-[#1269A8]">Ejemplo Básico 3 — Número de obreros y días de trabajo (I.P.)</p>
+                            <p class="text-sm font-semibold mt-1">Una cuadrilla de \(6\) obreros termina un muro en \(12\text{ días}\). ¿En cuántos días lo terminarían \(9\) obreros con el mismo rendimiento?</p>
+                            <div class="mt-2 bg-white p-3 rounded border text-sm text-gray-800">
+                                <strong>Resolución:</strong><br>
+                                1. A más obreros, menos días para la misma obra \(\implies\) son <strong>I.P.</strong> (\(\text{Obreros} \times \text{Días} = k\)).<br>
+                                2. Aplicamos producto constante: \(6 \times 12 = 9 \times d\).<br>
+                                3. Despejamos \(d\): \(d = \frac{72}{9} = \mathbf{8\text{ días}}\).
+                            </div>
+                        </div>
+
+                        <div class="card-theory p-4 shadow-sm">
+                            <p class="font-bold text-[#1269A8]">Ejemplo Básico 4 — Soldados y días de víveres (I.P.)</p>
+                            <p class="text-sm font-semibold mt-1">Un destacamento de \(40\) soldados tiene víveres para \(18\text{ días}\). Si se incorporan \(20\) soldados más, ¿para cuántos días alcanzarán los mismos víveres?</p>
+                            <div class="mt-2 bg-white p-3 rounded border text-sm text-gray-800">
+                                <strong>Resolución:</strong><br>
+                                1. Total de soldados ahora: \(40 + 20 = 60\) soldados.<br>
+                                2. Cantidad de soldados y días de víveres son <strong>I.P.</strong>: \(40 \times 18 = 60 \times d\).<br>
+                                3. Despejamos \(d\): \(d = \frac{720}{60} = \mathbf{12\text{ días}}\).
+                            </div>
+                        </div>
+
+                        <div class="card-theory p-4 shadow-sm md:col-span-2">
+                            <p class="font-bold text-[#1269A8]">Ejemplo Básico 5 — Obreros y dimensión de la obra (D.P.)</p>
+                            <p class="text-sm font-semibold mt-1">En una jornada de \(8\) horas, \(5\) pintores logran pintar \(45\text{ m}^2\) de fachada. ¿Cuántos metros cuadrados pintarán \(8\) pintores en esa misma jornada?</p>
+                            <div class="mt-2 bg-white p-3 rounded border text-sm text-gray-800">
+                                <strong>Resolución:</strong><br>
+                                1. A tiempo fijo, el número de pintores y el área de la obra son <strong>D.P.</strong>: \(\frac{\text{Obra}}{\text{Pintores}} = k\).<br>
+                                2. Planteamos: \(\frac{45}{5} = \frac{x}{8} \implies 9 = \frac{x}{8} \implies x = \mathbf{72\text{ m}^2}\).
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- NIVEL INTERMEDIO -->
+                <div class="space-y-4">
+                    <h3 class="text-xl font-bold text-[#54887D] flex items-center gap-2">
+                        <span class="badge-level text-xs px-3 py-1 rounded-full">NIVEL INTERMEDIO</span> Tablas de Variación y Lectura de Gráficas
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="card-theory p-4 shadow-sm">
+                            <p class="font-bold text-[#1269A8]">Ejemplo Intermedio 1 — Completar tabla D.P.</p>
+                            <p class="text-sm font-semibold mt-1">Sabiendo que \(A\) es D.P. a \(B\), halle \(x + y\) en la tabla: \((A=12, B=4)\), \((A=x, B=7)\), \((A=33, B=y)\).</p>
+                            <div class="mt-2 bg-white p-3 rounded border text-sm text-gray-800">
+                                <strong>Resolución:</strong><br>
+                                1. Constante \(k = \frac{A}{B} = \frac{12}{4} = 3\).<br>
+                                2. \(\frac{x}{7} = 3 \implies x = 21\). &nbsp;&nbsp; \(\frac{33}{y} = 3 \implies y = 11\).<br>
+                                3. Por lo tanto, \(x + y = 21 + 11 = \mathbf{32}\).
+                            </div>
+                        </div>
+
+                        <div class="card-theory p-4 shadow-sm">
+                            <p class="font-bold text-[#1269A8]">Ejemplo Intermedio 2 — Completar tabla I.P.</p>
+                            <p class="text-sm font-semibold mt-1">Si \(M\) es I.P. a \(N\), calcule \(m \cdot n\) si los pares correspondientes son \((M=15, N=8)\), \((M=24, N=m)\) y \((M=n, N=12)\).</p>
+                            <div class="mt-2 bg-white p-3 rounded border text-sm text-gray-800">
+                                <strong>Resolución:</strong><br>
+                                1. Constante \(k = M \cdot N = 15 \times 8 = 120\).<br>
+                                2. \(24 \cdot m = 120 \implies m = 5\). &nbsp;&nbsp; \(n \cdot 12 = 120 \implies n = 10\).<br>
+                                3. Producto solicitado: \(m \cdot n = 5 \times 10 = \mathbf{50}\).
+                            </div>
+                        </div>
+
+                        <div class="card-theory p-4 shadow-sm">
+                            <p class="font-bold text-[#1269A8]">Ejemplo Intermedio 3 — Análisis de gráfica lineal (D.P.)</p>
+                            <p class="text-sm font-semibold mt-1">Una recta pasa por el origen \((0,0)\) y contiene los puntos \(P(4, 14)\) y \(Q(a, 35)\). Determine el valor de \(a\) y la ecuación de la recta.</p>
+                            <div class="mt-2 bg-white p-3 rounded border text-sm text-gray-800">
+                                <strong>Resolución:</strong><br>
+                                1. Una recta que pasa por el origen representa magnitudes D.P.: \(\frac{y}{x} = k\).<br>
+                                2. \(k = \frac{14}{4} = 3.5 \implies\) Ecuación: \(y = 3.5x\).<br>
+                                3. En \(Q(a, 35)\): \(\frac{35}{a} = 3.5 \implies a = \frac{35}{3.5} = \mathbf{10}\).
+                            </div>
+                        </div>
+
+                        <div class="card-theory p-4 shadow-sm">
+                            <p class="font-bold text-[#1269A8]">Ejemplo Intermedio 4 — Análisis de hipérbola equilátera (I.P.)</p>
+                            <p class="text-sm font-semibold mt-1">En la gráfica de una hipérbola equilátera que relaciona velocidad \(V\) (km/h) y tiempo \(T\) (h), se ubican los puntos \((60, 4)\) y \((80, t)\). Halle \(t\).</p>
+                            <div class="mt-2 bg-white p-3 rounded border text-sm text-gray-800">
+                                <strong>Resolución:</strong><br>
+                                1. La hipérbola equilátera indica relación I.P.: \(V \cdot T = k\).<br>
+                                2. \(k = 60 \times 4 = 240\text{ km}\) (distancia fija).<br>
+                                3. Para \(V = 80\): \(80 \cdot t = 240 \implies t = \frac{240}{80} = \mathbf{3\text{ horas}}\).
+                            </div>
+                        </div>
+
+                        <div class="card-theory p-4 shadow-sm md:col-span-2">
+                            <p class="font-bold text-[#1269A8]">Ejemplo Intermedio 5 — Variación porcentual en magnitudes proporcionales</p>
+                            <p class="text-sm font-semibold mt-1">Si el precio de un artículo es D.P. a su peso y \(250\text{ g}\) cuestan \(\text{Q } 18\), ¿cuánto costará un paquete cuyo peso aumentó en un \(40\%\)?</p>
+                            <div class="mt-2 bg-white p-3 rounded border text-sm text-gray-800">
+                                <strong>Resolución:</strong><br>
+                                1. Nuevo peso: \(250 + 0.40(250) = 350\text{ g}\).<br>
+                                2. Como Precio D.P. Peso: \(\frac{18}{250} = \frac{P}{350} \implies P = \frac{18 \times 350}{250} = 18 \times 1.4 = \mathbf{\text{Q } 25.20}\).
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- NIVEL AVANZADO -->
+                <div class="space-y-4">
+                    <h3 class="text-xl font-bold text-[#54887D] flex items-center gap-2">
+                        <span class="badge-level text-xs px-3 py-1 rounded-full">NIVEL AVANZADO</span> Proporcionalidad con Potencias, Gráficas Mixtas y Proporcionalidad Compuesta
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="card-theory p-4 shadow-sm">
+                            <p class="font-bold text-[#1269A8]">Ejemplo Avanzado 1 — Magnitud D.P. al cuadrado de otra</p>
+                            <p class="text-sm font-semibold mt-1">La energía cinética \(E\) de un cuerpo de masa fija es D.P. al cuadrado de su velocidad \(v\). Si a \(v = 10\text{ m/s}\) su energía es \(250\text{ J}\), ¿cuál será su energía a \(v = 16\text{ m/s}\)?</p>
+                            <div class="mt-2 bg-white p-3 rounded border text-sm text-gray-800">
+                                <strong>Resolución:</strong><br>
+                                1. Planteamos \(\frac{E}{v^2} = k\): \(\frac{250}{10^2} = \frac{E_2}{16^2}\).<br>
+                                2. \(\frac{250}{100} = \frac{E_2}{256} \implies 2.5 = \frac{E_2}{256} \implies E_2 = 2.5 \times 256 = \mathbf{640\text{ J}}\).
+                            </div>
+                        </div>
+
+                        <div class="card-theory p-4 shadow-sm">
+                            <p class="font-bold text-[#1269A8]">Ejemplo Avanzado 2 — Magnitud I.P. a la raíz cuadrada de otra</p>
+                            <p class="text-sm font-semibold mt-1">Se sabe que \(A\) es I.P. a \(\sqrt{B}\). Cuando \(A = 12\), \(B = 9\). Calcule el valor de \(B\) cuando \(A = 4\).</p>
+                            <div class="mt-2 bg-white p-3 rounded border text-sm text-gray-800">
+                                <strong>Resolución:</strong><br>
+                                1. Producto constante: \(A \cdot \sqrt{B} = k\).<br>
+                                2. \(12 \cdot \sqrt{9} = 4 \cdot \sqrt{B} \implies 12 \times 3 = 4\sqrt{B} \implies 36 = 4\sqrt{B}\).<br>
+                                3. \(\sqrt{B} = 9 \implies B = 9^2 = \mathbf{81}\).
+                            </div>
+                        </div>
+
+                        <div class="card-theory p-4 shadow-sm">
+                            <p class="font-bold text-[#1269A8]">Ejemplo Avanzado 3 — Gráfica combinada (Tramo Recto + Hipérbola)</p>
+                            <p class="text-sm font-semibold mt-1">En un gráfico de \(Y\) vs \(X\), de \(X=0\) a \(X=6\) es una recta que pasa por \((0,0)\) y \((6, 18)\). A partir de \(X=6\) se convierte en una hipérbola equilátera. Halle \(Y\) cuando \(X = 12\).</p>
+                            <div class="mt-2 bg-white p-3 rounded border text-sm text-gray-800">
+                                <strong>Resolución:</strong><br>
+                                1. El punto \((6, 18)\) pertenece tanto al tramo D.P. como al inicio del tramo I.P.<br>
+                                2. Para \(X \ge 6\) (hipérbola equilátera): \(X \cdot Y = k_2\).<br>
+                                3. Usando \((6, 18)\): \(k_2 = 6 \times 18 = 108\).<br>
+                                4. Cuando \(X = 12\): \(12 \cdot Y = 108 \implies Y = \frac{108}{12} = \mathbf{9}\).
+                            </div>
+                        </div>
+
+                        <div class="card-theory p-4 shadow-sm">
+                            <p class="font-bold text-[#1269A8]">Ejemplo Avanzado 4 — Relación mixta de tres magnitudes</p>
+                            <p class="text-sm font-semibold mt-1">Una magnitud \(P\) es D.P. a \(Q\) e I.P. a \(R\). Si \(P = 15\) cuando \(Q = 10\) y \(R = 4\), halle \(P\) cuando \(Q = 18\) y \(R = 6\).</p>
+                            <div class="mt-2 bg-white p-3 rounded border text-sm text-gray-800">
+                                <strong>Resolución:</strong><br>
+                                1. Combinamos las propiedades: \(\frac{P \cdot R}{Q} = k\).<br>
+                                2. Sustituimos: \(\frac{15 \times 4}{10} = \frac{P \times 6}{18} \implies 6 = \frac{P}{3} \implies P = \mathbf{18}\).
+                            </div>
+                        </div>
+
+                        <div class="card-theory p-4 shadow-sm md:col-span-2">
+                            <p class="font-bold text-[#1269A8]">Ejemplo Avanzado 5 — Obra, obreros y cambio de condiciones a mitad de proyecto</p>
+                            <p class="text-sm font-semibold mt-1">Un grupo de \(15\) obreros se compromete a realizar una obra en \(20\text{ días}\). Después de trabajar \(8\text{ días}\), se retiran \(5\) obreros. ¿Con cuántos días de retraso se entregará la obra?</p>
+                            <div class="mt-2 bg-white p-3 rounded border text-sm text-gray-800">
+                                <strong>Resolución:</strong><br>
+                                1. Obra total medida en "obreros-día": \(15 \times 20 = 300\text{ obreros-día}\).<br>
+                                2. En \(8\text{ días}\) avanzaron: \(15 \times 8 = 120\text{ obreros-día}\). Falta por hacer: \(300 - 120 = 180\text{ obreros-día}\).<br>
+                                3. Quedan \(15 - 5 = 10\) obreros (I.P. con los días restantes \(d\)): \(10 \cdot d = 180 \implies d = 18\text{ días}\).<br>
+                                4. Tiempo total empleado: \(8 + 18 = 26\text{ días}\). Retraso: \(26 - 20 = \mathbf{6\text{ días de retraso}}\).
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- PESTAÑA 3: EJERCICIOS PRÁCTICOS (5 X NIVEL)-->
+            <!-- ========================================== -->
+            <section id="tab-ejercicios" class="hidden space-y-8">
+                <div class="border-b-2 border-[#1269A8] pb-2">
+                    <h2 class="text-2xl font-bold text-[#1269A8]">3. Ejercicios Prácticos</h2>
+                    <p class="text-sm text-[#54887D] font-semibold">Resuelve cada situación de proporcionalidad directa e inversa y despliega la solución paso a paso.</p>
+                </div>
+
+                <!-- 5 EJERCICIOS BÁSICOS -->
+                <div class="space-y-3">
+                    <h3 class="text-lg font-bold text-[#54887D]">Nivel Básico (Aplicación Directa de D.P. e I.P.)</h3>
+                    
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Básico 1</span>
+                        <p class="font-semibold text-gray-800 mt-1">Una impresora produce \(140\) páginas en \(4\text{ minutos}\) a ritmo constante. ¿Cuántas páginas imprimirá en \(11\text{ minutos}\)?</p>
+                        <button onclick="toggleSol('sol-b1', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-b1" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong> Páginas y tiempo son D.P. (\(\frac{P}{t} = k\)):<br>
+                            \(\frac{140}{4} = \frac{P}{11} \implies 35 = \frac{P}{11} \implies P = 35 \times 11 = \mathbf{385\text{ páginas}}\).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Básico 2</span>
+                        <p class="font-semibold text-gray-800 mt-1">Por \(7\text{ metros}\) de tela de tapicería se pagan \(\text{Q } 315\). ¿Cuánto se pagará por \(12\text{ metros}\) de la misma tela?</p>
+                        <button onclick="toggleSol('sol-b2', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-b2" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong> Costo y longitud son D.P.:<br>
+                            \(k = \frac{315}{7} = 45\text{ Q/m}\). Para \(12\text{ m}\): \(12 \times 45 = \mathbf{\text{Q } 540}\).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Básico 3</span>
+                        <p class="font-semibold text-gray-800 mt-1">Un tren que viaja a \(90\text{ km/h}\) tarda \(4\text{ horas}\) en cubrir el trayecto entre dos ciudades. Si aumenta su velocidad a \(120\text{ km/h}\), ¿cuánto tiempo tardará en hacer el mismo recorrido?</p>
+                        <button onclick="toggleSol('sol-b3', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-b3" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong> A distancia fija, velocidad y tiempo son I.P. (\(V \cdot t = k\)):<br>
+                            \(90 \times 4 = 120 \times t \implies 360 = 120t \implies t = \mathbf{3\text{ horas}}\).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Básico 4</span>
+                        <p class="font-semibold text-gray-800 mt-1">Para envasar una cosecha de aceite se necesitan \(300\) botellas de \(2\text{ litros}\) de capacidad. ¿Cuántas botellas de \(1.5\text{ litros}\) se necesitarán para envasar la misma cantidad de aceite?</p>
+                        <button onclick="toggleSol('sol-b4', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-b4" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong> Cantidad de botellas y capacidad por botella son I.P.:<br>
+                            \(300 \times 2 = N \times 1.5 \implies 600 = 1.5N \implies N = \mathbf{400\text{ botellas}}\).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Básico 5</span>
+                        <p class="font-semibold text-gray-800 mt-1">Si \(8\) técnicos instalan \(24\) paneles solares en un día, ¿cuántos técnicos de igual eficiencia se requieren para instalar \(42\) paneles en un día?</p>
+                        <button onclick="toggleSol('sol-b5', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-b5" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong> Técnicos y paneles instalados en un mismo tiempo son D.P.:<br>
+                            \(\frac{24}{8} = \frac{42}{T} \implies 3 = \frac{42}{T} \implies T = \mathbf{14\text{ técnicos}}\).
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5 EJERCICIOS INTERMEDIOS -->
+                <div class="space-y-3">
+                    <h3 class="text-lg font-bold text-[#54887D]">Nivel Intermedio (Constantes, Gráficas y Porcentajes)</h3>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Intermedio 1</span>
+                        <p class="font-semibold text-gray-800 mt-1">La gráfica de dos magnitudes \(A\) y \(B\) es una línea recta que pasa por el origen \((0,0)\) y por los puntos \((5, 22.5)\) y \((m, 54)\). Calcule el valor de \(m + k\).</p>
+                        <button onclick="toggleSol('sol-i1', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-i1" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong><br>
+                            1. Recta por el origen \(\implies\) D.P.: \(k = \frac{22.5}{5} = 4.5\).<br>
+                            2. \(\frac{54}{m} = 4.5 \implies m = \frac{54}{4.5} = 12\).<br>
+                            3. \(m + k = 12 + 4.5 = \mathbf{16.5}\).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Intermedio 2</span>
+                        <p class="font-semibold text-gray-800 mt-1">Sobre la curva de una hipérbola equilátera en el primer cuadrante se encuentran los puntos \((18, 10)\) y \((15, y)\). Determine \(y\) y la constante \(k\).</p>
+                        <button onclick="toggleSol('sol-i2', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-i2" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong><br>
+                            1. Hipérbola equilátera \(\implies\) I.P.: \(k = 18 \times 10 = \mathbf{180}\).<br>
+                            2. \(15 \cdot y = 180 \implies y = \frac{180}{15} = \mathbf{12}\).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Intermedio 3</span>
+                        <p class="font-semibold text-gray-800 mt-1">Un campamento con \(75\) excursionistas tiene alimentos para \(24\text{ días}\). Si antes de iniciar el viaje desisten \(15\) excursionistas, ¿cuántos días más durarán los alimentos?</p>
+                        <button onclick="toggleSol('sol-i3', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-i3" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong><br>
+                            1. Asisten \(75 - 15 = 60\) excursionistas. Como son I.P. con los días:<br>
+                            2. \(75 \times 24 = 60 \times d \implies 1800 = 60d \implies d = 30\text{ días}\).<br>
+                            3. Durarán \(30 - 24 = \mathbf{6\text{ días más}}\).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Intermedio 4</span>
+                        <p class="font-semibold text-gray-800 mt-1">Dos ruedas dentadas (engranajes) están acopladas. La rueda \(A\) tiene \(48\) dientes y da \(150\text{ vueltas por minuto}\). ¿Cuántas vueltas por minuto dará la rueda \(B\) si tiene \(30\) dientes?</p>
+                        <button onclick="toggleSol('sol-i4', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-i4" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong> A menor número de dientes, mayor número de vueltas \(\implies\) Dientes I.P. Vueltas:<br>
+                            \(48 \times 150 = 30 \times V_B \implies 7200 = 30V_B \implies V_B = \mathbf{240\text{ vueltas/min}}\).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Intermedio 5</span>
+                        <p class="font-semibold text-gray-800 mt-1">El costo de un diamante es D.P. al cuadrado de su peso. Si un diamante de \(2\text{ gramos}\) cuesta \(\text{Q } 3\,200\), ¿cuánto costará otro diamante de \(5\text{ gramos}\)?</p>
+                        <button onclick="toggleSol('sol-i5', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-i5" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong> \(\frac{\text{Costo}}{(\text{Peso})^2} = k\):<br>
+                            \(\frac{3200}{2^2} = \frac{C}{5^2} \implies \frac{3200}{4} = \frac{C}{25} \implies 800 = \frac{C}{25} \implies C = \mathbf{\text{Q } 20\,000}\).
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5 EJERCICIOS AVANZADOS -->
+                <div class="space-y-3">
+                    <h3 class="text-lg font-bold text-[#54887D]">Nivel Avanzado (Gráficas Compuestas, Leyes Físicas y Variaciones Múltiples)</h3>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Avanzado 1</span>
+                        <p class="font-semibold text-gray-800 mt-1">En un gráfico de \(A\) vs \(B\), el primer tramo de \(B=0\) a \(B=8\) es una recta que pasa por \((0,0)\) y \((8, 24)\). El segundo tramo (para \(B \ge 8\)) es una hipérbola equilátera. Calcule \(A\) cuando \(B = 3\) y cuando \(B = 16\), y sume ambos resultados.</p>
+                        <button onclick="toggleSol('sol-a1', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-a1" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong><br>
+                            • Para \(B = 3\) (tramo D.P.): \(\frac{A_1}{3} = \frac{24}{8} = 3 \implies A_1 = 9\).<br>
+                            • Para \(B = 16\) (tramo I.P. desde \((8,24)\)): \(16 \cdot A_2 = 8 \times 24 = 192 \implies A_2 = 12\).<br>
+                            • Suma: \(9 + 12 = \mathbf{21}\).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Avanzado 2</span>
+                        <p class="font-semibold text-gray-800 mt-1">La resistencia eléctrica \(R\) de un cable es D.P. a su longitud \(L\) e I.P. al cuadrado de su diámetro \(d\). Si un cable de \(50\text{ m}\) de largo y \(2\text{ mm}\) de diámetro tiene una resistencia de \(10\ \Omega\), ¿cuál será la resistencia de otro cable del mismo material de \(120\text{ m}\) de largo y \(4\text{ mm}\) de diámetro?</p>
+                        <button onclick="toggleSol('sol-a2', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-a2" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong> Relación combinada: \(\frac{R \cdot d^2}{L} = k\).<br>
+                            \(\frac{10 \cdot 2^2}{50} = \frac{R_2 \cdot 4^2}{120} \implies \frac{40}{50} = \frac{16R_2}{120} \implies 0.8 = \frac{2R_2}{15} \implies R_2 = \frac{12}{2} = \mathbf{6\ \Omega}\).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Avanzado 3</span>
+                        <p class="font-semibold text-gray-800 mt-1">Si \(A\) es D.P. a \(\sqrt{B}\) e I.P. a \(C^2\), cuando \(A = 16\), \(B = 25\) y \(C = 3\). Halle \(B\) cuando \(A = 36\) y \(C = 2\).</p>
+                        <button onclick="toggleSol('sol-a3', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-a3" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong> Constante \(\frac{A \cdot C^2}{\sqrt{B}} = k\):<br>
+                            \(\frac{16 \cdot 3^2}{\sqrt{25}} = \frac{36 \cdot 2^2}{\sqrt{B}} \implies \frac{144}{5} = \frac{144}{\sqrt{B}} \implies \sqrt{B} = 5 \implies B = \mathbf{25}\).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Avanzado 4</span>
+                        <p class="font-semibold text-gray-800 mt-1">Una guarnición de \(120\) soldados tiene víveres para \(30\text{ días}\) a razón de \(3\text{ raciones diarias}\) por soldado. Si al cabo de \(10\text{ días}\) llegan \(30\) soldados más y se reduce la ración a \(2\text{ raciones diarias}\) por soldado, ¿para cuántos días alcanzarán los víveres restantes?</p>
+                        <button onclick="toggleSol('sol-a4', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-a4" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong><br>
+                            1. Después de \(10\text{ días}\), los víveres restantes alcanzan para \(120\) soldados durante \(30 - 10 = 20\text{ días}\) a \(3\text{ raciones/día}\).<br>
+                            2. Total de raciones disponibles: \(120 \times 20 \times 3 = 7\,200\text{ raciones}\).<br>
+                            3. Nuevos soldados: \(120 + 30 = 150\) soldados a \(2\text{ raciones/día}\) (\(300\text{ raciones/día}\)).<br>
+                            4. Días que durarán: \(d = \frac{7\,200}{150 \times 2} = \frac{7\,200}{300} = \mathbf{24\text{ días}}\).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Avanzado 5</span>
+                        <p class="font-semibold text-gray-800 mt-1">Dos magnitudes \(X\) y \(Y\) son I.P. Si \(X\) aumenta en un \(25\%\), ¿en qué porcentaje disminuye \(Y\) para mantener constante su producto?</p>
+                        <button onclick="toggleSol('sol-a5', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-a5" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong><br>
+                            1. Inicialmente: \(X \cdot Y = k\).<br>
+                            2. Al aumentar \(X\) en \(25\%\), el nuevo valor es \(1.25X = \frac{5}{4}X\).<br>
+                            3. Para mantener \(k\): \(\left(\frac{5}{4}X\right) \cdot Y_{\text{nuevo}} = X \cdot Y \implies Y_{\text{nuevo}} = \frac{4}{5}Y = 0.80Y\).<br>
+                            4. \(Y\) pasa del \(100\%\) al \(80\%\), por lo que <strong>disminuye en un \(20\%\)</strong>.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- PESTAÑA 4: REFLEXIÓN CRÍTICA               -->
+            <!-- ========================================== -->
+            <section id="tab-reflexion" class="hidden space-y-6">
+                <div class="border-b-2 border-[#1269A8] pb-2">
+                    <h2 class="text-2xl font-bold text-[#1269A8]">4. Preguntas de Reflexión Crítica</h2>
+                    <p class="text-sm text-[#54887D] font-semibold">Análisis conceptual profundo sobre gráficas, límites y falsas proporcionalidades.</p>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="card-theory p-5 shadow-sm">
+                        <h3 class="font-bold text-lg text-[#1269A8] mb-2">1. ¿Por qué la gráfica de magnitudes D.P. debe pasar obligatoriamente por el origen \((0,0)\)?</h3>
+                        <p class="text-sm text-gray-800 leading-relaxed">
+                            En geometría analítica, toda línea recta responde a la ecuación \(y = mx + b\). Si \(b \neq 0\) (por ejemplo, el cobro de un servicio de taxi que tiene una tarifa base fija más un costo por kilómetro recorrido), las magnitudes crecen juntas, pero ¿son Directamente Proporcionales? Justifica usando la propiedad fundamental \(\frac{A}{B} = k\).
+                        </p>
+                    </div>
+
+                    <div class="card-theory p-5 shadow-sm">
+                        <h3 class="font-bold text-lg text-[#1269A8] mb-2">2. Comportamiento asintótico de la hipérbola equilátera (I.P.)</h3>
+                        <p class="text-sm text-gray-800 leading-relaxed">
+                            Observa la gráfica de dos magnitudes inversamente proporcionales (\(A \cdot B = k\), con \(k > 0\)). ¿Por qué la curva se acerca indefinidamente a los ejes \(A\) y \(B\) sin llegar jamás a tocarlos ni cruzarlos? Interpreta este hecho matemático en el contexto de obreros y días de trabajo.
+                        </p>
+                    </div>
+
+                    <div class="card-theory p-5 shadow-sm">
+                        <h3 class="font-bold text-lg text-[#1269A8] mb-2">3. Confusión frecuente: "Si una sube y la otra baja, ¿siempre son I.P.?"</h3>
+                        <p class="text-sm text-gray-800 leading-relaxed">
+                            Considera un tanque con \(100\text{ litros}\) de agua que se vacía a razón de \(10\text{ litros por minuto}\). A medida que aumenta el tiempo transcurrido (\(t\)), disminuye el volumen de agua que queda en el tanque (\(V\)). ¿Son \(V\) y \(t\) inversamente proporcionales? Verifica si su producto \(V \cdot t\) es constante y explica qué tipo de gráfica producen.
+                        </p>
+                    </div>
+
+                    <div class="card-theory p-5 shadow-sm">
+                        <h3 class="font-bold text-lg text-[#1269A8] mb-2">4. Significado geométrico de la constante \(k\) en ambas gráficas</h3>
+                        <p class="text-sm text-gray-800 leading-relaxed">
+                            En la gráfica D.P., \(k = \frac{y}{x}\) representa la <strong>pendiente (inclinación)</strong> de la recta. En cambio, en la gráfica I.P., \(k = x \cdot y\) representa el <strong>área de cualquier rectángulo</strong> formado entre un punto \((x, y)\) de la hipérbola y los ejes coordenados. Explica cómo esta interpretación visual permite verificar de un vistazo si dos puntos pertenecen a la misma relación proporcional.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- PESTAÑA 5: EVALUACIÓN FORMATIVA            -->
+            <!-- ========================================== -->
+            <section id="tab-evaluacion" class="hidden space-y-6">
+                <div class="border-b-2 border-[#1269A8] pb-2">
+                    <h2 class="text-2xl font-bold text-[#1269A8]">5. Evaluación Formativa</h2>
+                    <p class="text-sm text-[#54887D] font-semibold">Comprobación de conceptos teóricos, lectura gráfica y resolución de problemas aplicados.</p>
+                </div>
+
+                <div class="space-y-4">
+                    <!-- Pregunta 1 -->
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Pregunta 1 — Clasificación Conceptual</span>
+                        <p class="font-semibold text-gray-800 mt-1">Indique si cada par de magnitudes guarda una relación Directamente Proporcional (D.P.), Inversamente Proporcional (I.P.) o No Proporcional (N.P.):</p>
+                        <ul class="text-sm text-gray-800 list-disc pl-5 mt-1 space-y-1">
+                            <li><strong>a)</strong> El lado de un cuadrado y su perímetro.</li>
+                            <li><strong>b)</strong> El lado de un cuadrado y su área.</li>
+                            <li><strong>c)</strong> El caudal de un grifo (litros/min) y el tiempo necesario para llenar una piscina fija.</li>
+                            <li><strong>d)</strong> La edad de una persona y su estatura.</li>
+                        </ul>
+                        <button onclick="toggleSol('sol-ev1', this)" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-ev1" class="hidden solution-box mt-3 p-3 text-sm text-gray-800 space-y-1">
+                            <p>• <strong>a) D.P.:</strong> \(\text{Perímetro} = 4 \cdot L \implies \frac{P}{L} = 4\) (constante).</p>
+                            <p>• <strong>b) N.P. (con el lado lineal):</strong> \(\text{Área} = L^2\), por lo que es D.P. al <em>cuadrado</em> del lado, no al lado.</p>
+                            <p>• <strong>c) I.P.:</strong> \(\text{Caudal} \times \text{Tiempo} = \text{Volumen fijo}\) (constante).</p>
+                            <p>• <strong>d) N.P.:</strong> El crecimiento humano no mantiene un cociente ni un producto constante con la edad.</p>
+                        </div>
+                    </div>
+
+                    <!-- Pregunta 2 -->
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Pregunta 2 — Interpretación Gráfica</span>
+                        <p class="font-semibold text-gray-800 mt-1">
+                            Un estudiante afirma que la recta que pasa por los puntos \((2, 7)\) y \((4, 11)\) representa magnitudes Directamente Proporcionales porque ambas variables aumentan simultáneamente. ¿Tiene razón? Demuéstrelo matemáticamente.
+                        </p>
+                        <button onclick="toggleSol('sol-ev2', this)" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-ev2" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong><br>
+                            No tiene razón. Para que sean D.P., el cociente \(\frac{y}{x}\) debe ser constante y la recta debe pasar por \((0,0)\):<br>
+                            • Primer punto: \(\frac{7}{2} = 3.5\).<br>
+                            • Segundo punto: \(\frac{11}{4} = 2.75\).<br>
+                            Como \(3.5 \neq 2.75\), el cociente no es constante (la recta sigue la ecuación \(y = 2x + 3\), con intercepto en \(3\)).
+                        </div>
+                    </div>
+
+                    <!-- Pregunta 3 -->
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Pregunta 3 — Aplicación: Costo y Cantidad</span>
+                        <p class="font-semibold text-gray-800 mt-1">
+                            En una librería, \(15\) cuadernos universitarios cuestan \(\text{Q } 277.50\). Si un colegio dispone de un presupuesto de \(\text{Q } 888.00\), ¿cuántos cuadernos iguales podrá adquirir?
+                        </p>
+                        <button onclick="toggleSol('sol-ev3', this)" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-ev3" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong><br>
+                            1. Costo unitario (constante \(k\)): \(k = \frac{277.50}{15} = \text{Q } 18.50\) por cuaderno.<br>
+                            2. Cantidad de cuadernos: \(N = \frac{888.00}{18.50} = \mathbf{48\text{ cuadernos}}\).
+                        </div>
+                    </div>
+
+                    <!-- Pregunta 4 -->
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Pregunta 4 — Aplicación: Expedición y Víveres</span>
+                        <p class="font-semibold text-gray-800 mt-1">
+                            Un barco con \(64\) tripulantes lleva provisiones para una travesía de \(35\text{ días}\). Antes de zarpar, rescatan a \(16\) náufragos que viajan con ellos. ¿Para cuántos días alcanzarán las provisiones manteniendo la misma ración diaria?
+                        </p>
+                        <button onclick="toggleSol('sol-ev4', this)" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-ev4" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong><br>
+                            1. Total de personas a bordo: \(64 + 16 = 80\) personas.<br>
+                            2. Personas I.P. Días de provisiones: \(64 \times 35 = 80 \times d\).<br>
+                            3. \(2\,240 = 80d \implies d = \frac{2\,240}{80} = \mathbf{28\text{ días}}\).
+                        </div>
+                    </div>
+
+                    <!-- Pregunta 5 -->
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Pregunta 5 — Problema Integrador (Obra y Obreros)</span>
+                        <p class="font-semibold text-gray-800 mt-1">
+                            Una empresa constructora sabe que \(12\) obreros pavimentan \(180\text{ m}^2\) de carretera en \(5\text{ días}\). ¿Cuántos obreros de igual rendimiento se necesitarán para pavimentar \(300\text{ m}^2\) en \(4\text{ días}\)?
+                        </p>
+                        <button onclick="toggleSol('sol-ev5', this)" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-ev5" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución paso a paso:</strong><br>
+                            1. Analizamos la relación respecto a <strong>Obreros</strong>: es <strong>D.P.</strong> a la Obra (\(\text{m}^2\)) e <strong>I.P.</strong> a los Días.<br>
+                            2. Constante proporcional: \(\frac{\text{Obreros} \times \text{Días}}{\text{Obra}} = k\).<br>
+                            3. Sustituimos: \(\frac{12 \times 5}{180} = \frac{O_2 \times 4}{300} \implies \frac{60}{180} = \frac{4O_2}{300} \implies \frac{1}{3} = \frac{O_2}{75} \implies O_2 = \mathbf{25\text{ obreros}}\).
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Pie de Página Institucional -->
+        <footer class="bg-[#F2F5E9] border-t-2 border-[#54887D] p-3 text-center text-xs text-[#1269A8] font-semibold">
+            Colegio Montano — Departamento de Matemática • Pizarra Digital Interactiva (Canvas Education)
+        </footer>
+    </div>
+
+    <!-- Lógica de Interactividad -->
+    <script>
+        // Cambio dinámico entre las pestañas de la pizarra
+        function switchTab(tabName) {
+            const tabs = ['teoria', 'ejemplos', 'ejercicios', 'reflexion', 'evaluacion'];
+            tabs.forEach(t => {
+                const section = document.getElementById('tab-' + t);
+                const btn = document.getElementById('btn-' + t);
+                if (t === tabName) {
+                    section.classList.remove('hidden');
+                    btn.className = "flex-1 py-3 px-3 text-center font-bold text-xs md:text-sm tab-active transition cursor-pointer";
+                } else {
+                    section.classList.add('hidden');
+                    btn.className = "flex-1 py-3 px-3 text-center font-bold text-xs md:text-sm tab-inactive transition cursor-pointer";
+                }
+            });
+        }
+
+        // Alternar visibilidad de las soluciones ocultas
+        function toggleSol(solId, btnElement) {
+            const solDiv = document.getElementById(solId);
+            if (solDiv.classList.contains('hidden')) {
+                solDiv.classList.remove('hidden');
+                btnElement.textContent = "Ocultar solución";
+            } else {
+                solDiv.classList.add('hidden');
+                btnElement.textContent = "Mostrar solución";
+            }
+        }
+
+        // Control de Pantalla Completa mediante Fullscreen API
+        function toggleFullScreen() {
+            const elem = document.documentElement;
+            const btn = document.getElementById('fullscreen-btn');
+            if (!document.fullscreenElement) {
+                if (elem.requestFullscreen) {
+                    elem.requestFullscreen().catch(() => {});
+                } else if (elem.webkitRequestFullscreen) {
+                    elem.webkitRequestFullscreen();
+                } else if (elem.msRequestFullscreen) {
+                    elem.msRequestFullscreen();
+                }
+                btn.innerHTML = "<span>[ ✕ Salir pantalla completa ]</span>";
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen().catch(() => {});
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                }
+                btn.innerHTML = "<span>[ ⛶ Pantalla completa ]</span>";
+            }
+        }
+
+        document.addEventListener('fullscreenchange', () => {
+            const btn = document.getElementById('fullscreen-btn');
+            if (!document.fullscreenElement) {
+                btn.innerHTML = "<span>[ ⛶ Pantalla completa ]</span>";
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía Interactiva: Ecuaciones Cuadráticas y Aplicaciones - Colegio Montano</title>
+    <!-- Tailwind CSS para diseño moderno y responsivo -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- MathJax para renderizado impecable de expresiones algebraicas -->
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #F2F5E9;
+        }
+        /* Marco de pizarra digital con identidad Colegio Montano */
+        .whiteboard-container {
+            background-color: #ffffff;
+            border: 5px solid #F7D615;
+            border-radius: 12px;
+            box-shadow: 0 12px 30px rgba(18, 105, 168, 0.18);
+        }
+        .header-bg {
+            background: linear-gradient(135deg, #1269A8 0%, #0e5285 100%);
+        }
+        .tab-active {
+            background-color: #1269A8;
+            color: #ffffff;
+            border-bottom: 4px solid #F7D615;
+        }
+        .tab-inactive {
+            background-color: #88B5C7;
+            color: #0d4b7a;
+        }
+        .tab-inactive:hover {
+            background-color: #54887D;
+            color: #ffffff;
+        }
+        .card-theory {
+            background-color: #F2F5E9;
+            border-left: 5px solid #54887D;
+            border-radius: 8px;
+        }
+        .card-exercise {
+            background-color: rgba(136, 181, 199, 0.16);
+            border: 1px solid #54887D;
+            border-left: 5px solid #1269A8;
+            border-radius: 8px;
+        }
+        .solution-box {
+            background-color: rgba(136, 181, 199, 0.30);
+            border-left: 4px solid #54887D;
+            border-radius: 6px;
+        }
+        .badge-level {
+            background-color: #A6B046;
+            color: #ffffff;
+        }
+        .btn-action {
+            background-color: #1269A8;
+            color: #ffffff;
+            transition: all 0.2s ease;
+        }
+        .btn-action:hover {
+            background-color: #54887D;
+        }
+    </style>
+</head>
+<body class="p-3 md:p-6 min-h-screen flex flex-col items-center">
+
+    <!-- Contenedor Principal de la Pizarra Digital -->
+    <div id="whiteboard" class="whiteboard-container w-full max-w-6xl flex flex-col overflow-hidden">
+        
+        <!-- Barra Superior / Encabezado Institucional -->
+        <header class="header-bg p-4 flex flex-col sm:flex-row justify-between items-center text-white gap-4">
+            <div class="flex items-center space-x-4">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyEop0yf6lZ7Jk9MILZxF1rBj4Oqs5esyhIQ&s" alt="Logo Colegio Montano" class="h-14 w-14 object-contain bg-white rounded-full p-1 shadow-md">
+                <div>
+                    <h1 class="text-xl md:text-2xl font-bold tracking-wide">Colegio Montano — Tercero Básico</h1>
+                    <p class="text-xs md:text-sm text-[#F7D615] font-bold">Pizarra Digital Interactiva — Tema 1: Ecuaciones Cuadráticas, Métodos de Solución y Aplicaciones</p>
+                </div>
+            </div>
+            <div>
+                <button id="fullscreen-btn" onclick="toggleFullScreen()" class="bg-[#F7D615] text-[#1269A8] font-bold px-4 py-2 rounded-lg shadow hover:bg-yellow-300 transition flex items-center gap-2 text-sm cursor-pointer">
+                    <span>[ ⛶ Pantalla completa ]</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Menú de Pestañas Horizontales Interactivas -->
+        <nav class="flex flex-wrap bg-[#88B5C7] border-b-2 border-[#54887D]">
+            <button onclick="switchTab('teoria')" id="btn-teoria" class="flex-1 py-3 px-3 text-center font-bold text-xs md:text-sm tab-active transition cursor-pointer">Teoría</button>
+            <button onclick="switchTab('ejemplos')" id="btn-ejemplos" class="flex-1 py-3 px-3 text-center font-bold text-xs md:text-sm tab-inactive transition cursor-pointer">Ejemplos</button>
+            <button onclick="switchTab('ejercicios')" id="btn-ejercicios" class="flex-1 py-3 px-3 text-center font-bold text-xs md:text-sm tab-inactive transition cursor-pointer">Ejercicios</button>
+            <button onclick="switchTab('reflexion')" id="btn-reflexion" class="flex-1 py-3 px-3 text-center font-bold text-xs md:text-sm tab-inactive transition cursor-pointer">Reflexión</button>
+            <button onclick="switchTab('evaluacion')" id="btn-evaluacion" class="flex-1 py-3 px-3 text-center font-bold text-xs md:text-sm tab-inactive transition cursor-pointer">Evaluación</button>
+        </nav>
+
+        <!-- Lienzo de Contenido Principal -->
+        <main class="p-5 md:p-8 flex-1 overflow-y-auto max-h-[78vh] bg-[#F2F5E9]/40">
+
+            <!-- ========================================== -->
+            <!-- PESTAÑA 1: EXPLICACIÓN TEÓRICA             -->
+            <!-- ========================================== -->
+            <section id="tab-teoria" class="space-y-6">
+                <div class="border-b-2 border-[#1269A8] pb-2">
+                    <h2 class="text-2xl font-bold text-[#1269A8]">1. Fundamentación Teórica: Ecuaciones de Segundo Grado</h2>
+                    <p class="text-sm text-[#54887D] font-semibold">Estructura general, clasificación, métodos algebraicos de resolución, discriminante y propiedades de las raíces.</p>
+                </div>
+
+                <!-- Bloque 1 y 2: Forma General y Clasificación -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="card-theory p-5 shadow-sm space-y-2">
+                        <div class="flex items-center justify-between">
+                            <h3 class="font-bold text-lg text-[#1269A8]">Forma Estándar y Elementos</h3>
+                            <span class="badge-level text-xs px-2.5 py-1 rounded-full font-bold">Grado 2</span>
+                        </div>
+                        <p class="text-sm text-gray-800 leading-relaxed">
+                            Una <strong>ecuación cuadrática</strong> (o de segundo grado) con una incógnita \(x\) es toda ecuación que puede reducirse a la forma estándar:
+                        </p>
+                        <div class="bg-white p-3 rounded border border-[#54887D] text-center font-bold text-[#1269A8] text-base">
+                            \[ax^2 + bx + c = 0 \qquad (a \neq 0)\]
+                        </div>
+                        <ul class="text-sm text-gray-800 space-y-1 leading-relaxed">
+                            <li>• \(ax^2\): <strong>Término cuadrático</strong> (\(a\) es el coeficiente principal).</li>
+                            <li>• \(bx\): <strong>Término lineal</strong> (\(b\) es el coeficiente lineal).</li>
+                            <li>• \(c\): <strong>Término independiente</strong> o constante.</li>
+                            <li>• <strong>Raíces o soluciones:</strong> Valores \(x_1\) y \(x_2\) que anulan el polinomio cuadrático al sustituirse.</li>
+                        </ul>
+                    </div>
+
+                    <div class="card-theory p-5 shadow-sm space-y-2">
+                        <div class="flex items-center justify-between">
+                            <h3 class="font-bold text-lg text-[#1269A8]">Clasificación de Ecuaciones Cuadráticas</h3>
+                            <span class="badge-level text-xs px-2.5 py-1 rounded-full font-bold">Estructura</span>
+                        </div>
+                        <ul class="text-sm text-gray-800 space-y-2 leading-relaxed">
+                            <li>• <strong>Ecuación Completa (\(b \neq 0,\; c \neq 0\)):</strong> Contiene los tres términos. Ejemplo: \(2x^2 - 5x - 3 = 0\).</li>
+                            <li>• <strong>Incompleta Pura (\(b = 0\)):</strong> Tiene la forma \(ax^2 + c = 0\). Se resuelve despejando \(x^2\) y extrayendo raíz cuadrada (\(x = \pm\sqrt{-c/a}\)).</li>
+                            <li>• <strong>Incompleta Mixta (\(c = 0\)):</strong> Tiene la forma \(ax^2 + bx = 0\). Se resuelve extrayendo factor común \(x(ax + b) = 0\), por lo que una raíz siempre es \(x_1 = 0\).</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Bloque 3: Los 4 Métodos de Solución -->
+                <div class="card-theory p-5 shadow-sm space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h3 class="font-bold text-lg text-[#1269A8]">Los Cuatro Métodos de Resolución Algebraica</h3>
+                        <span class="badge-level text-xs px-2.5 py-1 rounded-full font-bold">Estrategias</span>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-800">
+                        <div class="bg-white p-4 rounded border border-[#54887D] space-y-1">
+                            <p class="font-bold text-[#1269A8]">1. Despeje Directo (Raíz Cuadrada)</p>
+                            <p class="text-xs">Aplicable cuando \(b = 0\) o cuando la ecuación tiene la forma \((x - h)^2 = k\).</p>
+                            <p class="text-xs font-semibold text-[#54887D] pt-1">Propiedad: \(u^2 = k \iff u = \pm\sqrt{k}\) (para \(k \ge 0\)).</p>
+                        </div>
+                        <div class="bg-white p-4 rounded border border-[#54887D] space-y-1">
+                            <p class="font-bold text-[#1269A8]">2. Factorización (Propiedad del Producto Cero)</p>
+                            <p class="text-xs">Se expresa \(ax^2 + bx + c = 0\) como producto de dos factores lineales \((px + q)(rx + s) = 0\).</p>
+                            <p class="text-xs font-semibold text-[#54887D] pt-1">Principio: \(A \cdot B = 0 \iff A = 0 \;\text{o}\; B = 0\).</p>
+                        </div>
+                        <div class="bg-white p-4 rounded border border-[#54887D] space-y-1">
+                            <p class="font-bold text-[#1269A8]">3. Completación de Cuadrados (TCP)</p>
+                            <p class="text-xs">Dividir entre \(a\), aislar el término independiente y sumar \(\left(\frac{b}{2a}\right)^2\) en ambos miembros para formar un binomio al cuadrado.</p>
+                            <p class="text-xs font-semibold text-[#54887D] pt-1">Base teórica para deducir la fórmula general.</p>
+                        </div>
+                        <div class="bg-white p-4 rounded border border-[#54887D] space-y-1">
+                            <p class="font-bold text-[#1269A8]">4. Fórmula General Cuadrática</p>
+                            <p class="text-xs">Válida para toda ecuación cuadrática con coeficientes reales:</p>
+                            <p class="text-sm font-bold text-center text-[#1269A8] pt-1">\[x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}\]</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bloque 4: Discriminante y Propiedades de Vieta + SVG -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="card-theory p-5 shadow-sm space-y-3">
+                        <h3 class="font-bold text-lg text-[#1269A8]">El Discriminante (\(\Delta\)) y Teorema de Vieta</h3>
+                        <p class="text-sm text-gray-800">
+                            La expresión bajo el radical \(\mathbf{\Delta = b^2 - 4ac}\) determina la naturaleza de las raíces sin necesidad de resolver la ecuación:
+                        </p>
+                        <div class="bg-white p-3.5 rounded border border-[#54887D] text-xs text-gray-800 space-y-1.5">
+                            <p>• <strong>Si \(\Delta > 0\):</strong> Dos raíces reales y distintas (\(x_1 \neq x_2\)). La parábola corta al eje \(X\) en dos puntos.</p>
+                            <p>• <strong>Si \(\Delta = 0\):</strong> Una raíz real doble o repetida (\(x_1 = x_2 = -\frac{b}{2a}\)). La parábola es tangente al eje \(X\).</p>
+                            <p>• <strong>Si \(\Delta < 0\):</strong> No existen raíces reales (dos soluciones complejas conjugadas). La parábola no toca el eje \(X\).</p>
+                        </div>
+                        <div class="bg-white p-3 rounded border border-[#54887D] text-xs text-gray-800">
+                            <p class="font-bold text-[#54887D]">Relaciones de Vieta (Suma y Producto de Raíces):</p>
+                            <p class="mt-1">\[x_1 + x_2 = -\frac{b}{a} \qquad\text{y}\qquad x_1 \cdot x_2 = \frac{c}{a}\]</p>
+                        </div>
+                    </div>
+
+                    <!-- Interpretación Geométrica SVG -->
+                    <div class="card-theory p-5 shadow-sm flex flex-col justify-between items-center">
+                        <h3 class="font-bold text-base text-[#1269A8] mb-1">Interpretación Geométrica del Discriminante (\(\Delta\))</h3>
+                        <svg viewBox="0 0 460 175" class="w-full max-w-md h-auto">
+                            <!-- Eje X común -->
+                            <line x1="15" y1="120" x2="445" y2="120" stroke="#1269A8" stroke-width="2"/>
+                            <text x="438" y="135" font-size="11" fill="#1269A8" font-weight="bold">X</text>
+
+                            <!-- Caso 1: Delta > 0 (dos cortes) -->
+                            <path d="M 35 45 Q 80 175 125 45" fill="none" stroke="#54887D" stroke-width="3"/>
+                            <circle cx="57" cy="120" r="4.5" fill="#F7D615" stroke="#1269A8" stroke-width="2"/>
+                            <circle cx="103" cy="120" r="4.5" fill="#F7D615" stroke="#1269A8" stroke-width="2"/>
+                            <text x="80" y="22" font-size="11" fill="#1269A8" font-weight="bold" text-anchor="middle">Δ &gt; 0</text>
+                            <text x="80" y="158" font-size="10" fill="#54887D" font-weight="bold" text-anchor="middle">2 raíces reales</text>
+
+                            <!-- Caso 2: Delta = 0 (tangente) -->
+                            <path d="M 185 35 Q 230 205 275 35" fill="none" stroke="#1269A8" stroke-width="3"/>
+                            <circle cx="230" cy="120" r="5" fill="#F7D615" stroke="#1269A8" stroke-width="2"/>
+                            <text x="230" y="22" font-size="11" fill="#1269A8" font-weight="bold" text-anchor="middle">Δ = 0</text>
+                            <text x="230" y="158" font-size="10" fill="#1269A8" font-weight="bold" text-anchor="middle">1 raíz doble</text>
+
+                            <!-- Caso 3: Delta < 0 (sin corte) -->
+                            <path d="M 335 25 Q 380 145 425 25" fill="none" stroke="#A6B046" stroke-width="3"/>
+                            <text x="380" y="22" font-size="11" fill="#1269A8" font-weight="bold" text-anchor="middle">Δ &lt; 0</text>
+                            <text x="380" y="158" font-size="10" fill="#A6B046" font-weight="bold" text-anchor="middle">Sin raíces reales</text>
+                        </svg>
+                        <p class="text-xs text-gray-700 text-center">Las soluciones reales de \(ax^2 + bx + c = 0\) son las abscisas donde la parábola \(y = ax^2 + bx + c\) interseca al eje \(X\).</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- PESTAÑA 2: EJEMPLOS RESUELTOS              -->
+            <!-- ========================================== -->
+            <section id="tab-ejemplos" class="hidden space-y-6">
+                <div class="border-b-2 border-[#1269A8] pb-2">
+                    <h2 class="text-2xl font-bold text-[#1269A8]">2. Ejemplos Resueltos Paso a Paso</h2>
+                    <p class="text-sm text-[#54887D] font-semibold">Aplicación rigurosa de los cuatro métodos algebraicos y modelación de problemas cuadráticos.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <!-- Ejemplo 1: Factorización -->
+                    <div class="card-theory p-5 shadow-sm space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-[#1269A8]">Ejemplo 1 — Método de Factorización</span>
+                            <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Trinomio \(ax^2+bx+c\)</span>
+                        </div>
+                        <p class="text-sm font-semibold text-gray-800">Resolver: \(3x^2 - 11x - 4 = 0\)</p>
+                        <div class="bg-white p-3.5 rounded border border-[#54887D] text-sm text-gray-800 space-y-1">
+                            <p>1. <strong>Descomponemos el término central</strong> (dos números que multipliquen \(3(-4) = -12\) y sumen \(-11\): son \(-12\) y \(+1\)):<br>
+                            \(3x^2 - 12x + x - 4 = 0\)</p>
+                            <p>2. <strong>Agrupamos y factorizamos:</strong> \(3x(x - 4) + 1(x - 4) = 0 \implies (x - 4)(3x + 1) = 0\)</p>
+                            <p>3. <strong>Igualamos cada factor a cero:</strong><br>
+                            \(x - 4 = 0 \implies \mathbf{x_1 = 4}\) &nbsp;|&nbsp; \(3x + 1 = 0 \implies \mathbf{x_2 = -\dfrac{1}{3}}\)</p>
+                        </div>
+                    </div>
+
+                    <!-- Ejemplo 2: Completación de cuadrados -->
+                    <div class="card-theory p-5 shadow-sm space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-[#1269A8]">Ejemplo 2 — Completación de Cuadrados</span>
+                            <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">TCP</span>
+                        </div>
+                        <p class="text-sm font-semibold text-gray-800">Resolver completando el cuadrado: \(x^2 + 6x - 16 = 0\)</p>
+                        <div class="bg-white p-3.5 rounded border border-[#54887D] text-sm text-gray-800 space-y-1">
+                            <p>1. <strong>Transponemos el término independiente:</strong> \(x^2 + 6x = 16\)</p>
+                            <p>2. <strong>Sumamos \(\left(\frac{6}{2}\right)^2 = 3^2 = 9\) en ambos miembros:</strong><br>
+                            \(x^2 + 6x + 9 = 16 + 9 \implies (x + 3)^2 = 25\)</p>
+                            <p>3. <strong>Extraemos raíz cuadrada y despejamos:</strong> \(x + 3 = \pm 5\)<br>
+                            \(\mathbf{x_1 = -3 + 5 = 2}\) &nbsp;|&nbsp; \(\mathbf{x_2 = -3 - 5 = -8}\)</p>
+                        </div>
+                    </div>
+
+                    <!-- Ejemplo 3: Fórmula General -->
+                    <div class="card-theory p-5 shadow-sm space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-[#1269A8]">Ejemplo 3 — Fórmula General Cuadrática</span>
+                            <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Raíces Irracionales</span>
+                        </div>
+                        <p class="text-sm font-semibold text-gray-800">Resolver: \(2x^2 - 4x - 3 = 0\)</p>
+                        <div class="bg-white p-3.5 rounded border border-[#54887D] text-sm text-gray-800 space-y-1">
+                            <p>1. <strong>Identificamos coeficientes:</strong> \(a = 2,\; b = -4,\; c = -3\).</p>
+                            <p>2. <strong>Calculamos el discriminante:</strong> \(\Delta = (-4)^2 - 4(2)(-3) = 16 + 24 = 40 > 0\).</p>
+                            <p>3. <strong>Aplicamos la fórmula y simplificamos el radical (\(\sqrt{40} = 2\sqrt{10}\)):</strong><br>
+                            \(x = \dfrac{-(-4) \pm \sqrt{40}}{2(2)} = \dfrac{4 \pm 2\sqrt{10}}{4} = \mathbf{\dfrac{2 \pm \sqrt{10}}{2}}\)</p>
+                        </div>
+                    </div>
+
+                    <!-- Ejemplo 4: Aplicación Geométrica -->
+                    <div class="card-theory p-5 shadow-sm space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-[#1269A8]">Ejemplo 4 — Aplicación Geométrica (Área)</span>
+                            <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Modelación</span>
+                        </div>
+                        <p class="text-sm font-semibold text-gray-800">El largo de un terreno rectangular mide \(5\text{ m}\) más que su ancho. Si su área es \(176\text{ m}^2\), determina sus dimensiones.</p>
+                        <div class="bg-white p-3.5 rounded border border-[#54887D] text-sm text-gray-800 space-y-1">
+                            <p>1. <strong>Incógnita:</strong> Sea \(x\) el ancho (en m); largo \(= x + 5\).</p>
+                            <p>2. <strong>Planteamiento (\(A = l \cdot a\)):</strong> \(x(x + 5) = 176 \implies x^2 + 5x - 176 = 0\)</p>
+                            <p>3. <strong>Factorización:</strong> \((x + 16)(x - 11) = 0 \implies x_1 = -16,\; x_2 = 11\).</p>
+                            <p>4. <strong>Interpretación:</strong> Descartamos \(x = -16\) por ser longitud. \(\mathbf{\text{Ancho: 11 m; Largo: 16 m}}\) (\(11 \times 16 = 176\text{ m}^2\)).</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- PESTAÑA 3: EJERCICIOS PROPUESTOS (1 AL 12) -->
+            <!-- ========================================== -->
+            <section id="tab-ejercicios" class="hidden space-y-8">
+                <div class="border-b-2 border-[#1269A8] pb-2">
+                    <h2 class="text-2xl font-bold text-[#1269A8]">3. Ejercicios Propuestos por Niveles</h2>
+                    <p class="text-sm text-[#54887D] font-semibold">Desarrolla los procedimientos completos en tu cuaderno y verifica con el solucionario interactivo.</p>
+                </div>
+
+                <!-- NIVEL I -->
+                <div class="space-y-3">
+                    <h3 class="text-lg font-bold text-[#54887D]">Nivel I. Ecuaciones Incompletas y Factorización</h3>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Ejercicio 1 — Incompleta Pura</span>
+                        <p class="font-semibold text-gray-800 mt-1">Resuelve: \(\;4x^2 - 49 = 0\)</p>
+                        <button onclick="toggleSol('sol-1', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-1" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Procedimiento:</strong><br>
+                            • \(4x^2 = 49 \implies x^2 = \frac{49}{4} \implies x = \pm\sqrt{\frac{49}{4}} \implies \mathbf{x_1 = \dfrac{7}{2},\quad x_2 = -\dfrac{7}{2}}\).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Ejercicio 2 — Incompleta Mixta</span>
+                        <p class="font-semibold text-gray-800 mt-1">Resuelve: \(\;5x^2 + 15x = 0\)</p>
+                        <button onclick="toggleSol('sol-2', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-2" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Procedimiento:</strong><br>
+                            • Factor común \(5x\): \(5x(x + 3) = 0 \implies 5x = 0\) o \(x + 3 = 0\).<br>
+                            • Soluciones: \(\mathbf{x_1 = 0,\quad x_2 = -3}\).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Ejercicio 3 — Factorización \(x^2 + bx + c = 0\)</span>
+                        <p class="font-semibold text-gray-800 mt-1">Resuelve: \(\;x^2 - 9x + 18 = 0\)</p>
+                        <button onclick="toggleSol('sol-3', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-3" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Procedimiento:</strong><br>
+                            • Buscamos dos números que multipliquen \(+18\) y sumen \(-9\): son \(-6\) y \(-3\).<br>
+                            • \((x - 6)(x - 3) = 0 \implies \mathbf{x_1 = 6,\quad x_2 = 3}\).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Ejercicio 4 — Factorización \(ax^2 + bx + c = 0\)</span>
+                        <p class="font-semibold text-gray-800 mt-1">Resuelve: \(\;6x^2 + 7x - 3 = 0\)</p>
+                        <button onclick="toggleSol('sol-4', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-4" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Procedimiento:</strong><br>
+                            • \(6x^2 + 9x - 2x - 3 = 0 \implies 3x(2x + 3) - 1(2x + 3) = 0 \implies (2x + 3)(3x - 1) = 0\).<br>
+                            • Soluciones: \(\mathbf{x_1 = -\dfrac{3}{2},\quad x_2 = \dfrac{1}{3}}\).
+                        </div>
+                    </div>
+                </div>
+
+                <!-- NIVEL II -->
+                <div class="space-y-3">
+                    <h3 class="text-lg font-bold text-[#54887D]">Nivel II. Completación de Cuadrados, Fórmula General y Discriminante</h3>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Ejercicio 5 — Completación de Cuadrados</span>
+                        <p class="font-semibold text-gray-800 mt-1">Resuelve completando el cuadrado: \(\;x^2 - 8x + 7 = 0\)</p>
+                        <button onclick="toggleSol('sol-5', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-5" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Procedimiento:</strong><br>
+                            • \(x^2 - 8x = -7 \implies x^2 - 8x + 16 = -7 + 16 \implies (x - 4)^2 = 9\)<br>
+                            • \(x - 4 = \pm 3 \implies \mathbf{x_1 = 7,\quad x_2 = 1}\).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Ejercicio 6 — Fórmula General</span>
+                        <p class="font-semibold text-gray-800 mt-1">Resuelve mediante la fórmula general: \(\;3x^2 - 5x - 1 = 0\)</p>
+                        <button onclick="toggleSol('sol-6', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-6" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Procedimiento:</strong><br>
+                            • \(a = 3,\; b = -5,\; c = -1 \implies \Delta = (-5)^2 - 4(3)(-1) = 25 + 12 = 37\).<br>
+                            • \(x = \dfrac{5 \pm \sqrt{37}}{2(3)} = \mathbf{\dfrac{5 \pm \sqrt{37}}{6}}\).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Ejercicio 7 — Reducción a Forma Estándar</span>
+                        <p class="font-semibold text-gray-800 mt-1">Reduce a la forma \(ax^2 + bx + c = 0\) y resuelve: \(\;(2x - 1)(x + 3) = x^2 + 7\)</p>
+                        <button onclick="toggleSol('sol-7', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-7" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Procedimiento:</strong><br>
+                            • Desarrollamos: \(2x^2 + 5x - 3 = x^2 + 7 \implies x^2 + 5x - 10 = 0\).<br>
+                            • Fórmula general (\(a = 1,\; b = 5,\; c = -10\)): \(\Delta = 25 - 4(1)(-10) = 65\).<br>
+                            • Soluciones: \(\mathbf{x = \dfrac{-5 \pm \sqrt{65}}{2}}\).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Ejercicio 8 — Análisis del Discriminante</span>
+                        <p class="font-semibold text-gray-800 mt-1">Determina el valor de \(k\) para que la ecuación \(4x^2 + kx + 9 = 0\) tenga exactamente una raíz real doble (\(\Delta = 0\)).</p>
+                        <button onclick="toggleSol('sol-8', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-8" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Procedimiento:</strong><br>
+                            • Condición de raíz doble: \(\Delta = b^2 - 4ac = 0 \implies k^2 - 4(4)(9) = 0\)<br>
+                            • \(k^2 - 144 = 0 \implies k^2 = 144 \implies \mathbf{k = 12 \;\text{o}\; k = -12}\).
+                        </div>
+                    </div>
+                </div>
+
+                <!-- NIVEL III -->
+                <div class="space-y-3">
+                    <h3 class="text-lg font-bold text-[#54887D]">Nivel III. Aplicaciones y Modelación Cuadrática</h3>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Ejercicio 9 — Números Consecutivos</span>
+                        <p class="font-semibold text-gray-800 mt-1">El producto de dos números enteros positivos consecutivos es \(240\). Determina cuáles son los dos números.</p>
+                        <button onclick="toggleSol('sol-9', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-9" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Modelación y solución:</strong><br>
+                            • Sea \(x\) el primer entero positivo; el consecutivo es \(x + 1\).<br>
+                            • Ecuación: \(x(x + 1) = 240 \implies x^2 + x - 240 = 0 \implies (x + 16)(x - 15) = 0\).<br>
+                            • Como se piden enteros positivos, \(x = 15\). Los números son \(\mathbf{15\;\text{y}\; 16}\) (\(15 \times 16 = 240\)).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Ejercicio 10 — Teorema de Pitágoras</span>
+                        <p class="font-semibold text-gray-800 mt-1">En un triángulo rectángulo, la hipotenusa mide \(13\text{ cm}\) y uno de los catetos mide \(7\text{ cm}\) más que el otro cateto. Calcula la longitud de ambos catetos.</p>
+                        <button onclick="toggleSol('sol-10', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-10" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Modelación y solución:</strong><br>
+                            • Cateto menor \(= x\); cateto mayor \(= x + 7\); hipotenusa \(= 13\).<br>
+                            • Teorema de Pitágoras: \(x^2 + (x + 7)^2 = 13^2 \implies x^2 + x^2 + 14x + 49 = 169\)<br>
+                            • \(2x^2 + 14x - 120 = 0 \implies x^2 + 7x - 60 = 0 \implies (x + 12)(x - 5) = 0 \implies x = 5\).<br>
+                            • <strong>Respuesta:</strong> \(\mathbf{\text{Catetos de 5 cm y 12 cm}}\) (\(5^2 + 12^2 = 25 + 144 = 169 = 13^2\)).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Ejercicio 11 — Marco de Fotografía (Geometría)</span>
+                        <p class="font-semibold text-gray-800 mt-1">Una fotografía de \(10\text{ cm}\) por \(15\text{ cm}\) se coloca dentro de un marco de ancho uniforme \(x\). Si el área total (fotografía más marco) es de \(266\text{ cm}^2\), determina el ancho \(x\) del marco.</p>
+                        <button onclick="toggleSol('sol-11', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-11" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Modelación y solución:</strong><br>
+                            • Dimensiones exteriores: ancho \(= 10 + 2x\); largo \(= 15 + 2x\).<br>
+                            • Ecuación: \((10 + 2x)(15 + 2x) = 266 \implies 150 + 50x + 4x^2 = 266\)<br>
+                            • \(4x^2 + 50x - 116 = 0 \implies 2x^2 + 25x - 58 = 0 \implies (2x + 29)(x - 2) = 0\).<br>
+                            • Descartamos \(x = -14.5\); el ancho uniforme es \(\mathbf{x = 2\text{ cm}}\) (\(14 \times 19 = 266\text{ cm}^2\)).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Ejercicio 12 — Lanzamiento Vertical (Física)</span>
+                        <p class="font-semibold text-gray-800 mt-1">Se lanza un proyectil verticalmente hacia arriba y su altura \(h\) (en metros) después de \(t\) segundos está dada por \(h(t) = -5t^2 + 30t\). ¿En qué instantes de tiempo el proyectil se encuentra a una altura de \(40\text{ metros}\)?</p>
+                        <button onclick="toggleSol('sol-12', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-12" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Modelación y solución:</strong><br>
+                            • Igualamos \(h(t) = 40\): \(-5t^2 + 30t = 40 \implies 5t^2 - 30t + 40 = 0\)<br>
+                            • Dividimos entre \(5\): \(t^2 - 6t + 8 = 0 \implies (t - 2)(t - 4) = 0 \implies t_1 = 2,\; t_2 = 4\).<br>
+                            • <strong>Interpretación física:</strong> Alcanza los \(40\text{ m}\) a los \(\mathbf{2\text{ segundos}}\) (cuando va subiendo) y nuevamente a los \(\mathbf{4\text{ segundos}}\) (cuando va descendiendo).
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- PESTAÑA 4: REFLEXIÓN CRÍTICA               -->
+            <!-- ========================================== -->
+            <section id="tab-reflexion" class="hidden space-y-6">
+                <div class="border-b-2 border-[#1269A8] pb-2">
+                    <h2 class="text-2xl font-bold text-[#1269A8]">4. Preguntas de Reflexión Crítica</h2>
+                    <p class="text-sm text-[#54887D] font-semibold">Análisis conceptual sobre métodos de resolución, raíces negativas y naturaleza del discriminante.</p>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="card-theory p-5 shadow-sm">
+                        <h3 class="font-bold text-lg text-[#1269A8] mb-2">1. ¿Cuándo conviene elegir cada método de resolución?</h3>
+                        <p class="text-sm text-gray-800 leading-relaxed">
+                            Compara las cuatro estrategias estudiadas (despeje directo, factorización, completación de cuadrados y fórmula general). ¿Por qué intentar factorizar una ecuación con discriminante \(\Delta = 37\) (como en el Ejercicio 6) es una pérdida de tiempo en los números enteros, y cómo el discriminante te avisa de antemano si un trinomio es factorizable con coeficientes enteros?
+                        </p>
+                    </div>
+
+                    <div class="card-theory p-5 shadow-sm">
+                        <h3 class="font-bold text-lg text-[#1269A8] mb-2">2. El error de dividir ambos miembros entre la incógnita \(x\)</h3>
+                        <p class="text-sm text-gray-800 leading-relaxed">
+                            Al resolver \(5x^2 + 15x = 0\), un estudiante divide toda la ecuación entre \(x\) y obtiene \(5x + 15 = 0 \implies x = -3\). Explica qué solución perdió en el camino y por qué nunca debe dividirse una ecuación entre una expresión que contiene la variable sin analizar primero el caso en que esa expresión vale cero.
+                        </p>
+                    </div>
+
+                    <div class="card-theory p-5 shadow-sm">
+                        <h3 class="font-bold text-lg text-[#1269A8] mb-2">3. Pertinencia de las dos raíces en problemas aplicados</h3>
+                        <p class="text-sm text-gray-800 leading-relaxed">
+                            Contrasta el <strong>Ejemplo 4</strong> (dimensiones de un terreno, donde se rechaza \(x = -16\)) con el <strong>Ejercicio 12</strong> (altura de un proyectil, donde ambas soluciones \(t = 2\text{ s}\) y \(t = 4\text{ s}\) son válidas). Explica por qué en las aplicaciones cuadráticas siempre deben evaluarse ambas raíces frente al dominio físico del problema.
+                        </p>
+                    </div>
+
+                    <div class="card-theory p-5 shadow-sm">
+                        <h3 class="font-bold text-lg text-[#1269A8] mb-2">4. Reconstrucción de una ecuación a partir de sus raíces (Vieta)</h3>
+                        <p class="text-sm text-gray-800 leading-relaxed">
+                            Si sabes que una ecuación cuadrática mónica (\(a = 1\)) tiene como soluciones \(x_1 = 5\) y \(x_2 = -3\), ¿cómo puedes escribir directamente su ecuación estándar \(x^2 - Sx + P = 0\) usando la suma \(S = x_1 + x_2\) y el producto \(P = x_1 \cdot x_2\) de sus raíces?
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- PESTAÑA 5: EVALUACIÓN FORMATIVA            -->
+            <!-- ========================================== -->
+            <section id="tab-evaluacion" class="hidden space-y-6">
+                <div class="border-b-2 border-[#1269A8] pb-2">
+                    <h2 class="text-2xl font-bold text-[#1269A8]">5. Evaluación Formativa</h2>
+                    <p class="text-sm text-[#54887D] font-semibold">Comprobación de dominio en factorización, completación de cuadrados, fórmula general, discriminante y modelación.</p>
+                </div>
+
+                <div class="space-y-4">
+                    <!-- Ítem 1 -->
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Ítem 1 — Resolución por Factorización</span>
+                        <p class="font-semibold text-gray-800 mt-1">
+                            Resuelve por factorización y comprueba ambas raíces: \(\;4x^2 - 12x + 9 = 0\)
+                        </p>
+                        <button onclick="toggleSol('sol-ev1', this)" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-ev1" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong><br>
+                            • Reconocemos un Trinomio Cuadrado Perfecto: \((2x - 3)^2 = 0\).<br>
+                            • Raíz doble: \(2x - 3 = 0 \implies \mathbf{x_1 = x_2 = \dfrac{3}{2}}\) (\(\Delta = (-12)^2 - 4(4)(9) = 0\)).
+                        </div>
+                    </div>
+
+                    <!-- Ítem 2 -->
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Ítem 2 — Completación de Cuadrados</span>
+                        <p class="font-semibold text-gray-800 mt-1">
+                            Resuelve completando el cuadrado: \(\;x^2 + 10x + 21 = 0\)
+                        </p>
+                        <button onclick="toggleSol('sol-ev2', this)" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-ev2" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong><br>
+                            • \(x^2 + 10x = -21 \implies x^2 + 10x + 25 = -21 + 25 \implies (x + 5)^2 = 4\)<br>
+                            • \(x + 5 = \pm 2 \implies \mathbf{x_1 = -3,\quad x_2 = -7}\).
+                        </div>
+                    </div>
+
+                    <!-- Ítem 3 -->
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Ítem 3 — Discriminante y Fórmula General</span>
+                        <p class="font-semibold text-gray-800 mt-1">
+                            Calcula el discriminante de \(2x^2 + 3x + 5 = 0\) e indica cuántas soluciones reales posee la ecuación. Justifica tu respuesta.
+                        </p>
+                        <button onclick="toggleSol('sol-ev3', this)" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-ev3" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong><br>
+                            • \(a = 2,\; b = 3,\; c = 5 \implies \Delta = 3^2 - 4(2)(5) = 9 - 40 = \mathbf{-31}\).<br>
+                            • Como \(\Delta < 0\), la raíz cuadrada \(\sqrt{-31}\) no está definida en los números reales; por tanto, la ecuación \(\mathbf{\text{no tiene soluciones reales}}\).
+                        </div>
+                    </div>
+
+                    <!-- Ítem 4 -->
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Ítem 4 — Problema de Aplicación Integrador</span>
+                        <p class="font-semibold text-gray-800 mt-1">
+                            Con una lámina cuadrada de cartón se construye una caja abierta cortando cuadrados de \(3\text{ cm}\) de lado en cada esquina y doblando los bordes. Si el volumen de la caja es de \(192\text{ cm}^3\), determina las dimensiones originales de la lámina cuadrada.
+                        </p>
+                        <button onclick="toggleSol('sol-ev4', this)" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-ev4" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Modelación, resolución e interpretación:</strong><br>
+                            • Sea \(x\) el lado original de la lámina (en cm). Al cortar \(3\text{ cm}\) en cada extremo, la base cuadrada de la caja mide \((x - 6)\text{ cm}\) por lado y su altura es \(3\text{ cm}\).<br>
+                            • Volumen (\(V = \text{base} \times \text{altura}\)): \(3(x - 6)^2 = 192 \implies (x - 6)^2 = 64\)<br>
+                            • \(x - 6 = \pm 8 \implies x_1 = 14,\; x_2 = -2\) (descartada).<br>
+                            • <strong>Respuesta:</strong> La lámina original medía \(\mathbf{14\text{ cm} \times 14\text{ cm}}\) (\(3 \times 8^2 = 3 \times 64 = 192\text{ cm}^3\)).
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Pie de Página Institucional -->
+        <footer class="bg-[#F2F5E9] border-t-2 border-[#54887D] p-3 text-center text-xs text-[#1269A8] font-semibold">
+            Colegio Montano — Tercero Básico • Departamento de Matemática • Pizarra Digital Interactiva (Canvas Education)
+        </footer>
+    </div>
+
+    <!-- Lógica de Interactividad -->
+    <script>
+        // Cambio dinámico entre las pestañas de la pizarra
+        function switchTab(tabName) {
+            const tabs = ['teoria', 'ejemplos', 'ejercicios', 'reflexion', 'evaluacion'];
+            tabs.forEach(t => {
+                const section = document.getElementById('tab-' + t);
+                const btn = document.getElementById('btn-' + t);
+                if (t === tabName) {
+                    section.classList.remove('hidden');
+                    btn.className = "flex-1 py-3 px-3 text-center font-bold text-xs md:text-sm tab-active transition cursor-pointer";
+                } else {
+                    section.classList.add('hidden');
+                    btn.className = "flex-1 py-3 px-3 text-center font-bold text-xs md:text-sm tab-inactive transition cursor-pointer";
+                }
+            });
+        }
+
+        // Alternar visibilidad de las soluciones ocultas
+        function toggleSol(solId, btnElement) {
+            const solDiv = document.getElementById(solId);
+            if (solDiv.classList.contains('hidden')) {
+                solDiv.classList.remove('hidden');
+                btnElement.textContent = "Ocultar solución";
+            } else {
+                solDiv.classList.add('hidden');
+                btnElement.textContent = "Mostrar solución";
+            }
+        }
+
+        // Control de Pantalla Completa mediante Fullscreen API
+        function toggleFullScreen() {
+            const elem = document.documentElement;
+            const btn = document.getElementById('fullscreen-btn');
+            if (!document.fullscreenElement) {
+                if (elem.requestFullscreen) {
+                    elem.requestFullscreen().catch(() => {});
+                } else if (elem.webkitRequestFullscreen) {
+                    elem.webkitRequestFullscreen();
+                } else if (elem.msRequestFullscreen) {
+                    elem.msRequestFullscreen();
+                }
+                btn.innerHTML = "<span>[ ✕ Salir pantalla completa ]</span>";
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen().catch(() => {});
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                }
+                btn.innerHTML = "<span>[ ⛶ Pantalla completa ]</span>";
+            }
+        }
+
+        document.addEventListener('fullscreenchange', () => {
+            const btn = document.getElementById('fullscreen-btn');
+            if (!document.fullscreenElement) {
+                btn.innerHTML = "<span>[ ⛶ Pantalla completa ]</span>";
+            }
+        });
+    </script>
+</body>
+</html>

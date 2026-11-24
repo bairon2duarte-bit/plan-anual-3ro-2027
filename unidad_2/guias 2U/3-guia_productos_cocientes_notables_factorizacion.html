@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía Interactiva: Productos, Cocientes Notables y Factorización - Colegio Montano</title>
+    <!-- Tailwind CSS para diseño moderno y responsivo -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- MathJax para renderizado impecable de expresiones algebraicas -->
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #F2F5E9;
+        }
+        /* Marco de pizarra digital con identidad Colegio Montano */
+        .whiteboard-container {
+            background-color: #ffffff;
+            border: 5px solid #F7D615;
+            border-radius: 12px;
+            box-shadow: 0 12px 30px rgba(18, 105, 168, 0.18);
+        }
+        .header-bg {
+            background: linear-gradient(135deg, #1269A8 0%, #0e5285 100%);
+        }
+        .tab-active {
+            background-color: #1269A8;
+            color: #ffffff;
+            border-bottom: 4px solid #F7D615;
+        }
+        .tab-inactive {
+            background-color: #88B5C7;
+            color: #0d4b7a;
+        }
+        .tab-inactive:hover {
+            background-color: #54887D;
+            color: #ffffff;
+        }
+        .card-theory {
+            background-color: #F2F5E9;
+            border-left: 5px solid #54887D;
+            border-radius: 8px;
+        }
+        .card-exercise {
+            background-color: rgba(136, 181, 199, 0.16);
+            border: 1px solid #54887D;
+            border-left: 5px solid #1269A8;
+            border-radius: 8px;
+        }
+        .solution-box {
+            background-color: rgba(136, 181, 199, 0.30);
+            border-left: 4px solid #54887D;
+            border-radius: 6px;
+        }
+        .badge-level {
+            background-color: #A6B046;
+            color: #ffffff;
+        }
+        .btn-action {
+            background-color: #1269A8;
+            color: #ffffff;
+            transition: all 0.2s ease;
+        }
+        .btn-action:hover {
+            background-color: #54887D;
+        }
+    </style>
+</head>
+<body class="p-3 md:p-6 min-h-screen flex flex-col items-center">
+
+    <!-- Contenedor Principal de la Pizarra Digital -->
+    <div id="whiteboard" class="whiteboard-container w-full max-w-6xl flex flex-col overflow-hidden">
+        
+        <!-- Barra Superior / Encabezado Institucional -->
+        <header class="header-bg p-4 flex flex-col sm:flex-row justify-between items-center text-white gap-4">
+            <div class="flex items-center space-x-4">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyEop0yf6lZ7Jk9MILZxF1rBj4Oqs5esyhIQ&s" alt="Logo Colegio Montano" class="h-14 w-14 object-contain bg-white rounded-full p-1 shadow-md">
+                <div>
+                    <h1 class="text-xl md:text-2xl font-bold tracking-wide">Colegio Montano</h1>
+                    <p class="text-xs md:text-sm text-[#F7D615] font-bold">Pizarra Digital Interactiva — Productos Notables, Cocientes Notables y Factorización (Nivel Medio-Alto)</p>
+                </div>
+            </div>
+            <div>
+                <button id="fullscreen-btn" onclick="toggleFullScreen()" class="bg-[#F7D615] text-[#1269A8] font-bold px-4 py-2 rounded-lg shadow hover:bg-yellow-300 transition flex items-center gap-2 text-sm cursor-pointer">
+                    <span>[ ⛶ Pantalla completa ]</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Menú de Pestañas Horizontales Interactivas -->
+        <nav class="flex flex-wrap bg-[#88B5C7] border-b-2 border-[#54887D]">
+            <button onclick="switchTab('teoria')" id="btn-teoria" class="flex-1 py-3 px-3 text-center font-bold text-xs md:text-sm tab-active transition cursor-pointer">Teoría</button>
+            <button onclick="switchTab('ejemplos')" id="btn-ejemplos" class="flex-1 py-3 px-3 text-center font-bold text-xs md:text-sm tab-inactive transition cursor-pointer">Ejemplos</button>
+            <button onclick="switchTab('ejercicios')" id="btn-ejercicios" class="flex-1 py-3 px-3 text-center font-bold text-xs md:text-sm tab-inactive transition cursor-pointer">Ejercicios</button>
+            <button onclick="switchTab('reflexion')" id="btn-reflexion" class="flex-1 py-3 px-3 text-center font-bold text-xs md:text-sm tab-inactive transition cursor-pointer">Reflexión</button>
+            <button onclick="switchTab('evaluacion')" id="btn-evaluacion" class="flex-1 py-3 px-3 text-center font-bold text-xs md:text-sm tab-inactive transition cursor-pointer">Evaluación</button>
+        </nav>
+
+        <!-- Lienzo de Contenido Principal -->
+        <main class="p-5 md:p-8 flex-1 overflow-y-auto max-h-[78vh] bg-[#F2F5E9]/40">
+
+            <!-- ========================================== -->
+            <!-- PESTAÑA 1: EXPLICACIÓN TEÓRICA             -->
+            <!-- ========================================== -->
+            <section id="tab-teoria" class="space-y-6">
+                <div class="border-b-2 border-[#1269A8] pb-2">
+                    <h2 class="text-2xl font-bold text-[#1269A8]">1. Productos Notables, Cocientes Notables y Factorización</h2>
+                    <p class="text-sm text-[#54887D] font-semibold">Identidades algebraicas estructurales, divisibilidad polinómica y descomposición factorial avanzada.</p>
+                </div>
+
+                <!-- Bloque 1: Productos Notables -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="card-theory p-5 shadow-sm space-y-3">
+                        <div class="flex items-center justify-between">
+                            <h3 class="font-bold text-lg text-[#1269A8]">A. Productos Notables Fundamentales</h3>
+                            <span class="badge-level text-xs px-2.5 py-1 rounded-full font-bold">Expansión Rápida</span>
+                        </div>
+                        <p class="text-sm text-gray-800 leading-relaxed">
+                            Son multiplicaciones algebraicas con estructura fija cuyo resultado puede escribirse por simple inspección sin efectuar la distribución término a término:
+                        </p>
+                        <div class="bg-white p-4 rounded border border-[#54887D] text-sm text-gray-800 space-y-2">
+                            <p>• <strong>Binomio al cuadrado:</strong> \((a \pm b)^2 = a^2 \pm 2ab + b^2\)</p>
+                            <p>• <strong>Producto de binomios conjugados:</strong> \((a + b)(a - b) = a^2 - b^2\)</p>
+                            <p>• <strong>Producto de binomios con término común:</strong> \((x + a)(x + b) = x^2 + (a + b)x + ab\)</p>
+                            <p>• <strong>Binomio al cubo:</strong> \((a \pm b)^3 = a^3 \pm 3a^2b + 3ab^2 \pm b^3 = a^3 \pm b^3 \pm 3ab(a \pm b)\)</p>
+                            <p>• <strong>Trinomio al cuadrado:</strong> \((a + b + c)^2 = a^2 + b^2 + c^2 + 2(ab + bc + ac)\)</p>
+                            <p>• <strong>Identidades de Legendre:</strong><br>
+                            \((a + b)^2 + (a - b)^2 = 2(a^2 + b^2)\) &nbsp;|&nbsp; \((a + b)^2 - (a - b)^2 = 4ab\)</p>
+                        </div>
+                    </div>
+
+                    <!-- Interpretación Geométrica SVG -->
+                    <div class="card-theory p-5 shadow-sm flex flex-col justify-between space-y-3">
+                        <div>
+                            <h3 class="font-bold text-lg text-[#1269A8]">Visualización Geométrica: \((a + b)^2\)</h3>
+                            <p class="text-sm text-gray-800 mt-1">
+                                El área de un cuadrado de lado \((a + b)\) se descompone exactamente en dos cuadrados de áreas \(a^2\) y \(b^2\), más dos rectángulos congruentes de área \(ab\):
+                            </p>
+                        </div>
+                        <div class="bg-white p-4 rounded border border-[#54887D] flex flex-col items-center">
+                            <svg viewBox="0 0 260 220" class="w-full max-w-xs h-auto">
+                                <!-- Cuadrado a^2 -->
+                                <rect x="30" y="20" width="110" height="110" fill="#1269A8" fill-opacity="0.85" stroke="#0d4b7a" stroke-width="2"/>
+                                <text x="85" y="80" font-size="16" fill="#ffffff" font-weight="bold" text-anchor="middle">a²</text>
+                                <!-- Rectángulo ab superior derecho -->
+                                <rect x="140" y="20" width="65" height="110" fill="#88B5C7" fill-opacity="0.85" stroke="#0d4b7a" stroke-width="2"/>
+                                <text x="172" y="80" font-size="14" fill="#1269A8" font-weight="bold" text-anchor="middle">ab</text>
+                                <!-- Rectángulo ab inferior izquierdo -->
+                                <rect x="30" y="130" width="110" height="65" fill="#88B5C7" fill-opacity="0.85" stroke="#0d4b7a" stroke-width="2"/>
+                                <text x="85" y="167" font-size="14" fill="#1269A8" font-weight="bold" text-anchor="middle">ab</text>
+                                <!-- Cuadrado b^2 -->
+                                <rect x="140" y="130" width="65" height="65" fill="#F7D615" fill-opacity="0.9" stroke="#0d4b7a" stroke-width="2"/>
+                                <text x="172" y="167" font-size="15" fill="#1269A8" font-weight="bold" text-anchor="middle">b²</text>
+                                <!-- Etiquetas de lados -->
+                                <text x="85" y="14" font-size="12" fill="#54887D" font-weight="bold" text-anchor="middle">a</text>
+                                <text x="172" y="14" font-size="12" fill="#54887D" font-weight="bold" text-anchor="middle">b</text>
+                                <text x="18" y="80" font-size="12" fill="#54887D" font-weight="bold" text-anchor="middle">a</text>
+                                <text x="18" y="167" font-size="12" fill="#54887D" font-weight="bold" text-anchor="middle">b</text>
+                            </svg>
+                            <p class="text-xs font-bold text-[#1269A8] mt-2">\(\text{Área Total} = (a + b)^2 = a^2 + 2ab + b^2\)</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bloque 2: Cocientes Notables -->
+                <div class="card-theory p-5 shadow-sm space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h3 class="font-bold text-lg text-[#1269A8]">B. Cocientes Notables (División Exacta \(\dfrac{x^n \pm y^n}{x \pm y}\))</h3>
+                        <span class="badge-level text-xs px-2.5 py-1 rounded-full font-bold">Propiedad del Término \(T_k\)</span>
+                    </div>
+                    <p class="text-sm text-gray-800 leading-relaxed">
+                        Son divisiones exactas entre binomios que generan polinomios homogéneos sin necesidad de realizar la división larga:
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-gray-800">
+                        <div class="bg-white p-4 rounded border border-[#54887D] space-y-1">
+                            <p class="font-bold text-[#1269A8]">Caso 1: \(\dfrac{x^n - y^n}{x - y}\)</p>
+                            <p class="text-xs text-[#A6B046] font-bold">Válido para TODO \(n \in \mathbb{N}\) (par o impar)</p>
+                            <p class="mt-1">Todos los signos del cociente son <strong>positivos (\(+\))</strong>:</p>
+                            <p class="text-xs font-semibold mt-1">\(x^{n-1} + x^{n-2}y + \dots + xy^{n-2} + y^{n-1}\)</p>
+                        </div>
+                        <div class="bg-white p-4 rounded border border-[#54887D] space-y-1">
+                            <p class="font-bold text-[#1269A8]">Caso 2: \(\dfrac{x^n - y^n}{x + y}\)</p>
+                            <p class="text-xs text-[#A6B046] font-bold">Válido solo si \(n\) es PAR</p>
+                            <p class="mt-1">Los signos del cociente se <strong>alternan (\(+, -, +, \dots, -\))</strong>:</p>
+                            <p class="text-xs font-semibold mt-1">\(x^{n-1} - x^{n-2}y + x^{n-3}y^2 - \dots - y^{n-1}\)</p>
+                        </div>
+                        <div class="bg-white p-4 rounded border border-[#54887D] space-y-1">
+                            <p class="font-bold text-[#1269A8]">Caso 3: \(\dfrac{x^n + y^n}{x + y}\)</p>
+                            <p class="text-xs text-[#A6B046] font-bold">Válido solo si \(n\) es IMPAR</p>
+                            <p class="mt-1">Los signos del cociente se <strong>alternan (\(+, -, +, \dots, +\))</strong>:</p>
+                            <p class="text-xs font-semibold mt-1">\(x^{n-1} - x^{n-2}y + x^{n-3}y^2 - \dots + y^{n-1}\)</p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-3 rounded border border-[#54887D] text-sm text-gray-800 flex flex-col md:flex-row justify-between items-center gap-2">
+                        <div>
+                            <strong>Condición de existencia:</strong> En \(\dfrac{x^p \pm y^q}{x^r \pm y^s}\), el número de términos es \(n = \dfrac{p}{r} = \dfrac{q}{s}\).
+                        </div>
+                        <div class="font-bold text-[#1269A8]">
+                            Término general \(k\): \(T_k = (\text{signo})\,(x^r)^{n-k}(y^s)^{k-1}\)
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bloque 3: Factorización Nivel Medio-Alto -->
+                <div class="card-theory p-5 shadow-sm space-y-3">
+                    <div class="flex items-center justify-between">
+                        <h3 class="font-bold text-lg text-[#1269A8]">C. Estrategias de Factorización (Nivel Medio-Alto)</h3>
+                        <span class="badge-level text-xs px-2.5 py-1 rounded-full font-bold">Descomposición Prima</span>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-sm text-gray-800">
+                        <div class="bg-white p-3.5 rounded border border-[#54887D]">
+                            <p class="font-bold text-[#1269A8]">1. Factor Común y Agrupación</p>
+                            <p class="text-xs mt-1">Extraer el MCD algebraico o asociar términos estratégicamente para revelar binomios comunes: \(ax + ay + bx + by = (x + y)(a + b)\).</p>
+                        </div>
+                        <div class="bg-white p-3.5 rounded border border-[#54887D]">
+                            <p class="font-bold text-[#1269A8]">2. Diferencia de Cuadrados y Cubos</p>
+                            <p class="text-xs mt-1">• \(a^2 - b^2 = (a + b)(a - b)\)<br>• \(a^3 \pm b^3 = (a \pm b)(a^2 \mp ab + b^2)\)</p>
+                        </div>
+                        <div class="bg-white p-3.5 rounded border border-[#54887D]">
+                            <p class="font-bold text-[#1269A8]">3. Trinomios \(x^2+bx+c\) y \(ax^2+bx+c\)</p>
+                            <p class="text-xs mt-1">Método de aspa simple o descomposición del término central: buscar dos factores que multipliquen \(a \cdot c\) y sumen \(b\).</p>
+                        </div>
+                        <div class="bg-white p-3.5 rounded border border-[#54887D]">
+                            <p class="font-bold text-[#1269A8]">4. Quita y Pon (Completar TCP)</p>
+                            <p class="text-xs mt-1">Sumar y restar un término cuadrado perfecto para generar una diferencia de cuadrados: \(x^4 + 4 = (x^4 + 4x^2 + 4) - 4x^2\).</p>
+                        </div>
+                        <div class="bg-white p-3.5 rounded border border-[#54887D]">
+                            <p class="font-bold text-[#1269A8]">5. Cambio de Variable</p>
+                            <p class="text-xs mt-1">Sustituir bloques repetidos por una letra auxiliar \(u\) (ej. \(u = x^2 + 3x\)) para reducir polinomios de grado superior a cuadráticos.</p>
+                        </div>
+                        <div class="bg-white p-3.5 rounded border border-[#54887D]">
+                            <p class="font-bold text-[#1269A8]">6. Divisores Binómicos (Ruffini)</p>
+                            <p class="text-xs mt-1">Para polinomios de grado \(\ge 3\), hallar raíces racionales \(r = \pm \frac{\text{div}(a_0)}{\text{div}(a_n)}\) tal que \(P(r) = 0\), generando el factor \((x - r)\).</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- PESTAÑA 2: EJEMPLOS RESUELTOS (5 POR NIVEL)-->
+            <!-- ========================================== -->
+            <section id="tab-ejemplos" class="hidden space-y-8">
+                <div class="border-b-2 border-[#1269A8] pb-2">
+                    <h2 class="text-2xl font-bold text-[#1269A8]">2. Ejemplos Resueltos Paso a Paso</h2>
+                    <p class="text-sm text-[#54887D] font-semibold">15 ejemplos seleccionados (5 Básico, 5 Intermedio, 5 Avanzado) integrando productos, cocientes y factorización.</p>
+                </div>
+
+                <!-- NIVEL BÁSICO -->
+                <div class="space-y-4">
+                    <h3 class="text-xl font-bold text-[#54887D] flex items-center gap-2">
+                        <span class="badge-level text-xs px-3 py-1 rounded-full">NIVEL BÁSICO</span> Identidades Directas y Factorización Fundamental
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="card-theory p-4 shadow-sm">
+                            <p class="font-bold text-[#1269A8]">Ejemplo Básico 1 — Binomio al cuadrado con coeficientes</p>
+                            <p class="text-sm font-semibold mt-1">Desarrolle \((3x^2 - 4y^3)^2\).</p>
+                            <div class="mt-2 bg-white p-3 rounded border text-sm text-gray-800">
+                                <strong>Resolución:</strong> Aplicamos \((a - b)^2 = a^2 - 2ab + b^2\):<br>
+                                \((3x^2)^2 - 2(3x^2)(4y^3) + (4y^3)^2 = \mathbf{9x^4 - 24x^2y^3 + 16y^6}\).
+                            </div>
+                        </div>
+
+                        <div class="card-theory p-4 shadow-sm">
+                            <p class="font-bold text-[#1269A8]">Ejemplo Básico 2 — Conjugados encadenados</p>
+                            <p class="text-sm font-semibold mt-1">Simplifique \((x + 2)(x - 2)(x^2 + 4)\).</p>
+                            <div class="mt-2 bg-white p-3 rounded border text-sm text-gray-800">
+                                <strong>Resolución:</strong> Asociamos los primeros dos factores conjugados:<br>
+                                \([(x + 2)(x - 2)](x^2 + 4) = (x^2 - 4)(x^2 + 4) = (x^2)^2 - 4^2 = \mathbf{x^4 - 16}\).
+                            </div>
+                        </div>
+
+                        <div class="card-theory p-4 shadow-sm">
+                            <p class="font-bold text-[#1269A8]">Ejemplo Básico 3 — Cociente notable directo</p>
+                            <p class="text-sm font-semibold mt-1">Desarrolle el cociente notable \(\dfrac{x^5 - 32}{x - 2}\).</p>
+                            <div class="mt-2 bg-white p-3 rounded border text-sm text-gray-800">
+                                <strong>Resolución:</strong> Escribimos \(32 = 2^5\). Como el divisor es \((x - 2)\), todos los términos son positivos:<br>
+                                \(\dfrac{x^5 - 2^5}{x - 2} = x^4 + x^3(2) + x^2(2^2) + x(2^3) + 2^4 = \mathbf{x^4 + 2x^3 + 4x^2 + 8x + 16}\).
+                            </div>
+                        </div>
+
+                        <div class="card-theory p-4 shadow-sm">
+                            <p class="font-bold text-[#1269A8]">Ejemplo Básico 4 — Factorización de trinomio \(ax^2 + bx + c\)</p>
+                            <p class="text-sm font-semibold mt-1">Factorice completamente \(6x^2 + 11x - 10\).</p>
+                            <div class="mt-2 bg-white p-3 rounded border text-sm text-gray-800">
+                                <strong>Resolución:</strong> Buscamos dos números cuyo producto sea \(6(-10) = -60\) y su suma sea \(+11\): son \(+15\) y \(-4\).<br>
+                                \(6x^2 + 15x - 4x - 10 = 3x(2x + 5) - 2(2x + 5) = \mathbf{(2x + 5)(3x - 2)}\).
+                            </div>
+                        </div>
+
+                        <div class="card-theory p-4 shadow-sm md:col-span-2">
+                            <p class="font-bold text-[#1269A8]">Ejemplo Básico 5 — Suma y diferencia de cubos</p>
+                            <p class="text-sm font-semibold mt-1">Factorice \(27a^3 + 8b^6\).</p>
+                            <div class="mt-2 bg-white p-3 rounded border text-sm text-gray-800">
+                                <strong>Resolución:</strong> Reconocemos \((3a)^3 + (2b^2)^3\) y aplicamos \(A^3 + B^3 = (A + B)(A^2 - AB + B^2)\):<br>
+                                \((3a + 2b^2)[(3a)^2 - (3a)(2b^2) + (2b^2)^2] = \mathbf{(3a + 2b^2)(9a^2 - 6ab^2 + 4b^4)}\).
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- NIVEL INTERMEDIO -->
+                <div class="space-y-4">
+                    <h3 class="text-xl font-bold text-[#54887D] flex items-center gap-2">
+                        <span class="badge-level text-xs px-3 py-1 rounded-full">NIVEL INTERMEDIO</span> Identidades Condicionales, Término \(k\) y Agrupación Estratégica
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="card-theory p-4 shadow-sm">
+                            <p class="font-bold text-[#1269A8]">Ejemplo Intermedio 1 — Identidades de Legendre y suma/cubo</p>
+                            <p class="text-sm font-semibold mt-1">Si \(x + \dfrac{1}{x} = 4\), calcule el valor numérico de \(x^3 + \dfrac{1}{x^3}\).</p>
+                            <div class="mt-2 bg-white p-3 rounded border text-sm text-gray-800">
+                                <strong>Resolución:</strong> Elevamos ambos miembros al cubo usando \((a + b)^3 = a^3 + b^3 + 3ab(a + b)\):<br>
+                                \(\left(x + \frac{1}{x}\right)^3 = 4^3 \implies x^3 + \frac{1}{x^3} + 3\left(x \cdot \frac{1}{x}\right)\left(x + \frac{1}{x}\right) = 64\)<br>
+                                \(x^3 + \frac{1}{x^3} + 3(1)(4) = 64 \implies x^3 + \frac{1}{x^3} = 64 - 12 = \mathbf{52}\).
+                            </div>
+                        </div>
+
+                        <div class="card-theory p-4 shadow-sm">
+                            <p class="font-bold text-[#1269A8]">Ejemplo Intermedio 2 — Término \(k\) en un Cociente Notable</p>
+                            <p class="text-sm font-semibold mt-1">Halle el cuarto término (\(T_4\)) del desarrollo del cociente notable \(\dfrac{x^{24} - y^{36}}{x^2 + y^3}\).</p>
+                            <div class="mt-2 bg-white p-3 rounded border text-sm text-gray-800">
+                                <strong>Resolución:</strong><br>
+                                1. Número de términos: \(n = \frac{24}{2} = \frac{36}{3} = 12\).<br>
+                                2. Como el divisor es \((x^2 + y^3)\), los términos pares tienen signo negativo (\(-\)).<br>
+                                3. \(T_4 = -(x^2)^{12-4}(y^3)^{4-1} = -(x^2)^8(y^3)^3 = \mathbf{-x^{16}y^9}\).
+                            </div>
+                        </div>
+
+                        <div class="card-theory p-4 shadow-sm">
+                            <p class="font-bold text-[#1269A8]">Ejemplo Intermedio 3 — Factorización por agrupación y diferencia de cuadrados</p>
+                            <p class="text-sm font-semibold mt-1">Factorice \(x^2 - y^2 + 6y - 9\).</p>
+                            <div class="mt-2 bg-white p-3 rounded border text-sm text-gray-800">
+                                <strong>Resolución:</strong> Agrupamos los últimos tres términos extrayendo el signo negativo:<br>
+                                \(x^2 - (y^2 - 6y + 9) = x^2 - (y - 3)^2\)<br>
+                                Aplicamos diferencia de cuadrados: \([x + (y - 3)][x - (y - 3)] = \mathbf{(x + y - 3)(x - y + 3)}\).
+                            </div>
+                        </div>
+
+                        <div class="card-theory p-4 shadow-sm">
+                            <p class="font-bold text-[#1269A8]">Ejemplo Intermedio 4 — Cambio de variable en polinomios</p>
+                            <p class="text-sm font-semibold mt-1">Factorice \((x^2 + 5x)^2 - 2(x^2 + 5x) - 24\).</p>
+                            <div class="mt-2 bg-white p-3 rounded border text-sm text-gray-800">
+                                <strong>Resolución:</strong> Sea \(u = x^2 + 5x\):<br>
+                                \(u^2 - 2u - 24 = (u - 6)(u + 4)\).<br>
+                                Volviendo a la variable \(x\): \((x^2 + 5x - 6)(x^2 + 5x + 4) = \mathbf{(x + 6)(x - 1)(x + 4)(x + 1)}\).
+                            </div>
+                        </div>
+
+                        <div class="card-theory p-4 shadow-sm md:col-span-2">
+                            <p class="font-bold text-[#1269A8]">Ejemplo Intermedio 5 — Factorización de suma/diferencia de sextas potencias</p>
+                            <p class="text-sm font-semibold mt-1">Factorice completamente en factores primos \(x^6 - 64\).</p>
+                            <div class="mt-2 bg-white p-3 rounded border text-sm text-gray-800">
+                                <strong>Resolución:</strong> Conviene factorizar primero como diferencia de cuadrados \((x^3)^2 - 8^2\):<br>
+                                \((x^3 - 8)(x^3 + 8) = (x - 2)(x^2 + 2x + 4)(x + 2)(x^2 - 2x + 4)\)<br>
+                                Ordenando: \(\mathbf{(x - 2)(x + 2)(x^2 + 2x + 4)(x^2 - 2x + 4)}\).
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- NIVEL AVANZADO -->
+                <div class="space-y-4">
+                    <h3 class="text-xl font-bold text-[#54887D] flex items-center gap-2">
+                        <span class="badge-level text-xs px-3 py-1 rounded-full">NIVEL AVANZADO</span> Quita y Pon (Argand), Ruffini y Simplificación Racional
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="card-theory p-4 shadow-sm">
+                            <p class="font-bold text-[#1269A8]">Ejemplo Avanzado 1 — Método de Quita y Pon (Completar TCP)</p>
+                            <p class="text-sm font-semibold mt-1">Factorice \(x^4 + 4y^4\) (Identidad de Sophie Germain).</p>
+                            <div class="mt-2 bg-white p-3 rounded border text-sm text-gray-800">
+                                <strong>Resolución:</strong> Sumamos y restamos \(4x^2y^2\) para completar un trinomio cuadrado perfecto:<br>
+                                \((x^4 + 4x^2y^2 + 4y^4) - 4x^2y^2 = (x^2 + 2y^2)^2 - (2xy)^2\)<br>
+                                Aplicamos diferencia de cuadrados: \(\mathbf{(x^2 + 2xy + 2y^2)(x^2 - 2xy + 2y^2)}\).
+                            </div>
+                        </div>
+
+                        <div class="card-theory p-4 shadow-sm">
+                            <p class="font-bold text-[#1269A8]">Ejemplo Avanzado 2 — Factorización por Divisores Binómicos (Ruffini)</p>
+                            <p class="text-sm font-semibold mt-1">Factorice \(P(x) = x^3 - 4x^2 + x + 6\).</p>
+                            <div class="mt-2 bg-white p-3 rounded border text-sm text-gray-800">
+                                <strong>Resolución:</strong> Divisores de \(6\): \(\pm 1, \pm 2, \pm 3, \pm 6\). Probamos \(x = -1\):<br>
+                                \(P(-1) = (-1)^3 - 4(-1)^2 + (-1) + 6 = -1 - 4 - 1 + 6 = 0 \implies (x + 1)\) es factor.<br>
+                                Dividiendo por Ruffini entre \((x + 1)\) queda \(x^2 - 5x + 6 = (x - 2)(x - 3)\).<br>
+                                Resultado: \(\mathbf{(x + 1)(x - 2)(x - 3)}\).
+                            </div>
+                        </div>
+
+                        <div class="card-theory p-4 shadow-sm">
+                            <p class="font-bold text-[#1269A8]">Ejemplo Avanzado 3 — Parámetros en un Cociente Notable</p>
+                            <p class="text-sm font-semibold mt-1">Si \(\dfrac{x^{3m+2} - y^{5m-1}}{x^2 - y^3}\) genera un cociente notable, halle \(m\) y el número de términos.</p>
+                            <div class="mt-2 bg-white p-3 rounded border text-sm text-gray-800">
+                                <strong>Resolución:</strong> Por condición de existencia: \(\dfrac{3m + 2}{2} = \dfrac{5m - 1}{3}\).<br>
+                                Multiplicando en cruz: \(3(3m + 2) = 2(5m - 1) \implies 9m + 6 = 10m - 2 \implies \mathbf{m = 8}\).<br>
+                                Número de términos: \(n = \dfrac{3(8) + 2}{2} = \dfrac{26}{2} = \mathbf{13\text{ términos}}\).
+                            </div>
+                        </div>
+
+                        <div class="card-theory p-4 shadow-sm">
+                            <p class="font-bold text-[#1269A8]">Ejemplo Avanzado 4 — Producto de Productos Notables (Identidad de Argand)</p>
+                            <p class="text-sm font-semibold mt-1">Reduzca \(E = (x^2 + x + 1)(x^2 - x + 1)(x^4 - x^2 + 1)\).</p>
+                            <div class="mt-2 bg-white p-3 rounded border text-sm text-gray-800">
+                                <strong>Resolución:</strong> Agrupamos los primeros dos factores como \([(x^2 + 1) + x][(x^2 + 1) - x]\):<br>
+                                \(= [(x^2 + 1)^2 - x^2](x^4 - x^2 + 1) = (x^4 + 2x^2 + 1 - x^2)(x^4 - x^2 + 1)\)<br>
+                                \(= (x^4 + x^2 + 1)(x^4 - x^2 + 1) = (x^4 + 1)^2 - (x^2)^2 = \mathbf{x^8 + x^4 + 1}\).
+                            </div>
+                        </div>
+
+                        <div class="card-theory p-4 shadow-sm md:col-span-2">
+                            <p class="font-bold text-[#1269A8]">Ejemplo Avanzado 5 — Simplificación de fracción algebraica compleja</p>
+                            <p class="text-sm font-semibold mt-1">Simplifique \(M = \dfrac{x^3 - 8}{x^2 - 4} \div \dfrac{x^2 + 2x + 4}{x^2 + 4x + 4}\).</p>
+                            <div class="mt-2 bg-white p-3 rounded border text-sm text-gray-800">
+                                <strong>Resolución:</strong> Factorizamos cada polinomio y convertimos la división en producto:<br>
+                                \(M = \dfrac{(x - 2)(x^2 + 2x + 4)}{(x - 2)(x + 2)} \cdot \dfrac{(x + 2)^2}{x^2 + 2x + 4}\)<br>
+                                Cancelando factores comunes \((x - 2)\), \((x^2 + 2x + 4)\) y \((x + 2)\): \(M = \mathbf{x + 2}\) (para \(x \neq \pm 2\)).
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- PESTAÑA 3: EJERCICIOS PRÁCTICOS (5 X NIVEL)-->
+            <!-- ========================================== -->
+            <section id="tab-ejercicios" class="hidden space-y-8">
+                <div class="border-b-2 border-[#1269A8] pb-2">
+                    <h2 class="text-2xl font-bold text-[#1269A8]">3. Ejercicios Prácticos</h2>
+                    <p class="text-sm text-[#54887D] font-semibold">Resuelve cada desafío algebraico y verifica paso a paso con el solucionario interactivo.</p>
+                </div>
+
+                <!-- 5 EJERCICIOS BÁSICOS -->
+                <div class="space-y-3">
+                    <h3 class="text-lg font-bold text-[#54887D]">Nivel Básico (Productos, Cocientes Directos y Factorización Inicial)</h3>
+                    
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Básico 1</span>
+                        <p class="font-semibold text-gray-800 mt-1">Desarrolle y simplifique \((2a + 3b)^2 - (2a - 3b)^2\).</p>
+                        <button onclick="toggleSol('sol-b1', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-b1" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong><br>
+                            Aplicando la Identidad de Legendre \((A + B)^2 - (A - B)^2 = 4AB\):<br>
+                            \(4(2a)(3b) = \mathbf{24ab}\).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Básico 2</span>
+                        <p class="font-semibold text-gray-800 mt-1">Desarrolle el cubo del binomio \((2x - 3)^3\).</p>
+                        <button onclick="toggleSol('sol-b2', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-b2" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong><br>
+                            \((2x)^3 - 3(2x)^2(3) + 3(2x)(3)^2 - 3^3 = \mathbf{8x^3 - 36x^2 + 54x - 27}\).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Básico 3</span>
+                        <p class="font-semibold text-gray-800 mt-1">Desarrolle el cociente notable \(\dfrac{a^4 - 81b^4}{a + 3b}\).</p>
+                        <button onclick="toggleSol('sol-b3', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-b3" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong><br>
+                            Como \(n = 4\) (par) y el divisor es \((a + 3b)\), alternamos signos:<br>
+                            \(a^3 - a^2(3b) + a(3b)^2 - (3b)^3 = \mathbf{a^3 - 3a^2b + 9ab^2 - 27b^3}\).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Básico 4</span>
+                        <p class="font-semibold text-gray-800 mt-1">Factorice completamente \(4x^2 - 25y^2\).</p>
+                        <button onclick="toggleSol('sol-b4', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-b4" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong><br>
+                            Diferencia de cuadrados \((2x)^2 - (5y)^2 = \mathbf{(2x + 5y)(2x - 5y)}\).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Básico 5</span>
+                        <p class="font-semibold text-gray-800 mt-1">Factorice \(8x^3 - 125\).</p>
+                        <button onclick="toggleSol('sol-b5', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-b5" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong><br>
+                            Diferencia de cubos \((2x)^3 - 5^3 = (2x - 5)[(2x)^2 + (2x)(5) + 5^2] = \mathbf{(2x - 5)(4x^2 + 10x + 25)}\).
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5 EJERCICIOS INTERMEDIOS -->
+                <div class="space-y-3">
+                    <h3 class="text-lg font-bold text-[#54887D]">Nivel Intermedio (Identidades Condicionales, Término \(k\) y Factorización Compuesta)</h3>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Intermedio 1</span>
+                        <p class="font-semibold text-gray-800 mt-1">Si \(a + b = 7\) y \(ab = 10\), calcule el valor de \(a^3 + b^3\).</p>
+                        <button onclick="toggleSol('sol-i1', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-i1" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong><br>
+                            Usando \((a + b)^3 = a^3 + b^3 + 3ab(a + b)\):<br>
+                            \(7^3 = a^3 + b^3 + 3(10)(7) \implies 343 = a^3 + b^3 + 210 \implies a^3 + b^3 = \mathbf{133}\).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Intermedio 2</span>
+                        <p class="font-semibold text-gray-800 mt-1">Halle el quinto término (\(T_5\)) del cociente notable \(\dfrac{a^{21} + b^{28}}{a^3 + b^4}\).</p>
+                        <button onclick="toggleSol('sol-i2', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-i2" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong><br>
+                            1. \(n = \frac{21}{3} = \frac{28}{4} = 7\) términos.<br>
+                            2. Como el divisor es \((a^3 + b^4)\) y \(k = 5\) (impar), el signo es positivo (\(+\)).<br>
+                            3. \(T_5 = +(a^3)^{7-5}(b^4)^{5-1} = (a^3)^2(b^4)^4 = \mathbf{a^6b^{16}}\).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Intermedio 3</span>
+                        <p class="font-semibold text-gray-800 mt-1">Factorice completamente \(a^2 - b^2 - 4a + 4\).</p>
+                        <button onclick="toggleSol('sol-i3', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-i3" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong><br>
+                            Reordenamos: \((a^2 - 4a + 4) - b^2 = (a - 2)^2 - b^2 = \mathbf{(a - 2 + b)(a - 2 - b)}\).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Intermedio 4</span>
+                        <p class="font-semibold text-gray-800 mt-1">Factorice \(12x^2 - 23x + 10\).</p>
+                        <button onclick="toggleSol('sol-i4', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-i4" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong><br>
+                            Buscamos dos números que multipliquen \(12 \times 10 = 120\) y sumen \(-23\): son \(-15\) y \(-8\).<br>
+                            \(12x^2 - 15x - 8x + 10 = 3x(4x - 5) - 2(4x - 5) = \mathbf{(4x - 5)(3x - 2)}\).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Intermedio 5</span>
+                        <p class="font-semibold text-gray-800 mt-1">Factorice utilizando cambio de variable: \((x^2 - 3x)^2 - 8(x^2 - 3x) - 20\).</p>
+                        <button onclick="toggleSol('sol-i5', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-i5" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong><br>
+                            Sea \(u = x^2 - 3x\): \(u^2 - 8u - 20 = (u - 10)(u + 2)\).<br>
+                            Sustituimos \(u\): \((x^2 - 3x - 10)(x^2 - 3x + 2) = \mathbf{(x - 5)(x + 2)(x - 2)(x - 1)}\).
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5 EJERCICIOS AVANZADOS -->
+                <div class="space-y-3">
+                    <h3 class="text-lg font-bold text-[#54887D]">Nivel Avanzado (Quita y Pon, Ruffini, Parámetros en Cocientes y Fracciones)</h3>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Avanzado 1</span>
+                        <p class="font-semibold text-gray-800 mt-1">Factorice por Quita y Pon: \(x^4 + x^2 + 1\).</p>
+                        <button onclick="toggleSol('sol-a1', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-a1" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong><br>
+                            Sumamos y restamos \(x^2\): \((x^4 + 2x^2 + 1) - x^2 = (x^2 + 1)^2 - x^2 = \mathbf{(x^2 + x + 1)(x^2 - x + 1)}\).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Avanzado 2</span>
+                        <p class="font-semibold text-gray-800 mt-1">Factorice \(P(x) = x^3 - 2x^2 - 5x + 6\) mediante divisores binómicos.</p>
+                        <button onclick="toggleSol('sol-a2', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-a2" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong><br>
+                            Probamos \(x = 1\): \(P(1) = 1 - 2 - 5 + 6 = 0 \implies (x - 1)\) es factor.<br>
+                            Dividiendo entre \((x - 1)\) obtenemos \(x^2 - x - 6 = (x - 3)(x + 2)\).<br>
+                            Factorización completa: \(\mathbf{(x - 1)(x - 3)(x + 2)}\).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Avanzado 3</span>
+                        <p class="font-semibold text-gray-800 mt-1">Determine el valor de \(k\) para que \(\dfrac{x^{2k+3} + y^{3k-3}}{x^3 + y^4}\) sea un cociente notable exacto, y escriba su término central.</p>
+                        <button onclick="toggleSol('sol-a3', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-a3" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong><br>
+                            1. \(\dfrac{2k + 3}{3} = \dfrac{3k - 3}{4} \implies 8k + 12 = 9k - 9 \implies \mathbf{k = 21}\).<br>
+                            2. Número de términos: \(n = \dfrac{2(21) + 3}{3} = \dfrac{45}{3} = 15\).<br>
+                            3. El término central ocupa la posición \(\frac{15 + 1}{2} = 8\): \(T_8 = -(x^3)^{15-8}(y^4)^{8-1} = \mathbf{-x^{21}y^{28}}\).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Avanzado 4</span>
+                        <p class="font-semibold text-gray-800 mt-1">Si \(a + b + c = 0\) y \(abc = 5\), calcule el valor de \(a^3 + b^3 + c^3\).</p>
+                        <button onclick="toggleSol('sol-a4', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-a4" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong><br>
+                            Por la identidad condicional de Gauss: si \(a + b + c = 0\), entonces \(a^3 + b^3 + c^3 = 3abc\).<br>
+                            Sustituyendo \(abc = 5\): \(a^3 + b^3 + c^3 = 3(5) = \mathbf{15}\).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Avanzado 5</span>
+                        <p class="font-semibold text-gray-800 mt-1">Simplifique a su mínima expresión: \(\dfrac{x^4 - 16}{x^3 + 8} \cdot \dfrac{x^2 - 2x + 4}{x^2 + 4}\).</p>
+                        <button onclick="toggleSol('sol-a5', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-a5" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong><br>
+                            Factorizamos numerador y denominador:<br>
+                            \(\dfrac{(x^2 + 4)(x + 2)(x - 2)}{(x + 2)(x^2 - 2x + 4)} \cdot \dfrac{x^2 - 2x + 4}{x^2 + 4} = \mathbf{x - 2}\) (para \(x \neq -2\)).
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- PESTAÑA 4: REFLEXIÓN CRÍTICA               -->
+            <!-- ========================================== -->
+            <section id="tab-reflexion" class="hidden space-y-6">
+                <div class="border-b-2 border-[#1269A8] pb-2">
+                    <h2 class="text-2xl font-bold text-[#1269A8]">4. Preguntas de Reflexión Crítica</h2>
+                    <p class="text-sm text-[#54887D] font-semibold">Análisis algebraico profundo sobre divisibilidad, reversibilidad y estructura polinómica.</p>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="card-theory p-5 shadow-sm">
+                        <h3 class="font-bold text-lg text-[#1269A8] mb-2">1. Dualidad entre Productos Notables y Factorización</h3>
+                        <p class="text-sm text-gray-800 leading-relaxed">
+                            ¿Por qué se afirma que desarrollar un producto notable y factorizar son operaciones inversas, análogas a multiplicar y descomponer en factores primos en aritmética? Explica qué riesgos ocurren cuando un estudiante detiene una factorización antes de llegar a factores primos (por ejemplo, dejar \(x^4 - 16 = (x^2 + 4)(x^2 - 4)\)).
+                        </p>
+                    </div>
+
+                    <div class="card-theory p-5 shadow-sm">
+                        <h3 class="font-bold text-lg text-[#1269A8] mb-2">2. ¿Por qué \(\dfrac{x^n + y^n}{x - y}\) nunca es un Cociente Notable exacto?</h3>
+                        <p class="text-sm text-gray-800 leading-relaxed">
+                            Utiliza el <strong>Teorema del Residuo</strong> (evaluando el numerador \(P(x) = x^n + y^n\) cuando \(x = y\)) para demostrar por qué el residuo de dividir \(x^n + y^n\) entre \(x - y\) nunca es cero para números reales no nulos.
+                        </p>
+                    </div>
+
+                    <div class="card-theory p-5 shadow-sm">
+                        <h3 class="font-bold text-lg text-[#1269A8] mb-2">3. Factorización de sumas de cuadrados en \(\mathbb{R}\): \(x^2 + 4\) vs. \(x^4 + 4\)</h3>
+                        <p class="text-sm text-gray-800 leading-relaxed">
+                            En los números reales, el binomio \(x^2 + 4\) es primo (no puede factorizarse). Sin embargo, el binomio \(x^4 + 4\) sí es factorizable mediante el método de <em>Quita y Pon</em>. Analiza por qué el exponente \(4\) permite completar el término central \(4x^2\) como un cuadrado perfecto \((2x)^2\), mientras que en \(x^2 + 4\) el término \(4x\) no tiene raíz cuadrada exacta racional.
+                        </p>
+                    </div>
+
+                    <div class="card-theory p-5 shadow-sm">
+                        <h3 class="font-bold text-lg text-[#1269A8] mb-2">4. Aplicaciones en simplificación de límites y cálculo</h3>
+                        <p class="text-sm text-gray-800 leading-relaxed">
+                            Al evaluar expresiones racionales como \(\dfrac{x^3 - 27}{x - 3}\) cerca de \(x = 3\), ocurre una indeterminación \(\frac{0}{0}\). Explica cómo los cocientes notables o la factorización de cubos permiten eliminar la discontinuidad removible y hallar el valor real de la expresión.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- PESTAÑA 5: EVALUACIÓN FORMATIVA            -->
+            <!-- ========================================== -->
+            <section id="tab-evaluacion" class="hidden space-y-6">
+                <div class="border-b-2 border-[#1269A8] pb-2">
+                    <h2 class="text-2xl font-bold text-[#1269A8]">5. Evaluación Formativa</h2>
+                    <p class="text-sm text-[#54887D] font-semibold">Comprobación integral de productos notables, cocientes notables y factorización avanzada.</p>
+                </div>
+
+                <div class="space-y-4">
+                    <!-- Pregunta 1 -->
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Pregunta 1 — Productos Notables e Identidades</span>
+                        <p class="font-semibold text-gray-800 mt-1">
+                            Si \(x - y = 5\) y \(xy = 6\), halle el valor de \(x^2 + y^2\) y de \(x^3 - y^3\).
+                        </p>
+                        <button onclick="toggleSol('sol-ev1', this)" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-ev1" class="hidden solution-box mt-3 p-3 text-sm text-gray-800 space-y-1">
+                            <p>• <strong>Para \(x^2 + y^2\):</strong> \((x - y)^2 = x^2 - 2xy + y^2 \implies 5^2 = x^2 + y^2 - 2(6) \implies x^2 + y^2 = 25 + 12 = \mathbf{37}\).</p>
+                            <p>• <strong>Para \(x^3 - y^3\):</strong> \((x - y)^3 = x^3 - y^3 - 3xy(x - y) \implies 5^3 = x^3 - y^3 - 3(6)(5) \implies 125 = x^3 - y^3 - 90 \implies x^3 - y^3 = \mathbf{215}\).</p>
+                        </div>
+                    </div>
+
+                    <!-- Pregunta 2 -->
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Pregunta 2 — Cociente Notable</span>
+                        <p class="font-semibold text-gray-800 mt-1">
+                            En el cociente notable \(\dfrac{x^{30} - y^{45}}{x^2 - y^3}\), determine cuántos términos tiene su desarrollo y calcule el grado absoluto del sexto término (\(T_6\)).
+                        </p>
+                        <button onclick="toggleSol('sol-ev2', this)" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-ev2" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong><br>
+                            1. Número de términos: \(n = \frac{30}{2} = \frac{45}{3} = \mathbf{15\text{ términos}}\).<br>
+                            2. Cálculo de \(T_6\): \(T_6 = +(x^2)^{15-6}(y^3)^{6-1} = (x^2)^9(y^3)^5 = x^{18}y^{15}\).<br>
+                            3. Grado absoluto de \(T_6\): \(18 + 15 = \mathbf{33}\).
+                        </div>
+                    </div>
+
+                    <!-- Pregunta 3 -->
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Pregunta 3 — Factorización por Quita y Pon</span>
+                        <p class="font-semibold text-gray-800 mt-1">
+                            Factorice completamente \(4x^4 + 3x^2y^2 + y^4\).
+                        </p>
+                        <button onclick="toggleSol('sol-ev3', this)" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-ev3" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong><br>
+                            1. Para completar un TCP con \(4x^4\) y \(y^4\), necesitamos \(+4x^2y^2\). Sumamos y restamos \(x^2y^2\):<br>
+                            \((4x^4 + 4x^2y^2 + y^4) - x^2y^2 = (2x^2 + y^2)^2 - (xy)^2\).<br>
+                            2. Aplicamos diferencia de cuadrados: \(\mathbf{(2x^2 + xy + y^2)(2x^2 - xy + y^2)}\).
+                        </div>
+                    </div>
+
+                    <!-- Pregunta 4 -->
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Pregunta 4 — Factorización por Ruffini</span>
+                        <p class="font-semibold text-gray-800 mt-1">
+                            Factorice en tres factores lineales el polinomio \(P(x) = 2x^3 - 3x^2 - 11x + 6\).
+                        </p>
+                        <button onclick="toggleSol('sol-ev4', this)" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-ev4" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong><br>
+                            1. Evaluamos \(x = -2\): \(P(-2) = 2(-8) - 3(4) - 11(-2) + 6 = -16 - 12 + 22 + 6 = 0 \implies (x + 2)\) es factor.<br>
+                            2. Al dividir por Ruffini entre \((x + 2)\) resulta el cociente \(2x^2 - 7x + 3\).<br>
+                            3. Factorizando el trinomio: \(2x^2 - 7x + 3 = (2x - 1)(x - 3)\).<br>
+                            4. Resultado final: \(\mathbf{(x + 2)(2x - 1)(x - 3)}\).
+                        </div>
+                    </div>
+
+                    <!-- Pregunta 5 -->
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Pregunta 5 — Simplificación Racional Integradora</span>
+                        <p class="font-semibold text-gray-800 mt-1">
+                            Simplifique la expresión racional: \(R = \dfrac{x^3 + 27}{x^2 - 9} - \dfrac{x^2 - 3x + 9}{x - 3}\).
+                        </p>
+                        <button onclick="toggleSol('sol-ev5', this)" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-ev5" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución paso a paso:</strong><br>
+                            1. Factorizamos la primera fracción usando suma de cubos y diferencia de cuadrados:<br>
+                            \(\dfrac{(x + 3)(x^2 - 3x + 9)}{(x + 3)(x - 3)} = \dfrac{x^2 - 3x + 9}{x - 3}\) (para \(x \neq -3\)).<br>
+                            2. Restamos ambas fracciones homogéneas:<br>
+                            \(R = \dfrac{x^2 - 3x + 9}{x - 3} - \dfrac{x^2 - 3x + 9}{x - 3} = \mathbf{0}\) (para todo \(x \neq \pm 3\)).
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Pie de Página Institucional -->
+        <footer class="bg-[#F2F5E9] border-t-2 border-[#54887D] p-3 text-center text-xs text-[#1269A8] font-semibold">
+            Colegio Montano — Departamento de Matemática • Pizarra Digital Interactiva (Canvas Education)
+        </footer>
+    </div>
+
+    <!-- Lógica de Interactividad -->
+    <script>
+        // Cambio dinámico entre las pestañas de la pizarra
+        function switchTab(tabName) {
+            const tabs = ['teoria', 'ejemplos', 'ejercicios', 'reflexion', 'evaluacion'];
+            tabs.forEach(t => {
+                const section = document.getElementById('tab-' + t);
+                const btn = document.getElementById('btn-' + t);
+                if (t === tabName) {
+                    section.classList.remove('hidden');
+                    btn.className = "flex-1 py-3 px-3 text-center font-bold text-xs md:text-sm tab-active transition cursor-pointer";
+                } else {
+                    section.classList.add('hidden');
+                    btn.className = "flex-1 py-3 px-3 text-center font-bold text-xs md:text-sm tab-inactive transition cursor-pointer";
+                }
+            });
+        }
+
+        // Alternar visibilidad de las soluciones ocultas
+        function toggleSol(solId, btnElement) {
+            const solDiv = document.getElementById(solId);
+            if (solDiv.classList.contains('hidden')) {
+                solDiv.classList.remove('hidden');
+                btnElement.textContent = "Ocultar solución";
+            } else {
+                solDiv.classList.add('hidden');
+                btnElement.textContent = "Mostrar solución";
+            }
+        }
+
+        // Control de Pantalla Completa mediante Fullscreen API
+        function toggleFullScreen() {
+            const elem = document.documentElement;
+            const btn = document.getElementById('fullscreen-btn');
+            if (!document.fullscreenElement) {
+                if (elem.requestFullscreen) {
+                    elem.requestFullscreen().catch(() => {});
+                } else if (elem.webkitRequestFullscreen) {
+                    elem.webkitRequestFullscreen();
+                } else if (elem.msRequestFullscreen) {
+                    elem.msRequestFullscreen();
+                }
+                btn.innerHTML = "<span>[ ✕ Salir pantalla completa ]</span>";
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen().catch(() => {});
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                }
+                btn.innerHTML = "<span>[ ⛶ Pantalla completa ]</span>";
+            }
+        }
+
+        document.addEventListener('fullscreenchange', () => {
+            const btn = document.getElementById('fullscreen-btn');
+            if (!document.fullscreenElement) {
+                btn.innerHTML = "<span>[ ⛶ Pantalla completa ]</span>";
+            }
+        });
+    </script>
+</body>
+</html>

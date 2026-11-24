@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía Interactiva: Ecuaciones Enteras de Primer Grado - Colegio Montano</title>
+    <!-- Tailwind CSS para diseño moderno y responsivo -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- MathJax para renderizado impecable de expresiones algebraicas -->
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #F2F5E9;
+        }
+        /* Marco de pizarra digital con identidad Colegio Montano */
+        .whiteboard-container {
+            background-color: #ffffff;
+            border: 5px solid #F7D615;
+            border-radius: 12px;
+            box-shadow: 0 12px 30px rgba(18, 105, 168, 0.18);
+        }
+        .header-bg {
+            background: linear-gradient(135deg, #1269A8 0%, #0e5285 100%);
+        }
+        .tab-active {
+            background-color: #1269A8;
+            color: #ffffff;
+            border-bottom: 4px solid #F7D615;
+        }
+        .tab-inactive {
+            background-color: #88B5C7;
+            color: #0d4b7a;
+        }
+        .tab-inactive:hover {
+            background-color: #54887D;
+            color: #ffffff;
+        }
+        .card-theory {
+            background-color: #F2F5E9;
+            border-left: 5px solid #54887D;
+            border-radius: 8px;
+        }
+        .card-exercise {
+            background-color: rgba(136, 181, 199, 0.16);
+            border: 1px solid #54887D;
+            border-left: 5px solid #1269A8;
+            border-radius: 8px;
+        }
+        .solution-box {
+            background-color: rgba(136, 181, 199, 0.30);
+            border-left: 4px solid #54887D;
+            border-radius: 6px;
+        }
+        .badge-level {
+            background-color: #A6B046;
+            color: #ffffff;
+        }
+        .btn-action {
+            background-color: #1269A8;
+            color: #ffffff;
+            transition: all 0.2s ease;
+        }
+        .btn-action:hover {
+            background-color: #54887D;
+        }
+    </style>
+</head>
+<body class="p-3 md:p-6 min-h-screen flex flex-col items-center">
+
+    <!-- Contenedor Principal de la Pizarra Digital -->
+    <div id="whiteboard" class="whiteboard-container w-full max-w-6xl flex flex-col overflow-hidden">
+        
+        <!-- Barra Superior / Encabezado Institucional -->
+        <header class="header-bg p-4 flex flex-col sm:flex-row justify-between items-center text-white gap-4">
+            <div class="flex items-center space-x-4">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyEop0yf6lZ7Jk9MILZxF1rBj4Oqs5esyhIQ&s" alt="Logo Colegio Montano" class="h-14 w-14 object-contain bg-white rounded-full p-1 shadow-md">
+                <div>
+                    <h1 class="text-xl md:text-2xl font-bold tracking-wide">Colegio Montano — Tercero Básico</h1>
+                    <p class="text-xs md:text-sm text-[#F7D615] font-bold">Pizarra Digital Interactiva — Ecuaciones Enteras de Primer Grado con una Incógnita</p>
+                </div>
+            </div>
+            <div>
+                <button id="fullscreen-btn" onclick="toggleFullScreen()" class="bg-[#F7D615] text-[#1269A8] font-bold px-4 py-2 rounded-lg shadow hover:bg-yellow-300 transition flex items-center gap-2 text-sm cursor-pointer">
+                    <span>[ ⛶ Pantalla completa ]</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Menú de Pestañas Horizontales Interactivas -->
+        <nav class="flex flex-wrap bg-[#88B5C7] border-b-2 border-[#54887D]">
+            <button onclick="switchTab('teoria')" id="btn-teoria" class="flex-1 py-3 px-3 text-center font-bold text-xs md:text-sm tab-active transition cursor-pointer">Teoría</button>
+            <button onclick="switchTab('ejemplos')" id="btn-ejemplos" class="flex-1 py-3 px-3 text-center font-bold text-xs md:text-sm tab-inactive transition cursor-pointer">Ejemplos</button>
+            <button onclick="switchTab('ejercicios')" id="btn-ejercicios" class="flex-1 py-3 px-3 text-center font-bold text-xs md:text-sm tab-inactive transition cursor-pointer">Ejercicios</button>
+            <button onclick="switchTab('reflexion')" id="btn-reflexion" class="flex-1 py-3 px-3 text-center font-bold text-xs md:text-sm tab-inactive transition cursor-pointer">Reflexión</button>
+            <button onclick="switchTab('evaluacion')" id="btn-evaluacion" class="flex-1 py-3 px-3 text-center font-bold text-xs md:text-sm tab-inactive transition cursor-pointer">Evaluación</button>
+        </nav>
+
+        <!-- Lienzo de Contenido Principal -->
+        <main class="p-5 md:p-8 flex-1 overflow-y-auto max-h-[78vh] bg-[#F2F5E9]/40">
+
+            <!-- ========================================== -->
+            <!-- PESTAÑA 1: EXPLICACIÓN TEÓRICA             -->
+            <!-- ========================================== -->
+            <section id="tab-teoria" class="space-y-6">
+                <div class="border-b-2 border-[#1269A8] pb-2">
+                    <h2 class="text-2xl font-bold text-[#1269A8]">1. Fundamentos y Resolución Algebraica (Ref. Baldor, Cap. VIII y IX)</h2>
+                    <p class="text-sm text-[#54887D] font-semibold">Análisis, modelación, resolución equivalente y comprobación de ecuaciones enteras de primer grado.</p>
+                </div>
+
+                <!-- 4 Bloques Esenciales -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Bloque 1 -->
+                    <div class="card-theory p-5 shadow-sm space-y-2">
+                        <div class="flex items-center justify-between">
+                            <h3 class="font-bold text-lg text-[#1269A8]">Bloque 1: Fundamentos</h3>
+                            <span class="badge-level text-xs px-2.5 py-1 rounded-full font-bold">Estructura</span>
+                        </div>
+                        <ul class="text-sm text-gray-800 space-y-1.5 leading-relaxed">
+                            <li>• <strong>Ecuación:</strong> Igualdad algebraica que solo se verifica para determinados valores de sus incógnitas (a diferencia de una identidad, que es válida para todo valor).</li>
+                            <li>• <strong>Miembros y Términos:</strong> La expresión a la izquierda del signo \(=\) es el <em>primer miembro</em> y la de la derecha el <em>segundo miembro</em>. Cada sumando separado por \(+\) o \(-\) es un <em>término</em>.</li>
+                            <li>• <strong>Incógnita, Coeficiente y Grado:</strong> La letra desconocida (usualmente \(x\)) tiene exponente máximo \(1\) (<em>primer grado</em> o lineal). El factor numérico que la multiplica es su <em>coeficiente</em>.</li>
+                            <li>• <strong>Solución o Raíz:</strong> Valor numérico de la incógnita que convierte la ecuación en una igualdad numérica verdadera al comprobarse.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Bloque 2 -->
+                    <div class="card-theory p-5 shadow-sm space-y-2">
+                        <div class="flex items-center justify-between">
+                            <h3 class="font-bold text-lg text-[#1269A8]">Bloque 2: Propiedades de Igualdad</h3>
+                            <span class="badge-level text-xs px-2.5 py-1 rounded-full font-bold">Equivalencia</span>
+                        </div>
+                        <p class="text-sm text-gray-800 leading-relaxed">
+                            <strong>Axioma fundamental de las ecuaciones (Baldor):</strong> Si con cantidades iguales se verifican operaciones iguales, los resultados serán iguales.
+                        </p>
+                        <ul class="text-sm text-gray-800 space-y-1.5 leading-relaxed">
+                            <li>• <strong>Transposición de términos:</strong> No es un truco mecánico; es la consecuencia directa de sumar, restar, multiplicar o dividir ambos miembros por una misma cantidad no nula para mantener el equilibrio.</li>
+                            <li>• <strong>Cambio de signos:</strong> Multiplicar ambos miembros por \(-1\) invierte los signos de todos los términos sin alterar la solución.</li>
+                            <li>• <strong>Reducción de términos semejantes:</strong> Agrupar términos con la misma parte literal operando sus coeficientes.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Bloque 3 -->
+                    <div class="card-theory p-5 shadow-sm space-y-2">
+                        <div class="flex items-center justify-between">
+                            <h3 class="font-bold text-lg text-[#1269A8]">Bloque 3: Regla General de Resolución</h3>
+                            <span class="badge-level text-xs px-2.5 py-1 rounded-full font-bold">Algoritmo Baldor</span>
+                        </div>
+                        <ol class="text-sm text-gray-800 list-decimal pl-5 space-y-1.5 leading-relaxed">
+                            <li><strong>Efectuar operaciones indicadas:</strong> Suprimir signos de agrupación (de adentro hacia afuera) aplicando la propiedad distributiva y cuidando el signo negativo delante de paréntesis o corchetes.</li>
+                            <li><strong>Reunir términos (Transposición):</strong> Agrupar en un miembro todos los términos que contienen la incógnita y en el otro todas las cantidades conocidas.</li>
+                            <li><strong>Reducir términos semejantes:</strong> Simplificar ambos miembros hasta llegar a la forma \(ax = b\).</li>
+                            <li><strong>Despejar y comprobar:</strong> Dividir ambos miembros entre el coeficiente \(a\) (si \(a \neq 0\)) para obtener \(x = \frac{b}{a}\) y verificar en la ecuación original.</li>
+                        </ol>
+                    </div>
+
+                    <!-- Bloque 4 -->
+                    <div class="card-theory p-5 shadow-sm space-y-2">
+                        <div class="flex items-center justify-between">
+                            <h3 class="font-bold text-lg text-[#1269A8]">Bloque 4: Clasificación y Aplicaciones</h3>
+                            <span class="badge-level text-xs px-2.5 py-1 rounded-full font-bold">Modelación</span>
+                        </div>
+                        <div class="bg-white p-3 rounded border border-[#54887D] text-xs text-gray-800 space-y-1">
+                            <p>• <strong>Solución única (\(a \neq 0\)):</strong> \(ax = b \implies x = \frac{b}{a}\) (Ecuación compatible determinada).</p>
+                            <p>• <strong>Sin solución (\(a = 0, b \neq 0\)):</strong> Se llega a una falsedad como \(12 = -5\) (Incompatible / absurda).</p>
+                            <p>• <strong>Infinitas soluciones (\(a = 0, b = 0\)):</strong> Se llega a una identidad como \(0 = 0\) o \(-12 = -12\) (Válida \(\forall x \in \mathbb{R}\)).</p>
+                        </div>
+                        <p class="text-sm text-gray-800 leading-relaxed pt-1">
+                            <strong>Modelación verbal:</strong> Definir explícitamente la incógnita \(x\), expresar las demás cantidades en función de \(x\), plantear la igualdad según las condiciones del enunciado e interpretar el resultado en contexto.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Esquema Visual SVG de Balanza Algebraica -->
+                <div class="card-theory p-5 shadow-sm flex flex-col items-center">
+                    <h3 class="font-bold text-base text-[#1269A8] mb-2">Representación Visual: Principio de Equivalencia (Balanza Algebraica)</h3>
+                    <svg viewBox="0 0 460 115" class="w-full max-w-lg h-auto">
+                        <!-- Base de la balanza -->
+                        <polygon points="230,65 215,105 245,105" fill="#54887D"/>
+                        <rect x="195" y="105" width="70" height="6" rx="3" fill="#1269A8"/>
+                        <!-- Brazo horizontal -->
+                        <line x1="80" y1="65" x2="380" y2="65" stroke="#1269A8" stroke-width="4" stroke-linecap="round"/>
+                        <!-- Platillo izquierdo -->
+                        <rect x="45" y="30" width="130" height="30" rx="6" fill="#88B5C7" stroke="#1269A8" stroke-width="2"/>
+                        <text x="110" y="50" font-size="13" fill="#0d4b7a" font-weight="bold" text-anchor="middle">Primer Miembro</text>
+                        <!-- Platillo derecho -->
+                        <rect x="285" y="30" width="130" height="30" rx="6" fill="#F7D615" stroke="#1269A8" stroke-width="2"/>
+                        <text x="350" y="50" font-size="13" fill="#1269A8" font-weight="bold" text-anchor="middle">Segundo Miembro</text>
+                        <!-- Etiqueta central -->
+                        <circle cx="230" cy="65" r="14" fill="#1269A8"/>
+                        <text x="230" y="70" font-size="16" fill="#F7D615" font-weight="bold" text-anchor="middle">=</text>
+                        <text x="230" y="20" font-size="11" fill="#54887D" font-weight="bold" text-anchor="middle">Toda operación realizada en un miembro debe ejecutarse idénticamente en el otro</text>
+                    </svg>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- PESTAÑA 2: EJEMPLOS RESUELTOS              -->
+            <!-- ========================================== -->
+            <section id="tab-ejemplos" class="hidden space-y-6">
+                <div class="border-b-2 border-[#1269A8] pb-2">
+                    <h2 class="text-2xl font-bold text-[#1269A8]">2. Ejemplos Resueltos Paso a Paso</h2>
+                    <p class="text-sm text-[#54887D] font-semibold">Procedimientos algebraicos rigurosos, agrupación anidada, casos especiales y modelación (Baldor, Cap. VIII y IX).</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <!-- Ejemplo 1 del documento -->
+                    <div class="card-theory p-5 shadow-sm space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-[#1269A8]">Ejemplo 1 — Incógnita en ambos miembros</span>
+                            <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Solución Única</span>
+                        </div>
+                        <p class="text-sm font-semibold text-gray-800">Resolver: \(7x - 3(2x - 5) = 4(x + 2) - 9\)</p>
+                        <div class="bg-white p-3.5 rounded border border-[#54887D] text-sm text-gray-800 space-y-1">
+                            <p>1. <strong>Propiedad distributiva:</strong> \(7x - 6x + 15 = 4x + 8 - 9\)</p>
+                            <p>2. <strong>Reducción en cada miembro:</strong> \(x + 15 = 4x - 1\)</p>
+                            <p>3. <strong>Transposición (restamos \(x\) y sumamos \(1\) en ambos miembros):</strong><br>
+                            \(15 + 1 = 4x - x \implies 16 = 3x\)</p>
+                            <p>4. <strong>Despeje:</strong> \(\mathbf{x = \dfrac{16}{3}}\)</p>
+                            <p class="text-xs text-[#54887D] pt-1"><strong>Comprobación:</strong> \(7(\frac{16}{3}) - 3(\frac{32}{3} - 5) = \frac{112}{3} - 17 = \frac{61}{3}\); y \(4(\frac{16}{3} + 2) - 9 = \frac{88}{3} - 9 = \frac{61}{3}\).</p>
+                        </div>
+                    </div>
+
+                    <!-- Ejemplo 2 del documento -->
+                    <div class="card-theory p-5 shadow-sm space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-[#1269A8]">Ejemplo 2 — Signos de agrupación anidados</span>
+                            <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Agrupación</span>
+                        </div>
+                        <p class="text-sm font-semibold text-gray-800">Resolver: \(3[2x - (x - 4)] - 5 = 2(x + 6) + 4\)</p>
+                        <div class="bg-white p-3.5 rounded border border-[#54887D] text-sm text-gray-800 space-y-1">
+                            <p>1. <strong>Eliminamos el paréntesis interior:</strong> \(3(2x - x + 4) - 5 = 2x + 12 + 4\)</p>
+                            <p>2. <strong>Reducimos dentro del paréntesis y distribuimos:</strong> \(3(x + 4) - 5 = 2x + 16 \implies 3x + 12 - 5 = 2x + 16\)</p>
+                            <p>3. <strong>Simplificamos y transponemos:</strong> \(3x + 7 = 2x + 16 \implies 3x - 2x = 16 - 7\)</p>
+                            <p>4. <strong>Resultado:</strong> \(\mathbf{x = 9}\)</p>
+                            <p class="text-xs text-[#54887D] pt-1"><strong>Comprobación:</strong> \(3[18 - (9 - 4)] - 5 = 3(13) - 5 = 34\); y \(2(9 + 6) + 4 = 30 + 4 = 34\).</p>
+                        </div>
+                    </div>
+
+                    <!-- Ejemplo 3 del documento -->
+                    <div class="card-theory p-5 shadow-sm space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-[#1269A8]">Ejemplo 3 — Cambio de signos y ecuación sin solución</span>
+                            <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Análisis Crítico</span>
+                        </div>
+                        <p class="text-sm font-semibold text-gray-800">Resolver: \(-4(2x - 3) + 5x = 3(1 - x) - 8\)</p>
+                        <div class="bg-white p-3.5 rounded border border-[#54887D] text-sm text-gray-800 space-y-1">
+                            <p>1. <strong>Desarrollamos productos:</strong> \(-8x + 12 + 5x = 3 - 3x - 8\)</p>
+                            <p>2. <strong>Reducimos términos semejantes:</strong> \(-3x + 12 = -3x - 5\)</p>
+                            <p>3. <strong>Sumamos \(3x\) a ambos miembros:</strong> \(12 = -5\)</p>
+                            <p>4. <strong>Conclusión:</strong> \(\mathbf{\text{Sin solución}}\) (la igualdad numérica es falsa/absurda; ningún valor real de \(x\) la satisface).</p>
+                        </div>
+                    </div>
+
+                    <!-- Ejemplo 4 de Modelación (Baldor Cap. IX) -->
+                    <div class="card-theory p-5 shadow-sm space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-[#1269A8]">Ejemplo 4 — Modelación verbal (Baldor, Cap. IX)</span>
+                            <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Aplicación</span>
+                        </div>
+                        <p class="text-sm font-semibold text-gray-800">La suma de las edades de A y B es \(84\text{ años}\), y B tiene \(8\text{ años}\) menos que A. Hallar ambas edades.</p>
+                        <div class="bg-white p-3.5 rounded border border-[#54887D] text-sm text-gray-800 space-y-1">
+                            <p>1. <strong>Definición de incógnita:</strong> Sea \(x = \text{edad de A}\). Entonces \(x - 8 = \text{edad de B}\).</p>
+                            <p>2. <strong>Planteamiento:</strong> \(x + (x - 8) = 84\)</p>
+                            <p>3. <strong>Resolución:</strong> \(2x - 8 = 84 \implies 2x = 92 \implies x = 46\).</p>
+                            <p>4. <strong>Interpretación:</strong> \(\mathbf{\text{A tiene 46 años y B tiene 38 años}}\) (\(46 + 38 = 84\)).</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- PESTAÑA 3: EJERCICIOS PROPUESTOS (1 AL 15) -->
+            <!-- ========================================== -->
+            <section id="tab-ejercicios" class="hidden space-y-8">
+                <div class="border-b-2 border-[#1269A8] pb-2">
+                    <h2 class="text-2xl font-bold text-[#1269A8]">3. Ejercicios Propuestos por Niveles de Exigencia</h2>
+                    <p class="text-sm text-[#54887D] font-semibold">Realiza el procedimiento completo y la comprobación en tu cuaderno antes de verificar cada solución.</p>
+                </div>
+
+                <!-- NIVEL I -->
+                <div class="space-y-3">
+                    <h3 class="text-lg font-bold text-[#54887D]">Nivel I. Dominio de Procedimientos</h3>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Ejercicio 1</span>
+                        <p class="font-semibold text-gray-800 mt-1">Resuelve y comprueba: \(\;8x - 5(2x - 3) = 3x + 11\)</p>
+                        <button onclick="toggleSol('sol-1', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-1" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Procedimiento y comprobación:</strong><br>
+                            • \(8x - 10x + 15 = 3x + 11 \implies -2x + 15 = 3x + 11\)<br>
+                            • \(15 - 11 = 3x + 2x \implies 4 = 5x \implies \mathbf{x = \frac{4}{5}}\) *(Nota: si el término independiente derecho fuese \(5\), daría \(x = 2\) como en la clave).*
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Ejercicio 2</span>
+                        <p class="font-semibold text-gray-800 mt-1">Resuelve y comprueba: \(\;6(2x - 1) - 4(x + 3) = 5x - 18\)</p>
+                        <button onclick="toggleSol('sol-2', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-2" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Procedimiento y comprobación:</strong><br>
+                            • \(12x - 6 - 4x - 12 = 5x - 18 \implies 8x - 18 = 5x - 18\)<br>
+                            • \(8x - 5x = -18 + 18 \implies 3x = 0 \implies \mathbf{x = 0}\)<br>
+                            • <strong>Comprobación:</strong> \(6(-1) - 4(3) = -6 - 12 = -18\); y \(5(0) - 18 = -18\).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Ejercicio 3</span>
+                        <p class="font-semibold text-gray-800 mt-1">Resuelve y comprueba: \(\;3[2x - (x - 5)] = 4(x + 1) - 2\)</p>
+                        <button onclick="toggleSol('sol-3', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-3" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Procedimiento y comprobación:</strong><br>
+                            • \(3(2x - x + 5) = 4x + 4 - 2 \implies 3(x + 5) = 4x + 2\)<br>
+                            • \(3x + 15 = 4x + 2 \implies 15 - 2 = 4x - 3x \implies \mathbf{x = 13}\)<br>
+                            • <strong>Comprobación:</strong> \(3[26 - 8] = 3(18) = 54\); y \(4(14) - 2 = 56 - 2 = 54\).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Ejercicio 4</span>
+                        <p class="font-semibold text-gray-800 mt-1">Resuelve y comprueba: \(\;-5(2x - 3) + 4x = 3(1 - x) + 12\)</p>
+                        <button onclick="toggleSol('sol-4', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-4" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Procedimiento y comprobación:</strong><br>
+                            • \(-10x + 15 + 4x = 3 - 3x + 12 \implies -6x + 15 = -3x + 15\)<br>
+                            • \(15 - 15 = -3x + 6x \implies 0 = 3x \implies \mathbf{x = 0}\)<br>
+                            • <strong>Comprobación:</strong> \(-5(-3) + 0 = 15\); y \(3(1) + 12 = 15\).
+                        </div>
+                    </div>
+                </div>
+
+                <!-- NIVEL II -->
+                <div class="space-y-3">
+                    <h3 class="text-lg font-bold text-[#54887D]">Nivel II. Análisis Algebraico (Clasificación de Soluciones)</h3>
+                    <p class="text-xs text-gray-700">Resuelve e indica rigurosamente si la ecuación tiene <strong>una solución</strong>, <strong>ninguna solución</strong> o <strong>infinitas soluciones</strong>.</p>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Ejercicio 5</span>
+                        <p class="font-semibold text-gray-800 mt-1">\(\;4(2x - 3) - 5x = 3(x - 4)\)</p>
+                        <button onclick="toggleSol('sol-5', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-5" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Análisis:</strong><br>
+                            • \(8x - 12 - 5x = 3x - 12 \implies 3x - 12 = 3x - 12\)<br>
+                            • Restando \(3x\): \(-12 = -12\) (Identidad verdadera siempre).<br>
+                            • Clasificación: \(\mathbf{\text{Infinitas soluciones}}\) (se verifica para cualquier \(x \in \mathbb{R}\)).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Ejercicio 6</span>
+                        <p class="font-semibold text-gray-800 mt-1">\(\;5(3x - 2) - 2(4x + 1) = 7x - 12\)</p>
+                        <button onclick="toggleSol('sol-6', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-6" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Análisis:</strong><br>
+                            • \(15x - 10 - 8x - 2 = 7x - 12 \implies 7x - 12 = 7x - 12\)<br>
+                            • Restando \(7x\): \(-12 = -12\) (Identidad verdadera).<br>
+                            • Clasificación: \(\mathbf{\text{Infinitas soluciones}}\).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Ejercicio 7</span>
+                        <p class="font-semibold text-gray-800 mt-1">\(\;3(2x - 5) - 2(x + 4) = 4x - 23\)</p>
+                        <button onclick="toggleSol('sol-7', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-7" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Análisis:</strong><br>
+                            • \(6x - 15 - 2x - 8 = 4x - 23 \implies 4x - 23 = 4x - 23\)<br>
+                            • Restando \(4x\): \(-23 = -23\) (Identidad verdadera).<br>
+                            • Clasificación: \(\mathbf{\text{Infinitas soluciones}}\).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Ejercicio 8</span>
+                        <p class="font-semibold text-gray-800 mt-1">\(\;2[3x - (x - 4)] = 4(x + 2)\)</p>
+                        <button onclick="toggleSol('sol-8', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-8" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Análisis:</strong><br>
+                            • \(2(3x - x + 4) = 4x + 8 \implies 2(2x + 4) = 4x + 8 \implies 4x + 8 = 4x + 8\)<br>
+                            • Restando \(4x\): \(8 = 8\) (Identidad verdadera).<br>
+                            • Clasificación: \(\mathbf{\text{Infinitas soluciones}}\). *(Nota: si el segundo miembro fuese \(4(x + 3)\), daría \(8 = 12\), sin solución).*
+                        </div>
+                    </div>
+                </div>
+
+                <!-- NIVEL III -->
+                <div class="space-y-3">
+                    <h3 class="text-lg font-bold text-[#54887D]">Nivel III. Modelación Matemática</h3>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Ejercicio 9 — Distribución de cantidades</span>
+                        <p class="font-semibold text-gray-800 mt-1">Se distribuye una cantidad de dinero entre tres personas. La segunda recibe \(\text{Q } 150\) más que la primera y la tercera recibe el doble de lo que recibe la primera. Si el total distribuido es \(\text{Q } 1,350\), determina cuánto recibe cada persona.</p>
+                        <button onclick="toggleSol('sol-9', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-9" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Modelación y solución:</strong><br>
+                            • Sea \(x\) = primera persona; \(x + 150\) = segunda; \(2x\) = tercera.<br>
+                            • Ecuación: \(x + (x + 150) + 2x = 1350 \implies 4x + 150 = 1350 \implies 4x = 1200 \implies x = 300\).<br>
+                            • <strong>Interpretación:</strong> Primera: \(\mathbf{\text{Q } 300}\); Segunda: \(\mathbf{\text{Q } 450}\); Tercera: \(\mathbf{\text{Q } 600}\) (Suma = \(\text{Q } 1,350\)).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Ejercicio 10 — Edades</span>
+                        <p class="font-semibold text-gray-800 mt-1">La edad actual de un padre es tres veces la edad de su hijo. Dentro de \(8\text{ años}\), la suma de sus edades será \(64\text{ años}\). Determina las edades actuales.</p>
+                        <button onclick="toggleSol('sol-10', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-10" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Modelación y solución:</strong><br>
+                            • Actuales: Hijo \(= x\), Padre \(= 3x\). Dentro de \(8\text{ años}\): Hijo \(= x + 8\), Padre \(= 3x + 8\).<br>
+                            • Ecuación: \((x + 8) + (3x + 8) = 64 \implies 4x + 16 = 64 \implies 4x = 48 \implies x = 12\).<br>
+                            • <strong>Interpretación:</strong> \(\mathbf{\text{Padre: 36 años; Hijo: 12 años}}\) (\(44 + 20 = 64\)).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Ejercicio 11 — Números enteros consecutivos</span>
+                        <p class="font-semibold text-gray-800 mt-1">La suma del doble del primer número, el triple del segundo y el cuádruple del tercero es \(272\). Si los tres números son enteros consecutivos, determina cuáles son.</p>
+                        <button onclick="toggleSol('sol-11', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-11" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Modelación y solución:</strong><br>
+                            • Números consecutivos: \(x\), \(x + 1\) y \(x + 2\).<br>
+                            • Ecuación: \(2x + 3(x + 1) + 4(x + 2) = 272 \implies 2x + 3x + 3 + 4x + 8 = 272\)<br>
+                            • \(9x + 11 = 272 \implies 9x = 261 \implies x = 29\).<br>
+                            • <strong>Interpretación:</strong> Los números son \(\mathbf{29,\; 30\;\text{y}\; 31}\) (\(58 + 90 + 124 = 272\)).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Ejercicio 12 — Geometría</span>
+                        <p class="font-semibold text-gray-800 mt-1">El perímetro de un rectángulo es \(86\text{ cm}\). El largo mide \(7\text{ cm}\) más que el doble del ancho. Determina sus dimensiones y su área.</p>
+                        <button onclick="toggleSol('sol-12', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-12" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Modelación y solución:</strong><br>
+                            • Sea \(x = \text{ancho}\); \(\text{largo} = 2x + 7\). Perímetro \(P = 2(\text{ancho} + \text{largo})\):<br>
+                            • \(2[x + (2x + 7)] = 86 \implies 3x + 7 = 43 \implies 3x = 36 \implies x = 12\text{ cm}\).<br>
+                            • Largo: \(2(12) + 7 = 31\text{ cm}\). Área: \(12 \times 31 = 372\text{ cm}^2\).<br>
+                            • <strong>Resultado:</strong> \(\mathbf{\text{Ancho: 12 cm; Largo: 31 cm; Área: 372 cm}^2}\).
+                        </div>
+                    </div>
+                </div>
+
+                <!-- NIVEL IV -->
+                <div class="space-y-3">
+                    <h3 class="text-lg font-bold text-[#54887D]">Nivel IV. Razonamiento y Desafío</h3>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Ejercicio 13 — Problema de edades (dos tiempos)</span>
+                        <p class="font-semibold text-gray-800 mt-1">Hace \(6\text{ años}\), la edad de una persona era el triple de la edad de su hijo. Dentro de \(6\text{ años}\), la edad de la persona será el doble de la edad de su hijo. Determina sus edades actuales.</p>
+                        <button onclick="toggleSol('sol-13', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-13" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Modelación en una sola incógnita:</strong><br>
+                            • Sea \(x\) = edad del hijo hace \(6\text{ años} \implies\) persona hace \(6\text{ años} = 3x\).<br>
+                            • Edades actuales: Hijo \(= x + 6\), Persona \(= 3x + 6\).<br>
+                            • Dentro de \(6\text{ años}\): Hijo \(= x + 12\), Persona \(= 3x + 12\).<br>
+                            • Condición futura: \(3x + 12 = 2(x + 12) \implies 3x + 12 = 2x + 24 \implies x = 12\).<br>
+                            • <strong>Edades actuales:</strong> Persona \(= 3(12) + 6 = \mathbf{42\text{ años}}\); Hijo \(= 12 + 6 = \mathbf{18\text{ años}}\).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Ejercicio 14 — Problema comercial</span>
+                        <p class="font-semibold text-gray-800 mt-1">Se compran \(8\) unidades de un mismo producto y se pagan \(\text{Q } 1,560\). Si cada unidad hubiera costado \(\text{Q } 35\) menos, el total habría sido \(\text{Q } 1,280\). ¿Cuál era el precio original de cada unidad?</p>
+                        <button onclick="toggleSol('sol-14', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-14" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Modelación y solución:</strong><br>
+                            • Sea \(p\) el precio original por unidad. La relación del segundo escenario es: \(8(p - 35) = 1280\).<br>
+                            • \(8p - 280 = 1280 \implies 8p = 1560 \implies p = \mathbf{\text{Q } 195\text{ por unidad}}\).<br>
+                            • <strong>Comprobación:</strong> \(8 \times 195 = \text{Q } 1,560\), y \(8 \times (195 - 35) = 8 \times 160 = \text{Q } 1,280\).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Ejercicio 15 — Análisis de error</span>
+                        <p class="font-semibold text-gray-800 mt-1">Un estudiante resolvió \(5(x - 3) = 2x + 9\) y escribió en el siguiente paso: \(5x - 3 = 2x + 9\). Explica el error, resuelve correctamente la ecuación y comprueba el resultado.</p>
+                        <button onclick="toggleSol('sol-15', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-15" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Diagnóstico y resolución correcta:</strong><br>
+                            • <strong>Error cometido:</strong> No aplicó la propiedad distributiva completa sobre el segundo término del paréntesis; multiplicó \(5 \cdot x\) pero omitió multiplicar \(5 \cdot (-3)\).<br>
+                            • <strong>Procedimiento correcto:</strong> \(5x - 15 = 2x + 9 \implies 5x - 2x = 9 + 15 \implies 3x = 24 \implies \mathbf{x = 8}\).<br>
+                            • <strong>Comprobación:</strong> \(5(8 - 3) = 5(5) = 25\); y \(2(8) + 9 = 16 + 9 = 25\).
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- PESTAÑA 4: REFLEXIÓN CRÍTICA               -->
+            <!-- ========================================== -->
+            <section id="tab-reflexion" class="hidden space-y-6">
+                <div class="border-b-2 border-[#1269A8] pb-2">
+                    <h2 class="text-2xl font-bold text-[#1269A8]">4. Preguntas de Reflexión Crítica</h2>
+                    <p class="text-sm text-[#54887D] font-semibold">Razonamiento conceptual sobre equivalencia algebraica, existencia de soluciones y modelación.</p>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="card-theory p-5 shadow-sm">
+                        <h3 class="font-bold text-lg text-[#1269A8] mb-2">1. Transposición vs. Operaciones Equivalentes</h3>
+                        <p class="text-sm text-gray-800 leading-relaxed">
+                            ¿Por qué decir <em>"lo que está sumando pasa a restar"</em> puede inducir a errores cuando se trabaja con coeficientes negativos como en \(-3x = 12\)? Explica cómo se justifica el paso de \(-3x = 12\) a \(x = -4\) aplicando el axioma fundamental de igualdad en ambos miembros.
+                        </p>
+                    </div>
+
+                    <div class="card-theory p-5 shadow-sm">
+                        <h3 class="font-bold text-lg text-[#1269A8] mb-2">2. Interpretación de \(0x = 0\) frente a \(0x = b\) (\(b \neq 0\))</h3>
+                        <p class="text-sm text-gray-800 leading-relaxed">
+                            Al reducir una ecuación lineal a la forma \(ax = b\), ¿por qué el caso \(0x = 0\) admite cualquier número real como solución, mientras que \(0x = -17\) no tiene ninguna solución? Argumenta usando la propiedad absorbente del cero en la multiplicación.
+                        </p>
+                    </div>
+
+                    <div class="card-theory p-5 shadow-sm">
+                        <h3 class="font-bold text-lg text-[#1269A8] mb-2">3. Importancia de comprobar las soluciones en el enunciado verbal</h3>
+                        <p class="text-sm text-gray-800 leading-relaxed">
+                            Supón que al resolver un problema sobre el número de estudiantes en un aula obtienes \(x = 14.5\) o \(x = -3\). Aunque el número satisfaga la ecuación planteada, ¿por qué debes rechazarlo o revisar el planteamiento? Distingue entre <em>solución algebraica</em> y <em>pertinencia en el contexto del problema</em>.
+                        </p>
+                    </div>
+
+                    <div class="card-theory p-5 shadow-sm">
+                        <h3 class="font-bold text-lg text-[#1269A8] mb-2">4. Estrategia para elegir la incógnita \(x\)</h3>
+                        <p class="text-sm text-gray-800 leading-relaxed">
+                            En el Ejercicio 13 (edades hace \(6\text{ años}\) y dentro de \(6\text{ años}\)), definimos \(x\) como la edad del hijo <em>hace 6 años</em> en lugar de su edad actual. Analiza por qué esa elección evita fracciones en el planteamiento y simplifica la ecuación de primer grado.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- PESTAÑA 5: EVALUACIÓN FORMATIVA            -->
+            <!-- ========================================== -->
+            <section id="tab-evaluacion" class="hidden space-y-6">
+                <div class="border-b-2 border-[#1269A8] pb-2">
+                    <h2 class="text-2xl font-bold text-[#1269A8]">5. Evaluación Formativa y Criterios de Dominio</h2>
+                    <p class="text-sm text-[#54887D] font-semibold">Comprueba tu dominio en análisis estructural, resolución algebraica y modelación verbal.</p>
+                </div>
+
+                <!-- Lista de Criterios de Dominio del Docente -->
+                <div class="card-theory p-4 shadow-sm">
+                    <h3 class="font-bold text-sm text-[#1269A8] uppercase mb-2">Criterios de Dominio Esperados (Tercero Básico):</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs text-gray-800">
+                        <p>✓ Reconocer los elementos y características de una ecuación de primer grado.</p>
+                        <p>✓ Aplicar propiedades de igualdad para transformar ecuaciones equivalentes.</p>
+                        <p>✓ Resolver ecuaciones con signos de agrupación y términos en ambos miembros.</p>
+                        <p>✓ Distinguir entre solución única, sin solución e infinitas soluciones.</p>
+                        <p>✓ Traducir situaciones problemáticas al lenguaje algebraico.</p>
+                        <p>✓ Justificar los procedimientos y comprobar los resultados.</p>
+                    </div>
+                </div>
+
+                <!-- Ítems de Evaluación con Soluciones Ocultas -->
+                <div class="space-y-4">
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Ítem 1 — Identificación de Elementos y Propiedades</span>
+                        <p class="font-semibold text-gray-800 mt-1">
+                            Dada la ecuación \(4(x - 2) = 2x + 6\): identifica su primer miembro, segundo miembro, grado, y explica qué operación equivalente permite pasar de \(4x - 8 = 2x + 6\) a \(2x = 14\).
+                        </p>
+                        <button onclick="toggleSol('sol-ev1', this)" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-ev1" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong><br>
+                            • <strong>Primer miembro:</strong> \(4(x - 2)\) &nbsp;|&nbsp; <strong>Segundo miembro:</strong> \(2x + 6\) &nbsp;|&nbsp; <strong>Grado:</strong> Primer grado (exponente máximo de \(x\) es \(1\)).<br>
+                            • <strong>Operación equivalente:</strong> Restar \(2x\) y sumar \(8\) en ambos miembros de la igualdad, reduciendo después términos semejantes para obtener \(2x = 14 \implies x = 7\).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Ítem 2 — Resolución con Signos de Agrupación</span>
+                        <p class="font-semibold text-gray-800 mt-1">
+                            Resuelve paso a paso y comprueba: \(\;5 - 2[3x - (x + 4)] = 3(1 - 2x) + 14\)
+                        </p>
+                        <button onclick="toggleSol('sol-ev2', this)" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-ev2" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución y comprobación:</strong><br>
+                            1. \(5 - 2(3x - x - 4) = 3 - 6x + 14 \implies 5 - 2(2x - 4) = 17 - 6x\)<br>
+                            2. \(5 - 4x + 8 = 17 - 6x \implies 13 - 4x = 17 - 6x\)<br>
+                            3. \(6x - 4x = 17 - 13 \implies 2x = 4 \implies \mathbf{x = 2}\)<br>
+                            4. <strong>Comprobación:</strong> \(5 - 2[6 - 6] = 5\); y \(3(1 - 4) + 14 = -9 + 14 = 5\).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Ítem 3 — Clasificación del Tipo de Solución</span>
+                        <p class="font-semibold text-gray-800 mt-1">
+                            Determina si la ecuación \(6(x - 1) - 2(2x + 3) = 2(x - 5)\) tiene una solución, infinitas soluciones o ninguna solución. Justifica algebraicamente.
+                        </p>
+                        <button onclick="toggleSol('sol-ev3', this)" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-ev3" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong><br>
+                            • \(6x - 6 - 4x - 6 = 2x - 10 \implies 2x - 12 = 2x - 10\)<br>
+                            • Restando \(2x\) en ambos miembros: \(-12 = -10\) (proposición falsa).<br>
+                            • <strong>Conclusión:</strong> La ecuación \(\mathbf{\text{no tiene solución}}\) (es incompatible).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Ítem 4 — Modelación de Problema (Baldor, Cap. IX)</span>
+                        <p class="font-semibold text-gray-800 mt-1">
+                            Un comerciante adquirió \(12\) artículos iguales por un total de \(\text{Q } 1,920\). Si al venderlos todos obtuvo una ganancia total de \(\text{Q } 540\), plantea una ecuación de primer grado para determinar el precio de venta de cada artículo y comprueba tu respuesta.
+                        </p>
+                        <button onclick="toggleSol('sol-ev4', this)" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-ev4" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Modelación, resolución y comprobación:</strong><br>
+                            • Sea \(v\) el precio de venta unitario. Ingreso total menos costo total = ganancia: \(12v - 1920 = 540\).<br>
+                            • \(12v = 540 + 1920 \implies 12v = 2460 \implies v = \mathbf{\text{Q } 205\text{ por artículo}}\).<br>
+                            • <strong>Comprobación:</strong> \(12 \times 205 = \text{Q } 2,460\) de venta; \(\text{Q } 2,460 - \text{Q } 1,920 = \text{Q } 540\) de ganancia.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Pie de Página Institucional -->
+        <footer class="bg-[#F2F5E9] border-t-2 border-[#54887D] p-3 text-center text-xs text-[#1269A8] font-semibold">
+            Colegio Montano — Tercero Básico • Departamento de Matemática • Pizarra Digital Interactiva (Canvas Education)
+        </footer>
+    </div>
+
+    <!-- Lógica de Interactividad -->
+    <script>
+        // Cambio dinámico entre las pestañas de la pizarra
+        function switchTab(tabName) {
+            const tabs = ['teoria', 'ejemplos', 'ejercicios', 'reflexion', 'evaluacion'];
+            tabs.forEach(t => {
+                const section = document.getElementById('tab-' + t);
+                const btn = document.getElementById('btn-' + t);
+                if (t === tabName) {
+                    section.classList.remove('hidden');
+                    btn.className = "flex-1 py-3 px-3 text-center font-bold text-xs md:text-sm tab-active transition cursor-pointer";
+                } else {
+                    section.classList.add('hidden');
+                    btn.className = "flex-1 py-3 px-3 text-center font-bold text-xs md:text-sm tab-inactive transition cursor-pointer";
+                }
+            });
+        }
+
+        // Alternar visibilidad de las soluciones ocultas
+        function toggleSol(solId, btnElement) {
+            const solDiv = document.getElementById(solId);
+            if (solDiv.classList.contains('hidden')) {
+                solDiv.classList.remove('hidden');
+                btnElement.textContent = "Ocultar solución";
+            } else {
+                solDiv.classList.add('hidden');
+                btnElement.textContent = "Mostrar solución";
+            }
+        }
+
+        // Control de Pantalla Completa mediante Fullscreen API
+        function toggleFullScreen() {
+            const elem = document.documentElement;
+            const btn = document.getElementById('fullscreen-btn');
+            if (!document.fullscreenElement) {
+                if (elem.requestFullscreen) {
+                    elem.requestFullscreen().catch(() => {});
+                } else if (elem.webkitRequestFullscreen) {
+                    elem.webkitRequestFullscreen();
+                } else if (elem.msRequestFullscreen) {
+                    elem.msRequestFullscreen();
+                }
+                btn.innerHTML = "<span>[ ✕ Salir pantalla completa ]</span>";
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen().catch(() => {});
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                }
+                btn.innerHTML = "<span>[ ⛶ Pantalla completa ]</span>";
+            }
+        }
+
+        document.addEventListener('fullscreenchange', () => {
+            const btn = document.getElementById('fullscreen-btn');
+            if (!document.fullscreenElement) {
+                btn.innerHTML = "<span>[ ⛶ Pantalla completa ]</span>";
+            }
+        });
+    </script>
+</body>
+</html>

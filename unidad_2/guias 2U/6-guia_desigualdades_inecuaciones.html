@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía Interactiva: Desigualdades y Aplicaciones - Colegio Montano</title>
+    <!-- Tailwind CSS para diseño moderno y responsivo -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- MathJax para renderizado impecable de expresiones algebraicas -->
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #F2F5E9;
+        }
+        /* Marco de pizarra digital con identidad Colegio Montano */
+        .whiteboard-container {
+            background-color: #ffffff;
+            border: 5px solid #F7D615;
+            border-radius: 12px;
+            box-shadow: 0 12px 30px rgba(18, 105, 168, 0.18);
+        }
+        .header-bg {
+            background: linear-gradient(135deg, #1269A8 0%, #0e5285 100%);
+        }
+        .tab-active {
+            background-color: #1269A8;
+            color: #ffffff;
+            border-bottom: 4px solid #F7D615;
+        }
+        .tab-inactive {
+            background-color: #88B5C7;
+            color: #0d4b7a;
+        }
+        .tab-inactive:hover {
+            background-color: #54887D;
+            color: #ffffff;
+        }
+        .card-theory {
+            background-color: #F2F5E9;
+            border-left: 5px solid #54887D;
+            border-radius: 8px;
+        }
+        .card-exercise {
+            background-color: rgba(136, 181, 199, 0.16);
+            border: 1px solid #54887D;
+            border-left: 5px solid #1269A8;
+            border-radius: 8px;
+        }
+        .solution-box {
+            background-color: rgba(136, 181, 199, 0.30);
+            border-left: 4px solid #54887D;
+            border-radius: 6px;
+        }
+        .badge-level {
+            background-color: #A6B046;
+            color: #ffffff;
+        }
+        .btn-action {
+            background-color: #1269A8;
+            color: #ffffff;
+            transition: all 0.2s ease;
+        }
+        .btn-action:hover {
+            background-color: #54887D;
+        }
+    </style>
+</head>
+<body class="p-3 md:p-6 min-h-screen flex flex-col items-center">
+
+    <!-- Contenedor Principal de la Pizarra Digital -->
+    <div id="whiteboard" class="whiteboard-container w-full max-w-6xl flex flex-col overflow-hidden">
+        
+        <!-- Barra Superior / Encabezado Institucional -->
+        <header class="header-bg p-4 flex flex-col sm:flex-row justify-between items-center text-white gap-4">
+            <div class="flex items-center space-x-4">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyEop0yf6lZ7Jk9MILZxF1rBj4Oqs5esyhIQ&s" alt="Logo Colegio Montano" class="h-14 w-14 object-contain bg-white rounded-full p-1 shadow-md">
+                <div>
+                    <h1 class="text-xl md:text-2xl font-bold tracking-wide">Colegio Montano — Tercero Básico • Unidad II</h1>
+                    <p class="text-xs md:text-sm text-[#F7D615] font-bold">Pizarra Digital Interactiva — Tema 6: Desigualdades y Aplicaciones (Ref. Baldor, Cap. XIX)</p>
+                </div>
+            </div>
+            <div>
+                <button id="fullscreen-btn" onclick="toggleFullScreen()" class="bg-[#F7D615] text-[#1269A8] font-bold px-4 py-2 rounded-lg shadow hover:bg-yellow-300 transition flex items-center gap-2 text-sm cursor-pointer">
+                    <span>[ ⛶ Pantalla completa ]</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Menú de Pestañas Horizontales Interactivas -->
+        <nav class="flex flex-wrap bg-[#88B5C7] border-b-2 border-[#54887D]">
+            <button onclick="switchTab('teoria')" id="btn-teoria" class="flex-1 py-3 px-3 text-center font-bold text-xs md:text-sm tab-active transition cursor-pointer">Teoría</button>
+            <button onclick="switchTab('ejemplos')" id="btn-ejemplos" class="flex-1 py-3 px-3 text-center font-bold text-xs md:text-sm tab-inactive transition cursor-pointer">Ejemplos</button>
+            <button onclick="switchTab('ejercicios')" id="btn-ejercicios" class="flex-1 py-3 px-3 text-center font-bold text-xs md:text-sm tab-inactive transition cursor-pointer">Ejercicios</button>
+            <button onclick="switchTab('reflexion')" id="btn-reflexion" class="flex-1 py-3 px-3 text-center font-bold text-xs md:text-sm tab-inactive transition cursor-pointer">Reflexión</button>
+            <button onclick="switchTab('evaluacion')" id="btn-evaluacion" class="flex-1 py-3 px-3 text-center font-bold text-xs md:text-sm tab-inactive transition cursor-pointer">Evaluación</button>
+        </nav>
+
+        <!-- Lienzo de Contenido Principal -->
+        <main class="p-5 md:p-8 flex-1 overflow-y-auto max-h-[78vh] bg-[#F2F5E9]/40">
+
+            <!-- ========================================== -->
+            <!-- PESTAÑA 1: FUNDAMENTACIÓN TEÓRICA          -->
+            <!-- ========================================== -->
+            <section id="tab-teoria" class="space-y-6">
+                <div class="border-b-2 border-[#1269A8] pb-2">
+                    <h2 class="text-2xl font-bold text-[#1269A8]">Parte I. Fundamentación Teórica (Baldor, Cap. XIX, Apartados 244–253)</h2>
+                    <p class="text-sm text-[#54887D] font-semibold">Conceptos estructurales, las 12 propiedades de las desigualdades, inecuaciones lineales e inecuaciones simultáneas.</p>
+                </div>
+
+                <!-- Secciones 1 y 3: Concepto de Desigualdad e Inecuación -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="card-theory p-5 shadow-sm space-y-2">
+                        <div class="flex items-center justify-between">
+                            <h3 class="font-bold text-lg text-[#1269A8]">Sección 1: Concepto de Desigualdad</h3>
+                            <span class="badge-level text-xs px-2.5 py-1 rounded-full font-bold">Apartados 244–246</span>
+                        </div>
+                        <ul class="text-sm text-gray-800 space-y-1.5 leading-relaxed">
+                            <li>• <strong>Desigualdad:</strong> Expresión que indica que una cantidad es mayor o menor que otra. Ejemplos: \(8 > 5\) o \(3x + 4 < 2x + 9\).</li>
+                            <li>• <strong>Signos de comparación:</strong> \(>\) (<em>mayor que</em>) y \(<\) (<em>menor que</em>). La abertura siempre apunta a la cantidad mayor.</li>
+                            <li>• <strong>Miembros y Términos:</strong> La expresión a la izquierda del signo es el <em>primer miembro</em> y la de la derecha el <em>segundo miembro</em>. Los <em>términos</em> son las cantidades separadas por \(+\) o \(-\).</li>
+                            <li>• <strong>Sentido de las desigualdades:</strong> Dos desigualdades tienen el <em>mismo sentido</em> si usan el mismo signo (\(a > b\) y \(c > d\)), y <em>sentido contrario</em> si usan signos opuestos (\(a > b\) y \(c < d\)).</li>
+                        </ul>
+                    </div>
+
+                    <div class="card-theory p-5 shadow-sm space-y-2">
+                        <div class="flex items-center justify-between">
+                            <h3 class="font-bold text-lg text-[#1269A8]">Sección 3 y 4: Inecuación y Principios</h3>
+                            <span class="badge-level text-xs px-2.5 py-1 rounded-full font-bold">Apartados 248–250</span>
+                        </div>
+                        <ul class="text-sm text-gray-800 space-y-1.5 leading-relaxed">
+                            <li>• <strong>Inecuación:</strong> Desigualdad en la que hay una o más cantidades desconocidas (incógnitas) y que solo se verifica para determinados valores de las incógnitas.</li>
+                            <li>• <strong>Ecuación vs. Inecuación:</strong> Una ecuación lineal tiene generalmente una raíz puntual; una inecuación admite un conjunto infinito de valores acotados por un <strong>límite inferior</strong> o <strong>límite superior</strong> (terminología de Baldor).</li>
+                            <li>• <strong>Principios de resolución:</strong> Se fundamentan en las propiedades de las desigualdades: supresión de denominadores y paréntesis, transposición de términos, reducción de semejantes y despeje cuidando el signo del coeficiente de \(x\).</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Sección 2: Las 12 Propiedades de Baldor -->
+                <div class="card-theory p-5 shadow-sm space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h3 class="font-bold text-lg text-[#1269A8]">Sección 2: Las 12 Propiedades de las Desigualdades (Baldor, Apartado 247)</h3>
+                        <span class="badge-level text-xs px-2.5 py-1 rounded-full font-bold">Reglas de Sentido</span>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 text-xs text-gray-800">
+                        <div class="bg-white p-3 rounded border border-[#54887D]">
+                            <p class="font-bold text-[#1269A8]">1. Sumar o restar una misma cantidad</p>
+                            <p class="mt-1"><strong>Conserva el sentido:</strong> Si \(a > b\), entonces \(a \pm c > b \pm c\). (Permite la transposición de términos cambiando su signo).</p>
+                        </div>
+                        <div class="bg-white p-3 rounded border border-[#54887D]">
+                            <p class="font-bold text-[#1269A8]">2. Multiplicar o dividir por positivo (\(c > 0\))</p>
+                            <p class="mt-1"><strong>Conserva el sentido:</strong> Si \(a > b\) y \(c > 0\), entonces \(ac > bc\) y \(\frac{a}{c} > \frac{b}{c}\).</p>
+                        </div>
+                        <div class="bg-white p-3 rounded border-2 border-red-600">
+                            <p class="font-bold text-red-700">3. Multiplicar o dividir por negativo (\(c < 0\))</p>
+                            <p class="mt-1"><strong>¡CAMBIA EL SENTIDO!</strong> Si \(a > b\) y \(c < 0\), entonces \(ac < bc\) y \(\frac{a}{c} < \frac{b}{c}\). Ej: \(10 > 6 \xrightarrow{\div (-2)} -5 < -3\).</p>
+                        </div>
+                        <div class="bg-white p-3 rounded border-2 border-red-600">
+                            <p class="font-bold text-red-700">4. Cambiar el orden de los miembros</p>
+                            <p class="mt-1"><strong>¡CAMBIA EL SENTIDO!</strong> Si \(a > b\), entonces \(b < a\). Ej: \(8 > x \iff x < 8\).</p>
+                        </div>
+                        <div class="bg-white p-3 rounded border-2 border-red-600">
+                            <p class="font-bold text-red-700">5. Invertir los miembros (mismo signo)</p>
+                            <p class="mt-1"><strong>¡CAMBIA EL SENTIDO!</strong> Si \(a > b > 0\), entonces \(\frac{1}{a} < \frac{1}{b}\). Ej: \(5 > 2 \implies \frac{1}{5} < \frac{1}{2}\).</p>
+                        </div>
+                        <div class="bg-white p-3 rounded border border-[#54887D]">
+                            <p class="font-bold text-[#1269A8]">6. Elevar miembros positivos a potencia positiva</p>
+                            <p class="mt-1"><strong>Conserva el sentido:</strong> Si \(a > b > 0\) y \(n > 0\), entonces \(a^n > b^n\).</p>
+                        </div>
+                        <div class="bg-white p-3 rounded border border-[#54887D]">
+                            <p class="font-bold text-[#1269A8]">7. Elevar a potencia impar positiva</p>
+                            <p class="mt-1"><strong>Conserva el sentido</strong> para cualesquiera signos: Si \(a > b\), entonces \(a^{2k+1} > b^{2k+1}\). Ej: \(-2 > -3 \implies -8 > -27\).</p>
+                        </div>
+                        <div class="bg-white p-3 rounded border-2 border-red-600">
+                            <p class="font-bold text-red-700">8. Elevar dos negativos a potencia par positiva</p>
+                            <p class="mt-1"><strong>¡CAMBIA EL SENTIDO!</strong> Si \(0 > a > b\), entonces \(a^{2k} < b^{2k}\). Ej: \(-2 > -5 \implies 4 < 25\).</p>
+                        </div>
+                        <div class="bg-white p-3 rounded border border-[#54887D]">
+                            <p class="font-bold text-[#1269A8]">9. Potencia par con signos diferentes</p>
+                            <p class="mt-1"><strong>Resultado variable:</strong> Depende de los valores absolutos. Ej: \(3 > -5 \implies 9 < 25\), pero \(4 > -2 \implies 16 > 4\).</p>
+                        </div>
+                        <div class="bg-white p-3 rounded border border-[#54887D]">
+                            <p class="font-bold text-[#1269A8]">10. Extraer raíz positiva de miembros positivos</p>
+                            <p class="mt-1"><strong>Conserva el sentido:</strong> Si \(a > b > 0\), entonces \(\sqrt[n]{a} > \sqrt[n]{b}\).</p>
+                        </div>
+                        <div class="bg-white p-3 rounded border border-[#54887D]">
+                            <p class="font-bold text-[#1269A8]">11. Sumar o multiplicar del mismo sentido</p>
+                            <p class="mt-1"><strong>Conserva el sentido:</strong> Si \(a > b\) y \(c > d\), entonces \(a+c > b+d\) (y \(ac > bd\) si son positivos).</p>
+                        </div>
+                        <div class="bg-white p-3 rounded border border-[#54887D]">
+                            <p class="font-bold text-[#1269A8]">12. Restar o dividir del mismo sentido</p>
+                            <p class="mt-1"><strong>No necesariamente conserva el sentido:</strong> Ej: \(10 > 8\) y \(7 > 2\), al restar da \(3 < 6\) (cambió).</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recurso Visual Complementario SVG: Recta Numérica e Inecuaciones Simultáneas -->
+                <div class="card-theory p-5 shadow-sm flex flex-col items-center">
+                    <h3 class="font-bold text-base text-[#1269A8] mb-2">Recurso Complementario: Interpretación de Límites en la Recta Numérica (\(4 < x < 5\))</h3>
+                    <svg viewBox="0 0 540 105" class="w-full max-w-2xl h-auto">
+                        <!-- Línea base de la recta -->
+                        <line x1="30" y1="60" x2="510" y2="60" stroke="#1269A8" stroke-width="2.5"/>
+                        <polygon points="30,60 38,55 38,65" fill="#1269A8"/>
+                        <polygon points="510,60 502,55 502,65" fill="#1269A8"/>
+                        <!-- Marcas numéricas -->
+                        <line x1="110" y1="53" x2="110" y2="67" stroke="#1269A8" stroke-width="2"/>
+                        <text x="110" y="83" font-size="11" fill="#1269A8" font-weight="bold" text-anchor="middle">2</text>
+                        <line x1="190" y1="53" x2="190" y2="67" stroke="#1269A8" stroke-width="2"/>
+                        <text x="190" y="83" font-size="11" fill="#1269A8" font-weight="bold" text-anchor="middle">3</text>
+                        <line x1="270" y1="53" x2="270" y2="67" stroke="#1269A8" stroke-width="2"/>
+                        <text x="270" y="83" font-size="12" fill="#54887D" font-weight="bold" text-anchor="middle">4 (Lím. inf.)</text>
+                        <line x1="370" y1="53" x2="370" y2="67" stroke="#1269A8" stroke-width="2"/>
+                        <text x="370" y="83" font-size="12" fill="#54887D" font-weight="bold" text-anchor="middle">5 (Lím. sup.)</text>
+                        <line x1="450" y1="53" x2="450" y2="67" stroke="#1269A8" stroke-width="2"/>
+                        <text x="450" y="83" font-size="11" fill="#1269A8" font-weight="bold" text-anchor="middle">6</text>
+                        <!-- Intervalo solución común -->
+                        <line x1="270" y1="60" x2="370" y2="60" stroke="#A6B046" stroke-width="6"/>
+                        <circle cx="270" cy="60" r="6" fill="#ffffff" stroke="#54887D" stroke-width="3"/>
+                        <circle cx="370" cy="60" r="6" fill="#ffffff" stroke="#54887D" stroke-width="3"/>
+                        <!-- Etiquetas superiores -->
+                        <text x="320" y="25" font-size="11" fill="#1269A8" font-weight="bold" text-anchor="middle">Soluciones comunes: 4 &lt; x &lt; 5</text>
+                        <text x="320" y="42" font-size="10" fill="#54887D" font-weight="bold" text-anchor="middle">(Círculos abiertos: los extremos 4 y 5 no se incluyen)</text>
+                    </svg>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- PESTAÑA 2: EJEMPLOS RESUELTOS (SEC. 5–9)   -->
+            <!-- ========================================== -->
+            <section id="tab-ejemplos" class="hidden space-y-6">
+                <div class="border-b-2 border-[#1269A8] pb-2">
+                    <h2 class="text-2xl font-bold text-[#1269A8]">Parte II. Ejemplos Guiados por Secciones (Secciones 5 a 9)</h2>
+                    <p class="text-sm text-[#54887D] font-semibold">Desarrollo paso a paso siguiendo la secuencia exacta del Capítulo XIX de Baldor.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <!-- Sección 5 -->
+                    <div class="card-theory p-5 shadow-sm space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-[#1269A8]">Sección 5 — Inecuación de primer grado</span>
+                            <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Lineal Directa</span>
+                        </div>
+                        <p class="text-sm font-semibold text-gray-800">Resolver: \(2x - 3 > x + 5\)</p>
+                        <div class="bg-white p-3.5 rounded border border-[#54887D] text-sm text-gray-800 space-y-1">
+                            <p>1. <strong>Transponemos términos:</strong> \(2x - x > 5 + 3\)</p>
+                            <p>2. <strong>Reducimos términos semejantes:</strong> \(\mathbf{x > 8}\)</p>
+                            <p>3. <strong>Interpretación (Baldor):</strong> El límite inferior de \(x\) es \(8\); la solución está formada por todos los números mayores que \(8\).</p>
+                            <p class="text-xs text-[#54887D]"><strong>Comprobación (con \(x = 9 > 8\)):</strong> \(2(9) - 3 = 15\) y \(9 + 5 = 14\); \(15 > 14\) (Verdadero).</p>
+                        </div>
+                    </div>
+
+                    <!-- Sección 6 -->
+                    <div class="card-theory p-5 shadow-sm space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-[#1269A8]">Sección 6 — Inecuación con denominadores</span>
+                            <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">M.C.M. Positivo</span>
+                        </div>
+                        <p class="text-sm font-semibold text-gray-800">Resolver: \(\dfrac{7 - x}{2} > \dfrac{5x - 6}{3}\)</p>
+                        <div class="bg-white p-3.5 rounded border border-[#54887D] text-sm text-gray-800 space-y-1">
+                            <p>1. <strong>Multiplicamos ambos miembros por el \(\text{mcm}(2, 3) = 6 > 0\)</strong> (conserva el sentido): \(3(7 - x) > 2(5x - 6)\)</p>
+                            <p>2. <strong>Desarrollamos y transponemos:</strong> \(21 - 3x > 10x - 12 \implies -3x - 10x > -12 - 21\)</p>
+                            <p>3. <strong>Reducimos y dividimos entre \(-13 < 0\) (cambia el sentido):</strong><br>
+                            \(-13x > -33 \implies \mathbf{x < \dfrac{33}{13}}\) (o \(x < 2\frac{7}{13}\)).</p>
+                        </div>
+                    </div>
+
+                    <!-- Sección 7 -->
+                    <div class="card-theory p-5 shadow-sm space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-[#1269A8]">Sección 7 — Paréntesis y productos algebraicos</span>
+                            <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Productos Notables</span>
+                        </div>
+                        <p class="text-sm font-semibold text-gray-800">Resolver: \((x + 3)(x - 1) < (x - 1)^2 + 3x\)</p>
+                        <div class="bg-white p-3.5 rounded border border-[#54887D] text-sm text-gray-800 space-y-1">
+                            <p>1. <strong>Efectuamos productos:</strong> \(x^2 + 2x - 3 < x^2 - 2x + 1 + 3x\)</p>
+                            <p>2. <strong>Cancelamos \(x^2\) en ambos miembros y reducimos:</strong><br>
+                            \(2x - 3 < x + 1\)</p>
+                            <p>3. <strong>Transponemos:</strong> \(2x - x < 1 + 3 \implies \mathbf{x < 4}\).</p>
+                            <p class="text-xs text-[#54887D]"><strong>Comprobación (con \(x = 0 < 4\)):</strong> \((3)(-1) = -3\) y \((-1)^2 + 0 = 1\); \(-3 < 1\) (Verdadero).</p>
+                        </div>
+                    </div>
+
+                    <!-- Sección 8 -->
+                    <div class="card-theory p-5 shadow-sm space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-[#1269A8]">Sección 8 — Inecuaciones simultáneas</span>
+                            <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Apartado 252</span>
+                        </div>
+                        <p class="text-sm font-semibold text-gray-800">Hallar el límite de las soluciones comunes: \(\begin{cases} 5x - 10 > 3x - 2 \\ 3x + 1 < 2x + 6 \end{cases}\)</p>
+                        <div class="bg-white p-3.5 rounded border border-[#54887D] text-sm text-gray-800 space-y-1">
+                            <p>1. <strong>Primera inecuación:</strong> \(5x - 3x > -2 + 10 \implies 2x > 8 \implies x > 4\).</p>
+                            <p>2. <strong>Segunda inecuación:</strong> \(3x - 2x < 6 - 1 \implies x < 5\).</p>
+                            <p>3. <strong>Intersección (soluciones comunes):</strong> \(x\) debe ser mayor que \(4\) y menor que \(5\): \(\mathbf{4 < x < 5}\).</p>
+                        </div>
+                    </div>
+
+                    <!-- Sección 9 -->
+                    <div class="card-theory p-5 shadow-sm md:col-span-2 space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-[#1269A8]">Sección 9 — Aplicación de inecuaciones (Baldor, Apartado 253)</span>
+                            <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Modelación</span>
+                        </div>
+                        <p class="text-sm font-semibold text-gray-800">El triplo de un número entero disminuido en \(5\) es mayor que \(28\), y el doble del mismo número aumentado en \(3\) es menor que \(31\). ¿Qué valores enteros puede tomar el número?</p>
+                        <div class="bg-white p-3.5 rounded border border-[#54887D] text-sm text-gray-800 space-y-1">
+                            <p>1. <strong>Incógnita:</strong> Sea \(x\) el número entero buscado.</p>
+                            <p>2. <strong>Planteamiento simultáneo:</strong> Condición 1: \(3x - 5 > 28 \implies 3x > 33 \implies x > 11\). Condición 2: \(2x + 3 < 31 \implies 2x < 28 \implies x < 14\).</p>
+                            <p>3. <strong>Interpretación y comprobación:</strong> \(11 < x < 14\). Como \(x\) es entero, las únicas soluciones son \(\mathbf{x = 12\;\text{y}\; x = 13}\). (Para \(12\): \(3(12)-5 = 31 > 28\) y \(2(12)+3 = 27 < 31\)).</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- PESTAÑA 3: ACTIVIDADES PRÁCTICAS (BLOQUES) -->
+            <!-- ========================================== -->
+            <section id="tab-ejercicios" class="hidden space-y-8">
+                <div class="border-b-2 border-[#1269A8] pb-2">
+                    <h2 class="text-2xl font-bold text-[#1269A8]">Parte II (Cont.). Actividades Prácticas Progresivas</h2>
+                    <p class="text-sm text-[#54887D] font-semibold">Organizadas en los cuatro bloques de exigencia (Bloques A, B, C y D — Baldor Ejercicios 164 y 165).</p>
+                </div>
+
+                <!-- BLOQUE A -->
+                <div class="space-y-3">
+                    <h3 class="text-lg font-bold text-[#54887D]">Bloque A. Reconocimiento de Desigualdades y Propiedades (Dificultad: Media)</h3>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Ejercicio A1</span>
+                        <p class="font-semibold text-gray-800 mt-1">Parte de la desigualdad verdadera \(-6 > -10\) y aplica sucesivamente: a) suma \(4\) a ambos miembros; b) multiplica ambos miembros por \(-2\); c) divide ambos miembros entre \(4\). Indica en cada paso si el signo se conserva o cambia.</p>
+                        <button onclick="toggleSol('sol-a1', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-a1" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Procedimiento:</strong><br>
+                            • <strong>a)</strong> Sumar \(4\) (Prop. 1, conserva sentido): \(-6 + 4 > -10 + 4 \implies \mathbf{-2 > -6}\).<br>
+                            • <strong>b)</strong> Multiplicar por \(-2 < 0\) (Prop. 3, <strong>cambia el sentido</strong>): \((-2)(-2) < (-6)(-2) \implies \mathbf{4 < 12}\).<br>
+                            • <strong>c)</strong> Dividir entre \(4 > 0\) (Prop. 2, conserva sentido): \(\frac{4}{4} < \frac{12}{4} \implies \mathbf{1 < 3}\).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Ejercicio A2</span>
+                        <p class="font-semibold text-gray-800 mt-1">Determina el signo correcto (\(>\) o \(<\)) tras aplicar la operación indicada en cada caso: a) Si \(x > 5\), entonces \(-3x \;\underline{\quad}\; -15\); &nbsp; b) Si \(a > b > 0\), entonces \(\dfrac{1}{a} \;\underline{\quad}\; \dfrac{1}{b}\); &nbsp; c) Si \(-3 > -7\), entonces \((-3)^2 \;\underline{\quad}\; (-7)^2\).</p>
+                        <button onclick="toggleSol('sol-a2', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-a2" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Respuestas justificadas:</strong><br>
+                            • <strong>a) \(<\)</strong> (Propiedad 3: al multiplicar por \(-3 < 0\) se invierte el signo: \(-3x < -15\)).<br>
+                            • <strong>b) \(<\)</strong> (Propiedad 5: al invertir miembros positivos cambia el sentido: \(\frac{1}{a} < \frac{1}{b}\)).<br>
+                            • <strong>c) \(<\)</strong> (Propiedad 8: dos miembros negativos elevados a potencia par invierten el signo: \(9 < 49\)).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Ejercicio A3</span>
+                        <p class="font-semibold text-gray-800 mt-1">Dadas las desigualdades \(12 > 7\) y \(9 > 2\), verifica numéricamente la Propiedad 11 (suma miembro a miembro) y la Propiedad 12 (resta miembro a miembro).</p>
+                        <button onclick="toggleSol('sol-a3', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-a3" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Verificación:</strong><br>
+                            • <strong>Suma (Propiedad 11):</strong> \(12 + 9 > 7 + 2 \implies \mathbf{21 > 9}\) (Conserva el sentido).<br>
+                            • <strong>Resta (Propiedad 12):</strong> \(12 - 9 = 3\) y \(7 - 2 = 5\). Como \(3 < 5\), el sentido <strong>cambió</strong> al restar desigualdades del mismo sentido.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BLOQUE B -->
+                <div class="space-y-3">
+                    <h3 class="text-lg font-bold text-[#54887D]">Bloque B. Resolución de Inecuaciones de Primer Grado (Dificultad: Media-Alta)</h3>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Ejercicio B1 (Baldor Ej. 164)</span>
+                        <p class="font-semibold text-gray-800 mt-1">Resuelve y comprueba: \(\;3x - 14 < 7x - 2\)</p>
+                        <button onclick="toggleSol('sol-b1', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-b1" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Procedimiento completo:</strong><br>
+                            • \(3x - 7x < -2 + 14 \implies -4x < 12\)<br>
+                            • Dividimos entre \(-4 < 0\) (cambia el sentido): \(\mathbf{x > -3}\) (Límite inferior: \(-3\)).<br>
+                            • <strong>Comprobación (con \(x = 0 > -3\)):</strong> \(-14 < -2\) (Verdadero).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Ejercicio B2 (Baldor Ej. 164)</span>
+                        <p class="font-semibold text-gray-800 mt-1">Resuelve y comprueba: \(\;5 - 4x > 17 + 2x\)</p>
+                        <button onclick="toggleSol('sol-b2', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-b2" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Procedimiento completo:</strong><br>
+                            • \(-4x - 2x > 17 - 5 \implies -6x > 12\)<br>
+                            • Dividimos entre \(-6 < 0\) (cambia el sentido): \(\mathbf{x < -2}\) (Límite superior: \(-2\)).<br>
+                            • <strong>Comprobación (con \(x = -3 < -2\)):</strong> \(5 - 4(-3) = 17\) y \(17 + 2(-3) = 11\); \(17 > 11\) (Verdadero).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Ejercicio B3</span>
+                        <p class="font-semibold text-gray-800 mt-1">Resuelve y comprueba: \(\;7x - 3(2x - 5) < 4(x + 2) - 11\)</p>
+                        <button onclick="toggleSol('sol-b3', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-b3" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Procedimiento completo:</strong><br>
+                            • \(7x - 6x + 15 < 4x + 8 - 11 \implies x + 15 < 4x - 3\)<br>
+                            • \(x - 4x < -3 - 15 \implies -3x < -18 \implies \mathbf{x > 6}\).<br>
+                            • <strong>Comprobación (con \(x = 7 > 6\)):</strong> \(49 - 3(9) = 22\) y \(4(9) - 11 = 25\); \(22 < 25\) (Verdadero).
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BLOQUE C -->
+                <div class="space-y-3">
+                    <h3 class="text-lg font-bold text-[#54887D]">Bloque C. Denominadores, Productos Algebraicos y Simultáneas (Dificultad: Alta)</h3>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Ejercicio C1 — Denominadores (Baldor Ej. 164)</span>
+                        <p class="font-semibold text-gray-800 mt-1">Resuelve y comprueba: \(\;\dfrac{2x - 5}{3} - \dfrac{x + 2}{4} > \dfrac{5x - 1}{6} - 2\)</p>
+                        <button onclick="toggleSol('sol-c1', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-c1" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Procedimiento completo:</strong><br>
+                            1. Multiplicamos ambos miembros por el \(\text{mcm}(3, 4, 6) = 12 > 0\):<br>
+                            \(4(2x - 5) - 3(x + 2) > 2(5x - 1) - 24\)<br>
+                            2. Desarrollamos: \(8x - 20 - 3x - 6 > 10x - 2 - 24 \implies 5x - 26 > 10x - 26\)<br>
+                            3. Transponemos: \(5x - 10x > -26 + 26 \implies -5x > 0 \implies \mathbf{x < 0}\).<br>
+                            4. <strong>Comprobación (con \(x = -1 < 0\)):</strong> \(\frac{-7}{3} - \frac{1}{4} = -\frac{31}{12} \approx -2.58\) y \(\frac{-6}{6} - 2 = -3\); \(-2.58 > -3\) (Verdadero).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Ejercicio C2 — Productos algebraicos (Baldor Ej. 164)</span>
+                        <p class="font-semibold text-gray-800 mt-1">Resuelve y comprueba: \(\;(2x - 3)^2 + 4x^2 > (2x + 1)(4x - 5) - 2\)</p>
+                        <button onclick="toggleSol('sol-c2', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-c2" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Procedimiento completo:</strong><br>
+                            1. Desarrollamos los productos: \((4x^2 - 12x + 9) + 4x^2 > (8x^2 - 6x - 5) - 2\)<br>
+                            2. Reducimos: \(8x^2 - 12x + 9 > 8x^2 - 6x - 7\)<br>
+                            3. Cancelamos \(8x^2\) y transponemos: \(-12x + 6x > -7 - 9 \implies -6x > -16\)<br>
+                            4. Dividimos entre \(-6 < 0\): \(x < \frac{-16}{-6} \implies \mathbf{x < \dfrac{8}{3}}\).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Ejercicio C3 — Inecuaciones simultáneas (Baldor Ej. 165)</span>
+                        <p class="font-semibold text-gray-800 mt-1">Halla el límite de las soluciones comunes de: \(\;\begin{cases} \dfrac{x}{2} + \dfrac{x}{3} > 5 \\ 3x - 2 < 2x + 7 \end{cases}\)</p>
+                        <button onclick="toggleSol('sol-c3', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-c3" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Procedimiento completo:</strong><br>
+                            1. <strong>Primera condición (multiplicando por \(6\)):</strong> \(3x + 2x > 30 \implies 5x > 30 \implies x > 6\).<br>
+                            2. <strong>Segunda condición:</strong> \(3x - 2x < 7 + 2 \implies x < 9\).<br>
+                            3. <strong>Soluciones comunes:</strong> \(\mathbf{6 < x < 9}\) (Límite inferior: \(6\); límite superior: \(9\)).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Ejercicio C4 — Inecuación doble / simultánea</span>
+                        <p class="font-semibold text-gray-800 mt-1">Determina los valores de \(x\) que satisfacen simultáneamente: \(\;-7 < 3x + 2 < 14\)</p>
+                        <button onclick="toggleSol('sol-c4', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-c4" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Procedimiento completo:</strong><br>
+                            1. Restamos \(2\) en los tres miembros: \(-7 - 2 < 3x < 14 - 2 \implies -9 < 3x < 12\).<br>
+                            2. Dividimos entre \(3 > 0\): \(\mathbf{-3 < x < 4}\).
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BLOQUE D -->
+                <div class="space-y-3">
+                    <h3 class="text-lg font-bold text-[#54887D]">Bloque D. Problemas de Aplicación y Razonamiento (Dificultad: Alta)</h3>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Ejercicio D1 — Cantidades enteras consecutivas</span>
+                        <p class="font-semibold text-gray-800 mt-1">La suma de tres números enteros consecutivos es mayor que \(84\) y menor que \(93\). Determina cuáles pueden ser los tres números consecutivos.</p>
+                        <button onclick="toggleSol('sol-d1', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-d1" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Modelación en 5 pasos:</strong><br>
+                            1. <strong>Incógnita:</strong> Sea \(x\) el primer entero; los siguientes son \(x + 1\) y \(x + 2\). Su suma es \(3x + 3\).<br>
+                            2. <strong>Desigualdad simultánea:</strong> \(84 < 3x + 3 < 93\).<br>
+                            3. <strong>Resolución:</strong> Restamos \(3\): \(81 < 3x < 90 \implies \mathbf{27 < x < 30}\).<br>
+                            4. <strong>Interpretación:</strong> Los enteros posibles para \(x\) son \(28\) y \(29\). Por tanto, las ternas son \(\mathbf{(28, 29, 30)}\) (suma \(87\)) o \(\mathbf{(29, 30, 31)}\) (suma \(90\)).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Ejercicio D2 — Problema de edades</span>
+                        <p class="font-semibold text-gray-800 mt-1">La edad de un padre es el triple de la edad de su hijo. Hace \(5\text{ años}\) la suma de sus edades era menor que \(50\text{ años}\), y dentro de \(4\text{ años}\) la suma de sus edades será mayor que \(76\text{ años}\). ¿Qué edades enteras pueden tener actualmente?</p>
+                        <button onclick="toggleSol('sol-d2', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-d2" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Modelación en 5 pasos:</strong><br>
+                            1. <strong>Incógnita:</strong> Sea \(x\) = edad actual del hijo; \(3x\) = edad actual del padre.<br>
+                            2. <strong>Condición 1 (hace \(5\text{ años}\)):</strong> \((x - 5) + (3x - 5) < 50 \implies 4x - 10 < 50 \implies 4x < 60 \implies x < 15\).<br>
+                            3. <strong>Condición 2 (dentro de \(4\text{ años}\)):</strong> \((x + 4) + (3x + 4) > 76 \implies 4x + 8 > 76 \implies 4x > 68 \implies x > 17\).<br>
+                            4. <strong>Análisis crítico:</strong> Observa que \(x < 15\) y \(x > 17\) no tienen intersección (no existen edades que cumplan ambas condiciones simultáneamente). *(Nota: si hace \(5\text{ años}\) la suma fuese menor que \(66\), entonces \(x < 19\), dando \(17 < x < 19 \implies \mathbf{\text{Hijo: 18 años; Padre: 54 años}}\)).*
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Ejercicio D3 — Comparación comercial</span>
+                        <p class="font-semibold text-gray-800 mt-1">Un vendedor recibe un sueldo base de \(\text{Q } 2,400\) más \(\text{Q } 45\) por cada artículo vendido. Otra empresa le ofrece \(\text{Q } 1,800\) fijos más \(\text{Q } 70\) por artículo vendido. ¿A partir de cuántos artículos vendidos le conviene más la segunda oferta?</p>
+                        <button onclick="toggleSol('sol-d3', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-d3" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Modelación en 5 pasos:</strong><br>
+                            1. <strong>Incógnita:</strong> Sea \(x\) el número de artículos vendidos.<br>
+                            2. <strong>Planteamiento (Oferta 2 > Oferta 1):</strong> \(1800 + 70x > 2400 + 45x\).<br>
+                            3. <strong>Resolución:</strong> \(70x - 45x > 2400 - 1800 \implies 25x > 600 \implies x > 24\).<br>
+                            4. <strong>Interpretación y comprobación:</strong> Le conviene a partir de \(\mathbf{25\text{ artículos vendidos}}\) (con \(25\): Oferta 2 = \(\text{Q } 3,550\) > Oferta 1 = \(\text{Q } 3,525\)).
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- PESTAÑA 4: AUTOEVALUACIÓN Y REFLEXIÓN      -->
+            <!-- ========================================== -->
+            <section id="tab-reflexion" class="hidden space-y-6">
+                <div class="border-b-2 border-[#1269A8] pb-2">
+                    <h2 class="text-2xl font-bold text-[#1269A8]">Parte III (A). Autoevaluación y Preguntas de Reflexión</h2>
+                    <p class="text-sm text-[#54887D] font-semibold">Cuestionamientos metacognitivos para consolidar el dominio del Capítulo XIX de Baldor.</p>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="card-theory p-5 shadow-sm">
+                        <h3 class="font-bold text-lg text-[#1269A8] mb-2">1. ¿En qué situaciones debo cambiar el sentido del signo de desigualdad?</h3>
+                        <p class="text-sm text-gray-800 leading-relaxed">
+                            Resume las cuatro operaciones de Baldor que invierten el signo de una desigualdad (multiplicar o dividir por un número negativo, intercambiar el orden de ambos miembros, invertir ambos miembros del mismo signo y elevar dos miembros negativos a una potencia par positiva), acompañando cada una con un ejemplo numérico.
+                        </p>
+                    </div>
+
+                    <div class="card-theory p-5 shadow-sm">
+                        <h3 class="font-bold text-lg text-[#1269A8] mb-2">2. ¿Qué diferencia existe entre resolver una ecuación y una inecuación?</h3>
+                        <p class="text-sm text-gray-800 leading-relaxed">
+                            Compara el conjunto solución de \(3x - 6 = 9\) frente al de \(3x - 6 > 9\). Explica por qué en una ecuación podemos multiplicar ambos miembros por \(-1\) sin precaución adicional, mientras que en una inecuación omitir el cambio de sentido invalida todo el intervalo solución.
+                        </p>
+                    </div>
+
+                    <div class="card-theory p-5 shadow-sm">
+                        <h3 class="font-bold text-lg text-[#1269A8] mb-2">3. ¿Cómo puedo comprobar que un valor satisface una inecuación?</h3>
+                        <p class="text-sm text-gray-800 leading-relaxed">
+                            Si el resultado de una inecuación es \(x < 5\), ¿qué sucede si sustituyes \(x = 5\) en la inecuación original? Explica la diferencia entre comprobar el <em>valor frontera o límite</em> (donde ambos miembros se igualan) y comprobar un <em>valor interior del conjunto solución</em> (por ejemplo, \(x = 4\) o \(x = 0\)).
+                        </p>
+                    </div>
+
+                    <div class="card-theory p-5 shadow-sm">
+                        <h3 class="font-bold text-lg text-[#1269A8] mb-2">4. ¿Qué estrategia utilicé para resolver las inecuaciones simultáneas?</h3>
+                        <p class="text-sm text-gray-800 leading-relaxed">
+                            Explica cómo se determina si dos condiciones como \(x > 4\) y \(x < 5\) tienen soluciones comunes (formando un intervalo acotado \(4 < x < 5\)) frente a un sistema incompatible como \(x > 7\) y \(x < 3\), donde no existe ningún número real que cumpla ambas condiciones al mismo tiempo.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- PESTAÑA 5: EVALUACIÓN DEL APRENDIZAJE      -->
+            <!-- ========================================== -->
+            <section id="tab-evaluacion" class="hidden space-y-6">
+                <div class="border-b-2 border-[#1269A8] pb-2">
+                    <h2 class="text-2xl font-bold text-[#1269A8]">Parte III (B). Evaluación del Aprendizaje (Nivel Alto)</h2>
+                    <p class="text-sm text-[#54887D] font-semibold">Comprobación sumativa de propiedades, inecuaciones con fracciones/productos, simultáneas y modelación.</p>
+                </div>
+
+                <!-- Criterios de Evaluación -->
+                <div class="card-theory p-4 shadow-sm">
+                    <h3 class="font-bold text-sm text-[#1269A8] uppercase mb-2">Criterios de Evaluación — Tercero Básico (Unidad II):</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs text-gray-800">
+                        <p>✓ Identificar correctamente los miembros, términos y sentido de una desigualdad.</p>
+                        <p>✓ Aplicar las 12 propiedades de Baldor sin alterar incorrectamente el signo.</p>
+                        <p>✓ Resolver inecuaciones con paréntesis, productos y denominadores.</p>
+                        <p>✓ Determinar las soluciones comunes de inecuaciones simultáneas.</p>
+                        <p>✓ Traducir situaciones problemáticas al lenguaje algebraico.</p>
+                        <p>✓ Justificar e interpretar sus resultados con comprobación numérica.</p>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <!-- Ítem 1 -->
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Ítem 1 — Inecuación con Denominadores</span>
+                        <p class="font-semibold text-gray-800 mt-1">
+                            Resuelve paso a paso e indica el límite de la solución: \(\;\dfrac{3x - 1}{4} - \dfrac{2x + 3}{3} > \dfrac{x - 5}{6}\)
+                        </p>
+                        <button onclick="toggleSol('sol-ev1', this)" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-ev1" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong><br>
+                            1. Multiplicamos ambos miembros por el \(\text{mcm}(4, 3, 6) = 12 > 0\):<br>
+                            \(3(3x - 1) - 4(2x + 3) > 2(x - 5)\)<br>
+                            2. \(9x - 3 - 8x - 12 > 2x - 10 \implies x - 15 > 2x - 10\)<br>
+                            3. \(x - 2x > -10 + 15 \implies -x > 5 \implies \mathbf{x < -5}\) (Límite superior: \(-5\)).
+                        </div>
+                    </div>
+
+                    <!-- Ítem 2 -->
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Ítem 2 — Inecuación con Productos Algebraicos</span>
+                        <p class="font-semibold text-gray-800 mt-1">
+                            Resuelve y comprueba: \(\;(x + 4)(x - 2) < (x + 1)^2 - 7\)
+                        </p>
+                        <button onclick="toggleSol('sol-ev2', this)" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-ev2" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong><br>
+                            1. Desarrollamos: \(x^2 + 2x - 8 < x^2 + 2x + 1 - 7 \implies x^2 + 2x - 8 < x^2 + 2x - 6\)<br>
+                            2. Restamos \((x^2 + 2x)\) en ambos miembros: \(-8 < -6\).<br>
+                            3. <strong>Interpretación:</strong> Como \(-8 < -6\) es una desigualdad numérica siempre verdadera, la inecuación se verifica para \(\mathbf{\text{todos los números reales } (x \in \mathbb{R})}\).
+                        </div>
+                    </div>
+
+                    <!-- Ítem 3 -->
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Ítem 3 — Inecuaciones Simultáneas</span>
+                        <p class="font-semibold text-gray-800 mt-1">
+                            Determina los límites inferior y superior de las soluciones comunes: \(\;\begin{cases} 4x - 7 > 2x + 5 \\ 5x + 3 < 7x - 9 \end{cases}\)
+                        </p>
+                        <button onclick="toggleSol('sol-ev3', this)" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-ev3" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong><br>
+                            1. <strong>Primera condición:</strong> \(4x - 2x > 5 + 7 \implies 2x > 12 \implies x > 6\).<br>
+                            2. <strong>Segunda condición:</strong> \(5x - 7x < -9 - 3 \implies -2x < -12 \implies x > 6\).<br>
+                            3. <strong>Soluciones comunes:</strong> Ambas condiciones exigen \(\mathbf{x > 6}\) (Límite inferior: \(6\); sin límite superior).
+                        </div>
+                    </div>
+
+                    <!-- Ítem 4 -->
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Ítem 4 — Aplicación Contextual</span>
+                        <p class="font-semibold text-gray-800 mt-1">
+                            Un estudiante obtuvo \(78\) y \(84\) puntos en sus dos primeras evaluaciones de Matemática. ¿Qué puntuación entera mínima y máxima puede obtener en su tercera evaluación para que su promedio sea mayor que \(82\) y menor que \(86\)?
+                        </p>
+                        <button onclick="toggleSol('sol-ev4', this)" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-ev4" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Modelación, resolución e interpretación:</strong><br>
+                            1. Sea \(x\) la nota de la tercera evaluación. El promedio es \(\dfrac{78 + 84 + x}{3} = \dfrac{162 + x}{3}\).<br>
+                            2. Desigualdad simultánea: \(82 < \dfrac{162 + x}{3} < 86\).<br>
+                            3. Multiplicamos por \(3\): \(246 < 162 + x < 258 \implies \mathbf{84 < x < 96}\).<br>
+                            4. <strong>Respuesta:</strong> Como la nota es entera, debe obtener como mínimo \(\mathbf{85\text{ puntos}}\) y como máximo \(\mathbf{95\text{ puntos}}\).
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Pie de Página Institucional -->
+        <footer class="bg-[#F2F5E9] border-t-2 border-[#54887D] p-3 text-center text-xs text-[#1269A8] font-semibold">
+            Colegio Montano — Tercero Básico • Unidad II • Departamento de Matemática • Pizarra Digital Interactiva (Canvas Education)
+        </footer>
+    </div>
+
+    <!-- Lógica de Interactividad -->
+    <script>
+        // Cambio dinámico entre las pestañas de la pizarra
+        function switchTab(tabName) {
+            const tabs = ['teoria', 'ejemplos', 'ejercicios', 'reflexion', 'evaluacion'];
+            tabs.forEach(t => {
+                const section = document.getElementById('tab-' + t);
+                const btn = document.getElementById('btn-' + t);
+                if (t === tabName) {
+                    section.classList.remove('hidden');
+                    btn.className = "flex-1 py-3 px-3 text-center font-bold text-xs md:text-sm tab-active transition cursor-pointer";
+                } else {
+                    section.classList.add('hidden');
+                    btn.className = "flex-1 py-3 px-3 text-center font-bold text-xs md:text-sm tab-inactive transition cursor-pointer";
+                }
+            });
+        }
+
+        // Alternar visibilidad de las soluciones ocultas
+        function toggleSol(solId, btnElement) {
+            const solDiv = document.getElementById(solId);
+            if (solDiv.classList.contains('hidden')) {
+                solDiv.classList.remove('hidden');
+                btnElement.textContent = "Ocultar solución";
+            } else {
+                solDiv.classList.add('hidden');
+                btnElement.textContent = "Mostrar solución";
+            }
+        }
+
+        // Control de Pantalla Completa mediante Fullscreen API
+        function toggleFullScreen() {
+            const elem = document.documentElement;
+            const btn = document.getElementById('fullscreen-btn');
+            if (!document.fullscreenElement) {
+                if (elem.requestFullscreen) {
+                    elem.requestFullscreen().catch(() => {});
+                } else if (elem.webkitRequestFullscreen) {
+                    elem.webkitRequestFullscreen();
+                } else if (elem.msRequestFullscreen) {
+                    elem.msRequestFullscreen();
+                }
+                btn.innerHTML = "<span>[ ✕ Salir pantalla completa ]</span>";
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen().catch(() => {});
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                }
+                btn.innerHTML = "<span>[ ⛶ Pantalla completa ]</span>";
+            }
+        }
+
+        document.addEventListener('fullscreenchange', () => {
+            const btn = document.getElementById('fullscreen-btn');
+            if (!document.fullscreenElement) {
+                btn.innerHTML = "<span>[ ⛶ Pantalla completa ]</span>";
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía Interactiva: Números Complejos - Colegio Montano</title>
+    <!-- Tailwind CSS para diseño moderno y responsivo -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- MathJax para renderizado impecable de expresiones algebraicas -->
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #F2F5E9;
+        }
+        /* Marco de pizarra digital con identidad Colegio Montano */
+        .whiteboard-container {
+            background-color: #ffffff;
+            border: 5px solid #F7D615;
+            border-radius: 12px;
+            box-shadow: 0 12px 30px rgba(18, 105, 168, 0.18);
+        }
+        .header-bg {
+            background: linear-gradient(135deg, #1269A8 0%, #0e5285 100%);
+        }
+        .tab-active {
+            background-color: #1269A8;
+            color: #ffffff;
+            border-bottom: 4px solid #F7D615;
+        }
+        .tab-inactive {
+            background-color: #88B5C7;
+            color: #0d4b7a;
+        }
+        .tab-inactive:hover {
+            background-color: #54887D;
+            color: #ffffff;
+        }
+        .card-theory {
+            background-color: #F2F5E9;
+            border-left: 5px solid #54887D;
+            border-radius: 8px;
+        }
+        .card-exercise {
+            background-color: rgba(136, 181, 199, 0.16);
+            border: 1px solid #54887D;
+            border-left: 5px solid #1269A8;
+            border-radius: 8px;
+        }
+        .solution-box {
+            background-color: rgba(136, 181, 199, 0.30);
+            border-left: 4px solid #54887D;
+            border-radius: 6px;
+        }
+        .badge-level {
+            background-color: #A6B046;
+            color: #ffffff;
+        }
+        .btn-action {
+            background-color: #1269A8;
+            color: #ffffff;
+            transition: all 0.2s ease;
+        }
+        .btn-action:hover {
+            background-color: #54887D;
+        }
+    </style>
+</head>
+<body class="p-3 md:p-6 min-h-screen flex flex-col items-center">
+
+    <!-- Contenedor Principal de la Pizarra Digital -->
+    <div id="whiteboard" class="whiteboard-container w-full max-w-6xl flex flex-col overflow-hidden">
+        
+        <!-- Barra Superior / Encabezado Institucional -->
+        <header class="header-bg p-4 flex flex-col sm:flex-row justify-between items-center text-white gap-4">
+            <div class="flex items-center space-x-4">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyEop0yf6lZ7Jk9MILZxF1rBj4Oqs5esyhIQ&s" alt="Logo Colegio Montano" class="h-14 w-14 object-contain bg-white rounded-full p-1 shadow-md">
+                <div>
+                    <h1 class="text-xl md:text-2xl font-bold tracking-wide">Colegio Montano — Tercero Básico</h1>
+                    <p class="text-xs md:text-sm text-[#F7D615] font-bold">Pizarra Digital Interactiva — Tema 1: Números Complejos</p>
+                </div>
+            </div>
+            <div>
+                <button id="fullscreen-btn" onclick="toggleFullScreen()" class="bg-[#F7D615] text-[#1269A8] font-bold px-4 py-2 rounded-lg shadow hover:bg-yellow-300 transition flex items-center gap-2 text-sm cursor-pointer">
+                    <span>[ ⛶ Pantalla completa ]</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Menú de Pestañas Horizontales Interactivas -->
+        <nav class="flex flex-wrap bg-[#88B5C7] border-b-2 border-[#54887D]">
+            <button onclick="switchTab('teoria')" id="btn-teoria" class="flex-1 py-3 px-3 text-center font-bold text-xs md:text-sm tab-active transition cursor-pointer">Teoría</button>
+            <button onclick="switchTab('ejemplos')" id="btn-ejemplos" class="flex-1 py-3 px-3 text-center font-bold text-xs md:text-sm tab-inactive transition cursor-pointer">Ejemplos</button>
+            <button onclick="switchTab('ejercicios')" id="btn-ejercicios" class="flex-1 py-3 px-3 text-center font-bold text-xs md:text-sm tab-inactive transition cursor-pointer">Ejercicios</button>
+            <button onclick="switchTab('reflexion')" id="btn-reflexion" class="flex-1 py-3 px-3 text-center font-bold text-xs md:text-sm tab-inactive transition cursor-pointer">Reflexión</button>
+            <button onclick="switchTab('evaluacion')" id="btn-evaluacion" class="flex-1 py-3 px-3 text-center font-bold text-xs md:text-sm tab-inactive transition cursor-pointer">Evaluación</button>
+        </nav>
+
+        <!-- Lienzo de Contenido Principal -->
+        <main class="p-5 md:p-8 flex-1 overflow-y-auto max-h-[78vh] bg-[#F2F5E9]/40">
+
+            <!-- ========================================== -->
+            <!-- PESTAÑA 1: EXPLICACIÓN TEÓRICA             -->
+            <!-- ========================================== -->
+            <section id="tab-teoria" class="space-y-6">
+                <div class="border-b-2 border-[#1269A8] pb-2">
+                    <h2 class="text-2xl font-bold text-[#1269A8]">1. Fundamentación Teórica: El Conjunto de los Números Complejos (\(\mathbb{C}\))</h2>
+                    <p class="text-sm text-[#54887D] font-semibold">La unidad imaginaria \(i\), potencias cíclicas, forma binómica, operaciones fundamentales, conjugado, módulo y plano de Argand.</p>
+                </div>
+
+                <!-- Bloque 1 y 2: Unidad Imaginaria y Forma Binómica -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="card-theory p-5 shadow-sm space-y-2">
+                        <div class="flex items-center justify-between">
+                            <h3 class="font-bold text-lg text-[#1269A8]">Unidad Imaginaria (\(i\)) y Raíces Negativas</h3>
+                            <span class="badge-level text-xs px-2.5 py-1 rounded-full font-bold">Definición</span>
+                        </div>
+                        <p class="text-sm text-gray-800 leading-relaxed">
+                            En los números reales (\(\mathbb{R}\)), ecuaciones como \(x^2 + 1 = 0\) no tienen solución porque ningún número real al cuadrado es negativo. Para resolverlo se define la <strong>unidad imaginaria \(i\)</strong>:
+                        </p>
+                        <div class="bg-white p-3 rounded border border-[#54887D] text-center font-bold text-[#1269A8] text-base">
+                            \[i = \sqrt{-1} \qquad \Longleftrightarrow \qquad i^2 = -1\]
+                        </div>
+                        <p class="text-sm text-gray-800 leading-relaxed">
+                            Para todo número real positivo \(a > 0\), la raíz cuadrada principal de \(-a\) se escribe en términos de \(i\):
+                        </p>
+                        <div class="bg-white p-2.5 rounded border border-[#54887D] text-center font-semibold text-sm text-[#54887D]">
+                            \[\sqrt{-a} = \sqrt{a \cdot (-1)} = \sqrt{a}\,i \qquad (\text{Ej. } \sqrt{-25} = 5i)\]
+                        </div>
+                    </div>
+
+                    <div class="card-theory p-5 shadow-sm space-y-2">
+                        <div class="flex items-center justify-between">
+                            <h3 class="font-bold text-lg text-[#1269A8]">Potencias Cíclicas de \(i\) y Forma Binómica</h3>
+                            <span class="badge-level text-xs px-2.5 py-1 rounded-full font-bold">Ciclo de 4</span>
+                        </div>
+                        <div class="bg-white p-3 rounded border border-[#54887D] text-xs text-gray-800 grid grid-cols-2 gap-2">
+                            <p>• \(i^1 = i\)</p>
+                            <p>• \(i^2 = -1\)</p>
+                            <p>• \(i^3 = i^2 \cdot i = -i\)</p>
+                            <p>• \(i^4 = (i^2)^2 = (-1)^2 = 1\)</p>
+                        </div>
+                        <p class="text-xs text-gray-700">
+                            Para calcular \(i^n\) (\(n \in \mathbb{N}\)), se divide \(n\) entre \(4\) y se conserva el residuo \(r\): \(\mathbf{i^n = i^{4q + r} = i^r}\) (con \(i^0 = 1\)).
+                        </p>
+                        <p class="text-sm text-gray-800 leading-relaxed pt-1">
+                            <strong>Forma estándar o binómica:</strong> Todo número complejo \(z \in \mathbb{C}\) tiene la forma \(\mathbf{z = a + bi}\), donde \(a = \text{Re}(z)\) es la <em>parte real</em> y \(b = \text{Im}(z)\) es la <em>parte imaginaria</em> (\(a, b \in \mathbb{R}\)).
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Bloque 3: Operaciones Algebraicas en Forma Binómica -->
+                <div class="card-theory p-5 shadow-sm space-y-3">
+                    <div class="flex items-center justify-between">
+                        <h3 class="font-bold text-lg text-[#1269A8]">Operaciones Fundamentales en \(\mathbb{C}\) (Sean \(z_1 = a + bi\) y \(z_2 = c + di\))</h3>
+                        <span class="badge-level text-xs px-2.5 py-1 rounded-full font-bold">Aritmética Compleja</span>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-800">
+                        <div class="bg-white p-3.5 rounded border border-[#54887D] space-y-1">
+                            <p class="font-bold text-[#1269A8]">1. Igualdad, Adición y Sustracción</p>
+                            <p class="text-xs">• <strong>Igualdad:</strong> \(a + bi = c + di \iff a = c \;\text{y}\; b = d\).</p>
+                            <p class="text-xs">• <strong>Suma y Resta:</strong> Se operan partes reales entre sí y partes imaginarias entre sí:<br>
+                            \((a + bi) \pm (c + di) = (a \pm c) + (b \pm d)i\)</p>
+                        </div>
+                        <div class="bg-white p-3.5 rounded border border-[#54887D] space-y-1">
+                            <p class="font-bold text-[#1269A8]">2. Multiplicación y Sustitución \(i^2 = -1\)</p>
+                            <p class="text-xs">Se aplica la propiedad distributiva y se reemplaza \(i^2 = -1\):</p>
+                            <p class="text-xs font-semibold text-[#54887D] pt-1">\((a + bi)(c + di) = (ac - bd) + (ad + bc)i\)</p>
+                        </div>
+                        <div class="bg-white p-3.5 rounded border border-[#54887D] space-y-1">
+                            <p class="font-bold text-[#1269A8]">3. Conjugado Complejo (\(\overline{z}\))</p>
+                            <p class="text-xs">El conjugado de \(z = a + bi\) es \(\overline{z} = a - bi\). Al multiplicar un complejo por su conjugado siempre se obtiene un número real no negativo:</p>
+                            <p class="text-xs font-semibold text-[#54887D] pt-1">\(z \cdot \overline{z} = (a + bi)(a - bi) = a^2 + b^2\)</p>
+                        </div>
+                        <div class="bg-white p-3.5 rounded border border-[#54887D] space-y-1">
+                            <p class="font-bold text-[#1269A8]">4. División de Números Complejos</p>
+                            <p class="text-xs">Se multiplica el numerador y el denominador por el <strong>conjugado del denominador</strong> para eliminar \(i\) del divisor:</p>
+                            <p class="text-xs font-semibold text-[#54887D] pt-1">\(\dfrac{a + bi}{c + di} = \dfrac{(a + bi)(c - di)}{c^2 + d^2}\)</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bloque 4: Módulo y Plano Complejo (Argand) SVG -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="card-theory p-5 shadow-sm space-y-3">
+                        <h3 class="font-bold text-lg text-[#1269A8]">Módulo (Valor Absoluto) y Representación Gráfica</h3>
+                        <p class="text-sm text-gray-800 leading-relaxed">
+                            Todo número complejo \(z = a + bi\) se representa como el punto \((a, b)\) o vector de posición en el <strong>Plano Complejo (Plano de Argand)</strong>, donde el eje horizontal es el <em>Eje Real (\(\text{Re}\))</em> y el eje vertical es el <em>Eje Imaginario (\(\text{Im}\))</em>.
+                        </p>
+                        <div class="bg-white p-3.5 rounded border border-[#54887D] text-center space-y-1">
+                            <p class="text-xs font-bold text-[#54887D] uppercase">Módulo o Norma de \(z = a + bi\)</p>
+                            <p class="text-base font-bold text-[#1269A8]">\[|z| = \sqrt{a^2 + b^2}\]</p>
+                            <p class="text-xs text-gray-600">Representa la distancia euclidiana desde el origen \((0,0)\) hasta el afijo \((a,b)\).</p>
+                        </div>
+                        <p class="text-xs text-gray-700">
+                            • <strong>Real puro:</strong> Si \(b = 0 \implies z = a\). &nbsp;|&nbsp; <strong>Imaginario puro:</strong> Si \(a = 0, b \neq 0 \implies z = bi\).
+                        </p>
+                    </div>
+
+                    <!-- Diagrama SVG del Plano de Argand -->
+                    <div class="card-theory p-5 shadow-sm flex flex-col justify-between items-center">
+                        <h3 class="font-bold text-base text-[#1269A8] mb-1">Plano Complejo de Argand: \(z = a + bi\) y su Conjugado \(\overline{z}\)</h3>
+                        <svg viewBox="0 0 380 210" class="w-full max-w-md h-auto">
+                            <!-- Ejes coordenados -->
+                            <line x1="40" y1="105" x2="340" y2="105" stroke="#1269A8" stroke-width="2"/>
+                            <polygon points="340,105 332,100 332,110" fill="#1269A8"/>
+                            <line x1="110" y1="15" x2="110" y2="195" stroke="#1269A8" stroke-width="2"/>
+                            <polygon points="110,15 105,23 115,23" fill="#1269A8"/>
+
+                            <!-- Etiquetas de ejes -->
+                            <text x="335" y="95" font-size="11" fill="#1269A8" font-weight="bold" text-anchor="end">Eje Real (Re)</text>
+                            <text x="118" y="24" font-size="11" fill="#1269A8" font-weight="bold">Eje Imaginario (Im)</text>
+                            <text x="98" y="118" font-size="10" fill="#1269A8" font-weight="bold">0</text>
+
+                            <!-- Proyecciones punteadas -->
+                            <line x1="250" y1="40" x2="250" y2="170" stroke="#54887D" stroke-width="1.5" stroke-dasharray="4,3"/>
+                            <line x1="110" y1="40" x2="250" y2="40" stroke="#54887D" stroke-width="1.5" stroke-dasharray="4,3"/>
+                            <line x1="110" y1="170" x2="250" y2="170" stroke="#54887D" stroke-width="1.5" stroke-dasharray="4,3"/>
+
+                            <!-- Vector z = a + bi -->
+                            <line x1="110" y1="105" x2="250" y2="40" stroke="#54887D" stroke-width="3"/>
+                            <circle cx="250" cy="40" r="5" fill="#F7D615" stroke="#1269A8" stroke-width="2"/>
+                            <text x="258" y="38" font-size="12" fill="#1269A8" font-weight="bold">z = a + bi</text>
+                            <text x="172" y="63" font-size="11" fill="#54887D" font-weight="bold" transform="rotate(-24 172 63)">|z| = √(a²+b²)</text>
+
+                            <!-- Vector conjugado z_bar = a - bi -->
+                            <line x1="110" y1="105" x2="250" y2="170" stroke="#A6B046" stroke-width="2.5" stroke-dasharray="5,3"/>
+                            <circle cx="250" cy="170" r="4.5" fill="#A6B046" stroke="#1269A8" stroke-width="1.5"/>
+                            <text x="258" y="175" font-size="11" fill="#54887D" font-weight="bold">z̄ = a - bi</text>
+
+                            <!-- Coordenadas a, b, -b -->
+                            <text x="250" y="118" font-size="11" fill="#1269A8" font-weight="bold" text-anchor="middle">a</text>
+                            <text x="102" y="44" font-size="11" fill="#1269A8" font-weight="bold" text-anchor="end">b</text>
+                            <text x="102" y="174" font-size="11" fill="#1269A8" font-weight="bold" text-anchor="end">-b</text>
+                        </svg>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- PESTAÑA 2: EJEMPLOS RESUELTOS              -->
+            <!-- ========================================== -->
+            <section id="tab-ejemplos" class="hidden space-y-6">
+                <div class="border-b-2 border-[#1269A8] pb-2">
+                    <h2 class="text-2xl font-bold text-[#1269A8]">2. Ejemplos Resueltos Paso a Paso</h2>
+                    <p class="text-sm text-[#54887D] font-semibold">Simplificación de radicales negativos, potencias de \(i\), operaciones en forma binómica y ecuaciones con soluciones complejas.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <!-- Ejemplo 1: Potencias de i y radicales negativos -->
+                    <div class="card-theory p-5 shadow-sm space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-[#1269A8]">Ejemplo 1 — Radicales Negativos y Potencias de \(i\)</span>
+                            <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Simplificación</span>
+                        </div>
+                        <p class="text-sm font-semibold text-gray-800">Simplifique a la forma \(a + bi\): \(\;E = \sqrt{-36} + 3i^{23} - 2i^{42}\)</p>
+                        <div class="bg-white p-3.5 rounded border border-[#54887D] text-sm text-gray-800 space-y-1">
+                            <p>1. <strong>Convertimos el radical negativo:</strong> \(\sqrt{-36} = \sqrt{36}\,i = 6i\).</p>
+                            <p>2. <strong>Reducimos las potencias de \(i\) dividiendo entre \(4\):</strong><br>
+                            • \(23 = 4(5) + 3 \implies i^{23} = i^3 = -i\)<br>
+                            • \(42 = 4(10) + 2 \implies i^{42} = i^2 = -1\)</p>
+                            <p>3. <strong>Sustituimos y ordenamos en forma binómica:</strong><br>
+                            \(E = 6i + 3(-i) - 2(-1) = 6i - 3i + 2 = \mathbf{2 + 3i}\)</p>
+                        </div>
+                    </div>
+
+                    <!-- Ejemplo 2: Multiplicación de números complejos -->
+                    <div class="card-theory p-5 shadow-sm space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-[#1269A8]">Ejemplo 2 — Multiplicación y Binomio al Cuadrado</span>
+                            <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Producto</span>
+                        </div>
+                        <p class="text-sm font-semibold text-gray-800">Efectúe y exprese en forma estándar: \(\;(4 - 3i)(2 + 5i) - (1 - 2i)^2\)</p>
+                        <div class="bg-white p-3.5 rounded border border-[#54887D] text-sm text-gray-800 space-y-1">
+                            <p>1. <strong>Primer producto:</strong> \((4 - 3i)(2 + 5i) = 8 + 20i - 6i - 15i^2 = 8 + 14i - 15(-1) = 23 + 14i\).</p>
+                            <p>2. <strong>Segundo producto:</strong> \((1 - 2i)^2 = 1 - 4i + 4i^2 = 1 - 4i + 4(-1) = -3 - 4i\).</p>
+                            <p>3. <strong>Restamos ambos resultados:</strong><br>
+                            \((23 + 14i) - (-3 - 4i) = 23 + 14i + 3 + 4i = \mathbf{26 + 18i}\)</p>
+                        </div>
+                    </div>
+
+                    <!-- Ejemplo 3: División mediante conjugado -->
+                    <div class="card-theory p-5 shadow-sm space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-[#1269A8]">Ejemplo 3 — División de Números Complejos</span>
+                            <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Conjugado</span>
+                        </div>
+                        <p class="text-sm font-semibold text-gray-800">Exprese el cociente \(\dfrac{7 + 4i}{3 - 2i}\) en la forma estándar \(a + bi\).</p>
+                        <div class="bg-white p-3.5 rounded border border-[#54887D] text-sm text-gray-800 space-y-1">
+                            <p>1. <strong>Multiplicamos por el conjugado del denominador \(\dfrac{3 + 2i}{3 + 2i}\):</strong><br>
+                            \(\dfrac{(7 + 4i)(3 + 2i)}{(3 - 2i)(3 + 2i)}\)</p>
+                            <p>2. <strong>Desarrollamos numerador y denominador:</strong><br>
+                            • Numerador: \(21 + 14i + 12i + 8i^2 = 21 + 26i - 8 = 13 + 26i\)<br>
+                            • Denominador: \(3^2 + 2^2 = 9 + 4 = 13\)</p>
+                            <p>3. <strong>Separamos parte real e imaginaria:</strong> \(\dfrac{13 + 26i}{13} = \mathbf{1 + 2i}\)</p>
+                        </div>
+                    </div>
+
+                    <!-- Ejemplo 4: Módulo y Ecuación Cuadrática con Raíces Complejas -->
+                    <div class="card-theory p-5 shadow-sm space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-[#1269A8]">Ejemplo 4 — Ecuación Cuadrática con Soluciones en \(\mathbb{C}\)</span>
+                            <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Discriminante \(\Delta < 0\)</span>
+                        </div>
+                        <p class="text-sm font-semibold text-gray-800">Resuelve en \(\mathbb{C}\): \(x^2 - 6x + 13 = 0\) y calcula el módulo \(|z|\) de sus raíces.</p>
+                        <div class="bg-white p-3.5 rounded border border-[#54887D] text-sm text-gray-800 space-y-1">
+                            <p>1. <strong>Fórmula general (\(a = 1,\; b = -6,\; c = 13\)):</strong><br>
+                            \(x = \dfrac{6 \pm \sqrt{(-6)^2 - 4(1)(13)}}{2} = \dfrac{6 \pm \sqrt{36 - 52}}{2} = \dfrac{6 \pm \sqrt{-16}}{2}\)</p>
+                            <p>2. <strong>Sustituimos \(\sqrt{-16} = 4i\):</strong> \(x = \dfrac{6 \pm 4i}{2} \implies \mathbf{x_1 = 3 + 2i,\quad x_2 = 3 - 2i}\).</p>
+                            <p>3. <strong>Módulo de ambas raíces conjugadas:</strong> \(|z| = \sqrt{3^2 + 2^2} = \mathbf{\sqrt{13}}\).</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- PESTAÑA 3: EJERCICIOS PROPUESTOS (1 AL 12) -->
+            <!-- ========================================== -->
+            <section id="tab-ejercicios" class="hidden space-y-8">
+                <div class="border-b-2 border-[#1269A8] pb-2">
+                    <h2 class="text-2xl font-bold text-[#1269A8]">3. Ejercicios Propuestos por Niveles</h2>
+                    <p class="text-sm text-[#54887D] font-semibold">Expresa todas tus respuestas en forma binómica estándar \(a + bi\) y verifica cada paso.</p>
+                </div>
+
+                <!-- NIVEL I -->
+                <div class="space-y-3">
+                    <h3 class="text-lg font-bold text-[#54887D]">Nivel I. Unidad Imaginaria, Potencias de \(i\) y Suma/Resta</h3>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Ejercicio 1 — Radicales con Radicando Negativo</span>
+                        <p class="font-semibold text-gray-800 mt-1">Simplifique en términos de \(i\): \(\;\sqrt{-49} + 2\sqrt{-9} - \sqrt{-64}\)</p>
+                        <button onclick="toggleSol('sol-1', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-1" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Procedimiento:</strong><br>
+                            • \(7i + 2(3i) - 8i = 7i + 6i - 8i = \mathbf{5i}\) (o \(0 + 5i\)).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Ejercicio 2 — Potencias Sucesivas de \(i\)</span>
+                        <p class="font-semibold text-gray-800 mt-1">Calcule el valor de: \(\;i^{18} + i^{33} - i^{47} + i^{100}\)</p>
+                        <button onclick="toggleSol('sol-2', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-2" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Procedimiento (dividiendo exponentes entre \(4\)):</strong><br>
+                            • \(i^{18} = i^2 = -1\); &nbsp; \(i^{33} = i^1 = i\); &nbsp; \(i^{47} = i^3 = -i\); &nbsp; \(i^{100} = i^0 = 1\).<br>
+                            • Sustituimos: \((-1) + i - (-i) + 1 = -1 + i + i + 1 = \mathbf{2i}\).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Ejercicio 3 — Operaciones Combinadas de Suma y Resta</span>
+                        <p class="font-semibold text-gray-800 mt-1">Dados \(z_1 = 5 - 4i\), \(z_2 = -3 + 7i\) y \(z_3 = 2 - 6i\), calcule \(\;2z_1 - z_2 + 3z_3\).</p>
+                        <button onclick="toggleSol('sol-3', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-3" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Procedimiento:</strong><br>
+                            • \(2(5 - 4i) - (-3 + 7i) + 3(2 - 6i) = (10 - 8i) + (3 - 7i) + (6 - 18i)\)<br>
+                            • Agrupamos reales e imaginarios: \((10 + 3 + 6) + (-8 - 7 - 18)i = \mathbf{19 - 33i}\).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Ejercicio 4 — Igualdad de Números Complejos</span>
+                        <p class="font-semibold text-gray-800 mt-1">Determine los valores reales de \(x\) e \(y\) que satisfacen la igualdad: \(\;(3x - 2) + (2y + 5)i = 10 - 3i\)</p>
+                        <button onclick="toggleSol('sol-4', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-4" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Procedimiento:</strong><br>
+                            • Igualamos partes reales: \(3x - 2 = 10 \implies 3x = 12 \implies \mathbf{x = 4}\).<br>
+                            • Igualamos partes imaginarias: \(2y + 5 = -3 \implies 2y = -8 \implies \mathbf{y = -4}\).
+                        </div>
+                    </div>
+                </div>
+
+                <!-- NIVEL II -->
+                <div class="space-y-3">
+                    <h3 class="text-lg font-bold text-[#54887D]">Nivel II. Multiplicación, División y Módulo</h3>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Ejercicio 5 — Producto de Binomios Complejos</span>
+                        <p class="font-semibold text-gray-800 mt-1">Efectúe la multiplicación: \(\;(-3 + 4i)(5 - 2i)\)</p>
+                        <button onclick="toggleSol('sol-5', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-5" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Procedimiento:</strong><br>
+                            • \(-15 + 6i + 20i - 8i^2 = -15 + 26i - 8(-1) = -15 + 8 + 26i = \mathbf{-7 + 26i}\).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Ejercicio 6 — Cuadrado y Cubo de Complejos</span>
+                        <p class="font-semibold text-gray-800 mt-1">Exprese en forma estándar \(a + bi\): \(\;(2 + 3i)^2 + (1 + i)^3\)</p>
+                        <button onclick="toggleSol('sol-6', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-6" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Procedimiento:</strong><br>
+                            • \((2 + 3i)^2 = 4 + 12i + 9i^2 = 4 + 12i - 9 = -5 + 12i\).<br>
+                            • \((1 + i)^3 = 1 + 3i + 3i^2 + i^3 = 1 + 3i - 3 - i = -2 + 2i\).<br>
+                            • Suma total: \((-5 + 12i) + (-2 + 2i) = \mathbf{-7 + 14i}\).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Ejercicio 7 — División de Números Complejos</span>
+                        <p class="font-semibold text-gray-800 mt-1">Calcule el cociente y escríbalo en forma estándar: \(\;\dfrac{5 - 10i}{3 + 4i}\)</p>
+                        <button onclick="toggleSol('sol-7', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-7" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Procedimiento:</strong><br>
+                            • Multiplicamos por \(\frac{3 - 4i}{3 - 4i}\): \(\dfrac{(5 - 10i)(3 - 4i)}{3^2 + 4^2} = \dfrac{15 - 20i - 30i + 40i^2}{9 + 16}\)<br>
+                            • \(= \dfrac{15 - 50i - 40}{25} = \dfrac{-25 - 50i}{25} = \mathbf{-1 - 2i}\).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Ejercicio 8 — Inverso Multiplicativo y Módulo</span>
+                        <p class="font-semibold text-gray-800 mt-1">Dado \(z = 6 - 8i\), halle su módulo \(|z|\) y su inverso multiplicativo \(z^{-1} = \dfrac{1}{z}\).</p>
+                        <button onclick="toggleSol('sol-8', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-8" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Procedimiento:</strong><br>
+                            • <strong>Módulo:</strong> \(|z| = \sqrt{6^2 + (-8)^2} = \sqrt{36 + 64} = \sqrt{100} = \mathbf{10}\).<br>
+                            • <strong>Inverso:</strong> \(z^{-1} = \dfrac{1}{6 - 8i} \cdot \dfrac{6 + 8i}{6 + 8i} = \dfrac{6 + 8i}{100} = \mathbf{\dfrac{3}{50} + \dfrac{2}{25}i}\).
+                        </div>
+                    </div>
+                </div>
+
+                <!-- NIVEL III -->
+                <div class="space-y-3">
+                    <h3 class="text-lg font-bold text-[#54887D]">Nivel III. Ecuaciones en \(\mathbb{C}\) y Aplicaciones</h3>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Ejercicio 9 — Ecuación Lineal con Coeficientes Complejos</span>
+                        <p class="font-semibold text-gray-800 mt-1">Despeje el número complejo \(z\) en la ecuación: \(\;(2 + i)z + (3 - 4i) = 7 + 3i\)</p>
+                        <button onclick="toggleSol('sol-9', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-9" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Procedimiento:</strong><br>
+                            • \((2 + i)z = (7 + 3i) - (3 - 4i) \implies (2 + i)z = 4 + 7i\)<br>
+                            • \(z = \dfrac{4 + 7i}{2 + i} \cdot \dfrac{2 - i}{2 - i} = \dfrac{8 - 4i + 14i - 7i^2}{2^2 + 1^2} = \dfrac{15 + 10i}{5} = \mathbf{3 + 2i}\).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Ejercicio 10 — Ecuación Cuadrática Compleja</span>
+                        <p class="font-semibold text-gray-800 mt-1">Resuelva en el conjunto de los números complejos: \(\;2x^2 + 4x + 5 = 0\)</p>
+                        <button onclick="toggleSol('sol-10', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-10" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Procedimiento:</strong><br>
+                            • Fórmula general (\(a = 2,\; b = 4,\; c = 5\)): \(x = \dfrac{-4 \pm \sqrt{4^2 - 4(2)(5)}}{2(2)} = \dfrac{-4 \pm \sqrt{16 - 40}}{4} = \dfrac{-4 \pm \sqrt{-24}}{4}\)<br>
+                            • Como \(\sqrt{-24} = \sqrt{4 \cdot 6}\,i = 2\sqrt{6}\,i\): \(x = \dfrac{-4 \pm 2\sqrt{6}\,i}{4} = \mathbf{-1 \pm \dfrac{\sqrt{6}}{2}i}\).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Ejercicio 11 — Impedancia en Circuitos Eléctricos (Física)</span>
+                        <p class="font-semibold text-gray-800 mt-1">En corriente alterna, la impedancia total \(Z_T\) de dos componentes conectados en paralelo está dada por \(Z_T = \dfrac{Z_1 \cdot Z_2}{Z_1 + Z_2}\). Si \(Z_1 = 4 + 3i\;\Omega\) y \(Z_2 = 4 - 3i\;\Omega\), calcule la impedancia total \(Z_T\).</p>
+                        <button onclick="toggleSol('sol-11', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-11" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Modelación y solución:</strong><br>
+                            • Numerador: \(Z_1 \cdot Z_2 = (4 + 3i)(4 - 3i) = 4^2 + 3^2 = 16 + 9 = 25\).<br>
+                            • Denominador: \(Z_1 + Z_2 = (4 + 3i) + (4 - 3i) = 8\).<br>
+                            • Impedancia total: \(Z_T = \dfrac{25}{8} = \mathbf{3.125\;\Omega}\) (impedancia puramente resistiva real).
+                        </div>
+                    </div>
+
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Ejercicio 12 — Suma de Potencias Consecutivas de \(i\)</span>
+                        <p class="font-semibold text-gray-800 mt-1">Demuestre algebraicamente que la suma de cuatro potencias enteras consecutivas cualesquiera de \(i\) es siempre igual a cero (\(i^n + i^{n+1} + i^{n+2} + i^{n+3} = 0\)), y evalúe \(S = i^1 + i^2 + i^3 + \dots + i^{50}\).</p>
+                        <button onclick="toggleSol('sol-12', this)" class="mt-2 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-12" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Demostración y evaluación:</strong><br>
+                            • Factorizando \(i^n\): \(i^n(1 + i + i^2 + i^3) = i^n(1 + i - 1 - i) = i^n(0) = \mathbf{0}\).<br>
+                            • En \(S = i^1 + i^2 + \dots + i^{50}\), los primeros \(48\) términos (\(12\) grupos de \(4\)) suman \(0\).<br>
+                            • Solo quedan los últimos dos términos: \(S = i^{49} + i^{50} = i^1 + i^2 = \mathbf{-1 + i}\).
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- PESTAÑA 4: REFLEXIÓN CRÍTICA               -->
+            <!-- ========================================== -->
+            <section id="tab-reflexion" class="hidden space-y-6">
+                <div class="border-b-2 border-[#1269A8] pb-2">
+                    <h2 class="text-2xl font-bold text-[#1269A8]">4. Preguntas de Reflexión Crítica</h2>
+                    <p class="text-sm text-[#54887D] font-semibold">Análisis conceptual sobre la extensión de los sistemas numéricos, propiedades de radicales negativos y conjugados.</p>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="card-theory p-5 shadow-sm">
+                        <h3 class="font-bold text-lg text-[#1269A8] mb-2">1. Falacia de \(\sqrt{-4} \cdot \sqrt{-9} = \sqrt{(-4)(-9)} = \sqrt{36} = 6\)</h3>
+                        <p class="text-sm text-gray-800 leading-relaxed">
+                            Un estudiante aplica la propiedad \(\sqrt{a}\sqrt{b} = \sqrt{ab}\) directamente a radicales negativos y afirma que \(\sqrt{-4}\cdot\sqrt{-9} = 6\). Explica por qué dicha propiedad solo es válida cuando \(a \ge 0\) y \(b \ge 0\), y demuestra que el resultado correcto es \((2i)(3i) = 6i^2 = -6\).
+                        </p>
+                    </div>
+
+                    <div class="card-theory p-5 shadow-sm">
+                        <h3 class="font-bold text-lg text-[#1269A8] mb-2">2. ¿Por qué \(\mathbb{R}\) es un subconjunto propio de \(\mathbb{C}\) (\(\mathbb{R} \subset \mathbb{C}\))?</h3>
+                        <p class="text-sm text-gray-800 leading-relaxed">
+                            Analiza cómo cualquier número real \(a\) (como \(-7\), \(\frac{3}{4}\) o \(\sqrt{2}\)) puede escribirse en la forma \(a + 0i\). ¿Qué ocurre con la relación de orden (\(>\) y \(<\)) al pasar de \(\mathbb{R}\) a \(\mathbb{C}\)? ¿Por qué no tiene sentido afirmar que \(3 + 2i > 1 + 5i\)?
+                        </p>
+                    </div>
+
+                    <div class="card-theory p-5 shadow-sm">
+                        <h3 class="font-bold text-lg text-[#1269A8] mb-2">3. Propiedades del Conjugado Complejo (\(\overline{z}\))</h3>
+                        <p class="text-sm text-gray-800 leading-relaxed">
+                            Verifica qué ocurre al sumar un número complejo con su conjugado (\(z + \overline{z}\)) y al restarlos (\(z - \overline{z}\)). Explica por qué \(z + \overline{z} = 2\text{Re}(z)\) siempre es un número real puro, y por qué las raíces complejas de ecuaciones cuadráticas con coeficientes reales siempre aparecen en pares conjugados.
+                        </p>
+                    </div>
+
+                    <div class="card-theory p-5 shadow-sm">
+                        <h3 class="font-bold text-lg text-[#1269A8] mb-2">4. Efecto geométrico de multiplicar un número complejo por \(i\)</h3>
+                        <p class="text-sm text-gray-800 leading-relaxed">
+                            Toma el número complejo \(z = 3 + 2i\) (ubicado en el punto \((3, 2)\) del plano de Argand) y multiplícalo sucesivamente por \(i\) para obtener \(zi = -2 + 3i\), \(zi^2 = -3 - 2i\) y \(zi^3 = 2 - 3i\). Describe qué transformación geométrica (rotación) sufre el vector cada vez que se multiplica por \(i\).
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- PESTAÑA 5: EVALUACIÓN FORMATIVA            -->
+            <!-- ========================================== -->
+            <section id="tab-evaluacion" class="hidden space-y-6">
+                <div class="border-b-2 border-[#1269A8] pb-2">
+                    <h2 class="text-2xl font-bold text-[#1269A8]">5. Evaluación Formativa</h2>
+                    <p class="text-sm text-[#54887D] font-semibold">Comprobación de dominio en potencias de \(i\), operaciones en \(\mathbb{C}\), conjugado, módulo y ecuaciones cuadráticas complejas.</p>
+                </div>
+
+                <div class="space-y-4">
+                    <!-- Ítem 1 -->
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Ítem 1 — Potencias de \(i\) y Forma Binómica</span>
+                        <p class="font-semibold text-gray-800 mt-1">
+                            Simplifique a la forma \(a + bi\): \(\;Z = 4i^{27} - 3i^{36} + \sqrt{-81}\)
+                        </p>
+                        <button onclick="toggleSol('sol-ev1', this)" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-ev1" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong><br>
+                            • \(i^{27} = i^3 = -i\); &nbsp; \(i^{36} = i^0 = 1\); &nbsp; \(\sqrt{-81} = 9i\).<br>
+                            • \(Z = 4(-i) - 3(1) + 9i = -4i - 3 + 9i = \mathbf{-3 + 5i}\).
+                        </div>
+                    </div>
+
+                    <!-- Ítem 2 -->
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Ítem 2 — Multiplicación y División</span>
+                        <p class="font-semibold text-gray-800 mt-1">
+                            Efectúe y exprese en forma estándar \(a + bi\): \(\;\dfrac{(2 + 3i)(4 - i)}{1 + 2i}\)
+                        </p>
+                        <button onclick="toggleSol('sol-ev2', this)" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-ev2" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong><br>
+                            1. Numerador: \((2 + 3i)(4 - i) = 8 - 2i + 12i - 3i^2 = 11 + 10i\).<br>
+                            2. Dividimos entre \((1 + 2i)\) multiplicando por \(\frac{1 - 2i}{1 - 2i}\):<br>
+                            \(\dfrac{(11 + 10i)(1 - 2i)}{1^2 + 2^2} = \dfrac{11 - 22i + 10i - 20i^2}{5} = \dfrac{31 - 12i}{5} = \mathbf{\dfrac{31}{5} - \dfrac{12}{5}i}\).
+                        </div>
+                    </div>
+
+                    <!-- Ítem 3 -->
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Ítem 3 — Módulo y Conjugado</span>
+                        <p class="font-semibold text-gray-800 mt-1">
+                            Dado el número complejo \(w = -5 + 12i\), determina su parte real \(\text{Re}(w)\), su parte imaginaria \(\text{Im}(w)\), su conjugado \(\overline{w}\) y su módulo \(|w|\).
+                        </p>
+                        <button onclick="toggleSol('sol-ev3', this)" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-ev3" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución:</strong><br>
+                            • \(\text{Re}(w) = \mathbf{-5}\); &nbsp; \(\text{Im}(w) = \mathbf{12}\); &nbsp; Conjugado: \(\overline{w} = \mathbf{-5 - 12i}\).<br>
+                            • Módulo: \(|w| = \sqrt{(-5)^2 + 12^2} = \sqrt{25 + 144} = \sqrt{169} = \mathbf{13}\).
+                        </div>
+                    </div>
+
+                    <!-- Ítem 4 -->
+                    <div class="card-exercise p-4">
+                        <span class="badge-level text-xs px-2 py-0.5 rounded font-bold">Ítem 4 — Ecuación Cuadrática con Raíces Complejas</span>
+                        <p class="font-semibold text-gray-800 mt-1">
+                            Resuelve en \(\mathbb{C}\) la ecuación \(x^2 - 4x + 29 = 0\) y comprueba una de sus soluciones sustituyéndola en la ecuación original.
+                        </p>
+                        <button onclick="toggleSol('sol-ev4', this)" class="mt-3 btn-action text-xs px-3 py-1.5 rounded font-bold shadow cursor-pointer">Mostrar solución</button>
+                        <div id="sol-ev4" class="hidden solution-box mt-3 p-3 text-sm text-gray-800">
+                            <strong>Solución y comprobación:</strong><br>
+                            • \(x = \dfrac{4 \pm \sqrt{(-4)^2 - 4(1)(29)}}{2} = \dfrac{4 \pm \sqrt{16 - 116}}{2} = \dfrac{4 \pm \sqrt{-100}}{2} = \dfrac{4 \pm 10i}{2}\)<br>
+                            • Raíces: \(\mathbf{x_1 = 2 + 5i,\quad x_2 = 2 - 5i}\).<br>
+                            • <strong>Comprobación con \(x_1 = 2 + 5i\):</strong> \((2 + 5i)^2 - 4(2 + 5i) + 29 = (4 + 20i - 25) - 8 - 20i + 29 = -21 - 8 + 29 = 0\).
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Pie de Página Institucional -->
+        <footer class="bg-[#F2F5E9] border-t-2 border-[#54887D] p-3 text-center text-xs text-[#1269A8] font-semibold">
+            Colegio Montano — Tercero Básico • Departamento de Matemática • Pizarra Digital Interactiva (Canvas Education)
+        </footer>
+    </div>
+
+    <!-- Lógica de Interactividad -->
+    <script>
+        // Cambio dinámico entre las pestañas de la pizarra
+        function switchTab(tabName) {
+            const tabs = ['teoria', 'ejemplos', 'ejercicios', 'reflexion', 'evaluacion'];
+            tabs.forEach(t => {
+                const section = document.getElementById('tab-' + t);
+                const btn = document.getElementById('btn-' + t);
+                if (t === tabName) {
+                    section.classList.remove('hidden');
+                    btn.className = "flex-1 py-3 px-3 text-center font-bold text-xs md:text-sm tab-active transition cursor-pointer";
+                } else {
+                    section.classList.add('hidden');
+                    btn.className = "flex-1 py-3 px-3 text-center font-bold text-xs md:text-sm tab-inactive transition cursor-pointer";
+                }
+            });
+        }
+
+        // Alternar visibilidad de las soluciones ocultas
+        function toggleSol(solId, btnElement) {
+            const solDiv = document.getElementById(solId);
+            if (solDiv.classList.contains('hidden')) {
+                solDiv.classList.remove('hidden');
+                btnElement.textContent = "Ocultar solución";
+            } else {
+                solDiv.classList.add('hidden');
+                btnElement.textContent = "Mostrar solución";
+            }
+        }
+
+        // Control de Pantalla Completa mediante Fullscreen API
+        function toggleFullScreen() {
+            const elem = document.documentElement;
+            const btn = document.getElementById('fullscreen-btn');
+            if (!document.fullscreenElement) {
+                if (elem.requestFullscreen) {
+                    elem.requestFullscreen().catch(() => {});
+                } else if (elem.webkitRequestFullscreen) {
+                    elem.webkitRequestFullscreen();
+                } else if (elem.msRequestFullscreen) {
+                    elem.msRequestFullscreen();
+                }
+                btn.innerHTML = "<span>[ ✕ Salir pantalla completa ]</span>";
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen().catch(() => {});
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                }
+                btn.innerHTML = "<span>[ ⛶ Pantalla completa ]</span>";
+            }
+        }
+
+        document.addEventListener('fullscreenchange', () => {
+            const btn = document.getElementById('fullscreen-btn');
+            if (!document.fullscreenElement) {
+                btn.innerHTML = "<span>[ ⛶ Pantalla completa ]</span>";
+            }
+        });
+    </script>
+</body>
+</html>
